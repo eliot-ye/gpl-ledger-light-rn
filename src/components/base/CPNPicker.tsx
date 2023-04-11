@@ -383,7 +383,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
       if (props.initActiveList) {
         activeListSet(props.initActiveList);
       }
-      Animated.spring(animatedValue, {
+      Animated.timing(animatedValue, {
         toValue: 0,
         useNativeDriver: true,
       }).start();
@@ -899,7 +899,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
       if (props.initActive) {
         activeDateObjSet(props.initActive);
       }
-      Animated.spring(animatedValue, {
+      Animated.timing(animatedValue, {
         toValue: 0,
         useNativeDriver: true,
       }).start();

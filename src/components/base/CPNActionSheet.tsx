@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  useWindowDimensions,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
@@ -27,7 +28,6 @@ const Config = {
 
 const styles = StyleSheet.create({
   modal: {
-    flex: 1,
     justifyContent: 'flex-end',
     overflow: 'hidden',
     paddingHorizontal: 8,
@@ -119,6 +119,8 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
     }
   }, [animatedValue, props.show]);
 
+  const windowSize = useWindowDimensions();
+
   return (
     <Modal
       visible={show}
@@ -137,7 +139,15 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
             props.onClose();
           }
         }}>
-        <View style={[styles.modal, {backgroundColor: Colors.backgroundModal}]}>
+        <View
+          style={[
+            styles.modal,
+            {
+              backgroundColor: Colors.backgroundModal,
+              width: windowSize.width,
+              height: windowSize.height,
+            },
+          ]}>
           <Animated.View
             accessibilityRole="menu"
             style={{

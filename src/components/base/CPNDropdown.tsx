@@ -3,6 +3,8 @@ import {
   FlatList,
   FlatListProps,
   Modal,
+  Platform,
+  StatusBar,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -164,10 +166,16 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                   ? {top: boxPosition.Y + Config.offset}
                   : {
                       bottom:
-                        windowHeight -
-                        boxHeight -
-                        boxPosition.Y +
-                        Config.offset,
+                        Platform.OS === 'android'
+                          ? windowHeight -
+                            boxHeight -
+                            boxPosition.Y +
+                            Config.offset -
+                            (StatusBar.currentHeight || 0)
+                          : windowHeight -
+                            boxHeight -
+                            boxPosition.Y +
+                            Config.offset,
                     },
                 {
                   left: boxPosition.X,

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Animated} from 'react-native';
+import {ActivityIndicator, Animated, useWindowDimensions} from 'react-native';
 import {Colors} from '@/configs/colors';
 import {CreateEvents} from '@/libs/CreateEvents';
 
@@ -42,17 +42,18 @@ export function createCPNLoading() {
       }
     }, [animatedValue, loadingCount]);
 
+    const windowSize = useWindowDimensions();
+
     return (
       <>
         {show ? (
           <Animated.View
             style={{
-              flex: 1,
+              width: windowSize.width,
+              height: windowSize.height,
               position: 'absolute',
               top: 0,
-              bottom: 0,
               left: 0,
-              right: 0,
               backgroundColor: Colors.backgroundModal,
               justifyContent: 'center',
               alignItems: 'center',

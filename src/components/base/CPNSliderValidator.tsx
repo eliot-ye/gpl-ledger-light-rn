@@ -8,6 +8,8 @@ import {
   ImageBackground,
   Modal,
   PanResponder,
+  Platform,
+  StatusBar,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -262,7 +264,12 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
       _style.top = boxPosition.Y;
     } else {
       _style.bottom =
-        windowDimensions.height - boxPosition.Y - Config.btnHeight;
+        Platform.OS === 'android'
+          ? windowDimensions.height -
+            boxPosition.Y -
+            Config.btnHeight -
+            (StatusBar.currentHeight || 0)
+          : windowDimensions.height - boxPosition.Y - Config.btnHeight;
     }
 
     return _style;
