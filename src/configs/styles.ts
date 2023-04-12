@@ -10,6 +10,9 @@ export const BaseStyles = StyleSheet.create({
     elevation: 5,
   } as const,
 
+  cellTitle: {
+    height: 20,
+  } as const,
   cell: {
     height: 46,
     paddingHorizontal: 10,

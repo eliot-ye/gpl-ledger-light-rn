@@ -59,7 +59,7 @@ export function CNPInput(props: CNPInputProps) {
   return (
     <View>
       {(!!props.label || !!props.placeholder) && (
-        <View style={{height: 18}}>
+        <View style={BaseStyles.cellTitle}>
           <CPNText
             style={[
               {color: Colors.theme},
