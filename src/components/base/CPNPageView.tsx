@@ -120,6 +120,7 @@ export function CPNPageView(props: CPNPageViewProps) {
 
       {Platform.OS === 'ios' && props.renderIOSTopNegativeDistanceView ? (
         <Animated.View
+          pointerEvents="none"
           style={{
             position: 'absolute',
             top: topDistanceAnimated,
