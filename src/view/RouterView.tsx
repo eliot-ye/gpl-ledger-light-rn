@@ -72,7 +72,7 @@ function TabBarView() {
     },
     {
       name: 'SettingPage',
-      label: 'Settings',
+      label: '设置',
       icon: IONName.Settings,
       backgroundColor: (
         <View

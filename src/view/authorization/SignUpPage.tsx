@@ -14,7 +14,7 @@ export function SignUpPage() {
   const [username, usernameSet] = useState({value: '', hasError: false});
   function renderUsernameInput() {
     return (
-      <View style={{paddingBottom: 20}}>
+      <View style={{paddingBottom: 10}}>
         <CNPInput
           value={username.value}
           onChangeText={value => usernameSet({value, hasError: false})}
@@ -58,9 +58,11 @@ export function SignUpPage() {
           onPress={async () => {
             if (!username.value) {
               usernameSet(val => ({...val, hasError: true}));
+              return;
             }
             if (!password.value) {
               passwordSet(val => ({...val, hasError: true}));
+              return;
             }
 
             const id = getRandomStr();

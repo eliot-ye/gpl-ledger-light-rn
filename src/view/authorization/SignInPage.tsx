@@ -15,6 +15,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {StoreRoot, StoreUserInfo} from '@/store';
 import {getRealm} from '@/database/main';
+import {BaseStyles} from '@/configs/styles';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -39,7 +40,9 @@ export function SignInPage() {
   function renderUserInfoInput() {
     return (
       <View style={{paddingBottom: 20}}>
-        <CPNText style={{color: Colors.theme, marginBottom: 10}}>用户</CPNText>
+        <View style={BaseStyles.cellTitle}>
+          <CPNText style={{color: Colors.theme}}>用户</CPNText>
+        </View>
         <CPNDropdown
           selectPlaceholder={
             useInfoListMemo.length > 0 ? '请选择用户' : '请注册用户'
