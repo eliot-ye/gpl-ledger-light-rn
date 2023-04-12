@@ -9,4 +9,11 @@ export const BaseStyles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   } as const,
+
+  cell: {
+    height: 46,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: Colors.transparent,
+  } as const,
 });

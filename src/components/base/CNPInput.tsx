@@ -9,16 +9,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import {CPNIonicons, CPNText, IONName} from '.';
+import {BaseStyles} from '@/configs/styles';
 
 const styles = StyleSheet.create({
   inputContainer: {
+    ...BaseStyles.cell,
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 2,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
   },
-  input: {fontSize: 20, padding: 0, borderWidth: 0, flex: 1},
+  input: {padding: 0, borderWidth: 0, flex: 1},
 });
 
 interface CNPInputProps extends TextInputProps {
@@ -58,7 +57,7 @@ export function CNPInput(props: CNPInputProps) {
   }, [isFocus, props.label, props.placeholder]);
 
   return (
-    <View style={props.containerStyle}>
+    <View>
       {(!!props.label || !!props.placeholder) && (
         <View style={{height: 18}}>
           <CPNText
@@ -73,9 +72,12 @@ export function CNPInput(props: CNPInputProps) {
       <View
         style={[
           styles.inputContainer,
-          {borderColor: Colors.dividingLine},
-          focused && {borderColor: Colors.theme},
-          props.hasError && {borderColor: Colors.fail},
+          {
+            backgroundColor: Colors.backgroundGrey,
+            borderBottomColor: Colors.dividingLine,
+          },
+          focused && {borderBottomColor: Colors.theme},
+          props.hasError && {borderBottomColor: Colors.fail},
         ]}>
         <TextInput
           pointerEvents={props.editable === false ? 'none' : 'auto'}
@@ -102,7 +104,9 @@ export function CNPInput(props: CNPInputProps) {
       </View>
       {!!props.errorText && (
         <View style={{opacity: props.hasError ? 1 : 0}}>
-          <CPNText style={{color: Colors.fail}}>{props.errorText}</CPNText>
+          <CPNText style={{fontSize: 12, color: Colors.fail}}>
+            {props.errorText}
+          </CPNText>
         </View>
       )}
     </View>

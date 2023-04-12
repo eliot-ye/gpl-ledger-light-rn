@@ -26,8 +26,8 @@ const Config = {
 } as const;
 const styles = StyleSheet.create({
   cell: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    ...BaseStyles.cell,
+    paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
