@@ -22,10 +22,9 @@ export function RouterView() {
 
   async function navReady() {
     const infoList = await LS_UserInfo.get();
-    console.log('infoList', infoList);
 
-    navigationRef.navigate('SignUpPage');
     if (infoList.length === 0) {
+      navigationRef.navigate('SignUpPage');
     }
   }
 
