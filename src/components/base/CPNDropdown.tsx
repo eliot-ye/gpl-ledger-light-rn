@@ -40,13 +40,22 @@ const styles = StyleSheet.create({
 
 export interface DataConstraint {
   label?: string;
-  value: string | number;
+  value: any;
 }
 
 interface CPNDropdownProps<ItemT extends DataConstraint>
   extends Partial<FlatListProps<ItemT>> {
   itemShowNum?: number;
-  /** ___use memoized value___ */
+  /**
+   * ___use memoized value___
+   * ### 预定义字段：
+   * ```
+   * export interface DataConstraint {
+   *   label?: string;
+   *   value: any;
+   * }
+   * ```
+   * */
   data: ItemT[];
   checked: ItemT['value'];
   onSelect?: (item: ItemT) => void;
@@ -123,7 +132,9 @@ export function CPNDropdown<ItemT extends DataConstraint>(
             Y: ev.nativeEvent.pageY - ev.nativeEvent.locationY,
             X: ev.nativeEvent.pageX - ev.nativeEvent.locationX + Config.offset,
           });
-          showSet(true);
+          if (props.data.length > 0) {
+            showSet(true);
+          }
         }}>
         <View pointerEvents="none" style={{flex: 1}}>
           {props.renderCellContent ? (

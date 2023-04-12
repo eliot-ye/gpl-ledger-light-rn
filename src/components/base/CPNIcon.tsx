@@ -33,8 +33,11 @@ export enum IONName {
 
   AlertCircleOutline = 'alert-circle-outline',
 
-  home = 'home',
-  information = 'alert-circle',
+  Eye = 'eye',
+  EyeOff = 'eye-off',
+
+  Home = 'home',
+  Settings = 'settings',
 }
 interface IoniconsProps extends CPNIconProps {
   name?: IONName;

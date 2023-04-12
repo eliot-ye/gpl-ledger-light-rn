@@ -2,7 +2,6 @@ import {I18n, LangCode} from '@assets/I18n';
 import {Colors, ThemeCode} from '@/configs/colors';
 import {createDispatch} from '@/libs/CreateStore';
 import initialState from './initialState';
-import {DateFormat} from '@/configs/dateFormat';
 
 const initialStateStr = JSON.stringify(initialState);
 
@@ -30,8 +29,6 @@ export default createDispatch<typeof initialState, DispatchPayloadRoot>({
     }
 
     I18n.setLanguage(langCode);
-
-    DateFormat.setCode(langCode);
 
     return {...state, langCode};
   },

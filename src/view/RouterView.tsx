@@ -11,32 +11,43 @@ import {
 import {CPNIonicons, CPNText, IONName} from '@components/base';
 import {Colors} from '@/configs/colors';
 import {Platform, View} from 'react-native';
+import {LS_UserInfo} from '@/store/localStorage';
 
 import {renderAuthorizationRouterView} from './authorization/routes';
-import {renderTestRouterView, HomePage, AboutPage} from './test/routes';
+import {HomePage} from './ledger/routes';
+import {SettingPage} from './settings/routes';
 
 export function RouterView() {
   const RootState = StoreRoot.useState();
 
+  async function navReady() {
+    const infoList = await LS_UserInfo.get();
+    console.log('infoList', infoList);
+
+    navigationRef.navigate('SignUpPage');
+    if (infoList.length === 0) {
+    }
+  }
+
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} onReady={navReady}>
       <RootStack.Navigator
+        initialRouteName={'SignInPage'}
         screenOptions={{
           headerShown: false,
           gestureEnabled: Platform.OS === 'ios',
           ...TransitionPresets.SlideFromRightIOS,
         }}>
-        {!RootState.isSignIn ? (
-          renderAuthorizationRouterView
-        ) : (
+        {RootState.isSignIn ? (
           <>
             <RootStack.Screen
               name="Tabbar"
               component={TabBarView}
               options={{headerShown: false, animationEnabled: false}}
             />
-            {renderTestRouterView}
           </>
+        ) : (
+          renderAuthorizationRouterView
         )}
       </RootStack.Navigator>
     </NavigationContainer>
@@ -44,6 +55,39 @@ export function RouterView() {
 }
 
 function TabBarView() {
+  const tabbarOptionList: TabbarOption[] = [
+    {
+      name: 'HomePage',
+      label: 'Home',
+      icon: IONName.Home,
+      backgroundColor: (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: Colors.success,
+          }}
+        />
+      ),
+      textColor: Colors.backgroundGrey,
+      textActiveColor: Colors.fontTextReverse,
+    },
+    {
+      name: 'SettingPage',
+      label: 'Settings',
+      icon: IONName.Settings,
+      backgroundColor: (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: Colors.warning,
+          }}
+        />
+      ),
+      textColor: Colors.backgroundGrey,
+      textActiveColor: Colors.fontTextReverse,
+    },
+  ];
+
   return (
     <TabStack.Navigator
       screenOptions={({route}) => {
@@ -69,7 +113,7 @@ function TabBarView() {
         };
       }}>
       <TabStack.Screen name="HomePage" component={HomePage} />
-      <TabStack.Screen name="AboutPage" component={AboutPage} />
+      <TabStack.Screen name="SettingPage" component={SettingPage} />
     </TabStack.Navigator>
   );
 }
@@ -82,36 +126,3 @@ interface TabbarOption {
   textColor: string;
   textActiveColor: string;
 }
-
-const tabbarOptionList: TabbarOption[] = [
-  {
-    name: 'HomePage',
-    label: 'Home',
-    icon: IONName.home,
-    backgroundColor: (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.success,
-        }}
-      />
-    ),
-    textColor: Colors.backgroundGrey,
-    textActiveColor: Colors.fontTextReverse,
-  },
-  {
-    name: 'AboutPage',
-    label: 'About',
-    icon: IONName.information,
-    backgroundColor: (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: Colors.warning,
-        }}
-      />
-    ),
-    textColor: Colors.backgroundGrey,
-    textActiveColor: Colors.fontTextReverse,
-  },
-];

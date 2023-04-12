@@ -8,8 +8,8 @@ import {
   CPNPageModal,
 } from '@components/base';
 import {RouterView} from '@/view/RouterView';
-import {StoreRoot, StoreExample} from '@/store';
-import {LS_Lang, LS_Theme, LS_Token} from '@/store/localStorage';
+import {StoreRoot, StoreUserInfo} from '@/store';
+import {LS_Lang, LS_Theme} from '@/store/localStorage';
 
 function RootView() {
   const RootDispatch = StoreRoot.useDispatch();
@@ -22,19 +22,12 @@ function RootView() {
     LS_Lang.get().then(_code => {
       RootDispatch('langCode', _code);
     });
-
-    LS_Token.get().then(async _token => {
-      if (_token) {
-        // 此处可请求一个 API 验证 token 是否有效
-        RootDispatch('isSignIn', true);
-      }
-    });
   }, [RootDispatch]);
 
   return (
-    <StoreExample.Provider>
+    <StoreUserInfo.Provider>
       <RouterView />
-    </StoreExample.Provider>
+    </StoreUserInfo.Provider>
   );
 }
 

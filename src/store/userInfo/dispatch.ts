@@ -5,12 +5,14 @@ const initialStateStr = JSON.stringify(initialState);
 
 interface DispatchPayload {
   reset: undefined;
-  count: number;
-  count2: number;
+  userId: string;
+  dbKey: string;
 }
 
 export default createDispatch<typeof initialState, DispatchPayload>({
   reset: () => JSON.parse(initialStateStr),
-  count: (state, payload) => ({...state, count: payload}),
-  count2: (state, payload) => ({...state, count2: payload}),
+  userId: (state, payload) =>
+    state.userId === payload ? state : {...state, userId: payload},
+  dbKey: (state, payload) =>
+    state.dbKey === payload ? state : {...state, dbKey: payload},
 });

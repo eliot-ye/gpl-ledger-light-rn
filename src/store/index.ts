@@ -4,24 +4,24 @@ import {createStore} from '@/libs/CreateStore';
 import dispatchAggregateRoot from './root/dispatch';
 import initialStateRoot from './root/initialState';
 
-import dispatchAggregateExample from './example/dispatch';
-import initialStateExample from './example/initialState';
+import dispatchAggregateUserInfo from './userInfo/dispatch';
+import initialStateUserInfo from './userInfo/initialState';
 
 export const StoreRoot = createStore(initialStateRoot, dispatchAggregateRoot);
 
 export function useResetStore() {
   const RootDispatch = StoreRoot.useDispatch();
 
-  const ExampleDispatch = StoreExample.useDispatch();
+  const UserInfoDispatch = StoreUserInfo.useDispatch();
 
   return useCallback(() => {
     RootDispatch('isSignIn', initialStateRoot.isSignIn);
 
-    ExampleDispatch('reset');
-  }, [RootDispatch, ExampleDispatch]);
+    UserInfoDispatch('reset');
+  }, [RootDispatch, UserInfoDispatch]);
 }
 
-export const StoreExample = createStore(
-  initialStateExample,
-  dispatchAggregateExample,
+export const StoreUserInfo = createStore(
+  initialStateUserInfo,
+  dispatchAggregateUserInfo,
 );

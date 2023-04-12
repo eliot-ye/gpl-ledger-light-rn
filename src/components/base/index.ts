@@ -6,6 +6,7 @@ export * from './CPNDropdown';
 export * from './CPNHeader';
 export * from './CPNIcon';
 export * from './CPNImage';
+export * from './CNPInput';
 export * from './CPNLoading';
 export * from './CPNPageModal';
 export * from './CPNPageView';

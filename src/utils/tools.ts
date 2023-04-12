@@ -1,3 +1,6 @@
+import 'react-native-get-random-values';
+import {AES, MD5, enc} from 'crypto-js';
+
 export function logNameValueBase(
   color: string,
   name: string | number = '',
@@ -30,6 +33,11 @@ export const CusLog = {
 /** 获取一个随机6位字符串加时间戳的字符串，格式为 `{randomString}:{timestamp}` */
 export function getRandomStr() {
   return `${Math.random().toString(36).slice(-8)}:${new Date().getTime()}`;
+}
+
+/** 获取 `getRandomStr` 字符串的MD5 */
+export function getRandomStrMD5() {
+  return MD5(getRandomStr()).toString();
 }
 
 /**
@@ -77,4 +85,18 @@ export function toEachTitleUpperCase(str: string) {
       newStr[i].slice(0, 1).toUpperCase() + newStr[i].slice(1).toLowerCase();
   }
   return newStr.join(' ');
+}
+
+export function AESEncrypt(message: string, key: string) {
+  return AES.encrypt(message, key).toString();
+}
+export function AESDecrypt(message: string, key: string) {
+  return AES.decrypt(message, key).toString(enc.Utf8);
+}
+export function stringToUint8Array(str: string) {
+  const ab = new Uint8Array(str.length);
+  for (var i = 0; i < str.length; i++) {
+    ab[i] = str.charCodeAt(i);
+  }
+  return ab;
 }
