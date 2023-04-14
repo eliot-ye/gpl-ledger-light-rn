@@ -19,6 +19,8 @@ export enum IONName {
   Back = 'chevron-back',
   BackCircle = 'chevron-back-circle',
 
+  ChevronForward = 'chevron-forward',
+
   Slider = 'swap-horizontal',
 
   Close = 'close',

@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 
 const Config = {
   offset: 10,
@@ -163,7 +163,7 @@ export function createCPNPageModal() {
             {...panResponderInstance.panHandlers}>
             <Animated.View
               style={[
-                BaseStyles.boxShadow,
+                StyleGet.boxShadow(),
                 {
                   height: boxHeight,
                   transform: [{translateY: translateY}],

@@ -1,4 +1,5 @@
-import {CPNButton, CPNPageView, CNPInput} from '@/components/base';
+import {CNPInput} from '@/components';
+import {CPNButton, CPNPageView} from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {getRealm} from '@/database/main';
 import {StoreRoot, StoreUserInfo} from '@/store';

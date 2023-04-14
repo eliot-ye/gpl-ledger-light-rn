@@ -8,12 +8,12 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {CPNIonicons, CPNText, IONName} from '.';
-import {BaseStyles} from '@/configs/styles';
+import {CPNIonicons, CPNText, IONName} from './base';
+import {StyleGet} from '@/configs/styles';
 
 const styles = StyleSheet.create({
   inputContainer: {
-    ...BaseStyles.cell,
+    ...StyleGet.cellView(),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -59,7 +59,7 @@ export function CNPInput(props: CNPInputProps) {
   return (
     <View>
       {(!!props.label || !!props.placeholder) && (
-        <View style={BaseStyles.cellTitle}>
+        <View style={StyleGet.cellTitleView()}>
           <CPNText
             style={[
               {color: Colors.theme},
@@ -87,7 +87,7 @@ export function CNPInput(props: CNPInputProps) {
           multiline={!props.secureTextEntry && props.editable === false}
           {...props}
           placeholder={placeholderStr}
-          style={[styles.input, {color: Colors.fontText}, props.style]}
+          style={[styles.input, StyleGet.title('h4'), props.style]}
           onFocus={() => isFocusSet(true)}
           onBlur={() => isFocusSet(false)}
         />

@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Animated, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {Colors} from '@/configs/colors';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 import {getOnlyStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {CreateEvents} from '@/libs/CreateEvents';
@@ -13,7 +13,7 @@ const Config = {
 
 const styles = StyleSheet.create({
   container: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     position: 'absolute',
     bottom: 100,
     alignSelf: 'center',

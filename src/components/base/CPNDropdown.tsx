@@ -13,7 +13,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
@@ -26,14 +26,14 @@ const Config = {
 } as const;
 const styles = StyleSheet.create({
   cell: {
-    ...BaseStyles.cell,
+    ...StyleGet.cellView(),
     paddingVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   container: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     position: 'absolute',
   },
 });
@@ -143,6 +143,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
             <CPNText
               numberOfLines={props.numberOfLines}
               style={[
+                StyleGet.title('h4'),
                 !activeItem && {color: Colors.fontSubtitle},
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>

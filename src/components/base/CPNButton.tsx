@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {CPNText, CPNTextColorContext} from './CPNText';
 import {Colors} from '@/configs/colors';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 
 const Config = {
   height: 60,
@@ -17,7 +17,7 @@ const Config = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     height: Config.height,
     justifyContent: 'center',
     alignItems: 'center',

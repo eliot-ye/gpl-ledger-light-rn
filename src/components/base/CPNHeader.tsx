@@ -13,7 +13,7 @@ import {Colors} from '@/configs/colors';
 import {CPNText} from './CPNText';
 import {I18n} from '@/assets/I18n';
 import {CPNIonicons, IONName} from './CPNIcon';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 import {navigationRef} from '@/view/Router';
 
 export const headerIconStyles = StyleSheet.create({
@@ -150,7 +150,7 @@ export function CPNHeader(props: CPNHeaderProps) {
       role="navigation"
       onLayout={props.onLayout}
       style={[
-        props.showShadow && BaseStyles.boxShadow,
+        props.showShadow && StyleGet.boxShadow(),
         props.fixedTop && styles.fixedTop,
         props.safeArea && {paddingTop: edgeInsets.top},
         {

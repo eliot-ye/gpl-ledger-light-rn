@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {I18n} from '@assets/I18n';
 import {Colors} from '@/configs/colors';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {CreateEvents} from '@/libs/CreateEvents';
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   container: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     // borderWidth: 1,
     // borderColor: Colors.dividingLine,
     width: Config.width,

@@ -1,6 +1,6 @@
 import {I18n} from '@/assets/I18n';
 import {Colors} from '@/configs/colors';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -32,7 +32,7 @@ const Config = {
 
 const styles = StyleSheet.create({
   initBtnWrapper: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     borderWidth: Config.borderWidth,
     paddingHorizontal: Config.padding,
   },
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     position: 'absolute',
     borderWidth: Config.borderWidth,
     alignItems: 'center',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   slider: {
-    ...BaseStyles.boxShadow,
+    ...StyleGet.boxShadow(),
     height: Config.btnHeight,
     borderRadius: Config.sliderBorderRadius,
     position: 'absolute',

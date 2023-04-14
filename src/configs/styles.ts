@@ -1,22 +1,41 @@
-import {StyleSheet} from 'react-native';
 import {Colors} from './colors';
 
-export const BaseStyles = StyleSheet.create({
-  boxShadow: {
-    shadowOffset: {width: 0, height: 0} as const,
-    shadowColor: Colors.shadow,
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 5,
-  } as const,
+const titleMap = {
+  h3: 18,
+  h4: 16,
+} as const;
+type TitleType = keyof typeof titleMap;
+function title<T extends TitleType>(type: T) {
+  return {
+    fontSize: titleMap[type],
+    color: Colors.fontTitle,
+  } as const;
+}
 
-  cellTitle: {
-    height: 20,
-  } as const,
-  cell: {
-    height: 46,
-    paddingHorizontal: 10,
-    borderWidth: 2,
-    borderColor: Colors.transparent,
-  } as const,
-});
+export const StyleGet = {
+  title,
+
+  boxShadow() {
+    return {
+      shadowOffset: {width: 0, height: 0} as const,
+      shadowColor: Colors.shadow,
+      shadowOpacity: 0.3,
+      shadowRadius: 2,
+      elevation: 5,
+    } as const;
+  },
+
+  cellTitleView() {
+    return {
+      height: 20,
+    } as const;
+  },
+  cellView() {
+    return {
+      height: 46,
+      paddingHorizontal: 10,
+      borderWidth: 2,
+      borderColor: Colors.transparent,
+    } as const;
+  },
+} as const;

@@ -1,7 +1,6 @@
 import {
   CPNButton,
   CPNDropdown,
-  CNPInput,
   CPNPageView,
   CPNText,
   DataConstraint,
@@ -15,7 +14,8 @@ import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {StoreRoot, StoreUserInfo} from '@/store';
 import {getRealm} from '@/database/main';
-import {BaseStyles} from '@/configs/styles';
+import {StyleGet} from '@/configs/styles';
+import {CNPInput} from '@/components';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -40,7 +40,7 @@ export function SignInPage() {
   function renderUserInfoInput() {
     return (
       <View style={{paddingBottom: 20}}>
-        <View style={BaseStyles.cellTitle}>
+        <View style={StyleGet.cellTitleView()}>
           <CPNText style={{color: Colors.theme}}>用户</CPNText>
         </View>
         <CPNDropdown
