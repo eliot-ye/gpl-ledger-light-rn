@@ -210,6 +210,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                       style={{
                         borderBottomWidth: Config.borderWidth,
                         borderColor: Colors.dividingLine,
+                        marginHorizontal: 6,
                       }}
                     />
                   ) as any
