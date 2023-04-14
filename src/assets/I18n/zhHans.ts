@@ -38,4 +38,6 @@ export default {
   AddColor: '新增顏色',
   ColorName: '顏色名称',
   ColorValue: '顏色值',
+
+  DeleteConfirm: '确定要删除{0}吗？',
 } as const;

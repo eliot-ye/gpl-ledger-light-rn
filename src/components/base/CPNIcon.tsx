@@ -40,6 +40,8 @@ export enum IONName {
 
   Add = 'add',
 
+  Delete = 'trash',
+
   Home = 'home',
   Settings = 'settings',
 }

@@ -8,7 +8,7 @@ import {
   CPNText,
   IONName,
 } from '@/components/base';
-import {dbGetColors, dbSetColor} from '@/database';
+import {dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
 import {ColorItem} from '@/database/color/schema';
 import {TouchableOpacity, View} from 'react-native';
 import {CNPCellGroup, CNPCell, CNPInput} from '@/components';
@@ -48,7 +48,21 @@ export function ColorManagementPage() {
           headerBackgroundColor={detailsRef.current.value}
           safeArea={false}
           leftIconType="close"
-          onPressLeftIcon={() => showDetailsModalSet(false)}>
+          onPressLeftIcon={() => showDetailsModalSet(false)}
+          rightIcon={
+            !!detailsRef.current.name && (
+              <TouchableOpacity
+                onPress={async () => {
+                  if (detailsRef.current.id) {
+                    dbDeleteColor(detailsRef.current.id);
+                    await getDBColors();
+                    showDetailsModalSet(false);
+                  }
+                }}>
+                <CPNIonicons name={IONName.Delete} />
+              </TouchableOpacity>
+            )
+          }>
           <View style={{padding: 20}}>
             <View style={{paddingBottom: 10}}>
               <CNPInput

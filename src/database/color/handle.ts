@@ -17,3 +17,17 @@ export async function dbSetColor(item: Partial<ColorItem>) {
     realm.create(SchemaName.Color, item, Realm.UpdateMode.Modified);
   });
 }
+
+export async function dbDeleteColor(id: string) {
+  const realm = await getRealm();
+
+  const data = realm.objectForPrimaryKey<ColorItem>(SchemaName.Color, id);
+
+  if (!data) {
+    return '';
+  }
+
+  realm.write(() => {
+    realm.delete(data);
+  });
+}
