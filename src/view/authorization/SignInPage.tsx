@@ -16,6 +16,7 @@ import {StoreRoot, StoreUserInfo} from '@/store';
 import {getRealm} from '@/database/main';
 import {StyleGet} from '@/configs/styles';
 import {CNPInput} from '@/components';
+import {I18n} from '@/assets/I18n';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -41,11 +42,13 @@ export function SignInPage() {
     return (
       <View style={{paddingBottom: 20}}>
         <View style={StyleGet.cellTitleView()}>
-          <CPNText style={{color: Colors.theme}}>用户</CPNText>
+          <CPNText style={{color: Colors.theme}}>{I18n.Username}</CPNText>
         </View>
         <CPNDropdown
           selectPlaceholder={
-            useInfoListMemo.length > 0 ? '请选择用户' : '请注册用户'
+            useInfoListMemo.length > 0
+              ? I18n.SelectUser
+              : I18n.PleaseRegisterUser
           }
           data={useInfoListMemo}
           checked={userInfo.value}
@@ -82,9 +85,9 @@ export function SignInPage() {
           onChangeText={value => passwordSet({value, hasError: false})}
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
-          label="密码"
-          placeholder="请输入密码"
-          errorText="请输入有效密码"
+          label={I18n.Password}
+          placeholder={I18n.PasswordPlaceholder}
+          errorText={I18n.PasswordError}
           hasError={password.hasError}
         />
       </View>
@@ -95,7 +98,7 @@ export function SignInPage() {
     return (
       <View>
         <CPNButton
-          text="提交"
+          text={I18n.Submit}
           onPress={async () => {
             if (!userInfo.token) {
               userInfoSet(val => ({...val, hasError: true}));
@@ -141,7 +144,7 @@ export function SignInPage() {
           }}>
           <CPNText
             style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            注册用户
+            {I18n.RegisteredUsers}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -149,7 +152,7 @@ export function SignInPage() {
   }
 
   return (
-    <CPNPageView titleText="登入" keyboardShouldPersistTaps="handled">
+    <CPNPageView titleText={I18n.SignIn} keyboardShouldPersistTaps="handled">
       <View style={{padding: 20}}>
         {renderUserInfoInput()}
         {renderPasswordInput()}

@@ -82,7 +82,7 @@ export function createCPNToast() {
             Animated.timing(option.animatedValue, {
               duration: 200,
               toValue: 0,
-              useNativeDriver: true,
+              useNativeDriver: false,
             }).start();
             setTimeout(() => {
               ev.publish({id, opt: undefined});

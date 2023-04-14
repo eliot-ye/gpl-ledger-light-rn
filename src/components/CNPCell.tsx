@@ -1,17 +1,23 @@
 import {StyleGet} from '@/configs/styles';
 import React, {createContext, useContext} from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import {CPNIonicons, CPNText, IONName} from './base';
+import {
+  CPNIonicons,
+  CPNText,
+  CPNTextColorContext,
+  CPNTextFontSizeContext,
+  IONName,
+} from './base';
 import {Colors} from '@/configs/colors';
 
 export const CNPCellGroupContext = createContext(false);
 export const CNPCellConfig = {
   padding: 10,
-};
+} as const;
 
 interface CNPCellProps {
-  title: string;
-  value?: string;
+  title: React.ReactNode;
+  value?: React.ReactNode;
   isLast?: boolean;
   onPress?: () => void;
 }
@@ -23,7 +29,7 @@ export function CNPCell(props: CNPCellProps) {
       style={[
         StyleGet.cellView(),
         {
-          paddingLeft: CNPCellConfig.padding,
+          paddingRight: 0,
           backgroundColor: Colors.backgroundGrey,
           borderWidth: 0.5,
         },
@@ -44,13 +50,40 @@ export function CNPCell(props: CNPCellProps) {
         }}
         disabled={!props.onPress}
         onPress={props.onPress}>
-        <CPNText style={StyleGet.title('h4')}>{props.title}</CPNText>
         <View
-          style={{paddingLeft: CNPCellConfig.padding, flexDirection: 'row'}}>
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 2.5,
+          }}>
+          <CPNTextFontSizeContext.Provider
+            value={StyleGet.title('h4').fontSize}>
+            <CPNTextColorContext.Provider value={StyleGet.title('h4').color}>
+              {['string', 'number'].includes(typeof props.title) ? (
+                <CPNText>{props.title}</CPNText>
+              ) : (
+                props.title
+              )}
+            </CPNTextColorContext.Provider>
+          </CPNTextFontSizeContext.Provider>
+        </View>
+        <View
+          style={{
+            paddingHorizontal: CNPCellConfig.padding,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            maxWidth: '50%',
+          }}>
           {props.value && (
-            <CPNText style={{color: Colors.fontSubtitle}}>
-              {props.value}
-            </CPNText>
+            <CPNTextColorContext.Provider value={Colors.fontSubtitle}>
+              {['string', 'number'].includes(typeof props.value) ? (
+                <CPNText>{props.value}</CPNText>
+              ) : (
+                props.value
+              )}
+            </CPNTextColorContext.Provider>
           )}
           {props.onPress && (
             <CPNIonicons

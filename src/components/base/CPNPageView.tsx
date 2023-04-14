@@ -93,7 +93,14 @@ export function CPNPageView(props: CPNPageViewProps) {
 
       <Animated.ScrollView
         {...props}
-        style={[{flex: 1}, props.style]}
+        style={[
+          {
+            flex: 1,
+            paddingLeft: edgeInsets.left,
+            paddingRight: edgeInsets.right,
+          },
+          props.style,
+        ]}
         onScroll={
           props.fixedTop
             ? ev => {

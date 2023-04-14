@@ -223,12 +223,12 @@ export function CPNAlertView(props: CPNAlertViewProps) {
     if (props.show) {
       Animated.spring(animatedValue, {
         toValue: 1,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     } else {
       Animated.spring(animatedValue, {
         toValue: 0,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     }
   }, [animatedValue, props.show]);
@@ -308,7 +308,7 @@ export function createCPNAlert() {
           {
             toValue: 1,
             speed: Config.animatedSpeed,
-            useNativeDriver: true,
+            useNativeDriver: false,
           },
         ).start();
       }
@@ -349,7 +349,7 @@ export function createCPNAlert() {
                   Animated.spring(_item.animatedValue, {
                     toValue: 0,
                     speed: Config.animatedSpeed,
-                    useNativeDriver: true,
+                    useNativeDriver: false,
                   }).start(() => {
                     if (_index > 0) {
                       closeEv.publish(_item.id);

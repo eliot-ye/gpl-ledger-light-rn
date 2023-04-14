@@ -30,12 +30,12 @@ export function createCPNLoading() {
         showSet(true);
         Animated.timing(animatedValue, {
           toValue: 1,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start();
       } else {
         Animated.timing(animatedValue, {
           toValue: 0,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start(() => {
           showSet(false);
         });

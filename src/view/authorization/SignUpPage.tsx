@@ -1,3 +1,4 @@
+import {I18n} from '@/assets/I18n';
 import {CNPInput} from '@/components';
 import {CPNButton, CPNPageView} from '@/components/base';
 import {Colors} from '@/configs/colors';
@@ -19,8 +20,8 @@ export function SignUpPage() {
         <CNPInput
           value={username.value}
           onChangeText={value => usernameSet({value, hasError: false})}
-          placeholder="用户名称"
-          errorText="用户名称不能为空"
+          placeholder={I18n.Username}
+          errorText={I18n.UsernameError}
           hasError={username.hasError}
           containerStyle={{
             backgroundColor: Colors.backgroundGrey,
@@ -38,10 +39,10 @@ export function SignUpPage() {
         <CNPInput
           value={password.value}
           onChangeText={value => passwordSet({value, hasError: false})}
-          placeholder="密码"
+          placeholder={I18n.Password}
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
-          errorText="密码不能为空"
+          errorText={I18n.PasswordError}
           hasError={password.hasError}
           containerStyle={{
             backgroundColor: Colors.backgroundGrey,
@@ -55,7 +56,7 @@ export function SignUpPage() {
     return (
       <View>
         <CPNButton
-          text="提交"
+          text={I18n.Submit}
           onPress={async () => {
             if (!username.value) {
               usernameSet(val => ({...val, hasError: true}));
@@ -87,7 +88,7 @@ export function SignUpPage() {
   }
 
   return (
-    <CPNPageView titleText="注册" keyboardShouldPersistTaps="handled">
+    <CPNPageView titleText={I18n.SignUp} keyboardShouldPersistTaps="handled">
       <View style={{padding: 20}}>
         {renderUsernameInput()}
         {renderPasswordInput()}

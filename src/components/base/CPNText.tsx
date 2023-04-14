@@ -1,17 +1,17 @@
-import React, {createContext, useContext, useMemo} from 'react';
+import React, {createContext, useContext} from 'react';
 import {Linking, Text, TextProps} from 'react-native';
 import {Colors} from '@/configs/colors';
 
 export const CPNTextColorContext = createContext('');
+export const CPNTextFontSizeContext = createContext(16);
 
 interface CPNTextProps extends TextProps {
   link?: string;
 }
 export function CPNText(props: CPNTextProps) {
-  const btnColor = useContext(CPNTextColorContext);
-  const textColor = useMemo(() => {
-    return btnColor || Colors.fontText;
-  }, [btnColor]);
+  const colorDefault = useContext(CPNTextColorContext) || Colors.fontText;
+
+  const fontSizeDefault = useContext(CPNTextFontSizeContext);
 
   return (
     <Text
@@ -27,7 +27,7 @@ export function CPNText(props: CPNTextProps) {
       }
       {...props}
       style={[
-        {color: textColor},
+        {color: colorDefault, fontSize: fontSizeDefault},
         !!props.link && {
           textDecorationLine: 'underline',
         },

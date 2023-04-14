@@ -5,6 +5,9 @@ export default {
   GoBack: '返回',
   Close: '关闭',
   Refresh: '刷新',
+  Submit: '提交',
+  SignIn: '登入',
+  SignUp: '注册',
 
   VerificationSuccessful: '验证成功',
   VerificationFailed: '验证失败，请重新验证',
@@ -16,6 +19,19 @@ export default {
   SessionExpired: '登录已失效',
   NetworkError: '网络错误，请稍后再试',
 
-  test1: '测试1: {0}',
-  test2: '测试2: {a}',
+  Ledger: '账本',
+  Settings: '设置',
+
+  SelectUser: '请选择用户',
+  PleaseRegisterUser: '请注册用户',
+  RegisteredUsers: '注册用户',
+
+  Password: '密码',
+  PasswordPlaceholder: '请输入密码',
+  PasswordError: '请输入有效密码',
+
+  Username: '用户名',
+  UsernameError: '请输入有效用户名',
+
+  ColorManagement: '颜色管理',
 } as const;

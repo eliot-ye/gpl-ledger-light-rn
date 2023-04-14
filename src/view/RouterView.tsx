@@ -12,10 +12,11 @@ import {CPNIonicons, CPNText, IONName} from '@components/base';
 import {Colors} from '@/configs/colors';
 import {Platform, View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
+import {I18n} from '@/assets/I18n';
 
 import {renderAuthorizationRouterView} from './authorization/routes';
 import {HomePage} from './ledger/routes';
-import {SettingPage} from './settings/routes';
+import {renderSettingsRouterView, SettingPage} from './settings/routes';
 
 export function RouterView() {
   const RootState = StoreRoot.useState();
@@ -44,6 +45,7 @@ export function RouterView() {
               component={TabBarView}
               options={{headerShown: false, animationEnabled: false}}
             />
+            {renderSettingsRouterView}
           </>
         ) : (
           renderAuthorizationRouterView
@@ -57,7 +59,7 @@ function TabBarView() {
   const tabbarOptionList: TabbarOption[] = [
     {
       name: 'HomePage',
-      label: 'Home',
+      label: I18n.Ledger,
       icon: IONName.Home,
       backgroundColor: (
         <View
@@ -72,7 +74,7 @@ function TabBarView() {
     },
     {
       name: 'SettingPage',
-      label: '设置',
+      label: I18n.Settings,
       icon: IONName.Settings,
       backgroundColor: (
         <View

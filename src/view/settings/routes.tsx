@@ -1,16 +1,18 @@
-// import React from 'react';
-// import {RootStack} from '../Router';
+import React from 'react';
+import {RootStack} from '../Router';
 
 export * from './SettingPage';
+import {ColorManagementPage} from './ColorManagementPage';
 
-// export type AuthorizationStackParamList = {
-//   SignUpPage: undefined;
-//   SignInPage: undefined;
-// };
+export type SettingsStackParamList = {
+  ColorManagementPage: undefined;
+};
 
-// export const renderAuthorizationRouterView = (
-//   <>
-//     <RootStack.Screen name="SignInPage" component={SignInPage} />
-//     <RootStack.Screen name="SignUpPage" component={SignUpPage} />
-//   </>
-// );
+export const renderSettingsRouterView = (
+  <>
+    <RootStack.Screen
+      name="ColorManagementPage"
+      component={ColorManagementPage}
+    />
+  </>
+);
