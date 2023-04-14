@@ -1,6 +1,7 @@
 import Realm from 'realm';
 import {ColorSchema} from './color/schema';
 import {stringToUint8Array} from '@/utils/tools';
+import {getDefaultColors} from './color/default';
 
 let realm: Realm | undefined;
 
@@ -12,6 +13,11 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         schemaVersion: 1,
         path,
         encryptionKey: stringToUint8Array(encryptionKey),
+        onFirstOpen(_realm) {
+          getDefaultColors().forEach(item => {
+            _realm.create(ColorSchema.name, item);
+          });
+        },
       });
     } else {
       return Promise.reject('realm is closed');

@@ -38,6 +38,8 @@ export enum IONName {
   Eye = 'eye',
   EyeOff = 'eye-off',
 
+  Add = 'add',
+
   Home = 'home',
   Settings = 'settings',
 }

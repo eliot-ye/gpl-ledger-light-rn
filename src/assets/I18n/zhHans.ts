@@ -34,4 +34,8 @@ export default {
   UsernameError: '请输入有效用户名',
 
   ColorManagement: '颜色管理',
+  EditColor: '编辑顏色：{0}',
+  AddColor: '新增顏色',
+  ColorName: '顏色名称',
+  ColorValue: '顏色值',
 } as const;

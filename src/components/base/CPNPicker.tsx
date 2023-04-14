@@ -1,4 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Animated,
   type NativeScrollEvent,
@@ -18,6 +25,7 @@ import {Colors} from '@/configs/colors';
 import {toTitleCase} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {DataConstraint} from './CPNDropdown';
+import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   itemHeight: 40,
@@ -69,6 +77,8 @@ interface PickerSingleProps extends CPNPicker {
   onChange?: (index: number) => void;
 }
 export function CPNPickerSingle(props: PickerSingleProps) {
+  const themeColor = useContext(CPNPageViewThemeColor);
+
   const SVRef = useRef<ScrollView | undefined>();
 
   const [activeIndex, activeIndexSet] = useState(props.initActive || 0);
@@ -178,7 +188,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
                 <CPNText
                   style={[
                     styles.itemText,
-                    {color: Colors.theme},
+                    {color: themeColor || Colors.theme},
                     index === activeIndex && {
                       opacity: 1,
                       fontSize: Config.selectTextSize,
@@ -196,7 +206,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
         pointerEvents="none"
         style={[
           styles.selectWatermark,
-          {borderColor: Colors.theme, height: itemHeight},
+          {borderColor: themeColor || Colors.theme, height: itemHeight},
         ]}
       />
     </View>

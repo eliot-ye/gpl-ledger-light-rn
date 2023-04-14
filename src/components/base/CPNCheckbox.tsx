@@ -1,8 +1,9 @@
-import React, {type PropsWithChildren} from 'react';
+import React, {useContext, type PropsWithChildren} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
+import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   size: 20,
@@ -41,6 +42,8 @@ interface CPNCheckboxProps extends PropsWithChildren {
   verticalMarginTop?: number;
 }
 export function CPNCheckbox(props: CPNCheckboxProps) {
+  const themeColor = useContext(CPNPageViewThemeColor);
+
   const verticalCentering = props.verticalCentering !== false;
 
   return (
@@ -61,7 +64,10 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
       <View
         style={[
           styles.iconWrapper,
-          {borderColor: Colors.theme, backgroundColor: Colors.backgroundTheme},
+          {
+            borderColor: themeColor || Colors.theme,
+            backgroundColor: Colors.backgroundTheme,
+          },
           !verticalCentering && {
             marginTop:
               props.verticalMarginTop === undefined
@@ -69,7 +75,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
                 : props.verticalMarginTop,
           },
           props.shape === 'round' && {borderRadius: Config.size * 0.5},
-          props.checked && {backgroundColor: Colors.theme},
+          props.checked && {backgroundColor: themeColor || Colors.theme},
           props.disabled && {
             backgroundColor: Colors.backgroundDisabled,
             borderColor: Colors.backgroundDisabled,

@@ -1,5 +1,5 @@
 import {Colors} from '@/configs/colors';
-import React, {useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {CPNIonicons, CPNText, IONName} from './base';
+import {CPNIonicons, CPNPageViewThemeColor, CPNText, IONName} from './base';
 import {StyleGet} from '@/configs/styles';
 
 const styles = StyleSheet.create({
@@ -31,6 +31,8 @@ interface CNPInputProps extends TextInputProps {
 }
 
 export function CNPInput(props: CNPInputProps) {
+  const themeColor = useContext(CPNPageViewThemeColor);
+
   const [isFocus, isFocusSet] = useState(false);
 
   const focused =
@@ -62,7 +64,7 @@ export function CNPInput(props: CNPInputProps) {
         <View style={StyleGet.cellTitleView()}>
           <CPNText
             style={[
-              {color: Colors.theme},
+              {color: themeColor || Colors.theme},
               props.hasError && {color: Colors.fail},
             ]}>
             {labelStr}
@@ -76,7 +78,7 @@ export function CNPInput(props: CNPInputProps) {
             backgroundColor: Colors.backgroundGrey,
             borderBottomColor: Colors.dividingLine,
           },
-          focused && {borderBottomColor: Colors.theme},
+          focused && {borderBottomColor: themeColor || Colors.theme},
           props.hasError && {borderBottomColor: Colors.fail},
         ]}>
         <TextInput

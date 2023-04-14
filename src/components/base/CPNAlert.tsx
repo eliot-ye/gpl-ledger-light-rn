@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Modal,
@@ -13,6 +13,7 @@ import {StyleGet} from '@/configs/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {CreateEvents} from '@/libs/CreateEvents';
+import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   width: '80%',
@@ -89,6 +90,8 @@ interface CPNAlertBoxProps extends AlertOption {
   onClose: () => void;
 }
 function CPNAlertBox(props: CPNAlertBoxProps) {
+  const themeColor = useContext(CPNPageViewThemeColor);
+
   const buttonsList = useMemo(
     () =>
       props.buttons
@@ -124,7 +127,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
             style={[
               styles.text,
               {
-                color: Colors.theme,
+                color: themeColor || Colors.theme,
                 fontWeight: Config.titleFontWeight,
                 fontSize: Config.titleFontSize,
                 marginBottom: !props.message ? 0 : 10,
@@ -136,7 +139,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
         {!!props.message && (
           <CPNText
             role="contentinfo"
-            style={[styles.text, {color: Colors.theme}]}>
+            style={[styles.text, {color: themeColor || Colors.theme}]}>
             {props.message}
           </CPNText>
         )}
@@ -199,7 +202,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
                       _btn.textColor ||
                       (!isColumnButtons && isLast) ||
                       (isColumnButtons && isFirst)
-                        ? Colors.theme
+                        ? themeColor || Colors.theme
                         : undefined,
                   }}>
                   {_btn.text}

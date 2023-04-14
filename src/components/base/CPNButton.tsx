@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 import {CPNText, CPNTextColorContext} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {StyleGet} from '@/configs/styles';
+import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   height: 60,
@@ -46,12 +47,14 @@ interface CPNButtonProps extends TouchableOpacityProps {
   disabledInit?: boolean;
 }
 export function CPNButton(props: CPNButtonProps) {
+  const themeColor = useContext(CPNPageViewThemeColor);
+
   const CPNButtonTypeList = useMemo<CPNButtonTypeItem[]>(
     () => [
       {
         type: 'theme',
         textColor: Colors.fontTextReverse,
-        backgroundColor: Colors.theme,
+        backgroundColor: themeColor || Colors.theme,
       },
       {
         type: 'warning',
@@ -66,6 +69,7 @@ export function CPNButton(props: CPNButtonProps) {
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
+      themeColor,
       Colors.fontText,
       Colors.fontTextReverse,
       Colors.theme,
@@ -108,9 +112,9 @@ export function CPNButton(props: CPNButtonProps) {
 
     return {
       textColor: Colors.fontTextReverse,
-      backgroundColor: Colors.theme,
+      backgroundColor: themeColor || Colors.theme,
     };
-  }, [CPNButtonTypeList, disabled, props.disabled, props.type]);
+  }, [CPNButtonTypeList, disabled, props.disabled, props.type, themeColor]);
 
   return (
     <TouchableOpacity

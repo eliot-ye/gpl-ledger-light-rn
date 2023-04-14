@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {createContext, useRef, useState} from 'react';
 import {
   type ScrollViewProps,
   View,
@@ -14,6 +14,8 @@ export enum BarTextStyle {
   light = 'light-content',
   dark = 'dark-content',
 }
+
+export const CPNPageViewThemeColor = createContext('');
 
 interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
   /** @default true */
@@ -78,66 +80,68 @@ export function CPNPageView(props: CPNPageViewProps) {
   const edgeInsets = useSafeAreaInsets();
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Colors.backgroundTheme,
-      }}>
-      <StatusBar
-        barStyle={props.barStyle || BarTextStyle.light}
-        backgroundColor={Colors.transparent}
-        translucent
-      />
+    <CPNPageViewThemeColor.Provider value={headerBackgroundColor}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: Colors.backgroundTheme,
+        }}>
+        <StatusBar
+          barStyle={props.barStyle || BarTextStyle.light}
+          backgroundColor={Colors.transparent}
+          translucent
+        />
 
-      {!props.fixedTop && <View style={{height: headerInfo.height}} />}
+        {!props.fixedTop && <View style={{height: headerInfo.height}} />}
 
-      <Animated.ScrollView
-        {...props}
-        style={[
-          {
-            flex: 1,
-            paddingLeft: edgeInsets.left,
-            paddingRight: edgeInsets.right,
-          },
-          props.style,
-        ]}
-        onScroll={
-          props.fixedTop
-            ? ev => {
-                const contentOffsetY = ev.nativeEvent.contentOffset.y;
-                if (
-                  Platform.OS === 'ios' &&
-                  props.renderIOSTopNegativeDistanceView
-                ) {
-                  topNegativeDistanceSet(
-                    contentOffsetY < 0 ? -contentOffsetY : 0,
-                  );
-                  topDistanceAnimated.setValue(
-                    contentOffsetY > 0 ? -contentOffsetY : 0,
-                  );
+        <Animated.ScrollView
+          {...props}
+          style={[
+            {
+              flex: 1,
+              paddingLeft: edgeInsets.left,
+              paddingRight: edgeInsets.right,
+            },
+            props.style,
+          ]}
+          onScroll={
+            props.fixedTop
+              ? ev => {
+                  const contentOffsetY = ev.nativeEvent.contentOffset.y;
+                  if (
+                    Platform.OS === 'ios' &&
+                    props.renderIOSTopNegativeDistanceView
+                  ) {
+                    topNegativeDistanceSet(
+                      contentOffsetY < 0 ? -contentOffsetY : 0,
+                    );
+                    topDistanceAnimated.setValue(
+                      contentOffsetY > 0 ? -contentOffsetY : 0,
+                    );
+                  }
+                  scrollDistanceAnimated.setValue(contentOffsetY);
+                  props.onScroll && props.onScroll(ev);
                 }
-                scrollDistanceAnimated.setValue(contentOffsetY);
-                props.onScroll && props.onScroll(ev);
-              }
-            : props.onScroll
-        }>
-        {props.children}
-        <View style={{height: edgeInsets.bottom}} />
-      </Animated.ScrollView>
+              : props.onScroll
+          }>
+          {props.children}
+          <View style={{height: edgeInsets.bottom}} />
+        </Animated.ScrollView>
 
-      {Platform.OS === 'ios' && props.renderIOSTopNegativeDistanceView ? (
-        <Animated.View
-          pointerEvents="none"
-          style={{
-            position: 'absolute',
-            top: topDistanceAnimated,
-            width: '100%',
-          }}>
-          {props.renderIOSTopNegativeDistanceView(topNegativeDistance)}
-        </Animated.View>
-      ) : null}
+        {Platform.OS === 'ios' && props.renderIOSTopNegativeDistanceView ? (
+          <Animated.View
+            pointerEvents="none"
+            style={{
+              position: 'absolute',
+              top: topDistanceAnimated,
+              width: '100%',
+            }}>
+            {props.renderIOSTopNegativeDistanceView(topNegativeDistance)}
+          </Animated.View>
+        ) : null}
 
-      {renderHeader()}
-    </View>
+        {renderHeader()}
+      </View>
+    </CPNPageViewThemeColor.Provider>
   );
 }
