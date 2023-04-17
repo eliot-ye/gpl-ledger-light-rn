@@ -4,6 +4,7 @@ import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {CPNPageViewThemeColor} from './CPNPageView';
+import {FormItemContext} from '../CNPFormItem';
 
 const Config = {
   size: 20,
@@ -43,6 +44,7 @@ interface CPNCheckboxProps extends PropsWithChildren {
 }
 export function CPNCheckbox(props: CPNCheckboxProps) {
   const themeColor = useContext(CPNPageViewThemeColor);
+  const formData = useContext(FormItemContext);
 
   const verticalCentering = props.verticalCentering !== false;
 
@@ -58,7 +60,10 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
       disabled={props.disabled}
       style={[
         styles.container,
-        {alignItems: verticalCentering ? 'center' : 'flex-start'},
+        {
+          alignItems: verticalCentering ? 'center' : 'flex-start',
+          marginRight: formData.isFormItem ? 16 : 0,
+        },
       ]}
       onPress={props.onPress}>
       <View
@@ -89,9 +94,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
           />
         )}
       </View>
-      <View style={{flex: 1}}>
-        {props.children || <CPNText>{props.label}</CPNText>}
-      </View>
+      <View>{props.children || <CPNText>{props.label}</CPNText>}</View>
     </TouchableOpacity>
   );
 }

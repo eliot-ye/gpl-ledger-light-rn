@@ -14,8 +14,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {StoreRoot, StoreUserInfo} from '@/store';
 import {getRealm} from '@/database/main';
-import {StyleGet} from '@/configs/styles';
-import {CNPInput} from '@/components';
+import {CNPFormItem, CNPInput} from '@/components';
 import {I18n} from '@/assets/I18n';
 
 export function SignInPage() {
@@ -41,21 +40,20 @@ export function SignInPage() {
   function renderUserInfoInput() {
     return (
       <View style={{paddingBottom: 20}}>
-        <View style={StyleGet.cellTitleView()}>
-          <CPNText style={{color: Colors.theme}}>{I18n.Username}</CPNText>
-        </View>
-        <CPNDropdown
-          selectPlaceholder={
-            useInfoListMemo.length > 0
-              ? I18n.SelectUser
-              : I18n.PleaseRegisterUser
-          }
-          data={useInfoListMemo}
-          checked={userInfo.value}
-          onSelect={data => {
-            userInfoSet(data);
-          }}
-        />
+        <CNPFormItem title={I18n.Username}>
+          <CPNDropdown
+            selectPlaceholder={
+              useInfoListMemo.length > 0
+                ? I18n.SelectUser
+                : I18n.PleaseRegisterUser
+            }
+            data={useInfoListMemo}
+            checked={userInfo.value}
+            onSelect={data => {
+              userInfoSet(data);
+            }}
+          />
+        </CNPFormItem>
       </View>
     );
   }
@@ -80,16 +78,19 @@ export function SignInPage() {
   function renderPasswordInput() {
     return (
       <View style={{paddingBottom: 30}}>
-        <CNPInput
-          value={password.value}
-          onChangeText={value => passwordSet({value, hasError: false})}
-          secureTextEntry={secureTextEntry}
-          onPressRightIcon={() => secureTextEntrySet(d => !d)}
-          label={I18n.Password}
-          placeholder={I18n.PasswordPlaceholder}
-          errorText={I18n.PasswordError}
-          hasError={password.hasError}
-        />
+        <CNPFormItem
+          style={{paddingBottom: 30}}
+          title={I18n.Password}
+          errorText={I18n.PasswordError1}
+          hasError={password.hasError}>
+          <CNPInput
+            value={password.value}
+            onChangeText={value => passwordSet({value, hasError: false})}
+            secureTextEntry={secureTextEntry}
+            onPressRightIcon={() => secureTextEntrySet(d => !d)}
+            placeholder={I18n.PasswordPlaceholder}
+          />
+        </CNPFormItem>
       </View>
     );
   }

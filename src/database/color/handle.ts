@@ -24,7 +24,7 @@ export async function dbDeleteColor(id: string) {
   const data = realm.objectForPrimaryKey<ColorItem>(SchemaName.Color, id);
 
   if (!data) {
-    return Promise.reject(`id (${id}) 不存在`);
+    return Promise.reject(`Color id (${id}) 不存在`);
   }
 
   realm.write(() => {

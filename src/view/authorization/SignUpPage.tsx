@@ -1,7 +1,6 @@
 import {I18n} from '@/assets/I18n';
-import {CNPInput} from '@/components';
+import {CNPFormItem, CNPInput} from '@/components';
 import {CPNButton, CPNPageView} from '@/components/base';
-import {Colors} from '@/configs/colors';
 import {getRealm} from '@/database/main';
 import {StoreRoot, StoreUserInfo} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
@@ -13,42 +12,57 @@ export function SignUpPage() {
   const RootDispatch = StoreRoot.useDispatch();
   const UserInfoDispatch = StoreUserInfo.useDispatch();
 
-  const [username, usernameSet] = useState({value: '', hasError: false});
+  interface FormData {
+    username: string;
+    password: string;
+  }
+  const [formData, formDataSet] = useState<FormData>({
+    username: '',
+    password: '',
+  });
+  const [formDataError, formDataErrorSet] = useState<ErrorItem<FormData>>({
+    username: '',
+    password: '',
+  });
+
   function renderUsernameInput() {
     return (
-      <View style={{paddingBottom: 10}}>
+      <CNPFormItem
+        style={{paddingBottom: 10}}
+        title={I18n.Username}
+        errorText={formDataError.username}
+        hasError={!!formDataError.username}>
         <CNPInput
-          value={username.value}
-          onChangeText={value => usernameSet({value, hasError: false})}
-          placeholder={I18n.Username}
-          errorText={I18n.UsernameError}
-          hasError={username.hasError}
-          containerStyle={{
-            backgroundColor: Colors.backgroundGrey,
+          value={formData.username}
+          onChangeText={username => {
+            formDataSet({...formData, username});
+            formDataErrorSet({...formData, username: ''});
           }}
+          placeholder={I18n.UsernamePlaceholder}
         />
-      </View>
+      </CNPFormItem>
     );
   }
 
-  const [password, passwordSet] = useState({value: '', hasError: false});
   const [secureTextEntry, secureTextEntrySet] = useState(true);
   function renderPasswordInput() {
     return (
-      <View style={{paddingBottom: 30}}>
+      <CNPFormItem
+        style={{paddingBottom: 30}}
+        title={I18n.Password}
+        errorText={I18n.PasswordError1}
+        hasError={!!formDataError.password}>
         <CNPInput
-          value={password.value}
-          onChangeText={value => passwordSet({value, hasError: false})}
-          placeholder={I18n.Password}
+          value={formData.password}
+          onChangeText={password => {
+            formDataSet({...formData, password});
+            formDataErrorSet({...formDataError, password: ''});
+          }}
+          placeholder={I18n.PasswordPlaceholder}
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
-          errorText={I18n.PasswordError}
-          hasError={password.hasError}
-          containerStyle={{
-            backgroundColor: Colors.backgroundGrey,
-          }}
         />
-      </View>
+      </CNPFormItem>
     );
   }
 
@@ -58,12 +72,21 @@ export function SignUpPage() {
         <CPNButton
           text={I18n.Submit}
           onPress={async () => {
-            if (!username.value) {
-              usernameSet(val => ({...val, hasError: true}));
-              return;
+            const _formDataError: ErrorItem<FormData> = {};
+
+            if (!formData.username) {
+              _formDataError.username = I18n.UsernameError1;
             }
-            if (!password.value) {
-              passwordSet(val => ({...val, hasError: true}));
+            if (!formData.password) {
+              _formDataError.password = I18n.PasswordError1;
+            }
+
+            if (
+              Object.keys(_formDataError)
+                .map(item => !!item)
+                .includes(true)
+            ) {
+              formDataErrorSet(_formDataError);
               return;
             }
 
@@ -74,8 +97,8 @@ export function SignUpPage() {
 
             await LS_UserInfo.set({
               id,
-              username: username.value,
-              token: AESEncrypt(dbKey, password.value),
+              username: formData.username,
+              token: AESEncrypt(dbKey, formData.password),
             });
 
             UserInfoDispatch('userId', id);

@@ -3,34 +3,36 @@ import {I18n} from '@/assets/I18n';
 import {
   CPNAlertView,
   CPNButton,
+  CPNCheckbox,
   CPNIonicons,
   CPNPageModal,
   CPNPageView,
-  CPNText,
   IONName,
 } from '@/components/base';
-import {dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
-import {ColorItem} from '@/database/color/schema';
+import {dbDeleteAssetType, dbGetAssetTypes, dbSetAssetType} from '@/database';
+import {AssetTypeItem} from '@/database/assetType/schema';
 import {TouchableOpacity, View} from 'react-native';
 import {CNPCellGroup, CNPCell, CNPInput, CNPFormItem} from '@/components';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 
-export function ColorManagementPage() {
-  const [colorList, colorListSet] = useState<ColorItem[]>([]);
-  const getDBColors = useCallback(async () => {
-    const res = await dbGetColors();
-    colorListSet(res);
+export function AssetTypeManagementPage() {
+  const [AssetTypeList, AssetTypeListSet] = useState<AssetTypeItem[]>([]);
+  const getDBAssetTypes = useCallback(async () => {
+    const res = await dbGetAssetTypes();
+    AssetTypeListSet(res);
   }, []);
   useEffect(() => {
-    getDBColors();
-  }, [getDBColors]);
+    getDBAssetTypes();
+  }, [getDBAssetTypes]);
 
   const [showDetailsModal, showDetailsModalSet] = useState(false);
-  const [details, detailsSet] = useState<Partial<ColorItem>>({});
-  const detailsRef = useRef<Partial<ColorItem>>({});
-  const [detailsError, detailsErrorSet] = useState<ErrorItem<ColorItem>>({});
+  const [details, detailsSet] = useState<Partial<AssetTypeItem>>({});
+  const detailsRef = useRef<Partial<AssetTypeItem>>({});
+  const [detailsError, detailsErrorSet] = useState<ErrorItem<AssetTypeItem>>(
+    {},
+  );
   function renderDetailsModal() {
     return (
       <CPNPageModal.View
@@ -41,13 +43,12 @@ export function ColorManagementPage() {
           titleText={
             detailsRef.current.id
               ? (I18n.formatString(
-                  I18n.EditColor,
+                  I18n.EditAssetType,
                   detailsRef.current.name || '',
                 ) as string)
-              : I18n.AddColor
+              : I18n.AddAssetType
           }
           scrollEnabled={false}
-          headerBackgroundColor={detailsRef.current.value}
           safeArea={false}
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}
@@ -63,8 +64,8 @@ export function ColorManagementPage() {
           }>
           <View style={{padding: 20}}>
             <CNPFormItem
-              style={{paddingBottom: 10}}
-              title={I18n.ColorName}
+              style={{paddingBottom: 20}}
+              title={I18n.AssetTypeName}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
               <CNPInput
@@ -77,34 +78,42 @@ export function ColorManagementPage() {
             </CNPFormItem>
 
             <CNPFormItem
-              style={{paddingBottom: 20}}
-              title={I18n.ColorValue}
-              hasError={!!detailsError.value}
-              errorText={detailsError.value}>
-              <CNPInput
-                value={details.value}
-                onChangeText={value => {
-                  detailsSet({...details, value});
-                  detailsErrorSet({...detailsError, value: ''});
-                }}
-              />
+              style={{paddingBottom: 30}}
+              title={I18n.AssetType}
+              hasError={!!detailsError.isAvailableAssets}
+              errorText={detailsError.isAvailableAssets}>
+              <View style={{flexDirection: 'row'}}>
+                <CPNCheckbox
+                  label={I18n.AvailableAssets}
+                  checked={details.isAvailableAssets === true}
+                  shape="round"
+                  onPress={() => {
+                    detailsSet({...details, isAvailableAssets: true});
+                    detailsErrorSet({...detailsError, isAvailableAssets: ''});
+                  }}
+                />
+                <CPNCheckbox
+                  checked={details.isAvailableAssets === false}
+                  label={I18n.UnavailableAssets}
+                  shape="round"
+                  onPress={() => {
+                    detailsSet({...details, isAvailableAssets: false});
+                    detailsErrorSet({...detailsError, isAvailableAssets: ''});
+                  }}
+                />
+              </View>
             </CNPFormItem>
 
             <CPNButton
               text={I18n.Submit}
               onPress={async () => {
-                const _detailsError: ErrorItem<ColorItem> = {};
+                const _detailsError: ErrorItem<AssetTypeItem> = {};
                 if (!details.name) {
-                  _detailsError.name = I18n.ColorNameError1;
+                  _detailsError.name = I18n.AssetTypeNameError1;
                 }
 
-                if (!details.value) {
-                  _detailsError.value = I18n.ColorValueError1;
-                } else if (
-                  !details.value.startsWith('#') &&
-                  !details.value.startsWith('rgb')
-                ) {
-                  _detailsError.value = I18n.ColorValueError2;
+                if (details.isAvailableAssets === undefined) {
+                  _detailsError.isAvailableAssets = I18n.AssetTypeError;
                 }
 
                 const errorList = Object.values(_detailsError).map(
@@ -118,8 +127,8 @@ export function ColorManagementPage() {
                 if (!details.id) {
                   details.id = getRandomStrMD5();
                 }
-                await dbSetColor(details);
-                await getDBColors();
+                await dbSetAssetType(details);
+                await getDBAssetTypes();
                 showDetailsModalSet(false);
               }}
             />
@@ -149,8 +158,8 @@ export function ColorManagementPage() {
               text: I18n.Confirm,
               async onPress() {
                 if (detailsRef.current.id) {
-                  dbDeleteColor(detailsRef.current.id);
-                  await getDBColors();
+                  dbDeleteAssetType(detailsRef.current.id);
+                  await getDBAssetTypes();
                   showDetailsModalSet(false);
                 }
               },
@@ -164,26 +173,18 @@ export function ColorManagementPage() {
 
   return (
     <>
-      <CPNPageView titleText={I18n.ColorManagement}>
+      <CPNPageView titleText={I18n.AssetTypeManagement}>
         <View style={{padding: 20}}>
           <CNPCellGroup>
-            {colorList.map(item => (
+            {AssetTypeList.map(item => (
               <CNPCell
                 key={item.id}
-                title={
-                  <>
-                    <View
-                      style={{
-                        width: 10,
-                        height: 10,
-                        backgroundColor: item.value,
-                        marginRight: 6,
-                      }}
-                    />
-                    <CPNText>{item.name}</CPNText>
-                  </>
+                title={item.name}
+                value={
+                  item.isAvailableAssets
+                    ? I18n.AvailableAssets
+                    : I18n.UnavailableAssets
                 }
-                value={item.value}
                 onPress={() => {
                   detailsSet(item);
                   detailsErrorSet({});

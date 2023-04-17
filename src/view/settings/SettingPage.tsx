@@ -16,33 +16,35 @@ export function SettingPage() {
       headerBackgroundColor={Colors.warning}
       hideBack>
       <View style={{padding: 20}}>
-        <CNPCellGroup>
+        <CNPCellGroup style={{marginBottom: 20}}>
           <CNPCell
             title={I18n.ColorManagement}
             onPress={() => {
               navigation.navigate('ColorManagementPage');
             }}
-          />
-          <CNPCell
-            title="颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理"
-            value="valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue"
-            onPress={() => {
-              navigation.navigate('ColorManagementPage');
-            }}
-          />
-          <CNPCell
-            title="颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理"
-            value="valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue"
             isLast
           />
         </CNPCellGroup>
-      </View>
-      <View style={{padding: 20}}>
-        <CNPCell
-          title="颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理颜色管理"
-          value="valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue"
-          isLast
-        />
+
+        <CNPCellGroup style={{marginBottom: 20}}>
+          <CNPCell
+            title={I18n.AssetTypeManagement}
+            onPress={() => {
+              navigation.navigate('AssetTypeManagementPage');
+            }}
+            isLast
+          />
+        </CNPCellGroup>
+
+        <CNPCellGroup style={{marginBottom: 20}}>
+          <CNPCell
+            title={I18n.ColorManagement}
+            onPress={() => {
+              navigation.navigate('ColorManagementPage');
+            }}
+            isLast
+          />
+        </CNPCellGroup>
       </View>
     </CPNPageView>
   );

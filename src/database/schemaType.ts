@@ -12,4 +12,5 @@ export function createObjectSchema<T>(schema: Schema<T>) {
 
 export enum SchemaName {
   Color = 'Color',
+  AssetType = 'AssetType',
 }
