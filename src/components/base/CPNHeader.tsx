@@ -132,11 +132,7 @@ export function CPNHeader(props: CPNHeaderProps) {
       props.customTitle || (
         <CPNText
           role="heading"
-          style={[
-            styles.titleText,
-            {color: Colors.fontTitleReverse},
-            props.titleStyle,
-          ]}>
+          style={[StyleGet.title('h2', true), props.titleStyle]}>
           {props.titleText}
         </CPNText>
       )

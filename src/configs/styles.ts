@@ -1,14 +1,15 @@
 import {Colors} from './colors';
 
 const titleMap = {
+  h2: 20,
   h3: 18,
   h4: 16,
 } as const;
 type TitleType = keyof typeof titleMap;
-function title<T extends TitleType>(type: T) {
+function title<T extends TitleType>(type: T, isReverse?: boolean) {
   return {
     fontSize: titleMap[type],
-    color: Colors.fontTitle,
+    color: isReverse ? Colors.fontTitleReverse : Colors.fontTitle,
   } as const;
 }
 
