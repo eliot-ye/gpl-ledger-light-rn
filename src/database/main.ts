@@ -9,14 +9,22 @@ import {getDefaultAssetTypes} from './assetType/default';
 
 let realm: Realm | undefined;
 
+let pathCache = '';
+let encryptionKeyCache = '';
+
 export async function getRealm(path?: string, encryptionKey?: string) {
   if (!realm || realm.isClosed) {
     if (path && encryptionKey) {
+      pathCache = path;
+      encryptionKeyCache = encryptionKey;
+    }
+
+    if (pathCache && encryptionKeyCache) {
       realm = await Realm.open({
         schema: [ColorSchema, AssetTypeSchema],
         schemaVersion: 1,
-        path,
-        encryptionKey: stringToUint8Array(encryptionKey),
+        path: pathCache,
+        encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
           getDefaultColors().forEach(item => {
             _realm.create(ColorSchema.name, item);

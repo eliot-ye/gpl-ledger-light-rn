@@ -81,6 +81,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
           },
           props.shape === 'round' && {borderRadius: Config.size * 0.5},
           props.checked && {backgroundColor: themeColor || Colors.theme},
+          formData.hasError && {borderColor: Colors.fail},
           props.disabled && {
             backgroundColor: Colors.backgroundDisabled,
             borderColor: Colors.backgroundDisabled,

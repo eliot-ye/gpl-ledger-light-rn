@@ -52,6 +52,7 @@ export function CNPInput(props: CNPInputProps) {
         allowFontScaling={false}
         autoCapitalize={'none'}
         multiline={!props.secureTextEntry && props.editable === false}
+        placeholderTextColor={Colors.fontPlaceholder}
         {...props}
         style={[styles.input, StyleGet.title('h4'), props.style]}
         onFocus={() => isFocusSet(true)}

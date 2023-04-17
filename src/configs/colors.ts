@@ -34,6 +34,7 @@ const colorsDefault = {
   fontTitleReverse: '#fff',
   fontSubtitleReverse: '#fff',
   fontTextReverse: '#fff',
+  fontPlaceholder: '#999',
 } as const;
 
 const colorsDark = {

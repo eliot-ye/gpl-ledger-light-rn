@@ -144,7 +144,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               numberOfLines={props.numberOfLines}
               style={[
                 StyleGet.title('h4'),
-                !activeItem && {color: Colors.fontSubtitle},
+                !activeItem && {color: Colors.fontPlaceholder},
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>
               {activeItem?.label ||
