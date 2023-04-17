@@ -37,7 +37,10 @@ export default {
   EditColor: '编辑顏色：{0}',
   AddColor: '新增顏色',
   ColorName: '顏色名称',
+  ColorNameError1: '颜色名称不能为空',
   ColorValue: '顏色值',
+  ColorValueError1: '颜色值不能为空',
+  ColorValueError2: '颜色值必须为HEX、rgb、rgba格式',
 
   DeleteConfirm: '确定要删除{0}吗？',
 } as const;

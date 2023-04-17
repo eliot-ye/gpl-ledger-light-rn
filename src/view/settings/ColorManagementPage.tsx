@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {I18n} from '@/assets/I18n';
 import {
+  CPNAlertView,
   CPNButton,
   CPNIonicons,
   CPNPageModal,
@@ -29,6 +30,7 @@ export function ColorManagementPage() {
   const [showDetailsModal, showDetailsModalSet] = useState(false);
   const [details, detailsSet] = useState<Partial<ColorItem>>({});
   const detailsRef = useRef<Partial<ColorItem>>({});
+  const [detailsError, detailsErrorSet] = useState<Partial<ColorItem>>({});
   function renderDetailsModal() {
     return (
       <CPNPageModal.View
@@ -37,10 +39,10 @@ export function ColorManagementPage() {
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
           titleText={
-            detailsRef.current.name
+            detailsRef.current.id
               ? (I18n.formatString(
                   I18n.EditColor,
-                  detailsRef.current.name,
+                  detailsRef.current.name || '',
                 ) as string)
               : I18n.AddColor
           }
@@ -50,14 +52,10 @@ export function ColorManagementPage() {
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}
           rightIcon={
-            !!detailsRef.current.name && (
+            !!detailsRef.current.id && (
               <TouchableOpacity
                 onPress={async () => {
-                  if (detailsRef.current.id) {
-                    dbDeleteColor(detailsRef.current.id);
-                    await getDBColors();
-                    showDetailsModalSet(false);
-                  }
+                  showDeleteAlertSet(true);
                 }}>
                 <CPNIonicons name={IONName.Delete} />
               </TouchableOpacity>
@@ -68,25 +66,51 @@ export function ColorManagementPage() {
               <CNPInput
                 placeholder={I18n.ColorName}
                 value={details.name}
-                onChangeText={name => detailsSet({...details, name})}
+                onChangeText={name => {
+                  detailsSet({...details, name});
+                  detailsErrorSet({...detailsError, name: ''});
+                }}
+                hasError={!!detailsError.name}
+                errorText={detailsError.name}
               />
             </View>
             <View style={{paddingBottom: 20}}>
               <CNPInput
                 placeholder={I18n.ColorValue}
                 value={details.value}
-                onChangeText={value => detailsSet({...details, value})}
+                onChangeText={value => {
+                  detailsSet({...details, value});
+                  detailsErrorSet({...detailsError, value: ''});
+                }}
+                hasError={!!detailsError.value}
+                errorText={detailsError.value}
               />
             </View>
             <CPNButton
               text={I18n.Submit}
               onPress={async () => {
+                const _detailsError: Partial<ColorItem> = {};
                 if (!details.name) {
-                  return;
+                  _detailsError.name = I18n.ColorNameError1;
                 }
+
                 if (!details.value) {
+                  _detailsError.value = I18n.ColorValueError1;
+                } else if (
+                  !details.value.startsWith('#') &&
+                  !details.value.startsWith('rgb')
+                ) {
+                  _detailsError.value = I18n.ColorValueError2;
+                }
+
+                const errorList = Object.values(_detailsError).map(
+                  _item => !!_item,
+                );
+                if (errorList.includes(true)) {
+                  detailsErrorSet(_detailsError);
                   return;
                 }
+
                 if (!details.id) {
                   details.id = getRandomStrMD5();
                 }
@@ -97,7 +121,40 @@ export function ColorManagementPage() {
             />
           </View>
         </CPNPageView>
+        {renderDeleteAlert()}
       </CPNPageModal.View>
+    );
+  }
+
+  const [showDeleteAlert, showDeleteAlertSet] = useState(false);
+  function renderDeleteAlert() {
+    return (
+      <CPNAlertView
+        show={showDeleteAlert}
+        onClose={() => showDeleteAlertSet(false)}
+        message={
+          I18n.formatString(
+            I18n.DeleteConfirm,
+            detailsRef.current.name || '',
+          ) as string
+        }
+        buttons={useMemo(
+          () => [
+            {text: I18n.Cancel},
+            {
+              text: I18n.Confirm,
+              async onPress() {
+                if (detailsRef.current.id) {
+                  dbDeleteColor(detailsRef.current.id);
+                  await getDBColors();
+                  showDetailsModalSet(false);
+                }
+              },
+            },
+          ],
+          [],
+        )}
+      />
     );
   }
 
@@ -125,6 +182,7 @@ export function ColorManagementPage() {
                 value={item.value}
                 onPress={() => {
                   detailsSet(item);
+                  detailsErrorSet({});
                   detailsRef.current = item;
                   showDetailsModalSet(true);
                 }}
@@ -141,6 +199,7 @@ export function ColorManagementPage() {
               ]}
               onPress={() => {
                 detailsSet({});
+                detailsErrorSet({});
                 detailsRef.current = {};
                 showDetailsModalSet(true);
               }}>
