@@ -26,7 +26,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
     if (pathCache && encryptionKeyCache) {
       realm = await Realm.open({
         schema: [ColorSchema, AssetTypeSchema, LedgerSchema, HistorySchema],
-        schemaVersion: 2,
+        schemaVersion: 3,
         path: pathCache,
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {

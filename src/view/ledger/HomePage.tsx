@@ -19,6 +19,7 @@ export function HomePage() {
     console.log('HomePageState.updateCount:', HomePageState.updateCount);
 
     const res = await dbGetLedger();
+    // console.log(JSON.stringify(res));
 
     ledgerListSet(res);
   }, [HomePageState.updateCount]);

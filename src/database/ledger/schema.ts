@@ -13,7 +13,7 @@ export const HistorySchema = createObjectSchema<HistoryItem>({
   embedded: true,
   properties: {
     date: 'int',
-    amountMoney: 'decimal128',
+    amountMoney: 'float',
   },
 });
 
