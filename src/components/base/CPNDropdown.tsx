@@ -57,7 +57,7 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
    * ```
    * */
   data: ItemT[];
-  checked: ItemT['value'];
+  checked?: ItemT['value'];
   onSelect?: (item: ItemT) => void;
   numberOfLines?: number;
   cellStyle?: StyleProp<ViewStyle>;

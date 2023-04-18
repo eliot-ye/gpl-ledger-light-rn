@@ -1,16 +1,16 @@
-// import React from 'react';
-// import {RootStack} from '../Router';
+import React from 'react';
+import {RootStack} from '../Router';
+import {LedgerDetailsPage} from './LedgerDetailsPage';
+import {LedgerItem} from '@/database/ledger/schema';
 
 export * from './HomePage';
 
-// export type AuthorizationStackParamList = {
-//   SignUpPage: undefined;
-//   SignInPage: undefined;
-// };
+export type HomeStackParamList = {
+  LedgerDetailsPage?: LedgerItem;
+};
 
-// export const renderAuthorizationRouterView = (
-//   <>
-//     <RootStack.Screen name="SignInPage" component={SignInPage} />
-//     <RootStack.Screen name="SignUpPage" component={SignUpPage} />
-//   </>
-// );
+export const renderHomeRouterView = (
+  <>
+    <RootStack.Screen name="LedgerDetailsPage" component={LedgerDetailsPage} />
+  </>
+);

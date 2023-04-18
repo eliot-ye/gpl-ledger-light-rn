@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
-import {StoreRoot, StoreUserInfo} from '@/store';
+import {StoreRoot} from '@/store';
 import {getRealm} from '@/database/main';
 import {CNPFormItem, CNPInput} from '@/components';
 import {I18n} from '@/assets/I18n';
@@ -21,7 +21,6 @@ export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
 
   const RootDispatch = StoreRoot.useDispatch();
-  const UserInfoDispatch = StoreUserInfo.useDispatch();
 
   const [useInfoList, useInfoListSet] = useState<LSUserInfo[]>([]);
   const useInfoListMemo = useMemo(
@@ -115,13 +114,13 @@ export function SignInPage() {
               if (dbKey) {
                 await getRealm(userInfo.id, dbKey);
 
-                UserInfoDispatch('userId', userInfo.id || '');
-                UserInfoDispatch('dbKey', dbKey);
                 RootDispatch('isSignIn', true);
+                navigation.replace('Tabbar', {screen: 'HomePage'});
               } else {
                 passwordSet(val => ({...val, hasError: true}));
               }
             } catch (error) {
+              console.error(error);
               passwordSet(val => ({...val, hasError: true}));
             }
           }}

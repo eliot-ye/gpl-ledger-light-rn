@@ -1,11 +1,15 @@
 import Realm from 'realm';
 import {stringToUint8Array} from '@/utils/tools';
+import {navigationRef} from '@/view/Router';
+import {CPNAlert} from '@/components/base';
+import {I18n} from '@/assets/I18n';
 
 import {ColorSchema} from './color/schema';
 import {getDefaultColors} from './color/default';
 
 import {AssetTypeSchema} from './assetType/schema';
 import {getDefaultAssetTypes} from './assetType/default';
+import {HistorySchema, LedgerSchema} from './ledger/schema';
 
 let realm: Realm | undefined;
 
@@ -21,8 +25,8 @@ export async function getRealm(path?: string, encryptionKey?: string) {
 
     if (pathCache && encryptionKeyCache) {
       realm = await Realm.open({
-        schema: [ColorSchema, AssetTypeSchema],
-        schemaVersion: 1,
+        schema: [ColorSchema, AssetTypeSchema, LedgerSchema, HistorySchema],
+        schemaVersion: 2,
         path: pathCache,
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
@@ -36,6 +40,21 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         },
       });
     } else {
+      if (navigationRef.isReady()) {
+        CPNAlert.open({
+          message: I18n.SessionExpired,
+          buttons: [
+            {
+              text: I18n.Confirm,
+              onPress() {
+                navigationRef.resetRoot({
+                  routes: [{name: 'SignInPage'}],
+                });
+              },
+            },
+          ],
+        });
+      }
       return Promise.reject('realm is closed');
     }
   }

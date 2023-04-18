@@ -12,11 +12,13 @@ import {
 } from '@react-navigation/bottom-tabs';
 
 import type {AuthorizationStackParamList} from './authorization/routes';
+import {HomeStackParamList} from './ledger/routes';
 import {SettingsStackParamList} from './settings/routes';
 
 type RootStackParamList = {
   Tabbar: {screen: keyof TabbarStackParamList};
 } & AuthorizationStackParamList &
+  HomeStackParamList &
   SettingsStackParamList;
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();

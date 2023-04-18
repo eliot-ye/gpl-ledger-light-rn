@@ -1,7 +1,6 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {TransitionPresets} from '@react-navigation/stack';
-import {StoreRoot} from '@/store';
 import {
   navigationRef,
   RootStack,
@@ -15,17 +14,15 @@ import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
 
 import {renderAuthorizationRouterView} from './authorization/routes';
-import {HomePage} from './ledger/routes';
+import {HomePage, renderHomeRouterView} from './ledger/routes';
 import {renderSettingsRouterView, SettingPage} from './settings/routes';
 
 export function RouterView() {
-  const RootState = StoreRoot.useState();
-
   async function navReady() {
     const infoList = await LS_UserInfo.get();
 
     if (infoList.length === 0) {
-      navigationRef.navigate('SignUpPage');
+      navigationRef.dispatch(StackActions.replace('SignUpPage'));
     }
   }
 
@@ -38,18 +35,14 @@ export function RouterView() {
           gestureEnabled: Platform.OS === 'ios',
           ...TransitionPresets.SlideFromRightIOS,
         }}>
-        {RootState.isSignIn ? (
-          <>
-            <RootStack.Screen
-              name="Tabbar"
-              component={TabBarView}
-              options={{headerShown: false, animationEnabled: false}}
-            />
-            {renderSettingsRouterView}
-          </>
-        ) : (
-          renderAuthorizationRouterView
-        )}
+        {renderAuthorizationRouterView}
+        <RootStack.Screen
+          name="Tabbar"
+          component={TabBarView}
+          options={{headerShown: false, animationEnabled: false}}
+        />
+        {renderHomeRouterView}
+        {renderSettingsRouterView}
       </RootStack.Navigator>
     </NavigationContainer>
   );

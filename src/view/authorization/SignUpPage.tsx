@@ -2,15 +2,17 @@ import {I18n} from '@/assets/I18n';
 import {CNPFormItem, CNPInput} from '@/components';
 import {CPNButton, CPNPageView} from '@/components/base';
 import {getRealm} from '@/database/main';
-import {StoreRoot, StoreUserInfo} from '@/store';
+import {StoreRoot} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {AESEncrypt, getRandomStr, getRandomStrMD5} from '@/utils/tools';
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
+import {PageProps} from '../Router';
 
 export function SignUpPage() {
+  const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
   const RootDispatch = StoreRoot.useDispatch();
-  const UserInfoDispatch = StoreUserInfo.useDispatch();
 
   interface FormData {
     username: string;
@@ -101,9 +103,8 @@ export function SignUpPage() {
               token: AESEncrypt(dbKey, formData.password),
             });
 
-            UserInfoDispatch('userId', id);
-            UserInfoDispatch('dbKey', dbKey);
             RootDispatch('isSignIn', true);
+            navigation.replace('Tabbar', {screen: 'HomePage'});
           }}
         />
       </View>

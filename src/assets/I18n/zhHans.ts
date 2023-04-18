@@ -53,4 +53,14 @@ export default {
   AvailableAssets: '可用资产',
   UnavailableAssets: '不可用资产',
   AssetTypeError: '请选择资产类型',
+
+  AssetManagement: '资产管理',
+  EditAsset: '编辑资产：{0}',
+  AddAsset: '新增资产',
+  AssetName: '资产名称',
+  AssetNameError1: '资产名称不能为空',
+  Color: '顏色',
+  ColorError: '请选择颜色',
+  AmountMoney: '金额',
+  AmountMoneyError1: '请输入正确的金额',
 } as const;

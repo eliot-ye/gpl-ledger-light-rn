@@ -22,11 +22,7 @@ export function SettingPage() {
             onPress={() => {
               navigation.navigate('ColorManagementPage');
             }}
-            isLast
           />
-        </CNPCellGroup>
-
-        <CNPCellGroup style={{marginBottom: 20}}>
           <CNPCell
             title={I18n.AssetTypeManagement}
             onPress={() => {

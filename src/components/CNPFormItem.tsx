@@ -10,18 +10,25 @@ export const FormItemContext = createContext({
 });
 
 interface CNPFormItemProps extends ViewProps {
-  title: string;
+  title?: React.ReactNode;
   hasError?: boolean;
   errorText?: string;
 }
 export function CNPFormItem(props: CNPFormItemProps) {
   return (
     <View {...props}>
-      <View style={StyleGet.cellTitleView()}>
-        <CPNText style={{color: props.hasError ? Colors.fail : Colors.theme}}>
-          {props.title}
-        </CPNText>
-      </View>
+      {!!props.title && (
+        <View style={StyleGet.cellTitleView()}>
+          {['string', 'number'].includes(typeof props.title) ? (
+            <CPNText
+              style={{color: props.hasError ? Colors.fail : Colors.theme}}>
+              {props.title}
+            </CPNText>
+          ) : (
+            props.title
+          )}
+        </View>
+      )}
       <View
         style={[
           {height: StyleGet.cellView().height, justifyContent: 'center'},
