@@ -8,8 +8,6 @@ import {
   ImageBackground,
   Modal,
   PanResponder,
-  Platform,
-  StatusBar,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -264,12 +262,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
       _style.top = boxPosition.Y;
     } else {
       _style.bottom =
-        Platform.OS === 'android'
-          ? windowDimensions.height -
-            boxPosition.Y -
-            Config.btnHeight -
-            (StatusBar.currentHeight || 0)
-          : windowDimensions.height - boxPosition.Y - Config.btnHeight;
+        windowDimensions.height - boxPosition.Y - Config.btnHeight;
     }
 
     return _style;
@@ -361,10 +354,8 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
         transparent
         statusBarTranslucent
         animationType="fade">
-        <TouchableWithoutFeedback
-          style={{flex: 1}}
-          onPress={() => showSet(false)}>
-          <View style={{flex: 1, alignItems: 'center'}}>
+        <TouchableWithoutFeedback onPress={() => showSet(false)}>
+          <View style={[StyleGet.windowSize(), {alignItems: 'center'}]}>
             <TouchableWithoutFeedback onPress={() => {}}>
               <View
                 style={[

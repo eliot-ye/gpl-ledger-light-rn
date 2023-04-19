@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from 'react-native';
 import {I18n} from '@assets/I18n';
 import {Colors} from '@/configs/colors';
@@ -26,11 +25,6 @@ const Config = {
 } as const;
 
 const styles = StyleSheet.create({
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
   container: {
     ...StyleGet.boxShadow(),
     width: Config.width,
@@ -234,8 +228,6 @@ export function CPNAlertView(props: CPNAlertViewProps) {
     }
   }, [animatedValue, props.show]);
 
-  const windowSize = useWindowDimensions();
-
   return (
     <Modal
       visible={props.show}
@@ -247,15 +239,7 @@ export function CPNAlertView(props: CPNAlertViewProps) {
           props.onClose();
         }
       }}>
-      <View
-        style={[
-          styles.modal,
-          {
-            backgroundColor: Colors.backgroundModal,
-            width: windowSize.width,
-            height: windowSize.height,
-          },
-        ]}>
+      <View style={StyleGet.modalView()}>
         {
           <CPNAlertBox
             {...props}
@@ -316,8 +300,6 @@ export function createCPNAlert() {
       alertOptionListLength.current = alertOptionList.length;
     }, [alertOptionList]);
 
-    const windowSize = useWindowDimensions();
-
     return (
       <Modal
         visible={alertOptionList.length > 0}
@@ -330,15 +312,7 @@ export function createCPNAlert() {
             closeEv.publish(alertOptionList[alertOptionList.length - 1].id);
           }
         }}>
-        <View
-          style={[
-            styles.modal,
-            {
-              backgroundColor: Colors.backgroundModal,
-              width: windowSize.width,
-              height: windowSize.height,
-            },
-          ]}>
+        <View style={StyleGet.modalView()}>
           {alertOptionList.map((_item, _index) => {
             return (
               <CPNAlertBox

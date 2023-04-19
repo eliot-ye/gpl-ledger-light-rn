@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  useWindowDimensions,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
@@ -16,6 +15,7 @@ import {Colors} from '@/configs/colors';
 import {getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {CreateEvents} from '@/libs/CreateEvents';
+import {StyleGet} from '@/configs/styles';
 
 const Config = {
   borderRadius: 14,
@@ -27,11 +27,6 @@ const Config = {
 } as const;
 
 const styles = StyleSheet.create({
-  modal: {
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-    paddingHorizontal: 8,
-  },
   title: {
     fontSize: Config.titleFontSize,
     fontWeight: '600',
@@ -119,8 +114,6 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
     }
   }, [animatedValue, props.show]);
 
-  const windowSize = useWindowDimensions();
-
   return (
     <Modal
       visible={show}
@@ -139,15 +132,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
             props.onClose();
           }
         }}>
-        <View
-          style={[
-            styles.modal,
-            {
-              backgroundColor: Colors.backgroundModal,
-              width: windowSize.width,
-              height: windowSize.height,
-            },
-          ]}>
+        <View style={[StyleGet.modalView('flex-end'), {paddingHorizontal: 8}]}>
           <Animated.View
             accessibilityRole="menu"
             style={{

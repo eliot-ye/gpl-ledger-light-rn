@@ -1,3 +1,4 @@
+import {Dimensions} from 'react-native';
 import {Colors} from './colors';
 
 const titleMap = {
@@ -13,8 +14,35 @@ function title<T extends TitleType>(type: T, isReverse?: boolean) {
   } as const;
 }
 
+type JustifyContent =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly';
+
 export const StyleGet = {
   title,
+
+  windowSize() {
+    const windowSize = Dimensions.get('window');
+    return {
+      width: windowSize.width,
+      height: windowSize.height,
+    } as const;
+  },
+  modalView(justifyContent?: JustifyContent) {
+    const windowSize = Dimensions.get('window');
+    return {
+      width: windowSize.width,
+      height: windowSize.height,
+      backgroundColor: Colors.backgroundModal,
+      justifyContent: justifyContent || 'center',
+      alignItems: 'center',
+      overflow: 'hidden',
+    } as const;
+  },
 
   boxShadow() {
     return {

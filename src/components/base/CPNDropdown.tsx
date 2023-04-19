@@ -3,8 +3,6 @@ import {
   FlatList,
   FlatListProps,
   Modal,
-  Platform,
-  StatusBar,
   StyleProp,
   StyleSheet,
   TouchableOpacity,
@@ -167,10 +165,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         statusBarTranslucent
         animationType="fade"
         onRequestClose={() => showSet(false)}>
-        <TouchableWithoutFeedback
-          style={{flex: 1}}
-          onPress={() => showSet(false)}>
-          <View style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={() => showSet(false)}>
+          <View style={StyleGet.windowSize()}>
             <View
               style={[
                 styles.container,
@@ -178,16 +174,10 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                   ? {top: boxPosition.Y + Config.offset}
                   : {
                       bottom:
-                        Platform.OS === 'android'
-                          ? windowHeight -
-                            boxHeight -
-                            boxPosition.Y +
-                            Config.offset -
-                            (StatusBar.currentHeight || 0)
-                          : windowHeight -
-                            boxHeight -
-                            boxPosition.Y +
-                            Config.offset,
+                        windowHeight -
+                        boxHeight -
+                        boxPosition.Y +
+                        Config.offset,
                     },
                 {
                   left: boxPosition.X,
