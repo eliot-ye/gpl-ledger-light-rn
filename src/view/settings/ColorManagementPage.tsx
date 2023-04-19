@@ -8,11 +8,14 @@ import {
   CPNPageView,
   CPNText,
   IONName,
+  CPNCellGroup,
+  CPNCell,
+  CPNInput,
+  CPNFormItem,
 } from '@/components/base';
 import {dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
 import {ColorItem} from '@/database/color/schema';
 import {TouchableOpacity, View} from 'react-native';
-import {CNPCellGroup, CNPCell, CNPInput, CNPFormItem} from '@/components';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
@@ -80,33 +83,33 @@ export function ColorManagementPage() {
             )
           }>
           <View style={{padding: 20}}>
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 10}}
               title={I18n.ColorName}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
-              <CNPInput
+              <CPNInput
                 value={details.name}
                 onChangeText={name => {
                   detailsSet({...details, name});
                   detailsErrorSet({...detailsError, name: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.ColorValue}
               hasError={!!detailsError.value}
               errorText={detailsError.value}>
-              <CNPInput
+              <CPNInput
                 value={details.value}
                 onChangeText={value => {
                   detailsSet({...details, value});
                   detailsErrorSet({...detailsError, value: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
             <CPNButton
               text={I18n.Submit}
@@ -151,9 +154,9 @@ export function ColorManagementPage() {
     <>
       <CPNPageView titleText={I18n.ColorManagement}>
         <View style={{padding: 20}}>
-          <CNPCellGroup>
+          <CPNCellGroup>
             {colorList.map(item => (
-              <CNPCell
+              <CPNCell
                 key={item.id}
                 title={
                   <>
@@ -194,7 +197,7 @@ export function ColorManagementPage() {
               }}>
               <CPNIonicons name={IONName.Add} color={Colors.theme} />
             </TouchableOpacity>
-          </CNPCellGroup>
+          </CPNCellGroup>
         </View>
       </CPNPageView>
       {renderDetailsModal()}

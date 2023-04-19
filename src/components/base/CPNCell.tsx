@@ -7,22 +7,22 @@ import {
   CPNTextColorContext,
   CPNTextFontSizeContext,
   IONName,
-} from './base';
+} from '.';
 import {Colors} from '@/configs/colors';
 
-export const CNPCellGroupContext = createContext(false);
-export const CNPCellConfig = {
+export const CPNCellGroupContext = createContext(false);
+export const CPNCellConfig = {
   padding: 10,
 } as const;
 
-interface CNPCellProps {
+interface CPNCellProps {
   title: React.ReactNode;
   value?: React.ReactNode;
   isLast?: boolean;
   onPress?: () => void;
 }
-export function CNPCell(props: CNPCellProps) {
-  const isCellGroup = useContext(CNPCellGroupContext);
+export function CPNCell(props: CPNCellProps) {
+  const isCellGroup = useContext(CPNCellGroupContext);
 
   return (
     <View
@@ -68,7 +68,7 @@ export function CNPCell(props: CNPCellProps) {
         </View>
         <View
           style={{
-            paddingHorizontal: CNPCellConfig.padding,
+            paddingHorizontal: CPNCellConfig.padding,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-end',

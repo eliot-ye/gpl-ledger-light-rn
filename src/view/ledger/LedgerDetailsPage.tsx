@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {I18n} from '@/assets/I18n';
-import {CNPFormItem, CNPInput} from '@/components';
 import {
   CPNPageView,
   CPNIonicons,
@@ -9,6 +8,8 @@ import {
   CPNDropdown,
   CPNAlert,
   CPNText,
+  CPNFormItem,
+  CPNInput,
 } from '@/components/base';
 import {getRandomStrMD5} from '@/utils/tools';
 import {View, TouchableOpacity} from 'react-native';
@@ -99,21 +100,21 @@ export function LedgerDetailsPage() {
         )
       }>
       <View style={{padding: 20}}>
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 20}}
           title={I18n.AssetName}
           hasError={!!detailsError.name}
           errorText={detailsError.name}>
-          <CNPInput
+          <CPNInput
             value={details.name}
             onChangeText={name => {
               detailsSet({...details, name});
               detailsErrorSet({...detailsError, name: ''});
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
 
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 20}}
           title={I18n.AssetType}
           hasError={!!detailsError.assetType}
@@ -138,9 +139,9 @@ export function LedgerDetailsPage() {
               detailsErrorSet({...detailsError, assetType: ''});
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
 
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 20}}
           title={
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -186,9 +187,9 @@ export function LedgerDetailsPage() {
               detailsErrorSet({...detailsError, color: ''});
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
 
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 20}}
           title={I18n.Currency}
           hasError={!!detailsError.currency}
@@ -209,14 +210,14 @@ export function LedgerDetailsPage() {
               detailsErrorSet({...detailsError, currency: ''});
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
 
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 20}}
           title={I18n.AmountMoney}
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
-          <CNPInput
+          <CPNInput
             value={
               details.amountMoney === undefined
                 ? undefined
@@ -235,7 +236,7 @@ export function LedgerDetailsPage() {
               }
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
 
         <CPNButton
           text={I18n.Submit}

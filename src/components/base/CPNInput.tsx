@@ -8,9 +8,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {CPNIonicons, CPNPageViewThemeColor, IONName} from './base';
+import {CPNIonicons, CPNPageViewThemeColor, IONName} from '.';
 import {StyleGet} from '@/configs/styles';
-import {FormItemContext} from './CNPFormItem';
+import {FormItemContext} from './CPNFormItem';
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
   input: {padding: 0, borderWidth: 0, flex: 1},
 });
 
-interface CNPInputProps extends TextInputProps {
+interface CPNInputProps extends TextInputProps {
   onPressRightIcon?: () => void;
   rightIcon?: React.ReactNode;
   containerStyle?: ViewStyle;
 }
 
-export function CNPInput(props: CNPInputProps) {
+export function CPNInput(props: CPNInputProps) {
   const themeColor = useContext(CPNPageViewThemeColor);
   const formItem = useContext(FormItemContext);
 

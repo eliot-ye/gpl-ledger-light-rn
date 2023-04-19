@@ -2,19 +2,19 @@ import React, {createContext, useMemo} from 'react';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {View, ViewProps} from 'react-native';
-import {CPNText} from './base';
+import {CPNText} from '.';
 
 export const FormItemContext = createContext({
   isFormItem: false,
   hasError: false,
 });
 
-interface CNPFormItemProps extends ViewProps {
+interface CPNFormItemProps extends ViewProps {
   title?: React.ReactNode;
   hasError?: boolean;
   errorText?: string;
 }
-export function CNPFormItem(props: CNPFormItemProps) {
+export function CPNFormItem(props: CPNFormItemProps) {
   return (
     <View {...props}>
       {!!props.title && (

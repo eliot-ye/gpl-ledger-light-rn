@@ -1,6 +1,5 @@
 import {I18n} from '@/assets/I18n';
-import {CNPFormItem, CNPInput} from '@/components';
-import {CPNButton, CPNPageView} from '@/components/base';
+import {CPNButton, CPNPageView, CPNFormItem, CPNInput} from '@/components/base';
 import {getRealm} from '@/database/main';
 import {StoreRoot} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
@@ -29,12 +28,12 @@ export function SignUpPage() {
 
   function renderUsernameInput() {
     return (
-      <CNPFormItem
+      <CPNFormItem
         style={{paddingBottom: 10}}
         title={I18n.Username}
         errorText={formDataError.username}
         hasError={!!formDataError.username}>
-        <CNPInput
+        <CPNInput
           value={formData.username}
           onChangeText={username => {
             formDataSet({...formData, username});
@@ -42,19 +41,19 @@ export function SignUpPage() {
           }}
           placeholder={I18n.UsernamePlaceholder}
         />
-      </CNPFormItem>
+      </CPNFormItem>
     );
   }
 
   const [secureTextEntry, secureTextEntrySet] = useState(true);
   function renderPasswordInput() {
     return (
-      <CNPFormItem
+      <CPNFormItem
         style={{paddingBottom: 30}}
         title={I18n.Password}
         errorText={I18n.PasswordError1}
         hasError={!!formDataError.password}>
-        <CNPInput
+        <CPNInput
           value={formData.password}
           onChangeText={password => {
             formDataSet({...formData, password});
@@ -64,7 +63,7 @@ export function SignUpPage() {
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
         />
-      </CNPFormItem>
+      </CPNFormItem>
     );
   }
 

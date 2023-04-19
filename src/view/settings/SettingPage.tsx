@@ -1,6 +1,5 @@
 import {I18n} from '@/assets/I18n';
-import {CNPCell, CNPCellGroup} from '@/components';
-import {CPNPageView} from '@/components/base';
+import {CPNPageView, CPNCell, CPNCellGroup} from '@/components/base';
 import {Colors} from '@/configs/colors';
 import React from 'react';
 import {View} from 'react-native';
@@ -16,37 +15,37 @@ export function SettingPage() {
       headerBackgroundColor={Colors.warning}
       hideBack>
       <View style={{padding: 20}}>
-        <CNPCellGroup style={{marginBottom: 20}}>
-          <CNPCell
+        <CPNCellGroup style={{marginBottom: 20}}>
+          <CPNCell
             title={I18n.ColorManagement}
             onPress={() => {
               navigation.navigate('ColorManagementPage');
             }}
           />
-          <CNPCell
+          <CPNCell
             title={I18n.CurrencyManagement}
             onPress={() => {
               navigation.navigate('CurrencyManagementPage');
             }}
           />
-          <CNPCell
+          <CPNCell
             title={I18n.AssetTypeManagement}
             onPress={() => {
               navigation.navigate('AssetTypeManagementPage');
             }}
             isLast
           />
-        </CNPCellGroup>
+        </CPNCellGroup>
 
-        <CNPCellGroup style={{marginBottom: 20}}>
-          <CNPCell
+        <CPNCellGroup style={{marginBottom: 20}}>
+          <CPNCell
             title={I18n.ColorManagement}
             onPress={() => {
               navigation.navigate('CurrencyManagementPage');
             }}
             isLast
           />
-        </CNPCellGroup>
+        </CPNCellGroup>
       </View>
     </CPNPageView>
   );

@@ -4,7 +4,7 @@ import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {CPNPageViewThemeColor} from './CPNPageView';
-import {FormItemContext} from '../CNPFormItem';
+import {FormItemContext} from './CPNFormItem';
 
 const Config = {
   size: 20,

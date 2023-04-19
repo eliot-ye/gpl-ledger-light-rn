@@ -7,11 +7,14 @@ import {
   CPNPageModal,
   CPNPageView,
   IONName,
+  CPNCellGroup,
+  CPNCell,
+  CPNInput,
+  CPNFormItem,
 } from '@/components/base';
 import {dbDeleteCurrency, dbGetCurrency, dbSetCurrency} from '@/database';
 import {CurrencyItem} from '@/database/currency/schema';
 import {TouchableOpacity, View} from 'react-native';
-import {CNPCellGroup, CNPCell, CNPInput, CNPFormItem} from '@/components';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
@@ -78,47 +81,47 @@ export function CurrencyManagementPage() {
             )
           }>
           <View style={{padding: 20}}>
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.CurrencyName}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
-              <CNPInput
+              <CPNInput
                 value={details.name}
                 onChangeText={name => {
                   detailsSet({...details, name});
                   detailsErrorSet({...detailsError, name: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.CurrencyAbbreviation}
               hasError={!!detailsError.abbreviation}
               errorText={detailsError.abbreviation}>
-              <CNPInput
+              <CPNInput
                 value={details.abbreviation}
                 onChangeText={abbreviation => {
                   detailsSet({...details, abbreviation});
                   detailsErrorSet({...detailsError, abbreviation: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.CurrencySymbol}
               hasError={!!detailsError.symbol}
               errorText={detailsError.symbol}>
-              <CNPInput
+              <CPNInput
                 value={details.symbol}
                 onChangeText={symbol => {
                   detailsSet({...details, symbol});
                   detailsErrorSet({...detailsError, symbol: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
             <CPNButton
               text={I18n.Submit}
@@ -162,9 +165,9 @@ export function CurrencyManagementPage() {
     <>
       <CPNPageView titleText={I18n.CurrencyManagement}>
         <View style={{padding: 20}}>
-          <CNPCellGroup>
+          <CPNCellGroup>
             {CurrencyList.map(item => (
-              <CNPCell
+              <CPNCell
                 key={item.id}
                 title={`${item.name}(${item.abbreviation})`}
                 value={item.symbol}
@@ -193,7 +196,7 @@ export function CurrencyManagementPage() {
               }}>
               <CPNIonicons name={IONName.Add} color={Colors.theme} />
             </TouchableOpacity>
-          </CNPCellGroup>
+          </CPNCellGroup>
         </View>
       </CPNPageView>
       {renderDetailsModal()}

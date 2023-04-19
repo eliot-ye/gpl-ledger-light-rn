@@ -8,11 +8,14 @@ import {
   CPNPageModal,
   CPNPageView,
   IONName,
+  CPNCellGroup,
+  CPNCell,
+  CPNInput,
+  CPNFormItem,
 } from '@/components/base';
 import {dbDeleteAssetType, dbGetAssetTypes, dbSetAssetType} from '@/database';
 import {AssetTypeItem} from '@/database/assetType/schema';
 import {TouchableOpacity, View} from 'react-native';
-import {CNPCellGroup, CNPCell, CNPInput, CNPFormItem} from '@/components';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
@@ -82,21 +85,21 @@ export function AssetTypeManagementPage() {
             )
           }>
           <View style={{padding: 20}}>
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.AssetTypeName}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
-              <CNPInput
+              <CPNInput
                 value={details.name}
                 onChangeText={name => {
                   detailsSet({...details, name});
                   detailsErrorSet({...detailsError, name: ''});
                 }}
               />
-            </CNPFormItem>
+            </CPNFormItem>
 
-            <CNPFormItem
+            <CPNFormItem
               style={{paddingBottom: 30}}
               title={I18n.AssetType}
               hasError={!!detailsError.isAvailableAssets}
@@ -121,7 +124,7 @@ export function AssetTypeManagementPage() {
                   }}
                 />
               </View>
-            </CNPFormItem>
+            </CPNFormItem>
 
             <CPNButton
               text={I18n.Submit}
@@ -161,9 +164,9 @@ export function AssetTypeManagementPage() {
     <>
       <CPNPageView titleText={I18n.AssetTypeManagement}>
         <View style={{padding: 20}}>
-          <CNPCellGroup>
+          <CPNCellGroup>
             {AssetTypeList.map(item => (
-              <CNPCell
+              <CPNCell
                 key={item.id}
                 title={item.name}
                 value={
@@ -196,7 +199,7 @@ export function AssetTypeManagementPage() {
               }}>
               <CPNIonicons name={IONName.Add} color={Colors.theme} />
             </TouchableOpacity>
-          </CNPCellGroup>
+          </CPNCellGroup>
         </View>
       </CPNPageView>
       {renderDetailsModal()}

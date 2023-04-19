@@ -1,9 +1,15 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {CPNIonicons, CPNPageView, CPNText, IONName} from '@/components/base';
+import {
+  CPNIonicons,
+  CPNPageView,
+  CPNText,
+  IONName,
+  CPNCellGroup,
+  CPNCell,
+} from '@/components/base';
 import {LedgerItem} from '@/database/ledger/schema';
 import {TouchableOpacity, View} from 'react-native';
 import {dbGetLedger} from '@/database/ledger/handle';
-import {CNPCellGroup, CNPCell} from '@/components';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
@@ -49,9 +55,9 @@ export function HomePage() {
       }>
       <View style={{padding: 20}}>
         {AvailableAssets.length > 0 && (
-          <CNPCellGroup style={{marginBottom: 20}}>
+          <CPNCellGroup style={{marginBottom: 20}}>
             {AvailableAssets.map((item, index) => (
-              <CNPCell
+              <CPNCell
                 isLast={index === AvailableAssets.length - 1}
                 key={item.id}
                 title={
@@ -78,13 +84,13 @@ export function HomePage() {
                 }}
               />
             ))}
-          </CNPCellGroup>
+          </CPNCellGroup>
         )}
 
         {UnAvailableAssets.length > 0 && (
-          <CNPCellGroup>
+          <CPNCellGroup>
             {UnAvailableAssets.map((item, index) => (
-              <CNPCell
+              <CPNCell
                 isLast={index === UnAvailableAssets.length - 1}
                 key={item.id}
                 title={
@@ -111,7 +117,7 @@ export function HomePage() {
                 }}
               />
             ))}
-          </CNPCellGroup>
+          </CPNCellGroup>
         )}
       </View>
     </CPNPageView>

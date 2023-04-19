@@ -4,6 +4,8 @@ import {
   CPNPageView,
   CPNText,
   DataConstraint,
+  CPNFormItem,
+  CPNInput,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {LSUserInfo, LS_UserInfo, LS_LastUserId} from '@/store/localStorage';
@@ -14,7 +16,6 @@ import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {StoreRoot} from '@/store';
 import {getRealm} from '@/database/main';
-import {CNPFormItem, CNPInput} from '@/components';
 import {I18n} from '@/assets/I18n';
 
 export function SignInPage() {
@@ -39,7 +40,7 @@ export function SignInPage() {
   function renderUserInfoInput() {
     return (
       <View style={{paddingBottom: 20}}>
-        <CNPFormItem title={I18n.Username}>
+        <CPNFormItem title={I18n.Username}>
           <CPNDropdown
             selectPlaceholder={
               useInfoListMemo.length > 0
@@ -52,7 +53,7 @@ export function SignInPage() {
               userInfoSet(data);
             }}
           />
-        </CNPFormItem>
+        </CPNFormItem>
       </View>
     );
   }
@@ -77,19 +78,19 @@ export function SignInPage() {
   function renderPasswordInput() {
     return (
       <View style={{paddingBottom: 30}}>
-        <CNPFormItem
+        <CPNFormItem
           style={{paddingBottom: 30}}
           title={I18n.Password}
           errorText={I18n.PasswordError1}
           hasError={password.hasError}>
-          <CNPInput
+          <CPNInput
             value={password.value}
             onChangeText={value => passwordSet({value, hasError: false})}
             secureTextEntry={secureTextEntry}
             onPressRightIcon={() => secureTextEntrySet(d => !d)}
             placeholder={I18n.PasswordPlaceholder}
           />
-        </CNPFormItem>
+        </CPNFormItem>
       </View>
     );
   }
