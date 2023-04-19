@@ -18,7 +18,7 @@ import {LedgerItem} from '@/database/ledger/schema';
 import {dbGetAssetTypes, dbGetColors, dbGetCurrency} from '@/database';
 import {AssetTypeItem} from '@/database/assetType/schema';
 import {ColorItem} from '@/database/color/schema';
-import {dbSetLedger} from '@/database/ledger/handle';
+import {dbDeleteLedger, dbSetLedger} from '@/database/ledger/handle';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
 import {CurrencyItem} from '@/database/currency/schema';
@@ -76,8 +76,23 @@ export function LedgerDetailsPage() {
                   I18n.DeleteConfirm,
                   route.params?.name || '',
                 ) as string,
+                buttons: [
+                  {text: I18n.Cancel},
+                  {
+                    text: I18n.Confirm,
+                    async onPress() {
+                      if (route.params?.id) {
+                        dbDeleteLedger(route.params?.id);
+                        HomePageDispatch(
+                          'updateCount',
+                          HomePageState.updateCount + 1,
+                        );
+                        navigation.goBack();
+                      }
+                    },
+                  },
+                ],
               });
-              // showDeleteAlertSet(true);
             }}>
             <CPNIonicons name={IONName.Delete} />
           </TouchableOpacity>

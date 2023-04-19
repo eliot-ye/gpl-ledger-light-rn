@@ -15,8 +15,12 @@ export function CPNImage(props: CPNImageProps) {
   const RootState = StoreRoot.useState();
 
   const _source = useMemo<ImageSourcePropType>(() => {
-    if (!props.name || props.source) {
+    if (props.source) {
       return props.source;
+    }
+
+    if (!props.name) {
+      return {};
     }
 
     const _imageNameDefaultMap = ImageData.default;
