@@ -108,7 +108,11 @@ export function LedgerDetailsPage() {
               () =>
                 assetTypeList.map(item => ({
                   ...item,
-                  label: item.name,
+                  label: `${item.name}(${
+                    item.isAvailableAssets
+                      ? I18n.AvailableAssets
+                      : I18n.UnavailableAssets
+                  })`,
                   value: item.id,
                 })),
               [assetTypeList],
@@ -144,6 +148,19 @@ export function LedgerDetailsPage() {
           hasError={!!detailsError.color}
           errorText={detailsError.color}>
           <CPNDropdown
+            renderItemContent={item => (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <CPNText>{item.label}</CPNText>
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    backgroundColor: item.value,
+                    marginLeft: 6,
+                  }}
+                />
+              </View>
+            )}
             data={useMemo(
               () => colorsList.map(item => ({...item, label: item.name})),
               [colorsList],
@@ -158,7 +175,7 @@ export function LedgerDetailsPage() {
 
         <CNPFormItem
           style={{paddingBottom: 20}}
-          title={I18n.CurrencyName}
+          title={I18n.Currency}
           hasError={!!detailsError.currency}
           errorText={detailsError.currency}>
           <CPNDropdown
@@ -166,7 +183,7 @@ export function LedgerDetailsPage() {
               () =>
                 currencyList.map(item => ({
                   ...item,
-                  label: item.name,
+                  label: `${item.name}(${item.abbreviation})`,
                   value: item.id,
                 })),
               [currencyList],

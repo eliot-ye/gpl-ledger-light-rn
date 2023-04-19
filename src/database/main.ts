@@ -7,11 +7,10 @@ import {I18n} from '@/assets/I18n';
 import {ColorSchema} from './color/schema';
 import {getDefaultColors} from './color/default';
 import {CurrencySchema} from './currency/schema';
-
+import {getDefaultCurrency} from './currency/default';
 import {AssetTypeSchema} from './assetType/schema';
 import {getDefaultAssetTypes} from './assetType/default';
 import {HistorySchema, LedgerSchema} from './ledger/schema';
-import {getDefaultCurrency} from './currency/default';
 
 let realm: Realm | undefined;
 
