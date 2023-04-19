@@ -34,7 +34,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
           LedgerSchema,
           HistorySchema,
         ],
-        schemaVersion: 4,
+        schemaVersion: 1,
         path: pathCache,
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
