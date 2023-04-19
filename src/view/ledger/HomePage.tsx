@@ -49,7 +49,7 @@ export function HomePage() {
       }>
       <View style={{padding: 20}}>
         {AvailableAssets.length > 0 && (
-          <CNPCellGroup style={{marginBottom: 40}}>
+          <CNPCellGroup style={{marginBottom: 20}}>
             {AvailableAssets.map((item, index) => (
               <CNPCell
                 isLast={index === AvailableAssets.length - 1}
@@ -72,7 +72,7 @@ export function HomePage() {
                     </View>
                   </>
                 }
-                value={item.amountMoney}
+                value={`${item.currency.symbol}${item.amountMoney}`}
                 onPress={() => {
                   navigation.navigate('LedgerDetailsPage', item);
                 }}
@@ -105,7 +105,7 @@ export function HomePage() {
                     </View>
                   </>
                 }
-                value={item.amountMoney}
+                value={`${item.currency.symbol}${item.amountMoney}`}
                 onPress={() => {
                   navigation.navigate('LedgerDetailsPage', item);
                 }}

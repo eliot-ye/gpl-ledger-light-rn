@@ -15,12 +15,13 @@ import {View, TouchableOpacity} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {LedgerItem} from '@/database/ledger/schema';
-import {dbGetAssetTypes, dbGetColors} from '@/database';
+import {dbGetAssetTypes, dbGetColors, dbGetCurrency} from '@/database';
 import {AssetTypeItem} from '@/database/assetType/schema';
 import {ColorItem} from '@/database/color/schema';
 import {dbSetLedger} from '@/database/ledger/handle';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
+import {CurrencyItem} from '@/database/currency/schema';
 
 export function LedgerDetailsPage() {
   const navigation =
@@ -41,6 +42,13 @@ export function LedgerDetailsPage() {
       assetTypeListSet(res);
     });
   }, [assetTypeListSet]);
+
+  const [currencyList, currencyListSet] = useState<CurrencyItem[]>([]);
+  useEffect(() => {
+    dbGetCurrency().then(res => {
+      currencyListSet(res);
+    });
+  }, []);
 
   const [colorsList, colorsListSet] = useState<ColorItem[]>([]);
   useEffect(() => {
@@ -150,6 +158,29 @@ export function LedgerDetailsPage() {
 
         <CNPFormItem
           style={{paddingBottom: 20}}
+          title={I18n.CurrencyName}
+          hasError={!!detailsError.currency}
+          errorText={detailsError.currency}>
+          <CPNDropdown
+            data={useMemo(
+              () =>
+                currencyList.map(item => ({
+                  ...item,
+                  label: item.name,
+                  value: item.id,
+                })),
+              [currencyList],
+            )}
+            checked={details.currency?.id}
+            onSelect={item => {
+              detailsSet({...details, currency: item});
+              detailsErrorSet({...detailsError, currency: ''});
+            }}
+          />
+        </CNPFormItem>
+
+        <CNPFormItem
+          style={{paddingBottom: 20}}
           title={I18n.AmountMoney}
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
@@ -186,6 +217,9 @@ export function LedgerDetailsPage() {
             }
             if (!details.color) {
               _detailsError.color = I18n.ColorError;
+            }
+            if (!details.currency) {
+              _detailsError.currency = I18n.CurrencyError;
             }
             if (details.amountMoney === undefined) {
               _detailsError.amountMoney = I18n.AmountMoneyError1;
@@ -227,7 +261,7 @@ export function LedgerDetailsPage() {
               await dbSetLedger(details);
               HomePageDispatch('updateCount', HomePageState.updateCount + 1);
             }
-            navigation.navigate('Tabbar', {screen: 'HomePage'});
+            navigation.goBack();
           }}
         />
       </View>

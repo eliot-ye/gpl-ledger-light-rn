@@ -1,5 +1,6 @@
 import {AssetTypeItem} from '../assetType/schema';
 import {ColorItem} from '../color/schema';
+import {CurrencyItem} from '../currency/schema';
 import {SchemaName, createObjectSchema} from '../schemaType';
 
 export interface HistoryItem {
@@ -22,6 +23,7 @@ export interface LedgerItem {
   name: string;
   amountMoney: number;
   color: ColorItem;
+  currency: CurrencyItem;
   assetType: AssetTypeItem;
   history: HistoryItem[];
 }
@@ -34,6 +36,7 @@ export const LedgerSchema = createObjectSchema<LedgerItem>({
     name: 'string',
     amountMoney: 'float',
     color: SchemaName.Color,
+    currency: SchemaName.Currency,
     assetType: SchemaName.AssetType,
     history: {type: 'list', objectType: SchemaName.History},
   },

@@ -24,6 +24,12 @@ export function SettingPage() {
             }}
           />
           <CNPCell
+            title={I18n.CurrencyManagement}
+            onPress={() => {
+              navigation.navigate('CurrencyManagementPage');
+            }}
+          />
+          <CNPCell
             title={I18n.AssetTypeManagement}
             onPress={() => {
               navigation.navigate('AssetTypeManagementPage');
@@ -36,7 +42,7 @@ export function SettingPage() {
           <CNPCell
             title={I18n.ColorManagement}
             onPress={() => {
-              navigation.navigate('ColorManagementPage');
+              navigation.navigate('CurrencyManagementPage');
             }}
             isLast
           />

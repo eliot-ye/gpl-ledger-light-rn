@@ -6,10 +6,12 @@ import {I18n} from '@/assets/I18n';
 
 import {ColorSchema} from './color/schema';
 import {getDefaultColors} from './color/default';
+import {CurrencySchema} from './currency/schema';
 
 import {AssetTypeSchema} from './assetType/schema';
 import {getDefaultAssetTypes} from './assetType/default';
 import {HistorySchema, LedgerSchema} from './ledger/schema';
+import {getDefaultCurrency} from './currency/default';
 
 let realm: Realm | undefined;
 
@@ -25,13 +27,23 @@ export async function getRealm(path?: string, encryptionKey?: string) {
 
     if (pathCache && encryptionKeyCache) {
       realm = await Realm.open({
-        schema: [ColorSchema, AssetTypeSchema, LedgerSchema, HistorySchema],
-        schemaVersion: 3,
+        schema: [
+          ColorSchema,
+          CurrencySchema,
+          AssetTypeSchema,
+          LedgerSchema,
+          HistorySchema,
+        ],
+        schemaVersion: 4,
         path: pathCache,
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
           getDefaultColors().forEach(item => {
             _realm.create(ColorSchema.name, item);
+          });
+
+          getDefaultCurrency().forEach(item => {
+            _realm.create(CurrencySchema.name, item);
           });
 
           getDefaultAssetTypes().forEach(item => {
