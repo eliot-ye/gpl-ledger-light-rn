@@ -122,7 +122,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         style={[
           styles.cell,
           {
-            backgroundColor: Colors.backgroundGrey,
+            backgroundColor: Colors.backgroundPanel,
             paddingRight: 10,
           },
           props.cellStyle,
@@ -191,7 +191,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                     },
                 {
                   left: boxPosition.X,
-                  backgroundColor: Colors.backgroundGrey,
+                  backgroundColor: Colors.backgroundPanel,
                   width: boxWidth,
                   maxHeight: containerHeight,
                 },
@@ -209,7 +209,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                     <View
                       style={{
                         borderBottomWidth: Config.borderWidth,
-                        borderColor: Colors.dividingLine,
+                        borderColor: Colors.line,
                         marginHorizontal: 6,
                       }}
                     />

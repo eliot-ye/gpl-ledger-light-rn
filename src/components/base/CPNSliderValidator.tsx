@@ -155,7 +155,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
         style={[
           styles.initBtnWrapper,
           {
-            borderColor: Colors.dividingLine,
+            borderColor: Colors.line,
             backgroundColor: Colors.backgroundTheme,
           },
           validatorStatus === ValidatorStatus.Successful && {
@@ -372,7 +372,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                   containerStyle,
                   {
                     backgroundColor: Colors.backgroundTheme,
-                    borderColor: Colors.dividingLine,
+                    borderColor: Colors.line,
                   },
                   validatorStatus === ValidatorStatus.Successful && {
                     shadowColor: Colors.success,
@@ -410,7 +410,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                       styles.slideRail,
                       {
                         width: validatorInfo.imageWidth,
-                        backgroundColor: Colors.backgroundGrey,
+                        backgroundColor: Colors.backgroundPanel,
                       },
                       validatorStatus === ValidatorStatus.Successful && {
                         backgroundColor: Colors.successLight,
@@ -463,7 +463,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                   style={{
                     width: '100%',
                     borderBottomWidth: Config.borderWidth,
-                    borderColor: Colors.dividingLine,
+                    borderColor: Colors.line,
                   }}
                 />
 
@@ -520,7 +520,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                         height: '90%',
                         justifyContent: 'center',
                         borderLeftWidth: 1,
-                        borderColor: Colors.dividingLine,
+                        borderColor: Colors.line,
                         paddingLeft: Config.padding,
                       }}>
                       <CPNText style={{color: Colors.success, fontSize: 12}}>
@@ -535,7 +535,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                         height: '90%',
                         justifyContent: 'center',
                         borderLeftWidth: 1,
-                        borderColor: Colors.dividingLine,
+                        borderColor: Colors.line,
                         paddingLeft: Config.padding,
                       }}>
                       <CPNText style={{color: Colors.fail, fontSize: 12}}>

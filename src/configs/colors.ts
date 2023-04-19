@@ -17,24 +17,23 @@ const colorsDefault = {
 
   transparent: 'transparent',
 
+  backgroundTheme: '#eee',
+  backgroundPanel: '#fff',
+  backgroundDisabled: '#c8c9cc',
   backgroundBlack: '#000',
   backgroundModal: 'rgba(0,0,0,0.5)',
-  backgroundGrey: '#eee',
-  backgroundDisabled: '#c8c9cc',
-  backgroundTheme: '#fff',
-  backgroundThemeTranslucent: 'rgba(255,255,255,0.9)',
 
   shadow: '#000',
-
-  dividingLine: 'rgba(84, 84, 88, 0.65)',
+  line: '#bbb',
 
   fontTitle: '#000',
   fontSubtitle: '#8E8E93',
   fontText: '#222',
+  fontPlaceholder: '#999',
+
   fontTitleReverse: '#fff',
   fontSubtitleReverse: '#fff',
   fontTextReverse: '#fff',
-  fontPlaceholder: '#999',
 } as const;
 
 const colorsDark = {

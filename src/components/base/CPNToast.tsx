@@ -109,7 +109,7 @@ export function createCPNToast() {
               style={[
                 styles.container,
                 {
-                  backgroundColor: Colors.backgroundGrey,
+                  backgroundColor: Colors.backgroundPanel,
                   maxWidth: windowDimensions.width * 0.6,
                   elevation: 5 + index,
                   opacity: option.animatedValue,

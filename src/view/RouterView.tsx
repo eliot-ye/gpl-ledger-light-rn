@@ -62,7 +62,7 @@ function TabBarView() {
           }}
         />
       ),
-      textColor: Colors.backgroundGrey,
+      textColor: Colors.backgroundPanel,
       textActiveColor: Colors.fontTextReverse,
     },
     {
@@ -77,7 +77,7 @@ function TabBarView() {
           }}
         />
       ),
-      textColor: Colors.backgroundGrey,
+      textColor: Colors.backgroundPanel,
       textActiveColor: Colors.fontTextReverse,
     },
   ];

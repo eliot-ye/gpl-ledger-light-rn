@@ -224,7 +224,7 @@ const stylesModalPicker = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: Colors.backgroundGrey,
+    backgroundColor: Colors.backgroundPanel,
   },
   btnText: {
     color: Colors.theme,

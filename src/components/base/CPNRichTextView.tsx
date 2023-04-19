@@ -38,18 +38,18 @@ export function CPNRichTextView(props: RichTextViewProps) {
     const tagsStylesDefault: TagsStyles = {
       table: {
         borderWidth: 0.5,
-        borderColor: Colors.dividingLine,
+        borderColor: Colors.line,
         width: '100%',
         minWidth: 200,
       },
       td: {
         borderWidth: 0.5,
-        borderColor: Colors.dividingLine,
+        borderColor: Colors.line,
         justifyContent: 'center',
       },
       th: {
         borderWidth: 0.5,
-        borderColor: Colors.dividingLine,
+        borderColor: Colors.line,
         padding: 10,
         minHeight: 36,
       },

@@ -40,8 +40,8 @@ export function CNPInput(props: CNPInputProps) {
       style={[
         styles.inputContainer,
         {
-          backgroundColor: Colors.backgroundGrey,
-          borderBottomColor: Colors.dividingLine,
+          backgroundColor: Colors.backgroundPanel,
+          borderBottomColor: Colors.line,
         },
         focused && {borderBottomColor: themeColor || Colors.theme},
         formItem.hasError && {borderBottomColor: Colors.fail},

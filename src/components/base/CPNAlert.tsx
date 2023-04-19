@@ -33,8 +33,6 @@ const styles = StyleSheet.create({
   },
   container: {
     ...StyleGet.boxShadow(),
-    // borderWidth: 1,
-    // borderColor: Colors.dividingLine,
     width: Config.width,
     position: 'absolute',
     borderRadius: Config.borderRadius,
@@ -147,7 +145,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
       <View
         style={{
           borderTopWidth: 1,
-          borderColor: Colors.dividingLine,
+          borderColor: Colors.line,
           flexDirection: isColumnButtons ? 'column' : 'row',
         }}>
         {buttonsList.map((_btn, _btnIndex) => {
@@ -158,7 +156,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
             <View
               key={`${_btn.id}`}
               style={[
-                {flex: 1, borderColor: Colors.dividingLine},
+                {flex: 1, borderColor: Colors.line},
 
                 !isColumnButtons &&
                   _btnIndex > 0 && {

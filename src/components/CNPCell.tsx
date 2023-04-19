@@ -30,15 +30,13 @@ export function CNPCell(props: CNPCellProps) {
         StyleGet.cellView(),
         {
           paddingRight: 0,
-          backgroundColor: Colors.backgroundGrey,
+          backgroundColor: Colors.backgroundPanel,
           borderWidth: 0.5,
         },
         isCellGroup && {
           paddingLeft: 0,
           backgroundColor: Colors.transparent,
-          borderBottomColor: props.isLast
-            ? Colors.transparent
-            : Colors.dividingLine,
+          borderBottomColor: props.isLast ? Colors.transparent : Colors.line,
         },
       ]}>
       <TouchableOpacity

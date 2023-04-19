@@ -13,7 +13,7 @@ export function CNPCellGroup(props: CNPCellGroupProps) {
         StyleGet.boxShadow(),
         {
           paddingLeft: CNPCellConfig.padding,
-          backgroundColor: Colors.backgroundGrey,
+          backgroundColor: Colors.backgroundPanel,
           borderRadius: 10,
         },
         props.style,

@@ -185,7 +185,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                   <View
                     style={{
                       borderTopWidth: 0.5,
-                      borderColor: Colors.dividingLine,
+                      borderColor: Colors.line,
                     }}
                     key={_item.id}>
                     <TouchableOpacity
