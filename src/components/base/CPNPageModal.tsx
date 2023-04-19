@@ -9,6 +9,10 @@ import {
   View,
 } from 'react-native';
 import {StyleGet} from '@/configs/styles';
+import {CPNActionSheet} from './CPNActionSheet';
+import {CPNAlert} from './CPNAlert';
+import {CPNLoading} from './CPNLoading';
+import {CPNToast} from './CPNToast';
 
 const Config = {
   offset: 10,
@@ -176,6 +180,10 @@ export function createCPNPageModal() {
               {props.children}
             </Animated.View>
           </Animated.View>
+          <CPNActionSheet.Provider />
+          <CPNAlert.Provider />
+          <CPNToast.Provider />
+          <CPNLoading.Provider />
         </Modal>
       );
     },

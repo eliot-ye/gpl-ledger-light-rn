@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {I18n} from '@/assets/I18n';
 import {
-  CPNAlertView,
+  CPNAlert,
   CPNButton,
   CPNIonicons,
   CPNPageModal,
@@ -55,7 +55,25 @@ export function ColorManagementPage() {
             !!detailsRef.current.id && (
               <TouchableOpacity
                 onPress={async () => {
-                  showDeleteAlertSet(true);
+                  CPNAlert.open({
+                    message: I18n.formatString(
+                      I18n.DeleteConfirm,
+                      detailsRef.current.name || '',
+                    ) as string,
+                    buttons: [
+                      {text: I18n.Cancel},
+                      {
+                        text: I18n.Confirm,
+                        async onPress() {
+                          if (detailsRef.current.id) {
+                            dbDeleteColor(detailsRef.current.id);
+                            await getDBColors();
+                            showDetailsModalSet(false);
+                          }
+                        },
+                      },
+                    ],
+                  });
                 }}>
                 <CPNIonicons name={IONName.Delete} />
               </TouchableOpacity>
@@ -125,40 +143,7 @@ export function ColorManagementPage() {
             />
           </View>
         </CPNPageView>
-        {renderDeleteAlert()}
       </CPNPageModal.View>
-    );
-  }
-
-  const [showDeleteAlert, showDeleteAlertSet] = useState(false);
-  function renderDeleteAlert() {
-    return (
-      <CPNAlertView
-        show={showDeleteAlert}
-        onClose={() => showDeleteAlertSet(false)}
-        message={
-          I18n.formatString(
-            I18n.DeleteConfirm,
-            detailsRef.current.name || '',
-          ) as string
-        }
-        buttons={useMemo(
-          () => [
-            {text: I18n.Cancel},
-            {
-              text: I18n.Confirm,
-              async onPress() {
-                if (detailsRef.current.id) {
-                  dbDeleteColor(detailsRef.current.id);
-                  await getDBColors();
-                  showDetailsModalSet(false);
-                }
-              },
-            },
-          ],
-          [],
-        )}
-      />
     );
   }
 
