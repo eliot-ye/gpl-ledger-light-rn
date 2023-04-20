@@ -75,4 +75,11 @@ export default {
   CurrencyError: '请选择币种',
   AmountMoney: '金额',
   AmountMoneyError1: '请输入正确的金额',
+
+  About: '关于',
+  Version: '版本',
+  CheckUpdates: '检查更新',
+  DiscoveringNewVersion: '发现新版本',
+  ViewVersionLog: '查看更新记录',
+  VersionLog: '更新记录',
 } as const;

@@ -5,6 +5,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {PageProps} from '../Router';
 import {useNavigation} from '@react-navigation/native';
+import {envConstant} from '@/configs/env';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -39,9 +40,10 @@ export function SettingPage() {
 
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
-            title={I18n.ColorManagement}
+            title={I18n.About}
+            value={`v${envConstant.versionName}`}
             onPress={() => {
-              navigation.navigate('CurrencyManagementPage');
+              navigation.navigate('AboutPage');
             }}
             isLast
           />

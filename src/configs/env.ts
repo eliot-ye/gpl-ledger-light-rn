@@ -42,8 +42,8 @@ export function getFetchUrl(serverName: ApiServerName, path: string) {
   let domain = envConstant.apiDomain;
   let serverPath = envConstant.apiServerMap[serverName];
 
-  if (envConstant.CE_ApiServerNameList.includes(serverName)) {
-    domain = envConstant.CE_ApiDomain;
+  if (envConstant.CE_ApiServerEnable.includes(serverName)) {
+    domain = envConstant.CE_ApiDomain || domain;
     serverPath = envConstant.CE_ApiServerMap[serverName] || serverPath;
   }
 

@@ -20,6 +20,8 @@ interface CPNCellProps {
   value?: React.ReactNode;
   isLast?: boolean;
   onPress?: () => void;
+  /** @default true */
+  showChevron?: boolean;
 }
 export function CPNCell(props: CPNCellProps) {
   const isCellGroup = useContext(CPNCellGroupContext);
@@ -83,7 +85,7 @@ export function CPNCell(props: CPNCellProps) {
               )}
             </CPNTextColorContext.Provider>
           )}
-          {props.onPress && (
+          {props.showChevron !== false && props.onPress && (
             <CPNIonicons
               name={IONName.ChevronForward}
               color={Colors.fontSubtitle}

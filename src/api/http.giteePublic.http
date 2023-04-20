@@ -1,0 +1,3 @@
+@domain=https://eliot-ye.gitee.io/public/GPL/ledger-light-rn
+
+GET {{domain}}/now_version.json

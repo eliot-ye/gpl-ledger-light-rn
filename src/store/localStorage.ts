@@ -24,6 +24,19 @@ export const LS_Lang = {
   },
 };
 
+export const LS_Token = {
+  key: 'token',
+  async get() {
+    return AsyncStorage.getItem(this.key);
+  },
+  async set(token: string) {
+    return AsyncStorage.setItem(this.key, token);
+  },
+  remove() {
+    return AsyncStorage.removeItem(this.key);
+  },
+};
+
 export interface LSUserInfo {
   id: string;
   username: string;

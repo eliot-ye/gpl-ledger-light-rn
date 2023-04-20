@@ -1,11 +1,12 @@
 import {I18n, LangCode, langDefault} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
-import {getFetchUrl} from '@/configs/env';
+import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
 import {useResetStore} from '@/store';
-import {LSLogout, LS_Lang, LS_Token} from '@/store/localStorage';
+import {LS_Lang, LS_Token} from '@/store/localStorage';
 import {CusLog} from '@/utils/tools';
 import {useCallback} from 'react';
+import {Platform} from 'react-native';
 
 interface LogData {
   response: any;
@@ -31,8 +32,9 @@ function logError({url, response, path, body, headers}: LogData) {
 const headersDefault = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
+  'User-Agent': `${envConstant.brand}/(${envConstant.model}) ${Platform.OS}/${Platform.Version} ${envConstant.bundleId}/${envConstant.versionName}.${envConstant.versionCode}`,
   'Content-Language': langDefault as LangCode,
-  Authorization: '',
+  Authorization: undefined as undefined | string,
 };
 
 /**
@@ -45,7 +47,7 @@ export async function getFetchData(
   body: any = {},
   option: HttpOption = {},
 ) {
-  const token = (await LS_Token.get()) || '';
+  const token = (await LS_Token.get()) || undefined;
   const langCode = await LS_Lang.get();
 
   const optionHeaders = option.headers || {};
@@ -95,6 +97,10 @@ async function createFetch(
   option: HttpOption = {},
 ) {
   const method = option.method || 'POST';
+  console.log('url', url);
+  console.log('method', method);
+  console.log('headers', option.hideHeader ? undefined : headers);
+  console.log('body', method === 'POST' ? bodyStr : undefined);
 
   return fetch(url, {
     method,
@@ -205,7 +211,7 @@ export function useFetch(
           if (responseStatus === 403 && !showExpiredFlag && showExpiredAlert) {
             // token 失效
             showExpiredFlag = true;
-            await LSLogout();
+            // await LSLogout();
             resetStore();
             CPNAlert.open({
               message: I18n.SessionExpired,
@@ -256,27 +262,27 @@ export function useFetch(
   );
 }
 
-export function useLogout() {
-  const resetStore = useResetStore();
+// export function useLogout() {
+//   const resetStore = useResetStore();
 
-  return useCallback(
-    async function () {
-      const fetchData = await getFetchData('main', '/logout');
+//   return useCallback(
+//     async function () {
+//       const fetchData = await getFetchData('main', '/logout');
 
-      createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
-        .then(res => {
-          CusLog.success('res logout:', fetchData.url, res);
-        })
-        .catch(error => {
-          CusLog.error('err logout:', fetchData.url, error);
-        });
+//       createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
+//         .then(res => {
+//           CusLog.success('res logout:', fetchData.url, res);
+//         })
+//         .catch(error => {
+//           CusLog.error('err logout:', fetchData.url, error);
+//         });
 
-      await LSLogout();
-      resetStore();
-    },
-    [resetStore],
-  );
-}
+//       await LSLogout();
+//       resetStore();
+//     },
+//     [resetStore],
+//   );
+// }
 
 export interface HttpRes {
   code: number;
