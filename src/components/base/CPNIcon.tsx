@@ -39,8 +39,9 @@ export enum IONName {
   EyeOff = 'eye-off',
 
   Add = 'add',
-
   Delete = 'trash',
+
+  FingerPrint = 'finger-print',
 
   Home = 'home',
   Settings = 'settings',

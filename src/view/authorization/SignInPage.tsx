@@ -6,6 +6,8 @@ import {
   DataConstraint,
   CPNFormItem,
   CPNInput,
+  CPNIonicons,
+  IONName,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {LSUserInfo, LS_UserInfo, LS_LastUserId} from '@/store/localStorage';
@@ -17,6 +19,7 @@ import {PageProps} from '../Router';
 import {StoreRoot} from '@/store';
 import {getRealm} from '@/database/main';
 import {I18n} from '@/assets/I18n';
+import {biometrics} from '@/utils/biometrics';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -152,6 +155,23 @@ export function SignInPage() {
     );
   }
 
+  const [availableBiometrics, availableBiometricsSet] = useState(false);
+  useEffect(() => {
+    biometrics.isSensorAvailable().then(({available}) => {
+      availableBiometricsSet(available);
+    });
+  }, []);
+  function renderBiometrics() {
+    return (
+      <View
+        style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+        <TouchableOpacity>
+          <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <CPNPageView titleText={I18n.SignIn} keyboardShouldPersistTaps="handled">
       <View style={{padding: 20}}>
@@ -159,6 +179,7 @@ export function SignInPage() {
         {renderPasswordInput()}
         {renderSubmitButton()}
         {renderGoSignUpButton()}
+        {availableBiometrics && renderBiometrics()}
       </View>
     </CPNPageView>
   );

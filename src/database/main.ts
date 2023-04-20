@@ -75,6 +75,6 @@ export async function getRealm(path?: string, encryptionKey?: string) {
 export function closeRealm() {
   if (realm && !realm.isClosed) {
     realm.close();
-    realm = undefined;
   }
+  realm = undefined;
 }
