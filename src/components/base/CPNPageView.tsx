@@ -95,6 +95,7 @@ export function CPNPageView(props: CPNPageViewProps) {
         {!props.fixedTop && <View style={{height: headerInfo.height}} />}
 
         <Animated.ScrollView
+          keyboardShouldPersistTaps="handled"
           {...props}
           style={[
             {

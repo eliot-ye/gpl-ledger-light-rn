@@ -176,7 +176,7 @@ export function SignInPage() {
   }
 
   return (
-    <CPNPageView title={I18n.SignIn} keyboardShouldPersistTaps="handled">
+    <CPNPageView title={I18n.SignIn}>
       <View style={{padding: 20}}>
         {renderUserInfoInput()}
         {renderPasswordInput()}
