@@ -108,7 +108,7 @@ export function AssetTypeManagementPage() {
                 <CPNCheckbox
                   label={I18n.AvailableAssets}
                   checked={details.isAvailableAssets === true}
-                  shape="round"
+                  isRadio
                   onPress={() => {
                     detailsSet({...details, isAvailableAssets: true});
                     detailsErrorSet({...detailsError, isAvailableAssets: ''});
@@ -117,7 +117,7 @@ export function AssetTypeManagementPage() {
                 <CPNCheckbox
                   checked={details.isAvailableAssets === false}
                   label={I18n.UnavailableAssets}
-                  shape="round"
+                  isRadio
                   onPress={() => {
                     detailsSet({...details, isAvailableAssets: false});
                     detailsErrorSet({...detailsError, isAvailableAssets: ''});

@@ -29,7 +29,7 @@ interface CPNCheckboxProps extends PropsWithChildren {
   label?: string;
   checked: boolean;
   onPress?: () => void;
-  shape?: 'round';
+  isRadio?: boolean;
   disabled?: boolean;
   /**
    * 是否垂直居中
@@ -43,7 +43,7 @@ interface CPNCheckboxProps extends PropsWithChildren {
   verticalMarginTop?: number;
 }
 export function CPNCheckbox(props: CPNCheckboxProps) {
-  const themeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
   const formData = useContext(FormItemContext);
 
   const verticalCentering = props.verticalCentering !== false;
@@ -51,7 +51,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
   return (
     <TouchableOpacity
       accessible={true}
-      accessibilityRole="checkbox"
+      accessibilityRole={props.isRadio ? 'radio' : 'checkbox'}
       accessibilityLabel={props.label}
       accessibilityState={{
         disabled: props.disabled,
@@ -70,7 +70,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
         style={[
           styles.iconWrapper,
           {
-            borderColor: themeColor || Colors.theme,
+            borderColor: themeColor,
             backgroundColor: Colors.backgroundTheme,
           },
           !verticalCentering && {
@@ -79,21 +79,31 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
                 ? 8
                 : props.verticalMarginTop,
           },
-          props.shape === 'round' && {borderRadius: Config.size * 0.5},
-          props.checked && {backgroundColor: themeColor || Colors.theme},
+          props.isRadio && {borderRadius: Config.size * 0.5},
+          props.checked && !props.isRadio && {backgroundColor: themeColor},
           formData.hasError && {borderColor: Colors.fail},
           props.disabled && {
             backgroundColor: Colors.backgroundDisabled,
             borderColor: Colors.backgroundDisabled,
           },
         ]}>
-        {props.checked && (
-          <CPNIonicons
-            name={IONName.Checkmark}
-            color={Colors.fontTitleReverse}
-            size={Config.size - 4}
-          />
-        )}
+        {props.checked &&
+          (props.isRadio ? (
+            <View
+              style={{
+                width: Config.size / 2,
+                height: Config.size / 2,
+                borderRadius: Config.size / 4,
+                backgroundColor: themeColor,
+              }}
+            />
+          ) : (
+            <CPNIonicons
+              name={IONName.Checkmark}
+              color={Colors.fontTitleReverse}
+              size={Config.size - 4}
+            />
+          ))}
       </View>
       <View>{props.children || <CPNText>{props.label}</CPNText>}</View>
     </TouchableOpacity>
