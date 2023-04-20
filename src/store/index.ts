@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {createStore} from '@/libs/CreateStore';
+import {resetSessionStorage} from './sessionStorage';
 
 import dispatchAggregateRoot from './root/dispatch';
 import initialStateRoot from './root/initialState';
@@ -15,6 +16,7 @@ export function useResetStore() {
   const HomePageDispatch = StoreHomePage.useDispatch();
 
   return useCallback(() => {
+    resetSessionStorage();
     RootDispatch('isSignIn', initialStateRoot.isSignIn);
 
     HomePageDispatch('reset');

@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {PageProps} from '../Router';
+import {SessionStorage} from '@/store/sessionStorage';
 
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
@@ -102,6 +103,8 @@ export function SignUpPage() {
               token: AESEncrypt(dbKey, formData.password),
             });
 
+            SessionStorage.setValue('userId', id);
+            SessionStorage.setValue('password', formData.password);
             RootDispatch('isSignIn', true);
             navigation.replace('Tabbar', {screen: 'HomePage'});
           }}

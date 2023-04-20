@@ -20,6 +20,7 @@ import {StoreRoot} from '@/store';
 import {getRealm} from '@/database/main';
 import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
+import {SessionStorage} from '@/store/sessionStorage';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -118,6 +119,8 @@ export function SignInPage() {
               if (dbKey) {
                 await getRealm(userInfo.id, dbKey);
 
+                SessionStorage.setValue('userId', userInfo.id);
+                SessionStorage.setValue('password', password.value);
                 RootDispatch('isSignIn', true);
                 navigation.replace('Tabbar', {screen: 'HomePage'});
               } else {
