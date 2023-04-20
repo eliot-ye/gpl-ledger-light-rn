@@ -60,8 +60,8 @@ interface CPNActionSheetButton extends ActionSheetButton {
 }
 
 interface ActionSheetOption<ItemB extends ActionSheetButton> {
-  title?: string;
-  message?: string;
+  title?: React.ReactNode;
+  message?: React.ReactNode;
   /** ___use memoized value___ */
   buttons: ItemB[];
   onPress?: (buttonData: ItemB, index: number) => void;
@@ -152,17 +152,26 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                     paddingTop: 8,
                     paddingBottom: 12,
                   }}>
-                  {!!props.title && (
-                    <CPNText style={[styles.title, {color: Colors.fontTitle}]}>
-                      {props.title}
-                    </CPNText>
-                  )}
-                  {!!props.message && (
-                    <CPNText
-                      style={[styles.message, {color: Colors.fontSubtitle}]}>
-                      {props.message}
-                    </CPNText>
-                  )}
+                  {!!props.title &&
+                    (['string', 'number'].includes(typeof props.title) ? (
+                      <CPNText
+                        role="heading"
+                        style={[styles.title, {color: Colors.fontTitle}]}>
+                        {props.title}
+                      </CPNText>
+                    ) : (
+                      <View role="heading">{props.title}</View>
+                    ))}
+                  {!!props.message &&
+                    (['string', 'number'].includes(typeof props.message) ? (
+                      <CPNText
+                        role="contentinfo"
+                        style={[styles.message, {color: Colors.fontSubtitle}]}>
+                        {props.message}
+                      </CPNText>
+                    ) : (
+                      <View role="contentinfo">{props.message}</View>
+                    ))}
                 </View>
               )}
               {buttonList.map((_item, _index) => {

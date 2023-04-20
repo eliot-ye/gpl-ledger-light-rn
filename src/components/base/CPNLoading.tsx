@@ -14,7 +14,7 @@ export function createCPNLoading() {
           if (type === 'show') {
             return c + 1;
           }
-          if (type === 'close') {
+          if (type === 'close' && c > 0) {
             return c - 1;
           }
           return c;

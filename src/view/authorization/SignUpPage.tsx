@@ -72,7 +72,7 @@ export function SignUpPage() {
     return (
       <View>
         <CPNButton
-          text={I18n.Submit}
+          children={I18n.Submit}
           onPress={async () => {
             const _formDataError: ErrorItem<FormData> = {};
 
@@ -114,7 +114,7 @@ export function SignUpPage() {
   }
 
   return (
-    <CPNPageView titleText={I18n.SignUp} keyboardShouldPersistTaps="handled">
+    <CPNPageView title={I18n.SignUp} keyboardShouldPersistTaps="handled">
       <View style={{padding: 20}}>
         {renderUsernameInput()}
         {renderPasswordInput()}

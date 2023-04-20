@@ -103,7 +103,7 @@ export function SignInPage() {
     return (
       <View>
         <CPNButton
-          text={I18n.Submit}
+          children={I18n.Submit}
           onPress={async () => {
             if (!userInfo.token) {
               userInfoSet(val => ({...val, hasError: true}));
@@ -176,7 +176,7 @@ export function SignInPage() {
   }
 
   return (
-    <CPNPageView titleText={I18n.SignIn} keyboardShouldPersistTaps="handled">
+    <CPNPageView title={I18n.SignIn} keyboardShouldPersistTaps="handled">
       <View style={{padding: 20}}>
         {renderUserInfoInput()}
         {renderPasswordInput()}

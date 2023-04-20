@@ -35,7 +35,6 @@ interface CPNButtonTypeItem {
 }
 
 interface CPNButtonProps extends TouchableOpacityProps {
-  text?: string;
   textStyle?: StyleProp<TextStyle>;
   type?: CPNButtonType;
   shape?: 'square';
@@ -47,14 +46,14 @@ interface CPNButtonProps extends TouchableOpacityProps {
   disabledInit?: boolean;
 }
 export function CPNButton(props: CPNButtonProps) {
-  const themeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
 
   const CPNButtonTypeList = useMemo<CPNButtonTypeItem[]>(
     () => [
       {
         type: 'theme',
         textColor: Colors.fontTextReverse,
-        backgroundColor: themeColor || Colors.theme,
+        backgroundColor: themeColor,
       },
       {
         type: 'warning',
@@ -112,7 +111,7 @@ export function CPNButton(props: CPNButtonProps) {
 
     return {
       textColor: Colors.fontTextReverse,
-      backgroundColor: themeColor || Colors.theme,
+      backgroundColor: themeColor,
     };
   }, [CPNButtonTypeList, disabled, props.disabled, props.type, themeColor]);
 
@@ -136,13 +135,16 @@ export function CPNButton(props: CPNButtonProps) {
         props.style,
       ]}>
       <CPNTextColorContext.Provider value={btnStyle.textColor}>
-        {props.children || (
+        {disabled ? (
           <CPNText style={[styles.text, props.textStyle]}>
-            {disabled
-              ? props.disabledText?.replace('{timer}', String(disabledTimer)) ||
-                props.text
-              : props.text}
+            {props.disabledText?.replace('{timer}', String(disabledTimer))}
           </CPNText>
+        ) : ['string', 'number'].includes(typeof props.children) ? (
+          <CPNText style={[styles.text, props.textStyle]}>
+            {props.children}
+          </CPNText>
+        ) : (
+          props.children
         )}
       </CPNTextColorContext.Provider>
     </TouchableOpacity>

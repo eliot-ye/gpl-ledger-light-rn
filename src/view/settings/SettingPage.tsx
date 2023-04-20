@@ -12,7 +12,7 @@ export function SettingPage() {
 
   return (
     <CPNPageView
-      titleText={I18n.Settings}
+      title={I18n.Settings}
       headerBackgroundColor={Colors.warning}
       hideBack>
       <View style={{padding: 20}}>

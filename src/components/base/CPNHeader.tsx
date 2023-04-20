@@ -46,9 +46,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 40,
   },
-  titleText: {
-    fontSize: 20,
-  },
   leftBtnWrapper: {
     position: 'absolute',
     left: 20,
@@ -73,9 +70,8 @@ export interface CPNHeaderProps {
   leftIconType?: 'close';
   /** ___use memoized value___ */
   onPressLeftIcon?: () => void;
-  titleText?: string;
+  title?: React.ReactNode;
   titleStyle?: StyleProp<TextStyle>;
-  customTitle?: boolean | React.ReactNode;
   rightIcon?: boolean | React.ReactNode | React.ReactNode[];
   hideBack?: boolean;
   backIconStyle?: StyleProp<TextStyle>;
@@ -128,14 +124,14 @@ export function CPNHeader(props: CPNHeaderProps) {
   }
 
   function renderTitle() {
-    return (
-      props.customTitle || (
-        <CPNText
-          role="heading"
-          style={[StyleGet.title('h2', true), props.titleStyle]}>
-          {props.titleText}
-        </CPNText>
-      )
+    return ['string', 'number'].includes(typeof props.title) ? (
+      <CPNText
+        role="heading"
+        style={[StyleGet.title('h2', true), props.titleStyle]}>
+        {props.title}
+      </CPNText>
+    ) : (
+      props.title
     );
   }
 

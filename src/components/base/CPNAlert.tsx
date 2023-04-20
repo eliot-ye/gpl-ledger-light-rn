@@ -60,8 +60,8 @@ interface CPNAlertButton extends AlertButton {
 }
 
 interface AlertOption {
-  title?: string;
-  message?: string;
+  title?: React.ReactNode;
+  message?: React.ReactNode;
   /**
    * 指示返回按钮是否关闭弹窗，仅`Android`
    * @default true
@@ -82,7 +82,7 @@ interface CPNAlertBoxProps extends AlertOption {
   onClose: () => void;
 }
 function CPNAlertBox(props: CPNAlertBoxProps) {
-  const themeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
 
   const buttonsList = useMemo(
     () =>
@@ -113,28 +113,34 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
         },
       ]}>
       <View style={styles.content}>
-        {!!props.title && (
-          <CPNText
-            role="heading"
-            style={[
-              styles.text,
-              {
-                color: themeColor || Colors.theme,
-                fontWeight: Config.titleFontWeight,
-                fontSize: Config.titleFontSize,
-                marginBottom: !props.message ? 0 : 10,
-              },
-            ]}>
-            {props.title}
-          </CPNText>
-        )}
-        {!!props.message && (
-          <CPNText
-            role="contentinfo"
-            style={[styles.text, {color: themeColor || Colors.theme}]}>
-            {props.message}
-          </CPNText>
-        )}
+        {!!props.title &&
+          (['string', 'number'].includes(typeof props.title) ? (
+            <CPNText
+              role="heading"
+              style={[
+                styles.text,
+                {
+                  color: themeColor,
+                  fontWeight: Config.titleFontWeight,
+                  fontSize: Config.titleFontSize,
+                  marginBottom: !props.message ? 0 : 10,
+                },
+              ]}>
+              {props.title}
+            </CPNText>
+          ) : (
+            <View role="heading">{props.title}</View>
+          ))}
+        {!!props.message &&
+          (['string', 'number'].includes(typeof props.message) ? (
+            <CPNText
+              role="contentinfo"
+              style={[styles.text, {color: themeColor}]}>
+              {props.message}
+            </CPNText>
+          ) : (
+            <View role="contentinfo">{props.message}</View>
+          ))}
       </View>
       <View
         style={{
@@ -194,7 +200,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
                       _btn.textColor ||
                       (!isColumnButtons && isLast) ||
                       (isColumnButtons && isFirst)
-                        ? themeColor || Colors.theme
+                        ? themeColor
                         : undefined,
                   }}>
                   {_btn.text}

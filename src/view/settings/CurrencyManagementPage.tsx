@@ -40,7 +40,7 @@ export function CurrencyManagementPage() {
         show={showDetailsModal}
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
-          titleText={
+          title={
             detailsRef.current.id
               ? (I18n.formatString(
                   I18n.EditCurrency,
@@ -124,7 +124,7 @@ export function CurrencyManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              text={I18n.Submit}
+              children={I18n.Submit}
               onPress={async () => {
                 const _detailsError: ErrorItem<CurrencyItem> = {};
                 if (!details.name) {
@@ -163,7 +163,7 @@ export function CurrencyManagementPage() {
 
   return (
     <>
-      <CPNPageView titleText={I18n.CurrencyManagement}>
+      <CPNPageView title={I18n.CurrencyManagement}>
         <View style={{padding: 20}}>
           <CPNCellGroup>
             {CurrencyList.map(item => (

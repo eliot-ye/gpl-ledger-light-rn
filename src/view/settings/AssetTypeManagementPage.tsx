@@ -43,7 +43,7 @@ export function AssetTypeManagementPage() {
         show={showDetailsModal}
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
-          titleText={
+          title={
             detailsRef.current.id
               ? (I18n.formatString(
                   I18n.EditAssetType,
@@ -127,7 +127,7 @@ export function AssetTypeManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              text={I18n.Submit}
+              children={I18n.Submit}
               onPress={async () => {
                 const _detailsError: ErrorItem<AssetTypeItem> = {};
                 if (!details.name) {
@@ -162,7 +162,7 @@ export function AssetTypeManagementPage() {
 
   return (
     <>
-      <CPNPageView titleText={I18n.AssetTypeManagement}>
+      <CPNPageView title={I18n.AssetTypeManagement}>
         <View style={{padding: 20}}>
           <CPNCellGroup>
             {AssetTypeList.map(item => (

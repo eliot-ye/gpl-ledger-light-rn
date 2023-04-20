@@ -60,7 +60,7 @@ export function LedgerDetailsPage() {
 
   return (
     <CPNPageView
-      titleText={
+      title={
         route.params?.id
           ? (I18n.formatString(
               I18n.EditAsset,
@@ -239,7 +239,7 @@ export function LedgerDetailsPage() {
         </CPNFormItem>
 
         <CPNButton
-          text={I18n.Submit}
+          children={I18n.Submit}
           onPress={async () => {
             const _detailsError: ErrorItem<LedgerItem> = {};
             if (!details.name) {

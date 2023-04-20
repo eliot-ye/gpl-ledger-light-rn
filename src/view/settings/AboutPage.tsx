@@ -20,7 +20,7 @@ export function AboutPage() {
   const apiGiteePublic = useApiGiteePublic();
 
   return (
-    <CPNPageView titleText={I18n.About}>
+    <CPNPageView title={I18n.About}>
       <View
         style={{
           height: 300,

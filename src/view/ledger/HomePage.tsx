@@ -44,7 +44,7 @@ export function HomePage() {
 
   return (
     <CPNPageView
-      titleText={I18n.Ledger}
+      title={I18n.Ledger}
       rightIcon={
         <TouchableOpacity
           onPress={async () => {

@@ -32,7 +32,7 @@ export function VersionLogPage() {
   }, [apiGetLogData]);
 
   return (
-    <CPNPageView titleText={I18n.VersionLog}>
+    <CPNPageView title={I18n.VersionLog}>
       <View style={{padding: 20}}>
         {logList.map(item => {
           return (

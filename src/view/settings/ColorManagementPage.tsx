@@ -41,7 +41,7 @@ export function ColorManagementPage() {
         show={showDetailsModal}
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
-          titleText={
+          title={
             detailsRef.current.id
               ? (I18n.formatString(
                   I18n.EditColor,
@@ -112,7 +112,7 @@ export function ColorManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              text={I18n.Submit}
+              children={I18n.Submit}
               onPress={async () => {
                 const _detailsError: ErrorItem<ColorItem> = {};
                 if (!details.name) {
@@ -152,7 +152,7 @@ export function ColorManagementPage() {
 
   return (
     <>
-      <CPNPageView titleText={I18n.ColorManagement}>
+      <CPNPageView title={I18n.ColorManagement}>
         <View style={{padding: 20}}>
           <CPNCellGroup>
             {colorList.map(item => (
