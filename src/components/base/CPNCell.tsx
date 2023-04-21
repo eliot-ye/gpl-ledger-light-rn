@@ -22,6 +22,7 @@ interface CPNCellProps {
   onPress?: () => void;
   /** @default true */
   showChevron?: boolean;
+  rightIcon?: React.ReactElement;
 }
 export function CPNCell(props: CPNCellProps) {
   const isCellGroup = useContext(CPNCellGroupContext);
@@ -85,13 +86,14 @@ export function CPNCell(props: CPNCellProps) {
               )}
             </CPNTextColorContext.Provider>
           )}
-          {props.showChevron !== false && props.onPress && (
-            <CPNIonicons
-              name={IONName.ChevronForward}
-              color={Colors.fontSubtitle}
-              size={20}
-            />
-          )}
+          {props.rightIcon ||
+            (props.showChevron !== false && props.onPress && (
+              <CPNIonicons
+                name={IONName.ChevronForward}
+                color={Colors.fontSubtitle}
+                size={20}
+              />
+            ))}
         </View>
       </TouchableOpacity>
     </View>

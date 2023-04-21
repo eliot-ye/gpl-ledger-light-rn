@@ -82,4 +82,6 @@ export default {
   DiscoveringNewVersion: '发现新版本',
   ViewVersionLog: '查看更新记录',
   VersionLog: '更新记录',
+  Biometrics: '生物认证',
+  BiometricsError: '生物认证失败，请使用密码登入',
 } as const;

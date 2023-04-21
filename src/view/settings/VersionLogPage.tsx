@@ -37,6 +37,7 @@ export function VersionLogPage() {
         {logList.map(item => {
           return (
             <View
+              key={`${item.versionName}.${item.versionCode}`}
               style={[
                 StyleGet.boxShadow(),
                 {

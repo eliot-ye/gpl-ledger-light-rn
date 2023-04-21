@@ -8,6 +8,7 @@ import {
   CPNInput,
   CPNIonicons,
   IONName,
+  CPNAlert,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {LSUserInfo, LS_UserInfo, LS_LastUserId} from '@/store/localStorage';
@@ -99,6 +100,30 @@ export function SignInPage() {
     );
   }
 
+  async function loginAuth(pwd: string, userId?: string) {
+    if (!userInfo.token) {
+      userInfoSet(val => ({...val, hasError: true}));
+      return Promise.reject('token');
+    }
+
+    try {
+      const dbKey = AESDecrypt(userInfo.token, pwd);
+      if (dbKey) {
+        await getRealm(userId, dbKey);
+
+        SessionStorage.setValue('userId', userId);
+        SessionStorage.setValue('password', pwd);
+        RootDispatch('isSignIn', true);
+        navigation.replace('Tabbar', {screen: 'HomePage'});
+      } else {
+        return Promise.reject('password');
+      }
+    } catch (error) {
+      console.error(error);
+      return Promise.reject('password');
+    }
+  }
+
   function renderSubmitButton() {
     return (
       <View>
@@ -115,20 +140,11 @@ export function SignInPage() {
             }
 
             try {
-              const dbKey = AESDecrypt(userInfo.token, password.value);
-              if (dbKey) {
-                await getRealm(userInfo.id, dbKey);
-
-                SessionStorage.setValue('userId', userInfo.id);
-                SessionStorage.setValue('password', password.value);
-                RootDispatch('isSignIn', true);
-                navigation.replace('Tabbar', {screen: 'HomePage'});
-              } else {
+              loginAuth(password.value, userInfo.id);
+            } catch (error: any) {
+              if (error === 'password') {
                 passwordSet(val => ({...val, hasError: true}));
               }
-            } catch (error) {
-              console.error(error);
-              passwordSet(val => ({...val, hasError: true}));
             }
           }}
         />
@@ -160,15 +176,26 @@ export function SignInPage() {
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
-    biometrics.isSensorAvailable().then(({available}) => {
-      availableBiometricsSet(available);
+    biometrics.isSensorAvailable().then(async ({available}) => {
+      if (available) {
+        const {username} = await biometrics.getUser();
+        availableBiometricsSet(userInfo.id === username);
+      }
     });
-  }, []);
+  }, [userInfo.id]);
   function renderBiometrics() {
     return (
       <View
         style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            try {
+              const res = await biometrics.loginBiometricAuth();
+              await loginAuth(res.password, res.username);
+            } catch (error) {
+              CPNAlert.open({message: I18n.BiometricsError});
+            }
+          }}>
           <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />
         </TouchableOpacity>
       </View>

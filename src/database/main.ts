@@ -5,11 +5,11 @@ import {CPNAlert} from '@/components/base';
 import {I18n} from '@/assets/I18n';
 
 import {ColorSchema} from './color/schema';
-import {getDefaultColors} from './color/default';
+// import {getDefaultColors} from './color/default';
 import {CurrencySchema} from './currency/schema';
-import {getDefaultCurrency} from './currency/default';
+// import {getDefaultCurrency} from './currency/default';
 import {AssetTypeSchema} from './assetType/schema';
-import {getDefaultAssetTypes} from './assetType/default';
+// import {getDefaultAssetTypes} from './assetType/default';
 import {HistorySchema, LedgerSchema} from './ledger/schema';
 
 let realm: Realm | undefined;
@@ -36,19 +36,19 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         schemaVersion: 1,
         path: pathCache,
         encryptionKey: stringToUint8Array(encryptionKeyCache),
-        onFirstOpen(_realm) {
-          getDefaultColors().forEach(item => {
-            _realm.create(ColorSchema.name, item);
-          });
+        // onFirstOpen(_realm) {
+        //   getDefaultColors().forEach(item => {
+        //     _realm.create(ColorSchema.name, item);
+        //   });
 
-          getDefaultCurrency().forEach(item => {
-            _realm.create(CurrencySchema.name, item);
-          });
+        //   getDefaultCurrency().forEach(item => {
+        //     _realm.create(CurrencySchema.name, item);
+        //   });
 
-          getDefaultAssetTypes().forEach(item => {
-            _realm.create(AssetTypeSchema.name, item);
-          });
-        },
+        //   getDefaultAssetTypes().forEach(item => {
+        //     _realm.create(AssetTypeSchema.name, item);
+        //   });
+        // },
       });
     } else {
       if (navigationRef.isReady()) {
