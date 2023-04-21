@@ -112,7 +112,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
   return (
     <>
       <TouchableOpacity
-        disabled={props.disabled}
+        accessible
+        disabled={props.disabled || props.data.length === 0}
         onLayout={ev => {
           boxWidthSet(ev.nativeEvent.layout.width);
           boxHeightSet(ev.nativeEvent.layout.height);

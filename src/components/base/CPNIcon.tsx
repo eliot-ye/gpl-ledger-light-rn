@@ -50,5 +50,12 @@ interface IoniconsProps extends CPNIconProps {
   name?: IONName;
 }
 export function CPNIonicons(props: IoniconsProps) {
-  return <Ionicons size={26} color={Colors.fontTitleReverse} {...props} />;
+  return (
+    <Ionicons
+      size={26}
+      color={Colors.fontTitleReverse}
+      accessibilityLabel={props.name}
+      {...props}
+    />
+  );
 }
