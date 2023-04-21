@@ -140,7 +140,7 @@ export function SignInPage() {
             }
 
             try {
-              loginAuth(password.value, userInfo.id);
+              await loginAuth(password.value, userInfo.id);
             } catch (error: any) {
               if (error === 'password') {
                 passwordSet(val => ({...val, hasError: true}));

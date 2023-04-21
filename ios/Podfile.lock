@@ -656,8 +656,6 @@ PODS:
   - React-jsinspector (0.71.6)
   - React-logger (0.71.6):
     - glog
-  - react-native-biometric-login (1.0.3):
-    - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
   - react-native-render-html (6.3.4):
@@ -779,10 +777,8 @@ PODS:
     - React-perflogger (= 0.71.6)
   - ReactNativeLocalization (2.3.1):
     - React-Core
-  - RealmJS (12.0.0-alpha.2):
+  - RealmJS (11.8.0):
     - React
-  - RNCAsyncStorage (1.18.1):
-    - React-Core
   - RNDeviceInfo (10.5.0):
     - React-Core
   - RNGestureHandler (2.9.0):
@@ -866,7 +862,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - react-native-biometric-login (from `../node_modules/react-native-biometric-login`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -887,7 +882,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - RealmJS (from `../node_modules/realm`)
-  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -957,8 +951,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-biometric-login:
-    :path: "../node_modules/react-native-biometric-login"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-render-html:
@@ -999,8 +991,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localization"
   RealmJS:
     :path: "../node_modules/realm"
-  RNCAsyncStorage:
-    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
@@ -1048,7 +1038,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 7894956638ff3e00819dd3f9f6f4a84da38f2409
   React-jsinspector: d5ce2ef3eb8fd30c28389d0bc577918c70821bd6
   React-logger: 9332c3e7b4ef007a0211c0a9868253aac3e1da82
-  react-native-biometric-login: 1787b96ef95f39e05326892964b83817a6e3294d
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 0dfc8e3a7d5ff115d100bafe4269d64a2c0a1456
@@ -1068,8 +1057,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 8692ac548bec648fa121980ccb4304afd136d584
   ReactCommon: 0c43eaeaaee231d7d8dc24fc5a6e4cf2b75bf196
   ReactNativeLocalization: 076497d7ca70341c751cd3b3e7c86187332a182d
-  RealmJS: 496714a3baf2ba320af9e558b205281607ec1fd3
-  RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
+  RealmJS: 27b8d695fa4bc9606a4a4a378de55511edc2084c
   RNDeviceInfo: 1d0af8eafb25c0391c548df5143d69e4a6a2bc71
   RNGestureHandler: 9d2ebd17a9fef618d9720e3d95ff5e6607acf8d4
   RNScreens: 4666ca0a74ee229b2332c5d22d2a8b81ba9202be
