@@ -70,7 +70,6 @@ export function CPNButton(props: CPNButtonProps) {
       themeColor,
       Colors.fontText,
       Colors.fontTextReverse,
-      Colors.theme,
       Colors.warning,
       Colors.success,
     ],
@@ -134,13 +133,13 @@ export function CPNButton(props: CPNButtonProps) {
           borderColor: btnStyle.backgroundColor,
           borderWidth: 1,
           borderRadius: props.shape === 'square' ? 0 : Config.borderRadius,
-          opacity: disabled ? 0.5 : undefined,
+          opacity: disabled ? 0.6 : undefined,
         },
         props.style,
       ]}>
       <CPNTextColorContext.Provider
         value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
-        {disabled ? (
+        {disabled && props.disabledText ? (
           <CPNText style={[props.textStyle]}>
             {props.disabledText?.replace('{timer}', String(disabledTimer))}
           </CPNText>

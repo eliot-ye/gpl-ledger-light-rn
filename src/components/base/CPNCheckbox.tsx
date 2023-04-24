@@ -76,7 +76,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
           !verticalCentering && {
             marginTop:
               props.verticalMarginTop === undefined
-                ? 8
+                ? 4
                 : props.verticalMarginTop,
           },
           props.isRadio && {borderRadius: Config.size * 0.5},

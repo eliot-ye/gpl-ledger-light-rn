@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingVertical: 16,
-    paddingHorizontal: 26,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   text: {
     fontSize: Config.fontSize,

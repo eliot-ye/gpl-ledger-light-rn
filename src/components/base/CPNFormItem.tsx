@@ -1,8 +1,8 @@
-import React, {createContext, useMemo} from 'react';
+import React, {createContext, useContext, useMemo} from 'react';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {View, ViewProps} from 'react-native';
-import {CPNText} from '.';
+import {CPNPageViewThemeColor, CPNText} from '.';
 
 export const FormItemContext = createContext({
   isFormItem: false,
@@ -15,13 +15,14 @@ interface CPNFormItemProps extends ViewProps {
   errorText?: string;
 }
 export function CPNFormItem(props: CPNFormItemProps) {
+  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
+
   return (
     <View {...props}>
       {!!props.title && (
         <View style={StyleGet.cellTitleView()}>
           {['string', 'number'].includes(typeof props.title) ? (
-            <CPNText
-              style={{color: props.hasError ? Colors.fail : Colors.theme}}>
+            <CPNText style={{color: props.hasError ? Colors.fail : themeColor}}>
               {props.title}
             </CPNText>
           ) : (

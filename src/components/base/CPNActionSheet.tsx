@@ -132,7 +132,11 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
             props.onClose();
           }
         }}>
-        <View style={[StyleGet.modalView('flex-end'), {paddingHorizontal: 8}]}>
+        <View
+          style={[
+            StyleGet.modalView('flex-end'),
+            {alignItems: 'stretch', paddingHorizontal: 8},
+          ]}>
           <Animated.View
             accessibilityRole="menu"
             style={{

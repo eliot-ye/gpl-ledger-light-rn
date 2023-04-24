@@ -154,7 +154,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
           styles.initBtnWrapper,
           {
             borderColor: Colors.line,
-            backgroundColor: Colors.backgroundTheme,
+            backgroundColor: Colors.backgroundPanel,
           },
           validatorStatus === ValidatorStatus.Successful && {
             shadowColor: Colors.success,
@@ -362,7 +362,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                   styles.container,
                   containerStyle,
                   {
-                    backgroundColor: Colors.backgroundTheme,
+                    backgroundColor: Colors.backgroundPanel,
                     borderColor: Colors.line,
                   },
                   validatorStatus === ValidatorStatus.Successful && {
@@ -401,7 +401,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                       styles.slideRail,
                       {
                         width: validatorInfo.imageWidth,
-                        backgroundColor: Colors.backgroundPanel,
+                        backgroundColor: Colors.backgroundTheme,
                       },
                       validatorStatus === ValidatorStatus.Successful && {
                         backgroundColor: Colors.successLight,
@@ -432,7 +432,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
                           styles.slider,
                           {
                             width: validatorInfo.sliderWidth,
-                            backgroundColor: Colors.backgroundTheme,
+                            backgroundColor: Colors.backgroundPanel,
                             transform: [{translateX: translateXAnimated}],
                           },
                         ]}
