@@ -18,12 +18,10 @@ const Config = {
 
 const styles = StyleSheet.create({
   wrapper: {
-    ...StyleGet.boxShadow(),
     height: Config.height,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {textAlign: 'center'},
 });
 
 export type CPNButtonType = 'theme' | 'warning' | 'success';
@@ -38,6 +36,7 @@ interface CPNButtonProps extends TouchableOpacityProps {
   textStyle?: StyleProp<TextStyle>;
   type?: CPNButtonType;
   shape?: 'square';
+  plain?: boolean;
   /** 点击按钮后的禁用时间。单位：秒 */
   disabledTimer?: number;
   /** 禁用时的按钮文本。文本中的 `{timer}` 会被替换为倒计时数字 */
@@ -92,10 +91,10 @@ export function CPNButton(props: CPNButtonProps) {
     }
   }, [props.disabledTimer, disabledTimer]);
 
-  const disabled = disabledTimer > 0;
+  const disabled = props.disabled || disabledTimer > 0;
 
   const btnStyle = useMemo(() => {
-    if (disabled || props.disabled) {
+    if (props.disabled) {
       return {
         textColor: Colors.fontTextReverse,
         backgroundColor: Colors.backgroundDisabled,
@@ -113,12 +112,12 @@ export function CPNButton(props: CPNButtonProps) {
       textColor: Colors.fontTextReverse,
       backgroundColor: themeColor,
     };
-  }, [CPNButtonTypeList, disabled, props.disabled, props.type, themeColor]);
+  }, [CPNButtonTypeList, props.disabled, props.type, themeColor]);
 
   return (
     <TouchableOpacity
-      disabled={disabled}
       {...props}
+      disabled={disabled}
       onPress={_ev => {
         if (props.disabledTimer !== undefined) {
           disabledTimerSet(props.disabledTimer);
@@ -127,22 +126,26 @@ export function CPNButton(props: CPNButtonProps) {
       }}
       style={[
         styles.wrapper,
+        StyleGet.boxShadow(),
         {
-          shadowOpacity: 0.7,
-          backgroundColor: btnStyle.backgroundColor,
+          backgroundColor: props.plain
+            ? Colors.backgroundPanel
+            : btnStyle.backgroundColor,
+          borderColor: btnStyle.backgroundColor,
+          borderWidth: 1,
           borderRadius: props.shape === 'square' ? 0 : Config.borderRadius,
+          opacity: disabled ? 0.5 : undefined,
         },
         props.style,
       ]}>
-      <CPNTextColorContext.Provider value={btnStyle.textColor}>
+      <CPNTextColorContext.Provider
+        value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
         {disabled ? (
-          <CPNText style={[styles.text, props.textStyle]}>
+          <CPNText style={[props.textStyle]}>
             {props.disabledText?.replace('{timer}', String(disabledTimer))}
           </CPNText>
         ) : ['string', 'number'].includes(typeof props.children) ? (
-          <CPNText style={[styles.text, props.textStyle]}>
-            {props.children}
-          </CPNText>
+          <CPNText style={[props.textStyle]}>{props.children}</CPNText>
         ) : (
           props.children
         )}

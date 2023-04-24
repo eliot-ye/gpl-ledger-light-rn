@@ -43,10 +43,7 @@ export function ColorManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.id
-              ? (I18n.formatString(
-                  I18n.EditColor,
-                  detailsRef.current.name || '',
-                ) as string)
+              ? I18n.formatString(I18n.EditColor, detailsRef.current.name || '')
               : I18n.AddColor
           }
           scrollEnabled={false}
@@ -62,7 +59,7 @@ export function ColorManagementPage() {
                     message: I18n.formatString(
                       I18n.DeleteConfirm,
                       detailsRef.current.name || '',
-                    ) as string,
+                    ),
                     buttons: [
                       {text: I18n.Cancel},
                       {

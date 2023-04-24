@@ -169,7 +169,11 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
               ]}>
               <TouchableOpacity
                 onPress={() => {
-                  _btn.onPress && _btn.onPress();
+                  try {
+                    _btn.onPress && _btn.onPress();
+                  } catch (error) {
+                    console.error(`CPNAlert button [${_btn.text}]:`, error);
+                  }
                   if (!_btn.keep) {
                     props.onClose();
                   }

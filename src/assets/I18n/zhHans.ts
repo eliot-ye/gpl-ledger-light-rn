@@ -79,7 +79,7 @@ export default {
   About: '关于',
   Version: '版本',
   CheckUpdates: '检查更新',
-  DiscoveringNewVersion: '发现新版本',
+  DiscoveringNewVersion: '发现新版本：{0}',
   ViewVersionLog: '查看更新记录',
   VersionLog: '更新记录',
   Biometrics: '生物认证',

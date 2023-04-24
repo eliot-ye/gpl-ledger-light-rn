@@ -28,7 +28,7 @@ interface CPNInputProps extends TextInputProps {
 }
 
 export function CPNInput(props: CPNInputProps) {
-  const themeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
   const formItem = useContext(FormItemContext);
 
   const [isFocus, isFocusSet] = useState(false);
@@ -43,7 +43,7 @@ export function CPNInput(props: CPNInputProps) {
           backgroundColor: Colors.backgroundPanel,
           borderBottomColor: Colors.line,
         },
-        focused && {borderBottomColor: themeColor || Colors.theme},
+        focused && {borderBottomColor: themeColor},
         formItem.hasError && {borderBottomColor: Colors.fail},
       ]}>
       <TextInput
@@ -59,7 +59,9 @@ export function CPNInput(props: CPNInputProps) {
         onBlur={() => isFocusSet(false)}
       />
       {props.onPressRightIcon && (
-        <TouchableOpacity onPress={props.onPressRightIcon}>
+        <TouchableOpacity
+          accessibilityRole="togglebutton"
+          onPress={props.onPressRightIcon}>
           {props.rightIcon || (
             <CPNIonicons
               name={props.secureTextEntry ? IONName.Eye : IONName.EyeOff}

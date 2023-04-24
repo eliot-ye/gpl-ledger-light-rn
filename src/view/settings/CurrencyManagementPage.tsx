@@ -42,10 +42,10 @@ export function CurrencyManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.id
-              ? (I18n.formatString(
+              ? I18n.formatString(
                   I18n.EditCurrency,
                   detailsRef.current.name || '',
-                ) as string)
+                )
               : I18n.AddCurrency
           }
           scrollEnabled={false}
@@ -60,7 +60,7 @@ export function CurrencyManagementPage() {
                     message: I18n.formatString(
                       I18n.DeleteConfirm,
                       detailsRef.current.name || '',
-                    ) as string,
+                    ),
                     buttons: [
                       {text: I18n.Cancel},
                       {

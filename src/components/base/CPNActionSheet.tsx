@@ -186,7 +186,14 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                       accessible
                       accessibilityRole="menuitem"
                       onPress={() => {
-                        props.onPress && props.onPress(_item as any, _index);
+                        try {
+                          props.onPress && props.onPress(_item as any, _index);
+                        } catch (error) {
+                          console.error(
+                            `CPNActionSheet button [${_item.text}]:`,
+                            error,
+                          );
+                        }
                         if (!_item.keep) {
                           props.onClose();
                         }
@@ -233,7 +240,11 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                   {backgroundColor: Colors.backgroundTheme},
                 ]}
                 onPress={() => {
-                  props.onCancel && props.onCancel();
+                  try {
+                    props.onCancel && props.onCancel();
+                  } catch (error) {
+                    console.error('CPNActionSheet [onCancel]:', error);
+                  }
                   props.onClose();
                 }}>
                 <CPNText

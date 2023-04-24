@@ -287,7 +287,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
         validatorStatusSet(ValidatorStatus.Waiting);
         translateX.current = 0;
         Animated.timing(translateXAnimated, {
-          toValue: 0,
+          toValue: translateX.current,
           useNativeDriver: true,
         }).start();
         return;
@@ -302,7 +302,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
           validatorStatusSet(ValidatorStatus.Fail);
           translateX.current = 0;
           Animated.timing(translateXAnimated, {
-            toValue: 0,
+            toValue: translateX.current,
             useNativeDriver: true,
           }).start();
         } else {
@@ -326,7 +326,7 @@ export function CPNSliderValidator(props: CPNSliderValidatorProps) {
           ge.dx < validatorInfo.imageWidth - validatorInfo.sliderWidth
         ) {
           translateX.current = ge.dx;
-          translateXAnimated.setValue(ge.dx);
+          translateXAnimated.setValue(translateX.current);
         }
       },
       onPanResponderEnd: (_ev, ge) => {

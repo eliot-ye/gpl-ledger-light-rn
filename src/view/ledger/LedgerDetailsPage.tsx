@@ -62,10 +62,7 @@ export function LedgerDetailsPage() {
     <CPNPageView
       title={
         route.params?.id
-          ? (I18n.formatString(
-              I18n.EditAsset,
-              route.params.name || '',
-            ) as string)
+          ? I18n.formatString(I18n.EditAsset, route.params.name || '')
           : I18n.AddAsset
       }
       rightIcon={
@@ -76,7 +73,7 @@ export function LedgerDetailsPage() {
                 message: I18n.formatString(
                   I18n.DeleteConfirm,
                   route.params?.name || '',
-                ) as string,
+                ),
                 buttons: [
                   {text: I18n.Cancel},
                   {

@@ -53,7 +53,10 @@ export function AboutPage() {
                   versionData.versionCode > Number(envConstant.versionCode)
                 ) {
                   CPNAlert.open({
-                    title: I18n.DiscoveringNewVersion,
+                    title: I18n.formatString(
+                      I18n.DiscoveringNewVersion,
+                      versionData.versionName,
+                    ),
                     message: <CPNRichTextView richText={versionData.desc} />,
                     buttons: [
                       {

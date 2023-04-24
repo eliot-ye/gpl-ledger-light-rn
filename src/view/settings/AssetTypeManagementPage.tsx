@@ -45,10 +45,10 @@ export function AssetTypeManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.id
-              ? (I18n.formatString(
+              ? I18n.formatString(
                   I18n.EditAssetType,
                   detailsRef.current.name || '',
-                ) as string)
+                )
               : I18n.AddAssetType
           }
           scrollEnabled={false}
@@ -64,7 +64,7 @@ export function AssetTypeManagementPage() {
                     message: I18n.formatString(
                       I18n.DeleteConfirm,
                       detailsRef.current.name || '',
-                    ) as string,
+                    ),
                     buttons: [
                       {text: I18n.Cancel},
                       {
