@@ -43,8 +43,9 @@ interface CPNCheckboxProps extends PropsWithChildren {
   verticalMarginTop?: number;
 }
 export function CPNCheckbox(props: CPNCheckboxProps) {
-  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
-  const formData = useContext(FormItemContext);
+  const formItem = useContext(FormItemContext);
+  const pageViewThemeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
 
   const verticalCentering = props.verticalCentering !== false;
 
@@ -62,7 +63,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
         styles.container,
         {
           alignItems: verticalCentering ? 'center' : 'flex-start',
-          marginRight: formData.isFormItem ? 16 : 0,
+          marginRight: formItem.isFormItem ? 16 : 0,
         },
       ]}
       onPress={props.onPress}>
@@ -81,7 +82,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
           },
           props.isRadio && {borderRadius: Config.size * 0.5},
           props.checked && !props.isRadio && {backgroundColor: themeColor},
-          formData.hasError && {borderColor: Colors.fail},
+          formItem.hasError && {borderColor: Colors.fail},
           props.disabled && {
             backgroundColor: Colors.backgroundDisabled,
             borderColor: Colors.backgroundDisabled,

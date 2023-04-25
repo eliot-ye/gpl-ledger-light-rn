@@ -7,6 +7,7 @@ import {CPNPageViewThemeColor, CPNText} from '.';
 export const FormItemContext = createContext({
   isFormItem: false,
   hasError: false,
+  themeColor: undefined as undefined | string,
 });
 
 interface CPNFormItemProps extends ViewProps {
@@ -38,9 +39,10 @@ export function CPNFormItem(props: CPNFormItemProps) {
           value={useMemo(
             () => ({
               isFormItem: true,
+              themeColor,
               hasError: props.hasError || false,
             }),
-            [props.hasError],
+            [props.hasError, themeColor],
           )}>
           {props.children}
         </FormItemContext.Provider>

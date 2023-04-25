@@ -28,8 +28,9 @@ interface CPNInputProps extends TextInputProps {
 }
 
 export function CPNInput(props: CPNInputProps) {
-  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
   const formItem = useContext(FormItemContext);
+  const pageViewThemeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
 
   const [isFocus, isFocusSet] = useState(false);
 

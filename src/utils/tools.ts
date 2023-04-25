@@ -95,7 +95,7 @@ export function AESDecrypt(message: string, key: string) {
 }
 export function stringToUint8Array(str: string) {
   const ab = new Uint8Array(str.length);
-  for (var i = 0; i < str.length; i++) {
+  for (let i = 0; i < str.length; i++) {
     ab[i] = str.charCodeAt(i);
   }
   return ab;
