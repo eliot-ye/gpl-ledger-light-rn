@@ -58,8 +58,14 @@ export function CPNInput(props: CPNInputProps) {
           placeholderTextColor={Colors.fontPlaceholder}
           {...props}
           style={[styles.input, StyleGet.title('h4'), props.style]}
-          onFocus={() => isFocusSet(true)}
-          onBlur={() => isFocusSet(false)}
+          onFocus={ev => {
+            props.onFocus && props.onFocus(ev);
+            isFocusSet(true);
+          }}
+          onBlur={ev => {
+            props.onBlur && props.onBlur(ev);
+            isFocusSet(false);
+          }}
         />
         {props.onPressRightIcon && (
           <TouchableOpacity
