@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {CPNIonicons, CPNPageViewThemeColor, IONName} from '.';
+import {CPNIonicons, CPNPageViewThemeColor, CPNText, IONName} from '.';
 import {StyleGet} from '@/configs/styles';
 import {FormItemContext} from './CPNFormItem';
 
@@ -25,6 +25,7 @@ interface CPNInputProps extends TextInputProps {
   onPressRightIcon?: () => void;
   rightIcon?: React.ReactNode;
   containerStyle?: ViewStyle;
+  description?: React.ReactNode;
 }
 
 export function CPNInput(props: CPNInputProps) {
@@ -37,40 +38,51 @@ export function CPNInput(props: CPNInputProps) {
   const focused = isFocus || !!props.value || !!props.defaultValue;
 
   return (
-    <View
-      style={[
-        styles.inputContainer,
-        {
-          backgroundColor: Colors.backgroundPanel,
-          borderBottomColor: Colors.line,
-        },
-        focused && {borderBottomColor: themeColor},
-        formItem.hasError && {borderBottomColor: Colors.fail},
-      ]}>
-      <TextInput
-        pointerEvents={props.editable === false ? 'none' : 'auto'}
-        autoCorrect={false}
-        allowFontScaling={false}
-        autoCapitalize={'none'}
-        multiline={!props.secureTextEntry && props.editable === false}
-        placeholderTextColor={Colors.fontPlaceholder}
-        {...props}
-        style={[styles.input, StyleGet.title('h4'), props.style]}
-        onFocus={() => isFocusSet(true)}
-        onBlur={() => isFocusSet(false)}
-      />
-      {props.onPressRightIcon && (
-        <TouchableOpacity
-          accessibilityRole="togglebutton"
-          onPress={props.onPressRightIcon}>
-          {props.rightIcon || (
-            <CPNIonicons
-              name={props.secureTextEntry ? IONName.Eye : IONName.EyeOff}
-              style={{color: Colors.fontText}}
-            />
-          )}
-        </TouchableOpacity>
-      )}
+    <View>
+      <View
+        style={[
+          styles.inputContainer,
+          {
+            backgroundColor: Colors.backgroundPanel,
+            borderBottomColor: Colors.line,
+          },
+          focused && {borderBottomColor: themeColor},
+          formItem.hasError && {borderBottomColor: Colors.fail},
+        ]}>
+        <TextInput
+          pointerEvents={props.editable === false ? 'none' : 'auto'}
+          autoCorrect={false}
+          allowFontScaling={false}
+          autoCapitalize={'none'}
+          multiline={!props.secureTextEntry && props.editable === false}
+          placeholderTextColor={Colors.fontPlaceholder}
+          {...props}
+          style={[styles.input, StyleGet.title('h4'), props.style]}
+          onFocus={() => isFocusSet(true)}
+          onBlur={() => isFocusSet(false)}
+        />
+        {props.onPressRightIcon && (
+          <TouchableOpacity
+            accessibilityRole="togglebutton"
+            onPress={props.onPressRightIcon}>
+            {props.rightIcon || (
+              <CPNIonicons
+                name={props.secureTextEntry ? IONName.Eye : IONName.EyeOff}
+                style={{color: Colors.fontText}}
+              />
+            )}
+          </TouchableOpacity>
+        )}
+      </View>
+      {!!props.description &&
+        !formItem.hasError &&
+        (['number', 'string'].includes(typeof props.description) ? (
+          <CPNText style={{fontSize: 12, opacity: 0.6}}>
+            {props.description}
+          </CPNText>
+        ) : (
+          props.description
+        ))}
     </View>
   );
 }

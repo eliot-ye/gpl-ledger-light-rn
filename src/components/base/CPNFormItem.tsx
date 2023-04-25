@@ -12,11 +12,14 @@ export const FormItemContext = createContext({
 
 interface CPNFormItemProps extends ViewProps {
   title?: React.ReactNode;
+  titleColor?: string;
   hasError?: boolean;
   errorText?: string;
+  description?: React.ReactNode;
 }
 export function CPNFormItem(props: CPNFormItemProps) {
-  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
+  const pageViewThemeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = props.titleColor || pageViewThemeColor || Colors.theme;
 
   return (
     <View {...props}>
@@ -31,28 +34,36 @@ export function CPNFormItem(props: CPNFormItemProps) {
           )}
         </View>
       )}
-      <View
-        style={[
-          {height: StyleGet.cellView().height, justifyContent: 'center'},
-        ]}>
-        <FormItemContext.Provider
-          value={useMemo(
-            () => ({
-              isFormItem: true,
-              themeColor,
-              hasError: props.hasError || false,
-            }),
-            [props.hasError, themeColor],
-          )}>
+      <FormItemContext.Provider
+        value={useMemo(
+          () => ({
+            isFormItem: true,
+            themeColor,
+            hasError: props.hasError || false,
+          }),
+          [props.hasError, themeColor],
+        )}>
+        <View
+          style={{
+            minHeight: StyleGet.cellView().height,
+            justifyContent: 'center',
+          }}>
           {props.children}
-        </FormItemContext.Provider>
-      </View>
-      {!!props.errorText && (
-        <View style={{opacity: props.hasError ? 1 : 0}}>
-          <CPNText style={{fontSize: 12, color: Colors.fail}}>
-            {props.errorText}
-          </CPNText>
         </View>
+      </FormItemContext.Provider>
+      {!!props.description &&
+        !props.hasError &&
+        (['string', 'number'].includes(typeof props.description) ? (
+          <CPNText style={{fontSize: 12, opacity: 0.6}}>
+            {props.description}
+          </CPNText>
+        ) : (
+          props.description
+        ))}
+      {!!props.errorText && props.hasError && (
+        <CPNText style={{fontSize: 12, color: Colors.fail}}>
+          {props.errorText}
+        </CPNText>
       )}
     </View>
   );

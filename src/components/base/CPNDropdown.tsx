@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
 import {
   FlatList,
   FlatListProps,
@@ -16,6 +16,7 @@ import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {I18n} from '@/assets/I18n';
+import {FormItemContext} from './CPNFormItem';
 
 const Config = {
   borderWidth: 0.5,
@@ -69,6 +70,8 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
 export function CPNDropdown<ItemT extends DataConstraint>(
   props: CPNDropdownProps<ItemT>,
 ) {
+  const formItem = useContext(FormItemContext);
+
   const [show, showSet] = useState(false);
 
   const [boxPosition, boxPositionSet] = useState({Y: 0, X: 0});
@@ -143,7 +146,13 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               numberOfLines={props.numberOfLines}
               style={[
                 StyleGet.title('h4'),
-                !activeItem && {color: Colors.fontPlaceholder},
+                {
+                  color: formItem.hasError
+                    ? Colors.fail
+                    : activeItem
+                    ? Colors.fontText
+                    : Colors.fontPlaceholder,
+                },
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>
               {activeItem?.label ||

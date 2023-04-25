@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
 interface CPNCheckboxProps extends PropsWithChildren {
   label?: string;
+  description?: React.ReactNode;
   checked: boolean;
   onPress?: () => void;
   isRadio?: boolean;
@@ -47,7 +48,8 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
   const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
 
-  const verticalCentering = props.verticalCentering !== false;
+  const verticalCentering =
+    props.verticalCentering !== false && !props.description;
 
   return (
     <TouchableOpacity
@@ -106,7 +108,18 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
             />
           ))}
       </View>
-      <View>{props.children || <CPNText>{props.label}</CPNText>}</View>
+      {props.children || (
+        <View>
+          <CPNText>{props.label}</CPNText>
+          {['number', 'string'].includes(typeof props.description) ? (
+            <CPNText style={{fontSize: 12, opacity: 0.6}}>
+              {props.description}
+            </CPNText>
+          ) : (
+            props.description
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
