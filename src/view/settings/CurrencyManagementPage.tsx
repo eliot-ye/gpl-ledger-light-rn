@@ -12,8 +12,12 @@ import {
   CPNInput,
   CPNFormItem,
 } from '@/components/base';
-import {dbDeleteCurrency, dbGetCurrency, dbSetCurrency} from '@/database';
-import {CurrencyItem} from '@/database/currency/schema';
+import {
+  CurrencyItem,
+  dbDeleteCurrency,
+  dbGetCurrency,
+  dbSetCurrency,
+} from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';

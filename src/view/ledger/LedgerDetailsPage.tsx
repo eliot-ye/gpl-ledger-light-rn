@@ -15,14 +15,19 @@ import {getRandomStrMD5} from '@/utils/tools';
 import {View, TouchableOpacity} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {PageProps} from '../Router';
-import {LedgerItem} from '@/database/ledger/schema';
-import {dbGetAssetTypes, dbGetColors, dbGetCurrency} from '@/database';
-import {AssetTypeItem} from '@/database/assetType/schema';
-import {ColorItem} from '@/database/color/schema';
-import {dbDeleteLedger, dbSetLedger} from '@/database/ledger/handle';
+import {
+  AssetTypeItem,
+  LedgerItem,
+  ColorItem,
+  CurrencyItem,
+  dbGetAssetTypes,
+  dbGetColors,
+  dbGetCurrency,
+  dbDeleteLedger,
+  dbSetLedger,
+} from '@/database';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
-import {CurrencyItem} from '@/database/currency/schema';
 
 export function LedgerDetailsPage() {
   const navigation =

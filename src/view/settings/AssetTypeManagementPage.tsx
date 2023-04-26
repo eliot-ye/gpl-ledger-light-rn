@@ -13,8 +13,12 @@ import {
   CPNInput,
   CPNFormItem,
 } from '@/components/base';
-import {dbDeleteAssetType, dbGetAssetTypes, dbSetAssetType} from '@/database';
-import {AssetTypeItem} from '@/database/assetType/schema';
+import {
+  AssetTypeItem,
+  dbDeleteAssetType,
+  dbGetAssetTypes,
+  dbSetAssetType,
+} from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';

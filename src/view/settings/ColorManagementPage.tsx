@@ -13,8 +13,7 @@ import {
   CPNInput,
   CPNFormItem,
 } from '@/components/base';
-import {dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
-import {ColorItem} from '@/database/color/schema';
+import {ColorItem, dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';

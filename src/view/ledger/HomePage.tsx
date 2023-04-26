@@ -7,9 +7,8 @@ import {
   CPNCellGroup,
   CPNCell,
 } from '@/components/base';
-import {LedgerItem} from '@/database/ledger/schema';
 import {TouchableOpacity, View} from 'react-native';
-import {dbGetLedger} from '@/database/ledger/handle';
+import {dbGetLedger, LedgerItem} from '@/database';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
