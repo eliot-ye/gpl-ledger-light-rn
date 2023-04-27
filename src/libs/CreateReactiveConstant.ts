@@ -78,7 +78,7 @@ export function CreateReactiveConstant<
       listenerMap[id] = undefined;
       listenerIds.splice(listenerIds.indexOf(id), 1);
     },
-  };
+  } as const;
 
-  return returnValue as Readonly<typeof returnValue>;
+  return returnValue;
 }

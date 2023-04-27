@@ -9,11 +9,12 @@ type SessionStorageDefault = typeof sessionStorageDefault;
 type SessionStorageKey = keyof SessionStorageDefault;
 
 export const SessionStorage = CreateReactiveConstant({
-  default: {...sessionStorageDefault},
+  default: sessionStorageDefault,
 });
 
+const sessionStorageCopy = JSON.parse(JSON.stringify(sessionStorageDefault));
 export function resetSessionStorage() {
-  (Object.keys(sessionStorageDefault) as SessionStorageKey[]).forEach(key => {
-    SessionStorage.setValue(key, sessionStorageDefault[key]);
+  (Object.keys(sessionStorageCopy) as SessionStorageKey[]).forEach(key => {
+    SessionStorage.setValue(key, sessionStorageCopy[key]);
   });
 }
