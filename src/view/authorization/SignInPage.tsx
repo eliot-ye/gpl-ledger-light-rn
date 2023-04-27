@@ -90,7 +90,6 @@ export function SignInPage() {
           onChangeText={value => passwordSet({value, hasError: false})}
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
-          placeholder={I18n.PasswordPlaceholder}
         />
       </CPNFormItem>
     );

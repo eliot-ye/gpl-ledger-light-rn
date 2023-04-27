@@ -40,7 +40,6 @@ export function SignUpPage() {
             formDataSet({...formData, username});
             formDataErrorSet({...formData, username: ''});
           }}
-          placeholder={I18n.UsernamePlaceholder}
         />
       </CPNFormItem>
     );
@@ -60,7 +59,6 @@ export function SignUpPage() {
             formDataSet({...formData, password});
             formDataErrorSet({...formDataError, password: ''});
           }}
-          placeholder={I18n.PasswordPlaceholder}
           secureTextEntry={secureTextEntry}
           onPressRightIcon={() => secureTextEntrySet(d => !d)}
         />

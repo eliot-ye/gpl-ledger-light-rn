@@ -8,6 +8,7 @@ export const FormItemContext = createContext({
   isFormItem: false,
   hasError: false,
   themeColor: undefined as undefined | string,
+  title: '',
 });
 
 interface CPNFormItemProps extends ViewProps {
@@ -40,8 +41,9 @@ export function CPNFormItem(props: CPNFormItemProps) {
             isFormItem: true,
             themeColor,
             hasError: props.hasError || false,
+            title: typeof props.title === 'string' ? props.title : '',
           }),
-          [props.hasError, themeColor],
+          [props.hasError, props.title, themeColor],
         )}>
         <View
           style={{

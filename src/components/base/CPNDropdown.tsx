@@ -17,6 +17,7 @@ import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {I18n} from '@/assets/I18n';
 import {FormItemContext} from './CPNFormItem';
+import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   borderWidth: 0.5,
@@ -71,6 +72,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
   props: CPNDropdownProps<ItemT>,
 ) {
   const formItem = useContext(FormItemContext);
+  const pageViewThemeColor = useContext(CPNPageViewThemeColor);
+  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
 
   const [show, showSet] = useState(false);
 
@@ -126,7 +129,10 @@ export function CPNDropdown<ItemT extends DataConstraint>(
           {
             backgroundColor: Colors.backgroundPanel,
             paddingRight: 10,
+            borderBottomColor: Colors.line,
           },
+          activeItem && {borderBottomColor: themeColor},
+          formItem.hasError && {borderBottomColor: Colors.fail},
           props.cellStyle,
         ]}
         onPress={ev => {
@@ -146,19 +152,16 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               numberOfLines={props.numberOfLines}
               style={[
                 StyleGet.title('h4'),
-                {
-                  color: formItem.hasError
-                    ? Colors.fail
-                    : activeItem
-                    ? Colors.fontText
-                    : Colors.fontPlaceholder,
-                },
+                {color: Colors.fontPlaceholder},
+                activeItem && {color: Colors.fontText},
+                formItem.hasError && {color: Colors.fail},
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>
               {activeItem?.label ||
                 activeItem?.value ||
-                props.selectPlaceholder ||
-                I18n.SelectPlaceholder}
+                (props.selectPlaceholder === undefined
+                  ? I18n.formatString(I18n.PlaceholderSelect, formItem.title)
+                  : props.selectPlaceholder)}
             </CPNText>
           )}
         </View>

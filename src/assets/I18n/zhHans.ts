@@ -14,7 +14,8 @@ export default {
   Used: '已使用',
   NotUsed: '未使用',
 
-  SelectPlaceholder: '请选择',
+  PlaceholderSelect: '请选择{0}',
+  PlaceholderInput: '请输入{0}',
   DeleteConfirm: '确定要删除{0}吗？',
 
   VerificationSuccessful: '验证成功',
@@ -33,11 +34,9 @@ export default {
   RegisteredUsers: '注册用户',
 
   Password: '密码',
-  PasswordPlaceholder: '请输入密码',
   PasswordError1: '请输入有效密码',
 
   Username: '用户名',
-  UsernamePlaceholder: '请输入用户名',
   UsernameError1: '请输入有效用户名',
 
   ColorManagement: '颜色管理',

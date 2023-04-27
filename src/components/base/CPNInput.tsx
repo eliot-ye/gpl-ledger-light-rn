@@ -11,6 +11,7 @@ import {
 import {CPNIonicons, CPNPageViewThemeColor, CPNText, IONName} from '.';
 import {StyleGet} from '@/configs/styles';
 import {FormItemContext} from './CPNFormItem';
+import {I18n} from '@/assets/I18n';
 
 const styles = StyleSheet.create({
   inputContainer: {
@@ -55,6 +56,9 @@ export function CPNInput(props: CPNInputProps) {
           allowFontScaling={false}
           autoCapitalize={'none'}
           multiline={!props.secureTextEntry && props.editable === false}
+          placeholder={
+            I18n.formatString(I18n.PlaceholderInput, formItem.title) as string
+          }
           placeholderTextColor={Colors.fontPlaceholder}
           {...props}
           style={[styles.input, StyleGet.title('h4'), props.style]}
