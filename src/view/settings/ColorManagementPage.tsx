@@ -125,7 +125,26 @@ export function ColorManagementPage() {
 
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.ColorValue}
+              title={
+                <View
+                  style={[
+                    StyleGet.cellTitleView(),
+                    {flexDirection: 'row', alignItems: 'center'},
+                  ]}>
+                  <CPNText
+                    style={{color: detailsRef.current.value || Colors.theme}}>
+                    {I18n.ColorValue}
+                  </CPNText>
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      backgroundColor: details.value,
+                      marginLeft: 4,
+                    }}
+                  />
+                </View>
+              }
               hasError={!!detailsError.value}
               errorText={detailsError.value}>
               <CPNInput
