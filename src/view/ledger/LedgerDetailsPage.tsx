@@ -25,6 +25,7 @@ import {
   dbGetCurrency,
   dbDeleteLedger,
   dbSetLedger,
+  dbGetColorsUsedIds,
 } from '@/database';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
@@ -57,9 +58,13 @@ export function LedgerDetailsPage() {
   }, []);
 
   const [colorsList, colorsListSet] = useState<ColorItem[]>([]);
+  const [colorsUsedIds, colorsUsedIdsSet] = useState<string[]>([]);
   useEffect(() => {
     dbGetColors().then(res => {
       colorsListSet(res);
+    });
+    dbGetColorsUsedIds().then(res => {
+      colorsUsedIdsSet(res);
     });
   }, []);
 
@@ -175,8 +180,15 @@ export function LedgerDetailsPage() {
                     height: 10,
                     backgroundColor: item.value,
                     marginLeft: 6,
+                    marginRight: 10,
                   }}
                 />
+                {colorsUsedIds.includes(item.id) && (
+                  <CPNText
+                    style={{color: Colors.fontPlaceholder, fontSize: 12}}>
+                    ({I18n.Used})
+                  </CPNText>
+                )}
               </View>
             )}
             data={useMemo(
