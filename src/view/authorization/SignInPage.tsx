@@ -44,22 +44,20 @@ export function SignInPage() {
   >({value: ''});
   function renderUserInfoInput() {
     return (
-      <View style={{paddingBottom: 20}}>
-        <CPNFormItem title={I18n.Username}>
-          <CPNDropdown
-            selectPlaceholder={
-              useInfoListMemo.length > 0
-                ? I18n.SelectUser
-                : I18n.PleaseRegisterUser
-            }
-            data={useInfoListMemo}
-            checked={userInfo.value}
-            onSelect={data => {
-              userInfoSet(data);
-            }}
-          />
-        </CPNFormItem>
-      </View>
+      <CPNFormItem style={{paddingBottom: 20}} title={I18n.Username}>
+        <CPNDropdown
+          selectPlaceholder={
+            useInfoListMemo.length > 0
+              ? I18n.SelectUser
+              : I18n.PleaseRegisterUser
+          }
+          data={useInfoListMemo}
+          checked={userInfo.value}
+          onSelect={data => {
+            userInfoSet(data);
+          }}
+        />
+      </CPNFormItem>
     );
   }
 
@@ -82,21 +80,19 @@ export function SignInPage() {
   const [secureTextEntry, secureTextEntrySet] = useState(true);
   function renderPasswordInput() {
     return (
-      <View style={{paddingBottom: 30}}>
-        <CPNFormItem
-          style={{paddingBottom: 30}}
-          title={I18n.Password}
-          errorText={I18n.PasswordError1}
-          hasError={password.hasError}>
-          <CPNInput
-            value={password.value}
-            onChangeText={value => passwordSet({value, hasError: false})}
-            secureTextEntry={secureTextEntry}
-            onPressRightIcon={() => secureTextEntrySet(d => !d)}
-            placeholder={I18n.PasswordPlaceholder}
-          />
-        </CPNFormItem>
-      </View>
+      <CPNFormItem
+        style={{paddingBottom: 30}}
+        title={I18n.Password}
+        errorText={I18n.PasswordError1}
+        hasError={password.hasError}>
+        <CPNInput
+          value={password.value}
+          onChangeText={value => passwordSet({value, hasError: false})}
+          secureTextEntry={secureTextEntry}
+          onPressRightIcon={() => secureTextEntrySet(d => !d)}
+          placeholder={I18n.PasswordPlaceholder}
+        />
+      </CPNFormItem>
     );
   }
 

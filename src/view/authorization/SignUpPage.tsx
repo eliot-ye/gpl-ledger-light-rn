@@ -30,7 +30,7 @@ export function SignUpPage() {
   function renderUsernameInput() {
     return (
       <CPNFormItem
-        style={{paddingBottom: 10}}
+        style={{paddingBottom: 20}}
         title={I18n.Username}
         errorText={formDataError.username}
         hasError={!!formDataError.username}>
