@@ -39,7 +39,7 @@ export function AssetTypeManagementPage() {
     getDBAssetTypes();
   }, [getDBAssetTypes]);
 
-  const [tabActive, tabActiveSet] = useState<ShowTabType>('All');
+  const [tabActive, tabActiveSet] = useState<ShowTabType>(ShowTabType.All);
   function renderTab() {
     return (
       <View style={{paddingBottom: 16}}>
@@ -49,10 +49,10 @@ export function AssetTypeManagementPage() {
   }
 
   const dataShowMemo = useMemo(() => {
-    if (tabActive === 'NotUsed') {
+    if (tabActive === ShowTabType.NotUsed) {
       return AssetTypeList.filter(item => !AssetTypeUsedIds.includes(item.id));
     }
-    if (tabActive === 'Used') {
+    if (tabActive === ShowTabType.Used) {
       return AssetTypeList.filter(item => AssetTypeUsedIds.includes(item.id));
     }
 

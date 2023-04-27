@@ -38,7 +38,7 @@ export function CurrencyManagementPage() {
     getDBCurrency();
   }, [getDBCurrency]);
 
-  const [tabActive, tabActiveSet] = useState<ShowTabType>('All');
+  const [tabActive, tabActiveSet] = useState<ShowTabType>(ShowTabType.All);
   function renderTab() {
     return (
       <View style={{paddingBottom: 16}}>
@@ -48,10 +48,10 @@ export function CurrencyManagementPage() {
   }
 
   const dataShowMemo = useMemo(() => {
-    if (tabActive === 'NotUsed') {
+    if (tabActive === ShowTabType.NotUsed) {
       return CurrencyList.filter(item => !CurrencyUsedIds.includes(item.id));
     }
-    if (tabActive === 'Used') {
+    if (tabActive === ShowTabType.Used) {
       return CurrencyList.filter(item => CurrencyUsedIds.includes(item.id));
     }
 

@@ -1,6 +1,7 @@
 export * from './CPNActionSheet';
 export * from './CPNAlert';
 export * from './CPNButton';
+export * from './CPNButtonGroup';
 export * from './CPNCell';
 export * from './CPNCellGroup';
 export * from './CPNCheckbox';
