@@ -1,13 +1,34 @@
+import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
 import {CurrencyItem} from './schema';
 
-export async function dbGetCurrency(): Promise<Readonly<CurrencyItem>[]> {
+export async function dbGetCurrencyUsedIds() {
+  const realm = await getRealm();
+
+  const res = realm.objects<LedgerItem>(SchemaName.Ledger);
+  const ids = res.map(item => item.currency.id);
+
+  return ids;
+}
+
+export async function dbGetCurrency(
+  isUsed?: boolean,
+): Promise<Readonly<CurrencyItem>[]> {
   const realm = await getRealm();
 
   const res = realm.objects<CurrencyItem>(SchemaName.Currency);
 
-  return res.toJSON() as any;
+  if (isUsed === undefined) {
+    return res.toJSON() as any;
+  }
+
+  const usedIds = await dbGetCurrencyUsedIds();
+  if (isUsed === true) {
+    return res.filter(item => usedIds.includes(item.id));
+  } else {
+    return res.filter(item => !usedIds.includes(item.id));
+  }
 }
 
 export async function dbSetCurrency(item: Partial<CurrencyItem>) {

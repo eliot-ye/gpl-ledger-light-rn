@@ -34,7 +34,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
           HistorySchema,
         ],
         schemaVersion: 1,
-        path: pathCache,
+        path: pathCache + '.realm',
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
           getDefaultColors().forEach(item => {
@@ -69,6 +69,8 @@ export async function getRealm(path?: string, encryptionKey?: string) {
       return Promise.reject('realm is closed');
     }
   }
+  // console.log('Realm encryptionKeyCache: ' + encryptionKeyCache);
+  // console.log('Realm file is located at: ' + realm.path);
   return realm;
 }
 

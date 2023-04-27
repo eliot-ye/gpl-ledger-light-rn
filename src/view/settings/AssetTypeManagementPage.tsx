@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {I18n} from '@/assets/I18n';
 import {
   CPNAlert,
@@ -17,22 +17,47 @@ import {
   AssetTypeItem,
   dbDeleteAssetType,
   dbGetAssetTypes,
+  dbGetAssetTypesUsedIds,
   dbSetAssetType,
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
+import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 
 export function AssetTypeManagementPage() {
   const [AssetTypeList, AssetTypeListSet] = useState<AssetTypeItem[]>([]);
+  const [AssetTypeUsedIds, AssetTypeUsedIdsSet] = useState<string[]>([]);
   const getDBAssetTypes = useCallback(async () => {
     const res = await dbGetAssetTypes();
     AssetTypeListSet(res);
+    const ids = await dbGetAssetTypesUsedIds();
+    AssetTypeUsedIdsSet(ids);
   }, []);
   useEffect(() => {
     getDBAssetTypes();
   }, [getDBAssetTypes]);
+
+  const [tabActive, tabActiveSet] = useState<ShowTabType>('All');
+  function renderTab() {
+    return (
+      <View style={{paddingBottom: 16}}>
+        <CPNUsedTab value={tabActive} onChange={_type => tabActiveSet(_type)} />
+      </View>
+    );
+  }
+
+  const dataShowMemo = useMemo(() => {
+    if (tabActive === 'NotUsed') {
+      return AssetTypeList.filter(item => !AssetTypeUsedIds.includes(item.id));
+    }
+    if (tabActive === 'Used') {
+      return AssetTypeList.filter(item => AssetTypeUsedIds.includes(item.id));
+    }
+
+    return AssetTypeList;
+  }, [AssetTypeList, AssetTypeUsedIds, tabActive]);
 
   const [showDetailsModal, showDetailsModalSet] = useState(false);
   const [details, detailsSet] = useState<Partial<AssetTypeItem>>({});
@@ -168,8 +193,9 @@ export function AssetTypeManagementPage() {
     <>
       <CPNPageView title={I18n.AssetTypeManagement}>
         <View style={{padding: 20}}>
+          {renderTab()}
           <CPNCellGroup>
-            {AssetTypeList.map(item => (
+            {dataShowMemo.map(item => (
               <CPNCell
                 key={item.id}
                 title={item.name}
@@ -178,12 +204,16 @@ export function AssetTypeManagementPage() {
                     ? I18n.AvailableAssets
                     : I18n.UnavailableAssets
                 }
-                onPress={() => {
-                  detailsSet(item);
-                  detailsErrorSet({});
-                  detailsRef.current = item;
-                  showDetailsModalSet(true);
-                }}
+                onPress={
+                  AssetTypeUsedIds.includes(item.id)
+                    ? undefined
+                    : () => {
+                        detailsSet(item);
+                        detailsErrorSet({});
+                        detailsRef.current = item;
+                        showDetailsModalSet(true);
+                      }
+                }
               />
             ))}
             <TouchableOpacity

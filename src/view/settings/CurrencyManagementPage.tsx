@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {I18n} from '@/assets/I18n';
 import {
   CPNAlert,
@@ -16,22 +16,47 @@ import {
   CurrencyItem,
   dbDeleteCurrency,
   dbGetCurrency,
+  dbGetCurrencyUsedIds,
   dbSetCurrency,
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
+import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 
 export function CurrencyManagementPage() {
   const [CurrencyList, CurrencyListSet] = useState<CurrencyItem[]>([]);
+  const [CurrencyUsedIds, CurrencyUsedIdsSet] = useState<string[]>([]);
   const getDBCurrency = useCallback(async () => {
     const res = await dbGetCurrency();
     CurrencyListSet(res);
+    const ids = await dbGetCurrencyUsedIds();
+    CurrencyUsedIdsSet(ids);
   }, []);
   useEffect(() => {
     getDBCurrency();
   }, [getDBCurrency]);
+
+  const [tabActive, tabActiveSet] = useState<ShowTabType>('All');
+  function renderTab() {
+    return (
+      <View style={{paddingBottom: 16}}>
+        <CPNUsedTab value={tabActive} onChange={_type => tabActiveSet(_type)} />
+      </View>
+    );
+  }
+
+  const dataShowMemo = useMemo(() => {
+    if (tabActive === 'NotUsed') {
+      return CurrencyList.filter(item => !CurrencyUsedIds.includes(item.id));
+    }
+    if (tabActive === 'Used') {
+      return CurrencyList.filter(item => CurrencyUsedIds.includes(item.id));
+    }
+
+    return CurrencyList;
+  }, [CurrencyList, CurrencyUsedIds, tabActive]);
 
   const [showDetailsModal, showDetailsModalSet] = useState(false);
   const [details, detailsSet] = useState<Partial<CurrencyItem>>({});
@@ -169,18 +194,23 @@ export function CurrencyManagementPage() {
     <>
       <CPNPageView title={I18n.CurrencyManagement}>
         <View style={{padding: 20}}>
+          {renderTab()}
           <CPNCellGroup>
-            {CurrencyList.map(item => (
+            {dataShowMemo.map(item => (
               <CPNCell
                 key={item.id}
                 title={`${item.name}(${item.abbreviation})`}
                 value={item.symbol}
-                onPress={() => {
-                  detailsSet(item);
-                  detailsErrorSet({});
-                  detailsRef.current = item;
-                  showDetailsModalSet(true);
-                }}
+                onPress={
+                  CurrencyUsedIds.includes(item.id)
+                    ? undefined
+                    : () => {
+                        detailsSet(item);
+                        detailsErrorSet({});
+                        detailsRef.current = item;
+                        showDetailsModalSet(true);
+                      }
+                }
               />
             ))}
             <TouchableOpacity

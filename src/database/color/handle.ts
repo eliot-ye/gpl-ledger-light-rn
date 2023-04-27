@@ -1,13 +1,34 @@
+import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
 import {ColorItem} from './schema';
 
-export async function dbGetColors(): Promise<Readonly<ColorItem>[]> {
+export async function dbGetColorsUsedIds() {
+  const realm = await getRealm();
+
+  const res = realm.objects<LedgerItem>(SchemaName.Ledger);
+  const ids = res.map(item => item.color.id);
+
+  return ids;
+}
+
+export async function dbGetColors(
+  isUsed?: boolean,
+): Promise<Readonly<ColorItem>[]> {
   const realm = await getRealm();
 
   const res = realm.objects<ColorItem>(SchemaName.Color);
 
-  return res.toJSON() as any;
+  if (isUsed === undefined) {
+    return res.toJSON() as any;
+  }
+
+  const usedIds = await dbGetColorsUsedIds();
+  if (isUsed === true) {
+    return res.filter(item => usedIds.includes(item.id));
+  } else {
+    return res.filter(item => !usedIds.includes(item.id));
+  }
 }
 
 export async function dbSetColor(item: Partial<ColorItem>) {

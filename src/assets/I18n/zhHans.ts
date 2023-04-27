@@ -6,8 +6,13 @@ export default {
   Close: '关闭',
   Refresh: '刷新',
   Submit: '提交',
+
   SignIn: '登入',
   SignUp: '注册',
+
+  All: '所有',
+  Used: '已使用',
+  NotUsed: '未使用',
 
   SelectPlaceholder: '请选择',
   DeleteConfirm: '确定要删除{0}吗？',

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {I18n} from '@/assets/I18n';
 import {
   CPNAlert,
@@ -13,21 +13,51 @@ import {
   CPNInput,
   CPNFormItem,
 } from '@/components/base';
-import {ColorItem, dbDeleteColor, dbGetColors, dbSetColor} from '@/database';
+import {
+  ColorItem,
+  dbDeleteColor,
+  dbGetColors,
+  dbGetColorsUsedIds,
+  dbSetColor,
+} from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
+import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
 
 export function ColorManagementPage() {
-  const [colorList, colorListSet] = useState<ColorItem[]>([]);
+  const [ColorsList, ColorsListSet] = useState<ColorItem[]>([]);
+  const [ColorsUsedIds, ColorsUsedIdsSet] = useState<string[]>([]);
   const getDBColors = useCallback(async () => {
     const res = await dbGetColors();
-    colorListSet(res);
+    ColorsListSet(res);
+    const ids = await dbGetColorsUsedIds();
+    ColorsUsedIdsSet(ids);
   }, []);
   useEffect(() => {
     getDBColors();
   }, [getDBColors]);
+
+  const [tabActive, tabActiveSet] = useState<ShowTabType>('All');
+  function renderTab() {
+    return (
+      <View style={{paddingBottom: 16}}>
+        <CPNUsedTab value={tabActive} onChange={_type => tabActiveSet(_type)} />
+      </View>
+    );
+  }
+
+  const dataShowMemo = useMemo(() => {
+    if (tabActive === 'NotUsed') {
+      return ColorsList.filter(item => !ColorsUsedIds.includes(item.id));
+    }
+    if (tabActive === 'Used') {
+      return ColorsList.filter(item => ColorsUsedIds.includes(item.id));
+    }
+
+    return ColorsList;
+  }, [ColorsList, ColorsUsedIds, tabActive]);
 
   const [showDetailsModal, showDetailsModalSet] = useState(false);
   const [details, detailsSet] = useState<Partial<ColorItem>>({});
@@ -150,8 +180,9 @@ export function ColorManagementPage() {
     <>
       <CPNPageView title={I18n.ColorManagement}>
         <View style={{padding: 20}}>
+          {renderTab()}
           <CPNCellGroup>
-            {colorList.map(item => (
+            {dataShowMemo.map(item => (
               <CPNCell
                 key={item.id}
                 title={
@@ -168,12 +199,16 @@ export function ColorManagementPage() {
                   </>
                 }
                 value={item.value}
-                onPress={() => {
-                  detailsSet(item);
-                  detailsErrorSet({});
-                  detailsRef.current = item;
-                  showDetailsModalSet(true);
-                }}
+                onPress={
+                  ColorsUsedIds.includes(item.id)
+                    ? undefined
+                    : () => {
+                        detailsSet(item);
+                        detailsErrorSet({});
+                        detailsRef.current = item;
+                        showDetailsModalSet(true);
+                      }
+                }
               />
             ))}
             <TouchableOpacity
