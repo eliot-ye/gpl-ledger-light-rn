@@ -77,8 +77,8 @@ export function LedgerDetailsPage() {
   const ChartData = useMemo<LineChartData>(() => {
     if (!details.history) {
       return {
-        labels: [] as string[],
-        datasets: [{data: [] as number[]}],
+        labels: [],
+        datasets: [],
       };
     }
 
@@ -92,28 +92,29 @@ export function LedgerDetailsPage() {
     };
   }, [details.history]);
   function renderChart() {
-    const chartConfig = {
-      backgroundGradientFrom: route.params?.color.value,
-      backgroundGradientTo: route.params?.color.value,
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-      decimalPlaces: 0,
-      style: {
-        borderRadius: 16,
-        padding: 10,
-      },
-    };
+    if (!details.history || details.history.length < 2) {
+      return;
+    }
+
     return (
       <View>
-        {!!details.history && details.history.length > 1 && (
-          <LineChart
-            data={ChartData}
-            width={width}
-            height={220}
-            yAxisLabel={route.params?.currency.symbol}
-            chartConfig={chartConfig}
-            bezier
-          />
-        )}
+        <LineChart
+          data={ChartData}
+          width={width}
+          height={220}
+          yAxisLabel={route.params?.currency.symbol}
+          chartConfig={{
+            backgroundGradientFrom: route.params?.color.value,
+            backgroundGradientTo: route.params?.color.value,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            decimalPlaces: 0,
+            style: {
+              borderRadius: 16,
+              padding: 10,
+            },
+          }}
+          bezier
+        />
       </View>
     );
   }

@@ -49,32 +49,33 @@ export function HomePage() {
   const ChartData = useMemo(
     () =>
       ledgerList.map(item => ({
-        ...item,
+        name: `${item.name}(${item.assetType.name})`,
+        amountMoney: item.amountMoney,
         color: item.color.value,
-        legendFontColor: Colors.fontSubtitle,
-        legendFontSize: 15,
+        legendFontColor: item.color.value,
       })),
     [ledgerList],
   );
   function renderChart() {
-    const chartConfig = {
-      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    };
+    if (ChartData.length < 1) {
+      return;
+    }
+
     return (
       <View>
-        {ChartData.length > 0 && (
-          <PieChart
-            data={ChartData}
-            width={width}
-            height={220}
-            chartConfig={chartConfig}
-            accessor={'amountMoney'}
-            backgroundColor={colorGetLightenBackground(Colors.theme, 0.7)}
-            paddingLeft={'20'}
-            absolute
-            avoidFalseZero
-          />
-        )}
+        <PieChart
+          data={ChartData}
+          width={width}
+          height={220}
+          chartConfig={{
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          }}
+          accessor={'amountMoney'}
+          backgroundColor={colorGetLightenBackground(Colors.theme, 0.7)}
+          paddingLeft={'20'}
+          absolute
+          avoidFalseZero
+        />
       </View>
     );
   }
