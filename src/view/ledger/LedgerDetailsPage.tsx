@@ -232,6 +232,7 @@ export function LedgerDetailsPage() {
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
           <CPNInput
+            keyboardType="numeric"
             value={
               details.amountMoney === undefined
                 ? undefined

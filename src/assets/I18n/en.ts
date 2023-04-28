@@ -13,7 +13,4 @@ export default {
 
   SessionExpired: 'Session Expired',
   NetworkError: 'Network error, please try again later.',
-
-  test1: 'test1: {0}',
-  test2: 'test2: {a}',
 } as const;

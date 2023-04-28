@@ -3,21 +3,18 @@ import {CreateReactiveConstant} from '@/libs/CreateReactiveConstant';
 const colorsDefault = {
   theme: '#1989fa',
   themeTransparent: 'rgba(25, 137, 250, 0.2)',
-  themeLight: '#CAE0F7',
 
   warning: '#F2B85F',
 
   success: '#41b883',
   successTransparent: 'rgba(65, 184, 131, 0.2)',
-  successLight: '#D0EEE0',
 
   fail: '#FF1E2F',
   failTransparent: 'rgba(255, 30, 47, 0.2)',
-  failLight: '#FFBBC0',
 
   transparent: 'transparent',
 
-  backgroundTheme: '#eee',
+  backgroundTheme: '#efefef',
   backgroundPanel: '#fff',
   backgroundDisabled: '#c8c9cc',
   backgroundBlack: '#000',
