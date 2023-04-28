@@ -120,6 +120,7 @@ export function LedgerDetailsPage() {
 
   return (
     <CPNPageView
+      alwaysBounceVertical={false}
       headerBackgroundColor={route.params?.color.value}
       title={
         route.params?.id

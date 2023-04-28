@@ -2,13 +2,13 @@ import React, {useContext} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {CPNPageViewThemeColor, CPNText, FormItemContext} from '.';
 import {Colors} from '@/configs/colors';
+import {StyleGet} from '@/configs/styles';
 
 const styles = StyleSheet.create({
   groupContainer: {
     flexDirection: 'row',
     borderRadius: 6,
     borderWidth: 1,
-    // minHeight: StyleGet.cellView().height,
   },
   btnContainer: {
     flex: 1,
@@ -43,8 +43,12 @@ export function CPNButtonGroup<T extends string | number>(
   return (
     <View
       style={[
+        StyleGet.boxShadow(),
         styles.groupContainer,
-        {borderColor: Colors.theme, backgroundColor: Colors.backgroundPanel},
+        {
+          borderColor: themeColor,
+          backgroundColor: Colors.backgroundPanel,
+        },
       ]}>
       {props.buttonList.map((item, index) => (
         <View

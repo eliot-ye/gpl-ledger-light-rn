@@ -17,6 +17,7 @@ import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
 import {StyleGet} from '@/configs/styles';
+import {colorGetLightenBackground} from '@/utils/tools';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -57,8 +58,6 @@ export function HomePage() {
   );
   function renderChart() {
     const chartConfig = {
-      backgroundGradientFrom: Colors.backgroundPanel,
-      backgroundGradientTo: Colors.backgroundPanel,
       color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     };
     return (
@@ -70,7 +69,7 @@ export function HomePage() {
             height={220}
             chartConfig={chartConfig}
             accessor={'amountMoney'}
-            backgroundColor={'transparent'}
+            backgroundColor={colorGetLightenBackground(Colors.theme, 0.7)}
             paddingLeft={'20'}
             absolute
             avoidFalseZero
@@ -83,6 +82,7 @@ export function HomePage() {
   return (
     <CPNPageView
       title={I18n.Ledger}
+      alwaysBounceVertical={false}
       rightIcon={
         <TouchableOpacity
           onPress={async () => {
