@@ -9,7 +9,7 @@ import {
 } from './Router';
 import {CPNIonicons, CPNText, IONName} from '@components/base';
 import {Colors} from '@/configs/colors';
-import {Platform, View} from 'react-native';
+import {Platform} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
 
@@ -57,31 +57,11 @@ function TabBarView() {
       name: 'HomePage',
       label: I18n.Ledger,
       icon: IONName.Home,
-      backgroundColor: (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: Colors.success,
-          }}
-        />
-      ),
-      textColor: Colors.backgroundPanel,
-      textActiveColor: Colors.fontTextReverse,
     },
     {
       name: 'SettingPage',
       label: I18n.Settings,
       icon: IONName.Settings,
-      backgroundColor: (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: Colors.warning,
-          }}
-        />
-      ),
-      textColor: Colors.backgroundPanel,
-      textActiveColor: Colors.fontTextReverse,
     },
   ];
 
@@ -92,8 +72,8 @@ function TabBarView() {
 
         return {
           headerShown: false,
-          tabBarActiveTintColor: opt?.textActiveColor,
-          tabBarInactiveTintColor: opt?.textColor,
+          tabBarActiveTintColor: opt?.textActiveColor || Colors.theme,
+          tabBarInactiveTintColor: opt?.textColor || Colors.fontSubtitle,
           tabBarBackground: () => opt?.backgroundColor,
           tabBarLabel: ({color, focused}) => (
             <CPNText style={{color, fontSize: focused ? 12 : 10}}>
@@ -104,7 +84,7 @@ function TabBarView() {
             <CPNIonicons
               name={opt?.icon}
               color={color}
-              size={focused ? 26 : 20}
+              size={focused ? 24 : 20}
             />
           ),
         };
@@ -119,7 +99,7 @@ interface TabbarOption {
   name: keyof TabbarStackParamList;
   label: string;
   icon: IONName;
-  backgroundColor: React.ReactNode;
-  textColor: string;
-  textActiveColor: string;
+  backgroundColor?: React.ReactNode;
+  textColor?: string;
+  textActiveColor?: string;
 }

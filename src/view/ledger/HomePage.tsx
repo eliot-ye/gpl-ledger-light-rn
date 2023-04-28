@@ -16,6 +16,7 @@ import {StoreHomePage} from '@/store';
 import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
+import {StyleGet} from '@/configs/styles';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -94,7 +95,9 @@ export function HomePage() {
       <View style={{padding: 20}}>
         {AvailableAssets.length > 0 && (
           <>
-            <CPNText>{I18n.AvailableAssets}</CPNText>
+            <CPNText style={StyleGet.title('h3')}>
+              {I18n.AvailableAssets}
+            </CPNText>
             <CPNCellGroup style={{marginBottom: 20}}>
               {AvailableAssets.map((item, index) => (
                 <CPNCell
@@ -130,7 +133,9 @@ export function HomePage() {
 
         {UnAvailableAssets.length > 0 && (
           <>
-            <CPNText>{I18n.UnavailableAssets}</CPNText>
+            <CPNText style={StyleGet.title('h3')}>
+              {I18n.UnavailableAssets}
+            </CPNText>
             <CPNCellGroup>
               {UnAvailableAssets.map((item, index) => (
                 <CPNCell

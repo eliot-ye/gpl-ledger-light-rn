@@ -1,6 +1,5 @@
 import {I18n} from '@/assets/I18n';
 import {CPNPageView, CPNCell, CPNCellGroup} from '@/components/base';
-import {Colors} from '@/configs/colors';
 import React, {useEffect, useState} from 'react';
 import {Switch, View} from 'react-native';
 import {PageProps} from '../Router';
@@ -52,10 +51,7 @@ export function SettingPage() {
   }
 
   return (
-    <CPNPageView
-      title={I18n.Settings}
-      headerBackgroundColor={Colors.warning}
-      hideBack>
+    <CPNPageView title={I18n.Settings} hideBack>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell

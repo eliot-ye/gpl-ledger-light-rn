@@ -51,24 +51,23 @@ export function CPNCell(props: CPNCellProps) {
         }}
         disabled={!props.onPress}
         onPress={props.onPress}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 2.5,
-          }}>
-          <CPNTextFontSizeContext.Provider
-            value={StyleGet.title('h4').fontSize}>
-            <CPNTextColorContext.Provider value={StyleGet.title('h4').color}>
+        <CPNTextFontSizeContext.Provider value={StyleGet.title('h4').fontSize}>
+          <CPNTextColorContext.Provider value={StyleGet.title('h4').color}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 2.5,
+              }}>
               {['string', 'number'].includes(typeof props.title) ? (
                 <CPNText>{props.title}</CPNText>
               ) : (
                 props.title
               )}
-            </CPNTextColorContext.Provider>
-          </CPNTextFontSizeContext.Provider>
-        </View>
+            </View>
+          </CPNTextColorContext.Provider>
+        </CPNTextFontSizeContext.Provider>
         <View
           style={{
             paddingHorizontal: CPNCellConfig.padding,
