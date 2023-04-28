@@ -1,18 +1,13 @@
 import {Colors} from '@/configs/colors';
 import React, {PropsWithChildren, useEffect, useMemo} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {
-  Animated,
-  Modal,
-  PanResponder,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import {Animated, Modal, PanResponder, View} from 'react-native';
 import {StyleGet} from '@/configs/styles';
 import {CPNActionSheet} from './CPNActionSheet';
 import {CPNAlert} from './CPNAlert';
 import {CPNLoading} from './CPNLoading';
 import {CPNToast} from './CPNToast';
+import {useDimensions} from '@/utils/useDimensions';
 
 const Config = {
   offset: 10,
@@ -39,7 +34,8 @@ export function createCPNPageModal() {
         () => edgeInsets.top || Config.offset,
         [edgeInsets.top],
       );
-      const {height: windowHeight, width: windowWidth} = useWindowDimensions();
+      const {height: windowHeight, width: windowWidth} =
+        useDimensions('screen');
       const boxHeight = useMemo(
         () => windowHeight - statusBarHeight - Config.offset,
         [statusBarHeight, windowHeight],
@@ -94,7 +90,7 @@ export function createCPNPageModal() {
         () => edgeInsets.top || Config.offset,
         [edgeInsets.top],
       );
-      const windowHeight = useWindowDimensions().height;
+      const {height: windowHeight} = useDimensions('screen');
       const boxHeight = useMemo(
         () => windowHeight - statusBarHeight - Config.offset,
         [statusBarHeight, windowHeight],
@@ -156,10 +152,10 @@ export function createCPNPageModal() {
           onRequestClose={props.onClose}>
           <Animated.View
             style={{
-              flex: 1,
+              height: windowHeight,
               paddingTop: statusBarHeight + Config.offset,
               backgroundColor: translateY.interpolate({
-                inputRange: [-60, closeThreshold],
+                inputRange: [0, closeThreshold],
                 outputRange: [Colors.backgroundModal, Colors.transparent],
                 extrapolate: 'clamp',
               }),
