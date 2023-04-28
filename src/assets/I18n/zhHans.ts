@@ -79,6 +79,7 @@ export default {
   CurrencyError: '请选择币种',
   AmountMoney: '金额',
   AmountMoneyError1: '请输入正确的金额',
+  CreateDescription1: '注意：创建后不可更改',
 
   About: '关于',
   Version: '版本',

@@ -29,6 +29,10 @@ import {
 } from '@/database';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
+import {formatDate} from '@/utils/dateFun';
+import {LineChart} from 'react-native-chart-kit';
+import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
+import {useDimensions} from '@/utils/useDimensions';
 
 export function LedgerDetailsPage() {
   const navigation =
@@ -68,8 +72,55 @@ export function LedgerDetailsPage() {
     });
   }, []);
 
+  const {width} = useDimensions('window');
+
+  const ChartData = useMemo<LineChartData>(() => {
+    if (!details.history) {
+      return {
+        labels: [] as string[],
+        datasets: [{data: [] as number[]}],
+      };
+    }
+
+    return {
+      labels: details.history.map(item => formatDate(item.date)),
+      datasets: [
+        {
+          data: details.history.map(item => item.amountMoney),
+        },
+      ],
+    };
+  }, [details.history]);
+  function renderChart() {
+    const chartConfig = {
+      backgroundGradientFrom: route.params?.color.value,
+      backgroundGradientTo: route.params?.color.value,
+      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+      decimalPlaces: 0,
+      style: {
+        borderRadius: 16,
+        padding: 10,
+      },
+    };
+    return (
+      <View>
+        {!!details.history && details.history.length > 1 && (
+          <LineChart
+            data={ChartData}
+            width={width}
+            height={220}
+            yAxisLabel={route.params?.currency.symbol}
+            chartConfig={chartConfig}
+            bezier
+          />
+        )}
+      </View>
+    );
+  }
+
   return (
     <CPNPageView
+      headerBackgroundColor={route.params?.color.value}
       title={
         route.params?.id
           ? I18n.formatString(I18n.EditAsset, route.params.name || '')
@@ -106,6 +157,7 @@ export function LedgerDetailsPage() {
           </TouchableOpacity>
         )
       }>
+      {renderChart()}
       <View style={{padding: 20}}>
         <CPNFormItem
           style={{paddingBottom: 20}}
@@ -121,32 +173,35 @@ export function LedgerDetailsPage() {
           />
         </CPNFormItem>
 
-        <CPNFormItem
-          style={{paddingBottom: 20}}
-          title={I18n.AssetType}
-          hasError={!!detailsError.assetType}
-          errorText={detailsError.assetType}>
-          <CPNDropdown
-            data={useMemo(
-              () =>
-                assetTypeList.map(item => ({
-                  ...item,
-                  label: `${item.name}(${
-                    item.isAvailableAssets
-                      ? I18n.AvailableAssets
-                      : I18n.UnavailableAssets
-                  })`,
-                  value: item.id,
-                })),
-              [assetTypeList],
-            )}
-            checked={details.assetType?.id}
-            onSelect={item => {
-              detailsSet({...details, assetType: item});
-              detailsErrorSet({...detailsError, assetType: ''});
-            }}
-          />
-        </CPNFormItem>
+        {!route.params?.id && (
+          <CPNFormItem
+            style={{paddingBottom: 20}}
+            title={I18n.AssetType}
+            description={I18n.CreateDescription1}
+            hasError={!!detailsError.assetType}
+            errorText={detailsError.assetType}>
+            <CPNDropdown
+              data={useMemo(
+                () =>
+                  assetTypeList.map(item => ({
+                    ...item,
+                    label: `${item.name}(${
+                      item.isAvailableAssets
+                        ? I18n.AvailableAssets
+                        : I18n.UnavailableAssets
+                    })`,
+                    value: item.id,
+                  })),
+                [assetTypeList],
+              )}
+              checked={details.assetType?.id}
+              onSelect={item => {
+                detailsSet({...details, assetType: item});
+                detailsErrorSet({...detailsError, assetType: ''});
+              }}
+            />
+          </CPNFormItem>
+        )}
 
         <CPNFormItem
           style={{paddingBottom: 20}}
@@ -154,7 +209,9 @@ export function LedgerDetailsPage() {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <CPNText
                 style={{
-                  color: detailsError.color ? Colors.fail : Colors.theme,
+                  color: detailsError.color
+                    ? Colors.fail
+                    : route.params?.color.value || Colors.theme,
                 }}>
                 {I18n.Color}
               </CPNText>
@@ -203,28 +260,31 @@ export function LedgerDetailsPage() {
           />
         </CPNFormItem>
 
-        <CPNFormItem
-          style={{paddingBottom: 20}}
-          title={I18n.Currency}
-          hasError={!!detailsError.currency}
-          errorText={detailsError.currency}>
-          <CPNDropdown
-            data={useMemo(
-              () =>
-                currencyList.map(item => ({
-                  ...item,
-                  label: `${item.name}(${item.abbreviation})`,
-                  value: item.id,
-                })),
-              [currencyList],
-            )}
-            checked={details.currency?.id}
-            onSelect={item => {
-              detailsSet({...details, currency: item});
-              detailsErrorSet({...detailsError, currency: ''});
-            }}
-          />
-        </CPNFormItem>
+        {!route.params?.id && (
+          <CPNFormItem
+            style={{paddingBottom: 20}}
+            title={I18n.Currency}
+            description={I18n.CreateDescription1}
+            hasError={!!detailsError.currency}
+            errorText={detailsError.currency}>
+            <CPNDropdown
+              data={useMemo(
+                () =>
+                  currencyList.map(item => ({
+                    ...item,
+                    label: `${item.name}(${item.abbreviation})`,
+                    value: item.id,
+                  })),
+                [currencyList],
+              )}
+              checked={details.currency?.id}
+              onSelect={item => {
+                detailsSet({...details, currency: item});
+                detailsErrorSet({...detailsError, currency: ''});
+              }}
+            />
+          </CPNFormItem>
+        )}
 
         <CPNFormItem
           style={{paddingBottom: 20}}
