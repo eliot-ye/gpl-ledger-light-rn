@@ -154,7 +154,6 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                 StyleGet.title('h4'),
                 {color: Colors.fontPlaceholder},
                 activeItem && {color: Colors.fontText},
-                formItem.hasError && {color: Colors.fail},
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>
               {activeItem?.label ||

@@ -211,9 +211,7 @@ export function LedgerDetailsPage() {
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <CPNText
                 style={{
-                  color: detailsError.color
-                    ? Colors.fail
-                    : route.params?.color.value || Colors.theme,
+                  color: route.params?.color.value || Colors.theme,
                 }}>
                 {I18n.Color}
               </CPNText>

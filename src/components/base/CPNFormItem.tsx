@@ -27,9 +27,7 @@ export function CPNFormItem(props: CPNFormItemProps) {
       {!!props.title && (
         <View style={StyleGet.cellTitleView()}>
           {['string', 'number'].includes(typeof props.title) ? (
-            <CPNText style={{color: props.hasError ? Colors.fail : themeColor}}>
-              {props.title}
-            </CPNText>
+            <CPNText style={{color: themeColor}}>{props.title}</CPNText>
           ) : (
             props.title
           )}
