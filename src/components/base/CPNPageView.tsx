@@ -9,6 +9,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '@/configs/colors';
 import {CPNHeader, type CPNHeaderProps} from './CPNHeader';
+import {useDimensions} from '@/utils/useDimensions';
 
 export enum BarTextStyle {
   light = 'light-content',
@@ -31,6 +32,7 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
   renderIOSTopNegativeDistanceView?: (
     scrollDistance: number,
   ) => React.ReactNode;
+  isTabbarPage?: boolean;
 }
 /**
  * - style 作用于 ScrollView
@@ -52,6 +54,7 @@ export function CPNPageView(props: CPNPageViewProps) {
       <CPNHeader
         safeArea
         {...props}
+        hideBack={props.hideBack || props.isTabbarPage}
         fixedTop
         showShadow={!props.fixedTop}
         backgroundColor={
@@ -78,6 +81,7 @@ export function CPNPageView(props: CPNPageViewProps) {
   }
 
   const edgeInsets = useSafeAreaInsets();
+  const scaledSize = useDimensions('screen');
 
   return (
     <CPNPageViewThemeColor.Provider value={headerBackgroundColor}>
@@ -125,8 +129,16 @@ export function CPNPageView(props: CPNPageViewProps) {
                 }
               : props.onScroll
           }>
-          {props.children}
-          <View style={{height: edgeInsets.bottom}} />
+          <View
+            style={{
+              minHeight:
+                scaledSize.height -
+                headerInfo.height -
+                (props.isTabbarPage ? 46 + edgeInsets.bottom : 0),
+              paddingBottom: props.isTabbarPage ? 0 : edgeInsets.bottom,
+            }}>
+            {props.children}
+          </View>
         </Animated.ScrollView>
 
         {Platform.OS === 'ios' && props.renderIOSTopNegativeDistanceView ? (

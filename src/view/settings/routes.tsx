@@ -5,6 +5,7 @@ export * from './SettingPage';
 import {ColorManagementPage} from './ColorManagementPage';
 import {CurrencyManagementPage} from './CurrencyManagementPage';
 import {AssetTypeManagementPage} from './AssetTypeManagementPage';
+import {LangSettingPage} from './LangSettingPage';
 import {AboutPage} from './AboutPage';
 import {VersionLogPage} from './VersionLogPage';
 
@@ -12,6 +13,8 @@ export type SettingsStackParamList = {
   ColorManagementPage: undefined;
   CurrencyManagementPage: undefined;
   AssetTypeManagementPage: undefined;
+
+  LangSettingPage: undefined;
 
   AboutPage: undefined;
   VersionLogPage: undefined;
@@ -31,6 +34,8 @@ export const renderSettingsRouterView = (
       name="AssetTypeManagementPage"
       component={AssetTypeManagementPage}
     />
+
+    <RootStack.Screen name="LangSettingPage" component={LangSettingPage} />
 
     <RootStack.Screen name="AboutPage" component={AboutPage} />
     <RootStack.Screen name="VersionLogPage" component={VersionLogPage} />

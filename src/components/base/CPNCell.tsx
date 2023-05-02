@@ -43,6 +43,8 @@ export function CPNCell(props: CPNCellProps) {
         },
       ]}>
       <TouchableOpacity
+        accessible
+        accessibilityRole="list"
         style={{
           flex: 1,
           flexDirection: 'row',

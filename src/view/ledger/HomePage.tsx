@@ -12,7 +12,7 @@ import {dbGetLedger, LedgerItem} from '@/database';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
-import {StoreHomePage} from '@/store';
+import {StoreHomePage, StoreRoot} from '@/store';
 import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
@@ -21,6 +21,7 @@ import {colorGetLightenBackground} from '@/utils/tools';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
+  StoreRoot.useState();
   const HomePageState = StoreHomePage.useState();
 
   const [ledgerList, ledgerListSet] = useState<LedgerItem[]>([]);
@@ -83,6 +84,7 @@ export function HomePage() {
   return (
     <CPNPageView
       title={I18n.Ledger}
+      isTabbarPage
       alwaysBounceVertical={false}
       rightIcon={
         <TouchableOpacity

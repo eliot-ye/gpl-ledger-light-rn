@@ -26,6 +26,7 @@ import {SessionStorage} from '@/store/sessionStorage';
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
 
+  StoreRoot.useState();
   const RootDispatch = StoreRoot.useDispatch();
 
   const [useInfoList, useInfoListSet] = useState<LSUserInfo[]>([]);
@@ -151,10 +152,9 @@ export function SignInPage() {
     return (
       <View
         style={{
-          paddingTop: 10,
+          paddingTop: 30,
           paddingRight: 16,
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
+          alignItems: 'center',
         }}>
         <TouchableOpacity
           onPress={() => {
@@ -197,14 +197,38 @@ export function SignInPage() {
     );
   }
 
+  function renderGoLangSettingButton() {
+    return (
+      <View
+        style={{
+          paddingTop: 30,
+          paddingRight: 16,
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('LangSettingPage');
+          }}>
+          <CPNText
+            style={{color: Colors.theme, textDecorationLine: 'underline'}}>
+            {I18n.LanguageSetting}
+          </CPNText>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <CPNPageView title={I18n.SignIn}>
-      <View style={{padding: 20}}>
-        {renderUserInfoInput()}
-        {renderPasswordInput()}
-        {renderSubmitButton()}
-        {renderGoSignUpButton()}
-        {availableBiometrics && renderBiometrics()}
+      <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
+        <View>
+          {renderUserInfoInput()}
+          {renderPasswordInput()}
+          {renderSubmitButton()}
+          {renderGoSignUpButton()}
+          {availableBiometrics && renderBiometrics()}
+        </View>
+        <View>{renderGoLangSettingButton()}</View>
       </View>
     </CPNPageView>
   );

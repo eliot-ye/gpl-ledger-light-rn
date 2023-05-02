@@ -37,61 +37,63 @@ async function getLSRealm() {
   return LSRealm;
 }
 
-async function getLSItem(key: string) {
-  const LSR = await getLSRealm();
-  const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
-  if (data) {
-    return data.value;
-  }
-}
-async function setLSItem(key: string, value: string) {
-  const LSR = await getLSRealm();
-  LSR.write(() => {
-    LSR.create(LSSchema.name, {key, value});
-  });
-}
-async function removeLSItem(key: string) {
-  const LSR = await getLSRealm();
-  LSR.write(() => {
+const LSRealmStorage = {
+  async get(key: string) {
+    const LSR = await getLSRealm();
     const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
     if (data) {
-      LSR.delete(data);
+      return data.value;
     }
-  });
-}
+  },
+  async set(key: string, value: string) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      LSR.create(LSSchema.name, {key, value}, Realm.UpdateMode.All);
+    });
+  },
+  async remove(key: string) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
+      if (data) {
+        LSR.delete(data);
+      }
+    });
+  },
+};
 
 export const LS_Theme = {
   key: 'theme_code',
   async get() {
-    const data = await getLSItem(this.key);
+    const data = await LSRealmStorage.get(this.key);
     return (data || ThemeCode.default) as ThemeCode;
   },
   set(data: ThemeCode) {
-    return setLSItem(this.key, data);
+    return LSRealmStorage.set(this.key, data);
   },
 };
 
 export const LS_Lang = {
   key: 'lang_code',
   async get() {
-    const data = await getLSItem(this.key);
+    const data = await LSRealmStorage.get(this.key);
     return (data || langDefault) as LangCode;
   },
   set(data: LangCode) {
-    return setLSItem(this.key, data);
+    return LSRealmStorage.set(this.key, data);
   },
 };
 
 export const LS_Token = {
   key: 'token',
   async get() {
-    return getLSItem(this.key);
+    return LSRealmStorage.get(this.key);
   },
   async set(token: string) {
-    return setLSItem(this.key, token);
+    return LSRealmStorage.set(this.key, token);
   },
   remove() {
-    return removeLSItem(this.key);
+    return LSRealmStorage.remove(this.key);
   },
 };
 
@@ -126,9 +128,9 @@ export const LS_UserInfo = {
 export const LS_LastUserId = {
   key: 'last_user_id',
   get() {
-    return getLSItem(this.key);
+    return LSRealmStorage.get(this.key);
   },
   set(id: string) {
-    return setLSItem(this.key, id);
+    return LSRealmStorage.set(this.key, id);
   },
 };

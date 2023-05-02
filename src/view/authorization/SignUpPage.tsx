@@ -1,17 +1,26 @@
 import {I18n} from '@/assets/I18n';
-import {CPNButton, CPNPageView, CPNFormItem, CPNInput} from '@/components/base';
+import {
+  CPNButton,
+  CPNPageView,
+  CPNFormItem,
+  CPNInput,
+  CPNText,
+} from '@/components/base';
 import {getRealm} from '@/database/main';
 import {StoreRoot} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {AESEncrypt, getRandomStr, getRandomStrMD5} from '@/utils/tools';
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {SessionStorage} from '@/store/sessionStorage';
+import {Colors} from '@/configs/colors';
 
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
+
+  StoreRoot.useState();
   const RootDispatch = StoreRoot.useDispatch();
 
   interface FormData {
@@ -111,12 +120,36 @@ export function SignUpPage() {
     );
   }
 
+  function renderGoLangSettingButton() {
+    return (
+      <View
+        style={{
+          paddingTop: 30,
+          paddingRight: 16,
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('LangSettingPage');
+          }}>
+          <CPNText
+            style={{color: Colors.theme, textDecorationLine: 'underline'}}>
+            {I18n.LanguageSetting}
+          </CPNText>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <CPNPageView title={I18n.SignUp}>
-      <View style={{padding: 20}}>
-        {renderUsernameInput()}
-        {renderPasswordInput()}
-        {renderSubmitButton()}
+      <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
+        <View>
+          {renderUsernameInput()}
+          {renderPasswordInput()}
+          {renderSubmitButton()}
+        </View>
+        <View>{renderGoLangSettingButton()}</View>
       </View>
     </CPNPageView>
   );

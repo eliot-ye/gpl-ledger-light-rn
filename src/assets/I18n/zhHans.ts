@@ -83,6 +83,8 @@ export default {
   AmountMoneyError1: '请输入正确的金额',
   CreateDescription1: '注意：创建后不可更改',
 
+  LanguageSetting: '语言设置',
+
   About: '关于',
   Version: '版本',
   CheckUpdates: '检查更新',

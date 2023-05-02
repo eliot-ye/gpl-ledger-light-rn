@@ -8,20 +8,21 @@ export enum ShowTabType {
   Used = 'Used',
   NotUsed = 'NotUsed',
 }
-const tabButtons: {
-  text: string;
-  value: ShowTabType;
-}[] = [
-  {text: I18n.All, value: ShowTabType.All},
-  {text: I18n.Used, value: ShowTabType.Used},
-  {text: I18n.NotUsed, value: ShowTabType.NotUsed},
-];
 
 interface CPNUsedTabProps {
   value: ShowTabType;
   onChange: (type: ShowTabType) => void;
 }
 export function CPNUsedTab(props: CPNUsedTabProps) {
+  const tabButtons: {
+    text: string;
+    value: ShowTabType;
+  }[] = [
+    {text: I18n.All, value: ShowTabType.All},
+    {text: I18n.Used, value: ShowTabType.Used},
+    {text: I18n.NotUsed, value: ShowTabType.NotUsed},
+  ];
+
   return (
     <CPNButtonGroup
       buttonList={tabButtons}

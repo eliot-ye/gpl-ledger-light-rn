@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: Config.borderRadius,
     borderWidth: Config.borderWidth,
-    marginRight: 10,
   },
 });
 
 interface CPNCheckboxProps extends PropsWithChildren {
   label?: string;
+  labelShow?: boolean;
   description?: React.ReactNode;
   checked: boolean;
   onPress?: () => void;
@@ -55,7 +55,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
     <TouchableOpacity
       accessible={true}
       accessibilityRole={props.isRadio ? 'radio' : 'checkbox'}
-      accessibilityLabel={props.label}
+      accessibilityLabel={props.label || formItem.title}
       accessibilityState={{
         disabled: props.disabled,
         checked: props.checked,
@@ -73,6 +73,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
         style={[
           styles.iconWrapper,
           {
+            marginRight: props.labelShow !== false ? 10 : 0,
             borderColor: themeColor,
             backgroundColor: Colors.backgroundTheme,
           },
@@ -108,18 +109,19 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
             />
           ))}
       </View>
-      {props.children || (
-        <View>
-          <CPNText>{props.label}</CPNText>
-          {['number', 'string'].includes(typeof props.description) ? (
-            <CPNText style={{fontSize: 12, opacity: 0.6}}>
-              {props.description}
-            </CPNText>
-          ) : (
-            props.description
-          )}
-        </View>
-      )}
+      {props.labelShow !== false &&
+        (props.children || (
+          <View>
+            <CPNText>{props.label || formItem.title}</CPNText>
+            {['number', 'string'].includes(typeof props.description) ? (
+              <CPNText style={{fontSize: 12, opacity: 0.6}}>
+                {props.description}
+              </CPNText>
+            ) : (
+              props.description
+            )}
+          </View>
+        ))}
     </TouchableOpacity>
   );
 }

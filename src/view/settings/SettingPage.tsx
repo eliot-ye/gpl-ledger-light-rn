@@ -7,9 +7,11 @@ import {useNavigation} from '@react-navigation/native';
 import {envConstant} from '@/configs/env';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
+import {StoreRoot} from '@/store';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
+  StoreRoot.useState();
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
@@ -51,7 +53,7 @@ export function SettingPage() {
   }
 
   return (
-    <CPNPageView title={I18n.Settings} hideBack>
+    <CPNPageView title={I18n.Settings} isTabbarPage>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
@@ -70,6 +72,16 @@ export function SettingPage() {
             title={I18n.AssetTypeManagement}
             onPress={() => {
               navigation.navigate('AssetTypeManagementPage');
+            }}
+            isLast
+          />
+        </CPNCellGroup>
+
+        <CPNCellGroup style={{marginBottom: 20}}>
+          <CPNCell
+            title={I18n.LanguageSetting}
+            onPress={() => {
+              navigation.navigate('LangSettingPage');
             }}
             isLast
           />

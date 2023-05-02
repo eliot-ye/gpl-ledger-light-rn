@@ -99,6 +99,7 @@ interface TabbarOption {
   name: keyof TabbarStackParamList;
   label: string;
   icon: IONName;
+  iconActive?: IONName;
   backgroundColor?: React.ReactNode;
   textColor?: string;
   textActiveColor?: string;
