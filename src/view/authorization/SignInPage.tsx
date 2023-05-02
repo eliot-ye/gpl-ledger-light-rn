@@ -22,6 +22,7 @@ import {getRealm} from '@/database/main';
 import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
+import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -124,7 +125,7 @@ export function SignInPage() {
     return (
       <View>
         <CPNButton
-          children={I18n.Submit}
+          children={I18n.SignIn}
           onPress={async () => {
             if (!userInfo.token) {
               userInfoSet(val => ({...val, hasError: true}));
@@ -150,21 +151,19 @@ export function SignInPage() {
 
   function renderGoSignUpButton() {
     return (
-      <View
-        style={{
-          paddingTop: 30,
-          paddingRight: 16,
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SignUpPage');
-          }}>
-          <CPNText
-            style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            {I18n.RegisteredUsers}
-          </CPNText>
-        </TouchableOpacity>
+      <View>
+        <CPNDivisionLine style={{marginVertical: 30}} />
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('SignUpPage');
+            }}>
+            <CPNText
+              style={{color: Colors.theme, textDecorationLine: 'underline'}}>
+              {I18n.RegisteredUsers}
+            </CPNText>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -199,12 +198,7 @@ export function SignInPage() {
 
   function renderGoLangSettingButton() {
     return (
-      <View
-        style={{
-          paddingTop: 30,
-          paddingRight: 16,
-          alignItems: 'center',
-        }}>
+      <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('LangSettingPage');

@@ -16,6 +16,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
 import {SessionStorage} from '@/store/sessionStorage';
 import {Colors} from '@/configs/colors';
+import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
@@ -79,7 +80,7 @@ export function SignUpPage() {
     return (
       <View>
         <CPNButton
-          children={I18n.Submit}
+          children={I18n.SignUp}
           onPress={async () => {
             const _formDataError: ErrorItem<FormData> = {};
 
@@ -120,14 +121,28 @@ export function SignUpPage() {
     );
   }
 
+  function renderGoImportBackupButton() {
+    return (
+      <View>
+        <CPNDivisionLine style={{marginVertical: 30}} />
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ImportBackupPage');
+            }}>
+            <CPNText
+              style={{color: Colors.theme, textDecorationLine: 'underline'}}>
+              {I18n.ImportBackup}
+            </CPNText>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   function renderGoLangSettingButton() {
     return (
-      <View
-        style={{
-          paddingTop: 30,
-          paddingRight: 16,
-          alignItems: 'center',
-        }}>
+      <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('LangSettingPage');
@@ -148,6 +163,7 @@ export function SignUpPage() {
           {renderUsernameInput()}
           {renderPasswordInput()}
           {renderSubmitButton()}
+          {renderGoImportBackupButton()}
         </View>
         <View>{renderGoLangSettingButton()}</View>
       </View>

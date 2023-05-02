@@ -8,6 +8,7 @@ export default {
   Close: '关闭',
   Refresh: '刷新',
   Submit: '提交',
+  OR: '或',
 
   SignIn: '登入',
   SignUp: '注册',
@@ -84,6 +85,8 @@ export default {
   CreateDescription1: '注意：创建后不可更改',
 
   LanguageSetting: '语言设置',
+  Backup: '备份',
+  ImportBackup: '导入备份',
 
   About: '关于',
   Version: '版本',

@@ -8,6 +8,7 @@ import {AssetTypeManagementPage} from './AssetTypeManagementPage';
 import {LangSettingPage} from './LangSettingPage';
 import {AboutPage} from './AboutPage';
 import {VersionLogPage} from './VersionLogPage';
+import {BackupPage} from './BackupPage';
 
 export type SettingsStackParamList = {
   ColorManagementPage: undefined;
@@ -15,6 +16,7 @@ export type SettingsStackParamList = {
   AssetTypeManagementPage: undefined;
 
   LangSettingPage: undefined;
+  BackupPage: undefined;
 
   AboutPage: undefined;
   VersionLogPage: undefined;
@@ -36,6 +38,7 @@ export const renderSettingsRouterView = (
     />
 
     <RootStack.Screen name="LangSettingPage" component={LangSettingPage} />
+    <RootStack.Screen name="BackupPage" component={BackupPage} />
 
     <RootStack.Screen name="AboutPage" component={AboutPage} />
     <RootStack.Screen name="VersionLogPage" component={VersionLogPage} />

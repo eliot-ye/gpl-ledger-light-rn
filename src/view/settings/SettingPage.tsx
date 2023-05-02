@@ -83,6 +83,12 @@ export function SettingPage() {
             onPress={() => {
               navigation.navigate('LangSettingPage');
             }}
+          />
+          <CPNCell
+            title={I18n.Backup}
+            onPress={() => {
+              navigation.navigate('BackupPage');
+            }}
             isLast
           />
         </CPNCellGroup>
