@@ -1,4 +1,6 @@
 export default {
+  formatDate: 'yyyy-MM-dd',
+
   OK: '好的',
   Confirm: '确认',
   Cancel: '取消',

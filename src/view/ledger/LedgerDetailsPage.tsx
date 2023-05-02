@@ -29,7 +29,7 @@ import {
 } from '@/database';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
-import {formatDate} from '@/utils/dateFun';
+import {formatDate} from '@/utils/dateFn';
 import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import {useDimensions} from '@/utils/useDimensions';
