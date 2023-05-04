@@ -9,7 +9,8 @@ import {
 import {getRealm} from '@/database/main';
 import {StoreRoot} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
-import {AESEncrypt, getRandomStr, getRandomStrMD5} from '@/utils/tools';
+import {getRandomStr, getRandomStrMD5} from '@/utils/tools';
+import {AESEncrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';

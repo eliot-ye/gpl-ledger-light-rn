@@ -12,7 +12,7 @@ import {
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {LSUserInfo, LS_UserInfo, LS_LastUserId} from '@/store/localStorage';
-import {AESDecrypt} from '@/utils/tools';
+import {AESDecrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';

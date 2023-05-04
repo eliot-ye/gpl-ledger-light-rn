@@ -1,5 +1,5 @@
 import Realm from 'realm';
-import {stringToUint8Array} from '@/utils/tools';
+import {stringToUint8Array} from '@/utils/encoding';
 import {navigationRef} from '@/view/Router';
 import {CPNAlert} from '@/components/base';
 import {I18n} from '@/assets/I18n';

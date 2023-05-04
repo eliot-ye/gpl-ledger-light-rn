@@ -1,5 +1,5 @@
 import 'react-native-get-random-values';
-import {AES, MD5, enc} from 'crypto-js';
+import {MD5} from 'crypto-js';
 import ColorProcessor from 'color';
 
 export function logNameValueBase(
@@ -86,20 +86,6 @@ export function toEachTitleUpperCase(str: string) {
       newStr[i].slice(0, 1).toUpperCase() + newStr[i].slice(1).toLowerCase();
   }
   return newStr.join(' ');
-}
-
-export function AESEncrypt(message: string, key: string) {
-  return AES.encrypt(message, key).toString();
-}
-export function AESDecrypt(message: string, key: string) {
-  return AES.decrypt(message, key).toString(enc.Utf8);
-}
-export function stringToUint8Array(str: string) {
-  const ab = new Uint8Array(str.length);
-  for (let i = 0; i < str.length; i++) {
-    ab[i] = str.charCodeAt(i);
-  }
-  return ab;
 }
 
 export function colorGetLightenBackground(colorStr: string, ratio = 0.66) {
