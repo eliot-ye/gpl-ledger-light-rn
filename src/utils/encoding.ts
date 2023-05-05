@@ -7,6 +7,7 @@ export function AESEncrypt(message: string, key: string) {
 export function AESDecrypt(message: string, key: string) {
   return AES.decrypt(message, key).toString(enc.Utf8);
 }
+
 export function stringToUint8Array(str: string) {
   const ab = new Uint8Array(str.length);
   for (let i = 0; i < str.length; i++) {

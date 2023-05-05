@@ -45,8 +45,8 @@ export function AboutPage() {
               CPNLoading.open();
               try {
                 const res = await apiGiteePublic.nowVersion();
-                const versionData = res.find(
-                  item => item.platform === Platform.OS,
+                const versionData = res.find(item =>
+                  item.platform.includes(Platform.OS),
                 );
                 if (
                   versionData &&

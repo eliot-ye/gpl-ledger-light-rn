@@ -19,11 +19,7 @@ export function VersionLogPage() {
     CPNLoading.open();
     try {
       const res = await apiGiteePublic.versionLog();
-      logListSet(
-        res.filter(
-          item => item.platform === 'all' || item.platform === Platform.OS,
-        ),
-      );
+      logListSet(res.filter(item => item.platform.includes(Platform.OS)));
     } catch (error) {}
     CPNLoading.close();
   }, [apiGiteePublic]);

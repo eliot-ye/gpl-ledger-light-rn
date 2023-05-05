@@ -29,7 +29,7 @@ export function useApiGiteePublic() {
 }
 
 export interface VersionItem {
-  platform: 'all' | typeof Platform.OS;
+  platform: (typeof Platform.OS)[];
   updateLink?: string;
   versionName: string;
   versionCode: number;
