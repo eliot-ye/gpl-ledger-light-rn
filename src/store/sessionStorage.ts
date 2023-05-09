@@ -2,6 +2,7 @@ import {CreateReactiveConstant} from '@/libs/CreateReactiveConstant';
 
 const sessionStorageDefault = {
   userId: undefined as string | undefined,
+  username: undefined as string | undefined,
   password: undefined as string | undefined,
 };
 

@@ -109,6 +109,7 @@ export function SignInPage() {
         await getRealm(userId, dbKey);
 
         SessionStorage.setValue('userId', userId);
+        SessionStorage.setValue('username', userInfo.username);
         SessionStorage.setValue('password', pwd);
         RootDispatch('isSignIn', true);
         navigation.replace('Tabbar', {screen: 'HomePage'});

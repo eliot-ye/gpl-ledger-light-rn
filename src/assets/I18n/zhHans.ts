@@ -86,6 +86,14 @@ export default {
 
   LanguageSetting: '语言设置',
   Backup: '备份',
+  BackupNow: '立即备份',
+  BackupPlaceholder: '备份将存储到以下文件中：{0}',
+  BackupPlaceholderIOS: '请在分享页面中存储备份文件',
+  BackupSuccess: '备份成功',
+  BackupSuccessTo: '已成功备份到：{0}',
+  BackupFailed: '备份失败',
+  InsufficientPermissions: '权限不足',
+  CanceledSave: '已取消保存',
   ImportBackup: '导入备份',
 
   About: '关于',
