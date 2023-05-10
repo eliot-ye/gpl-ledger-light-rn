@@ -1,9 +1,11 @@
 import {CreateReactiveConstant} from '@/libs/CreateReactiveConstant';
+import {WebDAVObject} from '@/libs/CreateWebDAV';
 
 const sessionStorageDefault = {
   userId: undefined as string | undefined,
   username: undefined as string | undefined,
   password: undefined as string | undefined,
+  WebDAVObject: undefined as WebDAVObject | undefined,
 };
 
 type SessionStorageDefault = typeof sessionStorageDefault;

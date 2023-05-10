@@ -1,5 +1,6 @@
 import 'react-native-get-random-values';
 import {AES, enc} from 'crypto-js';
+import Base64 from 'crypto-js/enc-base64';
 
 export function AESEncrypt(message: string, key: string) {
   return AES.encrypt(message, key).toString();
@@ -14,4 +15,8 @@ export function stringToUint8Array(str: string) {
     ab[i] = str.charCodeAt(i);
   }
   return ab;
+}
+
+export function utf8ToBase64(str: string) {
+  return Base64.stringify(enc.Utf8.parse(str));
 }

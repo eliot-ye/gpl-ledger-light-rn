@@ -23,6 +23,7 @@ const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
     id: 'string',
     username: 'string',
     token: 'string',
+    web_dav: 'string?',
   },
 });
 
@@ -31,7 +32,7 @@ async function getLSRealm() {
   if (!LSRealm) {
     LSRealm = await Realm.open({
       schema: [LSSchema, LSUserInfoSchema],
-      schemaVersion: 1,
+      schemaVersion: 2,
     });
   }
   return LSRealm;
@@ -101,6 +102,7 @@ export interface LSUserInfo {
   id: string;
   username: string;
   token: string;
+  web_dav?: string;
 }
 export const LS_UserInfo = {
   key: 'user_info',
@@ -111,7 +113,17 @@ export const LS_UserInfo = {
   async set(data: LSUserInfo) {
     const LSR = await getLSRealm();
     LSR.write(() => {
-      LSR.create<LSUserInfo>(LSUserInfoSchema.name, data);
+      LSR.create<LSUserInfo>(LSUserInfoSchema.name, data, Realm.UpdateMode.All);
+    });
+  },
+  async update(data: Partial<LSUserInfo>) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      LSR.create<LSUserInfo>(
+        LSUserInfoSchema.name,
+        data,
+        Realm.UpdateMode.Modified,
+      );
     });
   },
   async remove(id: string) {
@@ -132,5 +144,16 @@ export const LS_LastUserId = {
   },
   set(id: string) {
     return LSRealmStorage.set(this.key, id);
+  },
+};
+
+export const LS_WebDAVAutoSync = {
+  key: 'web_dav_auto_sync',
+  async get() {
+    const str = await LSRealmStorage.get(this.key);
+    return str !== 'false';
+  },
+  set(data: boolean) {
+    return LSRealmStorage.set(this.key, `${data}`);
   },
 };

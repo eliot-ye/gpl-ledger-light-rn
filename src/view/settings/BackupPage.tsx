@@ -7,8 +7,8 @@ import {
 } from '@/components/base';
 import {I18n} from '@/assets/I18n';
 import {SessionStorage} from '@/store/sessionStorage';
-import React from 'react';
-import {PermissionsAndroid, Platform, Share, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {PermissionsAndroid, Platform, Share, Switch, View} from 'react-native';
 import FS from 'react-native-fs';
 import {
   dbGetAssetTypes,
@@ -19,17 +19,16 @@ import {
 import {AESEncrypt} from '@/utils/encoding';
 import {CusLog} from '@/utils/tools';
 import {Colors} from '@/configs/colors';
+import {PageProps} from '../Router';
+import {LS_WebDAVAutoSync} from '@/store/localStorage';
+import {envConstant} from '@/configs/env';
 
-async function getBackupDataStr() {
-  const ledgerData = {
-    username: SessionStorage.username,
-    assetType: await dbGetAssetTypes(),
-    color: await dbGetColors(),
-    currency: await dbGetCurrency(),
-    ledger: await dbGetLedger(),
-  };
+export function getBackupDataStr(ledgerData: any) {
   const ledgerStr = JSON.stringify(ledgerData);
   const backupData = {
+    appId: envConstant.bundleId,
+    versionName: envConstant.versionName,
+    versionCode: envConstant.versionCode,
     usename: SessionStorage.username,
     ledgerCiphertext: '',
   };
@@ -40,6 +39,16 @@ async function getBackupDataStr() {
     );
   }
   return JSON.stringify(backupData);
+}
+
+async function getLedgerData() {
+  return {
+    username: SessionStorage.username,
+    assetType: await dbGetAssetTypes(),
+    color: await dbGetColors(),
+    currency: await dbGetCurrency(),
+    ledger: await dbGetLedger(),
+  };
 }
 
 function getBackupPath(basePath: string) {
@@ -77,12 +86,41 @@ const backupDirBase = Platform.select({
   ios: FS.DocumentDirectoryPath,
 });
 
-export function BackupPage() {
+export function BackupPage({navigation}: PageProps<'BackupPage'>) {
+  const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
+  useEffect(() => {
+    LS_WebDAVAutoSync.get().then(enable => enableWebDAVSyncSet(enable));
+  }, []);
+
+  const hasWebDAV = !!SessionStorage.WebDAVObject;
+
   return (
     <CPNPageView title={I18n.Backup}>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
-          <CPNCell title={'webdav'} />
+          <CPNCell
+            title={I18n.WebDAV}
+            value={SessionStorage.WebDAVObject?.account}
+            onPress={() => {
+              navigation.navigate('WebDAVPage');
+            }}
+            isLast={!hasWebDAV}
+          />
+          {hasWebDAV && (
+            <CPNCell
+              title={I18n.WebDAVSync}
+              value={
+                <Switch
+                  value={enableWebDAVSync}
+                  onChange={async () => {
+                    await LS_WebDAVAutoSync.set(!enableWebDAVSync);
+                    enableWebDAVSyncSet(!enableWebDAVSync);
+                  }}
+                />
+              }
+              isLast
+            />
+          )}
         </CPNCellGroup>
 
         <CPNCellGroup>
@@ -90,7 +128,7 @@ export function BackupPage() {
             title={I18n.BackupNow}
             onPress={async () => {
               try {
-                const backupDataStr = await getBackupDataStr();
+                const backupDataStr = getBackupDataStr(await getLedgerData());
 
                 if (Platform.OS === 'android') {
                   const permission = await PermissionsAndroid.check(
@@ -122,8 +160,8 @@ export function BackupPage() {
                     backupDirBase || FS.DocumentDirectoryPath,
                     backupDataStr,
                   );
-                  const action = await Share.share({url: backupFilePath});
-                  if (action.action === Share.dismissedAction) {
+                  const res = await Share.share({url: backupFilePath});
+                  if (res.action === Share.dismissedAction) {
                     CPNToast.open({text: I18n.CanceledSave});
                     return;
                   }

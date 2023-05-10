@@ -23,6 +23,8 @@ import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
 import {CPNDivisionLine} from '@/components/CPNDivisionLine';
+import {createWebDAV} from '@/libs/CreateWebDAV';
+import {CusLog} from '@/utils/tools';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -111,6 +113,17 @@ export function SignInPage() {
         SessionStorage.setValue('userId', userId);
         SessionStorage.setValue('username', userInfo.username);
         SessionStorage.setValue('password', pwd);
+
+        if (userInfo.web_dav) {
+          try {
+            const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
+            const WebDAV = createWebDAV(WebDAVDetails);
+            SessionStorage.setValue('WebDAVObject', WebDAV);
+          } catch (error) {
+            CusLog.error('SignIn', 'WebDAV', error);
+          }
+        }
+
         RootDispatch('isSignIn', true);
         navigation.replace('Tabbar', {screen: 'HomePage'});
       } else {

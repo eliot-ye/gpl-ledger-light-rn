@@ -95,6 +95,13 @@ export default {
   InsufficientPermissions: '权限不足',
   CanceledSave: '已取消保存',
   ImportBackup: '导入备份',
+  WebDAV: 'WebDAV',
+  WebDAVSync: '使用 WebDAV 同步数据',
+  WebDAVServerPath: 'WebDAV 服务器路径',
+  WebDAVAccount: 'WebDAV 账号',
+  WebDAVPassword: 'WebDAV 密码',
+  WebDAVSubmit: '测试并保存 WebDAV 设置',
+  WebDAVSuccess: 'WebDAV 设置成功',
 
   About: '关于',
   Version: '版本',
