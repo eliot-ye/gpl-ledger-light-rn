@@ -1,5 +1,6 @@
 import {utf8ToBase64} from '@/utils/encoding';
 import {XMLParser} from 'fast-xml-parser';
+import utf8ByteLength from 'utf8-byte-length';
 
 interface WebDAVOption {
   serverPath: string;
@@ -80,13 +81,19 @@ export function createWebDAV(option: WebDAVOption) {
     ) {
       console.log('Authorization', Authorization);
       console.log('path', getPath(path));
+      console.log('headers', {
+        'X-Realm': 'ogzone',
+        'Content-Type': ContentTypes[options.ContentType],
+        'Content-Length': utf8ByteLength(body).toString(),
+      });
 
       const response = await fetch(getPath(path), {
         method: 'PUT',
         headers: {
           Authorization,
+          'X-Realm': 'ogzone',
           'Content-Type': ContentTypes[options.ContentType],
-          // 'Content-Length': body.length.toString(),
+          'Content-Length': utf8ByteLength(body).toString(),
         },
         body: encodeURIComponent(body),
       });
