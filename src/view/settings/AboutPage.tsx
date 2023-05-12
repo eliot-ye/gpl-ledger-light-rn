@@ -14,6 +14,7 @@ import {envConstant} from '@/configs/env';
 import {useApiGiteePublic} from '@/api/http.giteePublic';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
+import {CusLog} from '@/utils/tools';
 
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
@@ -87,7 +88,7 @@ export function AboutPage() {
                   navigation.navigate('VersionLogPage');
                 }
               } catch (error) {
-                console.error('nowVersion', error);
+                CusLog.error('About', 'nowVersion', error);
               }
               CPNLoading.close();
             }}

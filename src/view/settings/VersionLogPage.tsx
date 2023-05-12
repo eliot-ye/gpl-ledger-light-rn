@@ -10,6 +10,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
 import {VersionItem, useApiGiteePublic} from '@/api/http.giteePublic';
 import {StyleGet} from '@/configs/styles';
+import {CusLog} from '@/utils/tools';
 
 export function VersionLogPage() {
   const apiGiteePublic = useApiGiteePublic();
@@ -20,7 +21,9 @@ export function VersionLogPage() {
     try {
       const res = await apiGiteePublic.versionLog();
       logListSet(res.filter(item => item.platform.includes(Platform.OS)));
-    } catch (error) {}
+    } catch (error) {
+      CusLog.error('VersionLogPage', 'apiGetLogData', error);
+    }
     CPNLoading.close();
   }, [apiGiteePublic]);
   useEffect(() => {
