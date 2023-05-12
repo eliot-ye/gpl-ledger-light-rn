@@ -15,8 +15,16 @@ import {AESEncrypt} from '@/utils/encoding';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 
-export const WebDAVDirName = 'gpl_ledger';
-export const WebDAVFileNamePre = 'backup_';
+const WebDAVDirName = 'gpl_ledger';
+const WebDAVFileNamePre = 'backup_';
+export function getWebDAVFileData() {
+  const WebDAVFileName = `${WebDAVFileNamePre}${SessionStorage.username}.json`;
+  const WebDAVFilePath = `/${WebDAVDirName}/${WebDAVFileName}`;
+  return {
+    name: WebDAVFileName,
+    path: WebDAVFilePath,
+  };
+}
 
 export function WebDAVPage() {
   const [WebDAVDetails, WebDAVDetailsSet] = useState({

@@ -1,6 +1,7 @@
 import {
   CPNCell,
   CPNCellGroup,
+  CPNLoading,
   CPNPageView,
   CPNText,
   CPNToast,
@@ -15,13 +16,18 @@ import {
   dbGetColors,
   dbGetCurrency,
   dbGetLedger,
+  dbSetAssetTypeList,
+  dbSetColorList,
+  dbSetCurrencyList,
+  dbSetLedgerList,
 } from '@/database';
-import {AESEncrypt} from '@/utils/encoding';
+import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
 import {CusLog} from '@/utils/tools';
 import {Colors} from '@/configs/colors';
 import {PageProps} from '../Router';
 import {LS_WebDAVAutoSync} from '@/store/localStorage';
 import {envConstant} from '@/configs/env';
+import {getWebDAVFileData} from './WebDAVPage';
 
 export function getBackupDataStr(ledgerData: any) {
   const ledgerStr = JSON.stringify(ledgerData);
@@ -54,7 +60,8 @@ async function getLedgerData() {
 function getBackupPath(basePath: string) {
   const backupDirName = 'backup';
   const backupDirPath = `${basePath}/${backupDirName}`;
-  const backupFilePath = `${backupDirPath}/gpl_ledger_${SessionStorage.username}.json`;
+  const backupFileName = `gpl_ledger_${SessionStorage.username}.json`;
+  const backupFilePath = `${backupDirPath}/${backupFileName}`;
 
   return {
     dirName: backupDirName,
@@ -86,6 +93,43 @@ const backupDirBase = Platform.select({
   ios: FS.DocumentDirectoryPath,
 });
 
+export async function recoveryFromWebDAV(showSuccess = true) {
+  if (!SessionStorage.WebDAVObject || !SessionStorage.password) {
+    return;
+  }
+
+  const WebDAVFileData = getWebDAVFileData();
+  const res = await SessionStorage.WebDAVObject.GET(WebDAVFileData.path);
+
+  if (res.status === 200 || res.status === 204) {
+    const backupData = JSON.parse(decodeURIComponent(res.responseText));
+    if (
+      backupData.username === SessionStorage.username &&
+      backupData.appId === envConstant.bundleId
+    ) {
+      const ledgerData = JSON.parse(
+        AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password),
+      );
+      await dbSetLedgerList(ledgerData.ledger);
+      await dbSetAssetTypeList(ledgerData.assetType);
+      await dbSetColorList(ledgerData.color);
+      await dbSetCurrencyList(ledgerData.currency);
+      if (showSuccess) {
+        CPNToast.open({
+          text: I18n.WebDAVRecoverySuccess,
+        });
+      }
+    }
+  } else {
+    CPNToast.open({
+      text: I18n.formatString(
+        I18n.WebDAVGetError,
+        `[${WebDAVFileData.path}]`,
+      ) as string,
+    });
+  }
+}
+
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
   useEffect(() => {
@@ -107,19 +151,34 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
             isLast={!hasWebDAV}
           />
           {hasWebDAV && (
-            <CPNCell
-              title={I18n.WebDAVSync}
-              value={
-                <Switch
-                  value={enableWebDAVSync}
-                  onChange={async () => {
-                    await LS_WebDAVAutoSync.set(!enableWebDAVSync);
-                    enableWebDAVSyncSet(!enableWebDAVSync);
-                  }}
-                />
-              }
-              isLast
-            />
+            <>
+              <CPNCell
+                title={I18n.WebDAVSync}
+                value={
+                  <Switch
+                    value={enableWebDAVSync}
+                    onChange={async () => {
+                      await LS_WebDAVAutoSync.set(!enableWebDAVSync);
+                      enableWebDAVSyncSet(!enableWebDAVSync);
+                    }}
+                  />
+                }
+              />
+              <CPNCell
+                title={I18n.WebDAVRecovery}
+                value={getWebDAVFileData().name}
+                onPress={async () => {
+                  CPNLoading.open();
+                  try {
+                    await recoveryFromWebDAV();
+                  } catch (error) {
+                    CusLog.error('WebDAV', 'RecoveryFromWebDAV', error);
+                  }
+                  CPNLoading.close();
+                }}
+                isLast
+              />
+            </>
           )}
         </CPNCellGroup>
 
@@ -172,8 +231,8 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 CusLog.error('backup', 'error', error);
               }
             }}
-            isLast
           />
+          <CPNCell title={I18n.RecoveryNow} onPress={() => {}} isLast />
         </CPNCellGroup>
         <View style={{padding: 10}}>
           <CPNText style={{fontSize: 12, color: Colors.fontSubtitle}}>

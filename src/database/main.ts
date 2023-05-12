@@ -14,7 +14,7 @@ import {HistorySchema, LedgerSchema} from './ledger/schema';
 import {LS_WebDAVAutoSync} from '@/store/localStorage';
 import {SessionStorage} from '@/store/sessionStorage';
 import {getBackupDataStr} from '@/view/settings/BackupPage';
-import {WebDAVDirName, WebDAVFileNamePre} from '@/view/settings/WebDAVPage';
+import {getWebDAVFileData} from '@/view/settings/WebDAVPage';
 import {debounce} from '@/utils/tools';
 
 let realm: Realm | undefined;
@@ -69,7 +69,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
               ledger: sender.objects(LedgerSchema.name).toJSON(),
             });
             const res = await SessionStorage.WebDAVObject.PUT(
-              `/${WebDAVDirName}/${WebDAVFileNamePre}${SessionStorage.username}.json`,
+              getWebDAVFileData().path,
               backupDataStr,
               {ContentType: 'application/json'},
             );
