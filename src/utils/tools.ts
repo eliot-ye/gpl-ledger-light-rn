@@ -73,6 +73,68 @@ export function getUrlQuery(url: string, key: string) {
   return resultList ? decodeURIComponent(resultList[2]) : undefined;
 }
 
+/**
+ * 防抖函数
+ * @return - 防抖函数体
+ */
+export function debounce<T extends Array<any>>(
+  callback: (...args: T) => void,
+  option: {
+    /**
+     * 延迟毫秒数
+     * @default 500
+     * */
+    wait?: number;
+    /**
+     * - immediate=true 调用函数体时，callback 被立即调用，并锁定不能再调用。函数体会从上一次被调用后，倒计时 wait 毫秒后解锁可调用 callback。
+     * - immediate=false 函数体会从上一次被调用后，延迟 wait 毫秒后调用 callback；
+     * @default false
+     * */
+    immediate?: boolean;
+  } = {},
+): (...args: T) => void {
+  let timer: number | null = null;
+  const {wait = 500, immediate = false} = option;
+  return (...args: T) => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate) {
+      if (!timer) {
+        callback(...args);
+      }
+      timer = setTimeout(() => (timer = null), wait);
+    } else {
+      timer = setTimeout(() => {
+        timer = null;
+        callback(...args);
+      }, wait);
+    }
+  };
+}
+
+/**
+ * 节流函数。函数体在 wait 毫秒内多次调用，callback 只触发一次
+ * @return - 节流函数体
+ */
+export function throttle<T extends Array<any>>(
+  callback: (...args: T) => void,
+  /**
+   * 间隔时间，单位：毫秒
+   * @default 500
+   * */
+  wait: number = 500,
+): (...args: T) => void {
+  let startTime = 0;
+  return function (...args: T) {
+    const now = +new Date();
+    if (now - startTime >= wait) {
+      startTime = now;
+      callback(...args);
+    }
+  };
+}
+
 /** 字符串首字母大写，其余都小写 */
 export function toTitleCase(str: string) {
   return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();

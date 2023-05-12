@@ -38,6 +38,15 @@ export async function dbSetColor(item: Partial<ColorItem>) {
     realm.create(SchemaName.Color, item, Realm.UpdateMode.Modified);
   });
 }
+export async function dbSetColorList(list: Partial<ColorItem>[]) {
+  const realm = await getRealm();
+
+  realm.write(() => {
+    list.forEach(item => {
+      realm.create(SchemaName.Color, item, Realm.UpdateMode.Modified);
+    });
+  });
+}
 
 export async function dbDeleteColor(id: string) {
   const realm = await getRealm();

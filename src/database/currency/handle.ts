@@ -38,6 +38,15 @@ export async function dbSetCurrency(item: Partial<CurrencyItem>) {
     realm.create(SchemaName.Currency, item, Realm.UpdateMode.Modified);
   });
 }
+export async function dbSetCurrencyList(list: Partial<CurrencyItem>[]) {
+  const realm = await getRealm();
+
+  realm.write(() => {
+    list.forEach(item => {
+      realm.create(SchemaName.Currency, item, Realm.UpdateMode.Modified);
+    });
+  });
+}
 
 export async function dbDeleteCurrency(id: string) {
   const realm = await getRealm();

@@ -1,7 +1,7 @@
 import Realm from 'realm';
 import {stringToUint8Array} from '@/utils/encoding';
 import {navigationRef} from '@/view/Router';
-import {CPNAlert} from '@/components/base';
+import {CPNAlert, CPNToast} from '@/components/base';
 import {I18n} from '@/assets/I18n';
 
 import {ColorSchema} from './color/schema';
@@ -15,6 +15,7 @@ import {LS_WebDAVAutoSync} from '@/store/localStorage';
 import {SessionStorage} from '@/store/sessionStorage';
 import {getBackupDataStr} from '@/view/settings/BackupPage';
 import {WebDAVDirName, WebDAVFileNamePre} from '@/view/settings/WebDAVPage';
+import {debounce} from '@/utils/tools';
 
 let realm: Realm | undefined;
 
@@ -55,24 +56,29 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         },
       });
 
-      realm.addListener('change', async sender => {
-        const enabled = await LS_WebDAVAutoSync.get();
-        if (enabled && SessionStorage.WebDAVObject) {
-          const backupDataStr = getBackupDataStr({
-            username: SessionStorage.username,
-            assetType: sender.objects(AssetTypeSchema.name).toJSON(),
-            color: sender.objects(ColorSchema.name).toJSON(),
-            currency: sender.objects(CurrencySchema.name).toJSON(),
-            ledger: sender.objects(LedgerSchema.name).toJSON(),
-          });
-          const res = await SessionStorage.WebDAVObject.PUT(
-            `/${WebDAVDirName}/${WebDAVFileNamePre}${SessionStorage.username}.json`,
-            backupDataStr,
-            {ContentType: 'application/json'},
-          );
-          console.log('PUT', res);
-        }
-      });
+      realm.addListener(
+        'change',
+        debounce(async sender => {
+          const enabled = await LS_WebDAVAutoSync.get();
+          if (enabled && SessionStorage.WebDAVObject) {
+            const backupDataStr = getBackupDataStr({
+              username: SessionStorage.username,
+              assetType: sender.objects(AssetTypeSchema.name).toJSON(),
+              color: sender.objects(ColorSchema.name).toJSON(),
+              currency: sender.objects(CurrencySchema.name).toJSON(),
+              ledger: sender.objects(LedgerSchema.name).toJSON(),
+            });
+            const res = await SessionStorage.WebDAVObject.PUT(
+              `/${WebDAVDirName}/${WebDAVFileNamePre}${SessionStorage.username}.json`,
+              backupDataStr,
+              {ContentType: 'application/json'},
+            );
+            if (res.status !== 201 && res.status !== 204) {
+              CPNToast.open({text: res.responseText || res.status});
+            }
+          }
+        }),
+      );
     } else {
       if (navigationRef.isReady()) {
         CPNAlert.open({

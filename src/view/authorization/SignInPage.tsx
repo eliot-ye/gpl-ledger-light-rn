@@ -9,9 +9,15 @@ import {
   CPNIonicons,
   IONName,
   CPNAlert,
+  CPNToast,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
-import {LSUserInfo, LS_UserInfo, LS_LastUserId} from '@/store/localStorage';
+import {
+  LSUserInfo,
+  LS_UserInfo,
+  LS_LastUserId,
+  LS_WebDAVAutoSync,
+} from '@/store/localStorage';
 import {AESDecrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
@@ -25,6 +31,14 @@ import {SessionStorage} from '@/store/sessionStorage';
 import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 import {createWebDAV} from '@/libs/CreateWebDAV';
 import {CusLog} from '@/utils/tools';
+import {WebDAVDirName, WebDAVFileNamePre} from '../settings/WebDAVPage';
+import {envConstant} from '@/configs/env';
+import {
+  dbSetAssetTypeList,
+  dbSetColorList,
+  dbSetCurrencyList,
+  dbSetLedgerList,
+} from '@/database';
 
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
@@ -114,11 +128,39 @@ export function SignInPage() {
         SessionStorage.setValue('username', userInfo.username);
         SessionStorage.setValue('password', pwd);
 
-        if (userInfo.web_dav) {
+        const enabled = await LS_WebDAVAutoSync.get();
+        if (enabled && userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
             SessionStorage.setValue('WebDAVObject', WebDAV);
+            const filename = `${WebDAVFileNamePre}${SessionStorage.username}.json`;
+            const res = await WebDAV.GET(`/${WebDAVDirName}/${filename}`);
+
+            if (res.status === 200 || res.status === 204) {
+              const backupData = JSON.parse(
+                decodeURIComponent(res.responseText),
+              );
+              if (
+                backupData.username === SessionStorage.username &&
+                backupData.appId === envConstant.bundleId
+              ) {
+                const ledgerData = JSON.parse(
+                  AESDecrypt(backupData.ledgerCiphertext, pwd),
+                );
+                await dbSetLedgerList(ledgerData.ledger);
+                await dbSetAssetTypeList(ledgerData.assetType);
+                await dbSetColorList(ledgerData.color);
+                await dbSetCurrencyList(ledgerData.currency);
+              }
+            } else {
+              CPNToast.open({
+                text: I18n.formatString(
+                  I18n.WebDAVGetError,
+                  `[${filename}]`,
+                ) as string,
+              });
+            }
           } catch (error) {
             CusLog.error('SignIn', 'WebDAV', error);
           }

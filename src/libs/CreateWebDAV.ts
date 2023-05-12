@@ -63,6 +63,20 @@ export function createWebDAV(option: WebDAVOption) {
       return fromatWebDAVResponse(response);
     },
 
+    async GET(
+      path: string,
+      options = {ContentType: 'text/plain' as ContentType},
+    ) {
+      const response = await fetch(getPath(path), {
+        method: 'GET',
+        headers: {
+          Authorization,
+          'Content-Type': ContentTypes[options.ContentType],
+        },
+      });
+      return fromatWebDAVResponse(response);
+    },
+
     async MKCOL(path: string) {
       const response = await fetch(getPath(path), {
         method: 'MKCOL',
@@ -79,14 +93,6 @@ export function createWebDAV(option: WebDAVOption) {
       body: string,
       options = {ContentType: 'text/plain' as ContentType},
     ) {
-      console.log('Authorization', Authorization);
-      console.log('path', getPath(path));
-      console.log('headers', {
-        'X-Realm': 'ogzone',
-        'Content-Type': ContentTypes[options.ContentType],
-        'Content-Length': utf8ByteLength(body).toString(),
-      });
-
       const response = await fetch(getPath(path), {
         method: 'PUT',
         headers: {

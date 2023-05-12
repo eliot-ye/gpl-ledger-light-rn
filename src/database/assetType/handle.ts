@@ -37,6 +37,15 @@ export async function dbSetAssetType(item: Partial<AssetTypeItem>) {
     realm.create(SchemaName.AssetType, item, Realm.UpdateMode.Modified);
   });
 }
+export async function dbSetAssetTypeList(list: Partial<AssetTypeItem>[]) {
+  const realm = await getRealm();
+
+  realm.write(() => {
+    list.forEach(item => {
+      realm.create(SchemaName.AssetType, item, Realm.UpdateMode.Modified);
+    });
+  });
+}
 
 export async function dbDeleteAssetType(id: string) {
   const realm = await getRealm();

@@ -101,7 +101,10 @@ export default {
   WebDAVAccount: 'WebDAV 账号',
   WebDAVPassword: 'WebDAV 密码',
   WebDAVSubmit: '测试并保存 WebDAV 设置',
-  WebDAVSuccess: 'WebDAV 设置成功',
+  WebDAVSuccess: 'WebDAV: 设置成功',
+  WebDAVFailed: 'WebDAV: 测试失败',
+  WebDAVUnauthorized: 'WebDAV: 认证失败',
+  WebDAVGetError: 'WebDAV: 获取备份文件{0}失败',
 
   About: '关于',
   Version: '版本',

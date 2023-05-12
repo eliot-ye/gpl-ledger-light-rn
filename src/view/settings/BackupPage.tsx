@@ -29,7 +29,7 @@ export function getBackupDataStr(ledgerData: any) {
     appId: envConstant.bundleId,
     versionName: envConstant.versionName,
     versionCode: envConstant.versionCode,
-    usename: SessionStorage.username,
+    username: SessionStorage.username,
     ledgerCiphertext: '',
   };
   if (SessionStorage.password) {

@@ -46,21 +46,39 @@ export function WebDAVPage() {
           } else {
             const MKCOLError: WebDAVErrorResponseJson = MKCOLRes.responseJson;
             if (MKCOLError['d:error'] && MKCOLError['d:error']['s:message']) {
-              return Promise.reject(MKCOLError['d:error']['s:message']);
+              return Promise.reject({
+                status: MKCOLRes.status,
+                message: MKCOLError['d:error']['s:message'],
+              });
             }
+            return Promise.reject({
+              status: MKCOLRes.status,
+              message: MKCOLRes.responseText,
+            });
           }
         }
       } else {
         const errorJson: WebDAVErrorResponseJson = PROPFINDRes.responseJson;
         if (errorJson['d:error'] && errorJson['d:error']['s:message']) {
-          return Promise.reject(errorJson['d:error']['s:message']);
+          return Promise.reject({
+            status: PROPFINDRes.status,
+            message: errorJson['d:error']['s:message'],
+          });
         }
+        return Promise.reject({
+          status: PROPFINDRes.status,
+          message: PROPFINDRes.responseText,
+        });
       }
     } catch (error: any) {
       const errorJson: WebDAVErrorResponseJson = error.responseJson;
       if (errorJson['d:error'] && errorJson['d:error']['s:message']) {
         return Promise.reject(errorJson['d:error']['s:message']);
       }
+      return Promise.reject({
+        status: error.status,
+        message: error.responseText,
+      });
     }
   }
 
@@ -113,7 +131,13 @@ export function WebDAVPage() {
 
               CPNToast.open({text: I18n.WebDAVSuccess});
             } catch (error: any) {
-              CPNAlert.open({message: error});
+              if (error.message) {
+                CPNToast.open({text: error.message});
+              } else if (error.status === 401) {
+                CPNAlert.open({message: I18n.WebDAVUnauthorized});
+              } else {
+                CPNToast.open({text: I18n.WebDAVFailed});
+              }
             }
             CPNLoading.close();
           }}

@@ -17,6 +17,15 @@ export async function dbSetLedger(item: Partial<LedgerItem>) {
     realm.create(SchemaName.Ledger, item, Realm.UpdateMode.Modified);
   });
 }
+export async function dbSetLedgerList(list: Partial<LedgerItem>[]) {
+  const realm = await getRealm();
+
+  realm.write(() => {
+    list.forEach(item => {
+      realm.create(SchemaName.Ledger, item, Realm.UpdateMode.Modified);
+    });
+  });
+}
 
 export async function dbDeleteLedger(id: string) {
   const realm = await getRealm();
