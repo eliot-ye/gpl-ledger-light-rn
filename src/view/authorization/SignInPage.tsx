@@ -121,13 +121,13 @@ export function SignInPage() {
         SessionStorage.setValue('username', userInfo.username);
         SessionStorage.setValue('password', pwd);
 
-        const enabled = await LS_WebDAVAutoSync.get();
-        if (enabled && userInfo.web_dav) {
+        if (userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
             SessionStorage.setValue('WebDAVObject', WebDAV);
-            await recoveryFromWebDAV(false);
+            const enabled = await LS_WebDAVAutoSync.get();
+            enabled && (await recoveryFromWebDAV(false));
           } catch (error) {
             CusLog.error('SignIn', 'WebDAV', error);
           }

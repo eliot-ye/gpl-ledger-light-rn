@@ -5,7 +5,7 @@ const sessionStorageDefault = {
   userId: undefined as string | undefined,
   username: undefined as string | undefined,
   password: undefined as string | undefined,
-  WebDAVObject: undefined as WebDAVObject | undefined,
+  WebDAVObject: null as WebDAVObject | null,
 };
 
 type SessionStorageDefault = typeof sessionStorageDefault;

@@ -50,7 +50,7 @@ export function createWebDAV(option: WebDAVOption) {
   return {
     serverPath: option.serverPath,
     account: option.account,
-    password: option.account,
+    password: option.password,
     async PROPFIND(path: string) {
       const response = await fetch(getPath(path), {
         method: 'PROPFIND',
