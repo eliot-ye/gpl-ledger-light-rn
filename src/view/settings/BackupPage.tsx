@@ -29,6 +29,7 @@ import {PageProps} from '../Router';
 import {LS_WebDAVAutoSync} from '@/store/localStorage';
 import {envConstant} from '@/configs/env';
 import {getWebDAVFileData} from './WebDAVPage';
+import {StoreBackupPage} from '@/store';
 
 export function getBackupDataStr(ledgerData: any) {
   const ledgerStr = JSON.stringify(ledgerData);
@@ -139,6 +140,8 @@ async function recoveryFromJSON(backupData: any) {
 }
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
+  StoreBackupPage.useState();
+
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
   useEffect(() => {
     LS_WebDAVAutoSync.get().then(enable => enableWebDAVSyncSet(enable));
@@ -259,7 +262,12 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
           />
         </CPNCellGroup>
         <View style={{padding: 10}}>
-          <CPNText style={{fontSize: 12, color: Colors.fontSubtitle}}>
+          <CPNText
+            style={{
+              fontSize: 12,
+              color: Colors.fontSubtitle,
+              marginBottom: 10,
+            }}>
             {I18n.formatString(
               I18n.BackupPlaceholder,
               getBackupPath(backupDirBase || FS.DocumentDirectoryPath).filePath,

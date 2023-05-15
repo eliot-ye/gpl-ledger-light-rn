@@ -8,7 +8,7 @@ import {
   CPNPageModal,
 } from '@components/base';
 import {RouterView} from '@/view/RouterView';
-import {StoreRoot, StoreHomePage} from '@/store';
+import {StoreRoot, StoreHomePage, StoreBackupPage} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
 
 function RootView() {
@@ -26,7 +26,9 @@ function RootView() {
 
   return (
     <StoreHomePage.Provider>
-      <RouterView />
+      <StoreBackupPage.Provider>
+        <RouterView />
+      </StoreBackupPage.Provider>
     </StoreHomePage.Provider>
   );
 }

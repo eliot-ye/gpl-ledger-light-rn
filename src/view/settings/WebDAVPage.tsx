@@ -4,16 +4,19 @@ import {
   CPNButton,
   CPNFormItem,
   CPNInput,
+  CPNIonicons,
   CPNLoading,
   CPNPageView,
   CPNToast,
+  IONName,
 } from '@/components/base';
 import {WebDAVErrorResponseJson, createWebDAV} from '@/libs/CreateWebDAV';
+import {StoreBackupPage} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {SessionStorage} from '@/store/sessionStorage';
 import {AESEncrypt} from '@/utils/encoding';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 
 const WebDAVDirName = 'gpl_ledger';
 const WebDAVFileNamePre = 'backup_';
@@ -27,6 +30,9 @@ export function getWebDAVFileData() {
 }
 
 export function WebDAVPage() {
+  const BackupPageState = StoreBackupPage.useState();
+  const BackupPageDispatch = StoreBackupPage.useDispatch();
+
   const [WebDAVDetails, WebDAVDetailsSet] = useState({
     serverPath: SessionStorage.WebDAVObject?.serverPath || '',
     account: SessionStorage.WebDAVObject?.account || '',
@@ -91,7 +97,45 @@ export function WebDAVPage() {
   }
 
   return (
-    <CPNPageView title={I18n.WebDAV}>
+    <CPNPageView
+      title={I18n.WebDAV}
+      rightIcon={
+        !!SessionStorage.WebDAVObject && (
+          <TouchableOpacity
+            onPress={async () => {
+              CPNAlert.open({
+                message: I18n.formatString(
+                  I18n.DeleteConfirm,
+                  ' ' + I18n.WebDAV,
+                ),
+                buttons: [
+                  {text: I18n.Cancel},
+                  {
+                    text: I18n.Confirm,
+                    async onPress() {
+                      await LS_UserInfo.update({
+                        id: SessionStorage.userId,
+                        web_dav: '',
+                      });
+                      SessionStorage.setValue('WebDAVObject', null);
+                      WebDAVDetailsSet({
+                        serverPath: '',
+                        account: '',
+                        password: '',
+                      });
+                      BackupPageDispatch(
+                        'updateCount',
+                        BackupPageState.updateCount + 1,
+                      );
+                    },
+                  },
+                ],
+              });
+            }}>
+            <CPNIonicons name={IONName.Delete} />
+          </TouchableOpacity>
+        )
+      }>
       <View style={{padding: 20}}>
         <CPNFormItem style={{paddingBottom: 10}} title={I18n.WebDAVServerPath}>
           <CPNInput
@@ -125,7 +169,7 @@ export function WebDAVPage() {
             CPNLoading.open();
             try {
               const WebDAVObject = await onSubmit();
-              SessionStorage.setValue('WebDAVObject', WebDAVObject);
+              SessionStorage.setValue('WebDAVObject', WebDAVObject || null);
 
               if (SessionStorage.password) {
                 await LS_UserInfo.update({
@@ -137,6 +181,10 @@ export function WebDAVPage() {
                 });
               }
 
+              BackupPageDispatch(
+                'updateCount',
+                BackupPageState.updateCount + 1,
+              );
               CPNToast.open({text: I18n.WebDAVSuccess});
             } catch (error: any) {
               if (error.message) {
