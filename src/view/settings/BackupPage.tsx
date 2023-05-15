@@ -1,4 +1,5 @@
 import {
+  CPNAlert,
   CPNCell,
   CPNCellGroup,
   CPNLoading,
@@ -89,7 +90,7 @@ async function backupHandler(basePath: string, backupDataStr: string) {
 }
 
 const backupDirBase = Platform.select({
-  android: FS.ExternalDirectoryPath,
+  android: FS.DownloadDirectoryPath,
   ios: FS.DocumentDirectoryPath,
 });
 
@@ -103,22 +104,11 @@ export async function recoveryFromWebDAV(showSuccess = true) {
 
   if (res.status === 200 || res.status === 204) {
     const backupData = JSON.parse(decodeURIComponent(res.responseText));
-    if (
-      backupData.username === SessionStorage.username &&
-      backupData.appId === envConstant.bundleId
-    ) {
-      const ledgerData = JSON.parse(
-        AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password),
-      );
-      await dbSetLedgerList(ledgerData.ledger);
-      await dbSetAssetTypeList(ledgerData.assetType);
-      await dbSetColorList(ledgerData.color);
-      await dbSetCurrencyList(ledgerData.currency);
-      if (showSuccess) {
-        CPNToast.open({
-          text: I18n.WebDAVRecoverySuccess,
-        });
-      }
+    await recoveryFromJSON(backupData);
+    if (showSuccess) {
+      CPNToast.open({
+        text: I18n.WebDAVRecoverySuccess,
+      });
     }
   } else {
     CPNToast.open({
@@ -128,6 +118,24 @@ export async function recoveryFromWebDAV(showSuccess = true) {
       ) as string,
     });
   }
+}
+
+async function recoveryFromJSON(backupData: any) {
+  if (backupData.appId !== envConstant.bundleId) {
+    CPNAlert.open({message: I18n.BackupFileError});
+    return Promise.reject();
+  }
+  if (backupData.username !== SessionStorage.username) {
+    CPNAlert.open({message: I18n.BackupFileError2});
+    return Promise.reject();
+  }
+  const ledgerData = JSON.parse(
+    AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password || ''),
+  );
+  await dbSetLedgerList(ledgerData.ledger);
+  await dbSetAssetTypeList(ledgerData.assetType);
+  await dbSetColorList(ledgerData.color);
+  await dbSetCurrencyList(ledgerData.currency);
 }
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
@@ -232,18 +240,36 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
               }
             }}
           />
-          <CPNCell title={I18n.RecoveryNow} onPress={() => {}} isLast />
+          <CPNCell
+            title={I18n.RecoveryNow}
+            onPress={async () => {
+              try {
+                const backupItem = getBackupPath(
+                  backupDirBase || FS.DownloadDirectoryPath,
+                );
+                const res = await FS.readFile(backupItem.filePath);
+                const backupData = JSON.parse(res);
+                await recoveryFromJSON(backupData);
+                CPNToast.open({text: I18n.RecoverySuccess});
+              } catch (error) {
+                CPNToast.open({text: I18n.RecoverySuccess});
+              }
+            }}
+            isLast
+          />
         </CPNCellGroup>
         <View style={{padding: 10}}>
           <CPNText style={{fontSize: 12, color: Colors.fontSubtitle}}>
-            {Platform.OS === 'ios'
-              ? I18n.BackupPlaceholderIOS
-              : I18n.formatString(
-                  I18n.BackupPlaceholder,
-                  getBackupPath(backupDirBase || FS.ExternalDirectoryPath)
-                    .filePath,
-                )}
+            {I18n.formatString(
+              I18n.BackupPlaceholder,
+              getBackupPath(backupDirBase || FS.DocumentDirectoryPath).filePath,
+            )}
           </CPNText>
+          {Platform.OS === 'ios' && (
+            <CPNText style={{fontSize: 12, color: Colors.fontSubtitle}}>
+              {I18n.BackupPlaceholderIOS}
+            </CPNText>
+          )}
         </View>
       </View>
     </CPNPageView>
