@@ -26,6 +26,10 @@ export function CreateReactiveConstant<
 
   const returnValue = {
     ...defaultValue,
+
+    /**
+     * @param value - 不能是`undefined`和是函数
+     */
     setValue<K extends Key>(key: K, value: T[K]) {
       if (value !== undefined && typeof returnValue[value] !== 'function') {
         returnValue[key] = value;
