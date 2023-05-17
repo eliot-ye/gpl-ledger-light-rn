@@ -20,7 +20,6 @@ import {
   dbSetCurrency,
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
-import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
@@ -49,10 +48,14 @@ export function CurrencyManagementPage() {
 
   const dataShowMemo = useMemo(() => {
     if (tabActive === ShowTabType.NotUsed) {
-      return CurrencyList.filter(item => !CurrencyUsedIds.includes(item.id));
+      return CurrencyList.filter(
+        item => !CurrencyUsedIds.includes(item.abbreviation),
+      );
     }
     if (tabActive === ShowTabType.Used) {
-      return CurrencyList.filter(item => CurrencyUsedIds.includes(item.id));
+      return CurrencyList.filter(item =>
+        CurrencyUsedIds.includes(item.abbreviation),
+      );
     }
 
     return CurrencyList;
@@ -70,7 +73,7 @@ export function CurrencyManagementPage() {
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
           title={
-            detailsRef.current.id
+            detailsRef.current.abbreviation
               ? I18n.formatString(
                   I18n.EditCurrency,
                   detailsRef.current.name || '',
@@ -82,7 +85,7 @@ export function CurrencyManagementPage() {
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}
           rightIcon={
-            !!detailsRef.current.id && (
+            !!detailsRef.current.abbreviation && (
               <TouchableOpacity
                 onPress={async () => {
                   CPNAlert.open({
@@ -95,8 +98,8 @@ export function CurrencyManagementPage() {
                       {
                         text: I18n.Confirm,
                         async onPress() {
-                          if (detailsRef.current.id) {
-                            dbDeleteCurrency(detailsRef.current.id);
+                          if (detailsRef.current.abbreviation) {
+                            dbDeleteCurrency(detailsRef.current.abbreviation);
                             await getDBCurrency();
                             showDetailsModalSet(false);
                           }
@@ -127,10 +130,12 @@ export function CurrencyManagementPage() {
             <CPNFormItem
               style={{paddingBottom: 20}}
               title={I18n.CurrencyAbbreviation}
+              description={I18n.CurrencyAbbreviationDesc}
               hasError={!!detailsError.abbreviation}
               errorText={detailsError.abbreviation}>
               <CPNInput
                 value={details.abbreviation}
+                editable={!detailsRef.current.abbreviation}
                 onChangeText={abbreviation => {
                   detailsSet({...details, abbreviation});
                   detailsErrorSet({...detailsError, abbreviation: ''});
@@ -162,6 +167,13 @@ export function CurrencyManagementPage() {
 
                 if (!details.abbreviation) {
                   _detailsError.abbreviation = I18n.CurrencyAbbreviationError1;
+                } else if (
+                  details.abbreviation &&
+                  CurrencyList.map(item => item.abbreviation).includes(
+                    details.abbreviation,
+                  )
+                ) {
+                  _detailsError.abbreviation = I18n.CurrencyAbbreviationError2;
                 }
 
                 if (!details.symbol) {
@@ -176,9 +188,6 @@ export function CurrencyManagementPage() {
                   return;
                 }
 
-                if (!details.id) {
-                  details.id = getRandomStrMD5();
-                }
                 await dbSetCurrency(details);
                 await getDBCurrency();
                 showDetailsModalSet(false);
@@ -198,11 +207,11 @@ export function CurrencyManagementPage() {
           <CPNCellGroup>
             {dataShowMemo.map(item => (
               <CPNCell
-                key={item.id}
+                key={item.abbreviation}
                 title={`${item.name}(${item.abbreviation})`}
                 value={item.symbol}
                 onPress={
-                  CurrencyUsedIds.includes(item.id)
+                  CurrencyUsedIds.includes(item.abbreviation)
                     ? undefined
                     : () => {
                         detailsSet(item);

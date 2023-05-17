@@ -7,7 +7,7 @@ export async function dbGetCurrencyUsedIds() {
   const realm = await getRealm();
 
   const res = realm.objects<LedgerItem>(SchemaName.Ledger);
-  const ids = res.map(item => item.currency.id);
+  const ids = res.map(item => item.currency.symbol);
 
   return ids;
 }
@@ -25,9 +25,9 @@ export async function dbGetCurrency(
 
   const usedIds = await dbGetCurrencyUsedIds();
   if (isUsed === true) {
-    return res.filter(item => usedIds.includes(item.id));
+    return res.filter(item => usedIds.includes(item.symbol));
   } else {
-    return res.filter(item => !usedIds.includes(item.id));
+    return res.filter(item => !usedIds.includes(item.symbol));
   }
 }
 
@@ -48,13 +48,16 @@ export async function dbSetCurrencyList(list: Partial<CurrencyItem>[]) {
   });
 }
 
-export async function dbDeleteCurrency(id: string) {
+export async function dbDeleteCurrency(symbol: string) {
   const realm = await getRealm();
 
-  const data = realm.objectForPrimaryKey<CurrencyItem>(SchemaName.Currency, id);
+  const data = realm.objectForPrimaryKey<CurrencyItem>(
+    SchemaName.Currency,
+    symbol,
+  );
 
   if (!data) {
-    return Promise.reject(`Currency id (${id}) 不存在`);
+    return Promise.reject(`Currency symbol (${symbol}) 不存在`);
   }
 
   realm.write(() => {

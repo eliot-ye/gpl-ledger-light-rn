@@ -1,12 +1,18 @@
-import type {ObjectSchema, ObjectSchemaProperty, PropertyType} from 'realm';
+import type {ObjectSchemaProperty, PropertyType} from 'realm';
 
-interface Schema<T> extends ObjectSchema {
+interface Schema<T extends Record<string, any>> {
+  name: string;
+  embedded?: boolean;
+  asymmetric?: boolean;
+  primaryKey?: keyof T;
   properties: {
     [K in keyof T]: ObjectSchemaProperty | PropertyType;
   };
 }
 
-export function createObjectSchema<T>(schema: Schema<T>) {
+export function createObjectSchema<T extends Record<string, any>>(
+  schema: Schema<T>,
+) {
   return schema;
 }
 

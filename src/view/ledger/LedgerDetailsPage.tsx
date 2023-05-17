@@ -192,11 +192,11 @@ export function LedgerDetailsPage() {
                         ? I18n.AvailableAssets
                         : I18n.UnavailableAssets
                     })`,
-                    value: item.id,
+                    value: item.symbol,
                   })),
                 [assetTypeList],
               )}
-              checked={details.assetType?.id}
+              checked={details.assetType?.symbol}
               onSelect={item => {
                 detailsSet({...details, assetType: item});
                 detailsErrorSet({...detailsError, assetType: ''});
@@ -240,7 +240,7 @@ export function LedgerDetailsPage() {
                     marginRight: 10,
                   }}
                 />
-                {colorsUsedIds.includes(item.id) && (
+                {colorsUsedIds.includes(item.value) && (
                   <CPNText
                     style={{color: Colors.fontPlaceholder, fontSize: 12}}>
                     ({I18n.Used})
@@ -273,11 +273,11 @@ export function LedgerDetailsPage() {
                   currencyList.map(item => ({
                     ...item,
                     label: `${item.name}(${item.abbreviation})`,
-                    value: item.id,
+                    value: item.symbol,
                   })),
                 [currencyList],
               )}
-              checked={details.currency?.id}
+              checked={details.currency?.symbol}
               onSelect={item => {
                 detailsSet({...details, currency: item});
                 detailsErrorSet({...detailsError, currency: ''});
@@ -363,8 +363,8 @@ export function LedgerDetailsPage() {
             if (
               route.params?.name !== details.name ||
               route.params?.amountMoney !== details.amountMoney ||
-              route.params?.assetType.id !== details.assetType?.id ||
-              route.params?.color.id !== details.color?.id
+              route.params?.assetType.symbol !== details.assetType?.symbol ||
+              route.params?.color.value !== details.color?.value
             ) {
               await dbSetLedger(details);
               HomePageDispatch('updateCount', HomePageState.updateCount + 1);

@@ -1,17 +1,17 @@
 import {SchemaName, createObjectSchema} from '../schemaType';
 
 export interface AssetTypeItem {
-  id: string;
   name: string;
+  symbol: string;
   isAvailableAssets: boolean;
 }
 
 export const AssetTypeSchema = createObjectSchema<AssetTypeItem>({
   name: SchemaName.AssetType,
-  primaryKey: 'id',
+  primaryKey: 'symbol',
   properties: {
-    id: 'string',
     name: 'string',
+    symbol: 'string',
     isAvailableAssets: 'bool',
   },
 });

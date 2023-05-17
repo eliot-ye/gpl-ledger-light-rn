@@ -21,7 +21,6 @@ import {
   dbSetAssetType,
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
-import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
@@ -50,10 +49,14 @@ export function AssetTypeManagementPage() {
 
   const dataShowMemo = useMemo(() => {
     if (tabActive === ShowTabType.NotUsed) {
-      return AssetTypeList.filter(item => !AssetTypeUsedIds.includes(item.id));
+      return AssetTypeList.filter(
+        item => !AssetTypeUsedIds.includes(item.symbol),
+      );
     }
     if (tabActive === ShowTabType.Used) {
-      return AssetTypeList.filter(item => AssetTypeUsedIds.includes(item.id));
+      return AssetTypeList.filter(item =>
+        AssetTypeUsedIds.includes(item.symbol),
+      );
     }
 
     return AssetTypeList;
@@ -73,7 +76,7 @@ export function AssetTypeManagementPage() {
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
           title={
-            detailsRef.current.id
+            detailsRef.current.symbol
               ? I18n.formatString(
                   I18n.EditAssetType,
                   detailsRef.current.name || '',
@@ -85,10 +88,9 @@ export function AssetTypeManagementPage() {
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}
           rightIcon={
-            !!detailsRef.current.id && (
+            !!detailsRef.current.symbol && (
               <TouchableOpacity
                 onPress={async () => {
-                  // showDeleteAlertSet(true);
                   CPNAlert.open({
                     message: I18n.formatString(
                       I18n.DeleteConfirm,
@@ -99,8 +101,8 @@ export function AssetTypeManagementPage() {
                       {
                         text: I18n.Confirm,
                         async onPress() {
-                          if (detailsRef.current.id) {
-                            dbDeleteAssetType(detailsRef.current.id);
+                          if (detailsRef.current.symbol) {
+                            dbDeleteAssetType(detailsRef.current.symbol);
                             await getDBAssetTypes();
                             showDetailsModalSet(false);
                           }
@@ -124,6 +126,22 @@ export function AssetTypeManagementPage() {
                 onChangeText={name => {
                   detailsSet({...details, name});
                   detailsErrorSet({...detailsError, name: ''});
+                }}
+              />
+            </CPNFormItem>
+
+            <CPNFormItem
+              style={{paddingBottom: 20}}
+              title={I18n.Symbol}
+              description={I18n.SymbolDesc}
+              hasError={!!detailsError.symbol}
+              errorText={detailsError.symbol}>
+              <CPNInput
+                value={details.symbol}
+                editable={!detailsRef.current.symbol}
+                onChangeText={symbol => {
+                  detailsSet({...details, symbol});
+                  detailsErrorSet({...detailsError, symbol: ''});
                 }}
               />
             </CPNFormItem>
@@ -167,6 +185,17 @@ export function AssetTypeManagementPage() {
                   _detailsError.isAvailableAssets = I18n.AssetTypeError;
                 }
 
+                if (!details.symbol) {
+                  _detailsError.symbol = I18n.SymbolError;
+                } else if (
+                  details.symbol &&
+                  AssetTypeList.map(item => item.symbol).includes(
+                    details.symbol,
+                  )
+                ) {
+                  _detailsError.symbol = I18n.SymbolError2;
+                }
+
                 const errorList = Object.values(_detailsError).map(
                   _item => !!_item,
                 );
@@ -175,9 +204,6 @@ export function AssetTypeManagementPage() {
                   return;
                 }
 
-                if (!details.id) {
-                  details.id = getRandomStrMD5();
-                }
                 await dbSetAssetType(details);
                 await getDBAssetTypes();
                 showDetailsModalSet(false);
@@ -197,7 +223,7 @@ export function AssetTypeManagementPage() {
           <CPNCellGroup>
             {dataShowMemo.map(item => (
               <CPNCell
-                key={item.id}
+                key={item.symbol}
                 title={item.name}
                 value={
                   item.isAvailableAssets
@@ -205,7 +231,7 @@ export function AssetTypeManagementPage() {
                     : I18n.UnavailableAssets
                 }
                 onPress={
-                  AssetTypeUsedIds.includes(item.id)
+                  AssetTypeUsedIds.includes(item.symbol)
                     ? undefined
                     : () => {
                         detailsSet(item);

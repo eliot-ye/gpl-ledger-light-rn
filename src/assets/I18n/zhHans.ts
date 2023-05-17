@@ -42,14 +42,21 @@ export default {
   Username: '用户名',
   UsernameError1: '请输入有效用户名',
 
+  Symbol: '标记',
+  SymbolDesc: '注意：标记具有唯一性和不可更改性',
+  SymbolError: '请输入有效标记',
+  SymbolError2: '标记已存在',
+
   ColorManagement: '颜色管理',
   EditColor: '编辑颜色：{0}',
   AddColor: '新增颜色',
   ColorName: '颜色名称',
   ColorNameError1: '颜色名称不能为空',
   ColorValue: '颜色值',
+  ColorValueDesc: '注意：颜色值具有唯一性和不可更改性',
   ColorValueError1: '颜色值不能为空',
   ColorValueError2: '颜色值必须为HEX、rgb、rgba格式',
+  ColorValueError3: '颜色值已存在',
 
   CurrencyManagement: '币种管理',
   EditCurrency: '编辑币种：{0}',
@@ -59,7 +66,9 @@ export default {
   CurrencySymbol: '币种符号',
   CurrencySymbolError1: '币种符号不能为空',
   CurrencyAbbreviation: '币种缩写',
+  CurrencyAbbreviationDesc: '注意：币种缩写具有唯一性和不可更改性',
   CurrencyAbbreviationError1: '币种缩写不能为空',
+  CurrencyAbbreviationError2: '币种已存在',
 
   AssetTypeManagement: '资产类型管理',
   EditAssetType: '编辑资产类型：{0}',

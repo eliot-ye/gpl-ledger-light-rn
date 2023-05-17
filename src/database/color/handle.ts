@@ -7,7 +7,7 @@ export async function dbGetColorsUsedIds() {
   const realm = await getRealm();
 
   const res = realm.objects<LedgerItem>(SchemaName.Ledger);
-  const ids = res.map(item => item.color.id);
+  const ids = res.map(item => item.color.value);
 
   return ids;
 }
@@ -25,9 +25,9 @@ export async function dbGetColors(
 
   const usedIds = await dbGetColorsUsedIds();
   if (isUsed === true) {
-    return res.filter(item => usedIds.includes(item.id));
+    return res.filter(item => usedIds.includes(item.value));
   } else {
-    return res.filter(item => !usedIds.includes(item.id));
+    return res.filter(item => !usedIds.includes(item.value));
   }
 }
 
@@ -48,13 +48,13 @@ export async function dbSetColorList(list: Partial<ColorItem>[]) {
   });
 }
 
-export async function dbDeleteColor(id: string) {
+export async function dbDeleteColor(value: string) {
   const realm = await getRealm();
 
-  const data = realm.objectForPrimaryKey<ColorItem>(SchemaName.Color, id);
+  const data = realm.objectForPrimaryKey<ColorItem>(SchemaName.Color, value);
 
   if (!data) {
-    return Promise.reject(`Color id (${id}) 不存在`);
+    return Promise.reject(`Color value (${value}) 不存在`);
   }
 
   realm.write(() => {

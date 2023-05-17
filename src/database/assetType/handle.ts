@@ -7,7 +7,7 @@ export async function dbGetAssetTypesUsedIds() {
   const realm = await getRealm();
 
   const res = realm.objects<LedgerItem>(SchemaName.Ledger);
-  const ids = res.map(item => item.assetType.id);
+  const ids = res.map(item => item.assetType.symbol);
 
   return ids;
 }
@@ -24,9 +24,9 @@ export async function dbGetAssetTypes(
 
   const usedIds = await dbGetAssetTypesUsedIds();
   if (isUsed === true) {
-    return res.filter(item => usedIds.includes(item.id));
+    return res.filter(item => usedIds.includes(item.symbol));
   } else {
-    return res.filter(item => !usedIds.includes(item.id));
+    return res.filter(item => !usedIds.includes(item.symbol));
   }
 }
 
@@ -47,16 +47,16 @@ export async function dbSetAssetTypeList(list: Partial<AssetTypeItem>[]) {
   });
 }
 
-export async function dbDeleteAssetType(id: string) {
+export async function dbDeleteAssetType(symbol: string) {
   const realm = await getRealm();
 
   const data = realm.objectForPrimaryKey<AssetTypeItem>(
     SchemaName.AssetType,
-    id,
+    symbol,
   );
 
   if (!data) {
-    return Promise.reject(`AssetType id (${id}) 不存在`);
+    return Promise.reject(`AssetType symbol (${symbol}) 不存在`);
   }
 
   realm.write(() => {

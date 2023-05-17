@@ -50,10 +50,10 @@ export function ColorManagementPage() {
 
   const dataShowMemo = useMemo(() => {
     if (tabActive === ShowTabType.NotUsed) {
-      return ColorsList.filter(item => !ColorsUsedIds.includes(item.id));
+      return ColorsList.filter(item => !ColorsUsedIds.includes(item.value));
     }
     if (tabActive === ShowTabType.Used) {
-      return ColorsList.filter(item => ColorsUsedIds.includes(item.id));
+      return ColorsList.filter(item => ColorsUsedIds.includes(item.value));
     }
 
     return ColorsList;
@@ -71,7 +71,7 @@ export function ColorManagementPage() {
         onClose={() => showDetailsModalSet(false)}>
         <CPNPageView
           title={
-            detailsRef.current.id
+            detailsRef.current.value
               ? I18n.formatString(I18n.EditColor, detailsRef.current.name || '')
               : I18n.AddColor
           }
@@ -81,7 +81,7 @@ export function ColorManagementPage() {
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}
           rightIcon={
-            !!detailsRef.current.id && (
+            !!detailsRef.current.value && (
               <TouchableOpacity
                 onPress={async () => {
                   CPNAlert.open({
@@ -94,8 +94,8 @@ export function ColorManagementPage() {
                       {
                         text: I18n.Confirm,
                         async onPress() {
-                          if (detailsRef.current.id) {
-                            dbDeleteColor(detailsRef.current.id);
+                          if (detailsRef.current.value) {
+                            dbDeleteColor(detailsRef.current.value);
                             await getDBColors();
                             showDetailsModalSet(false);
                           }
@@ -145,10 +145,12 @@ export function ColorManagementPage() {
                   />
                 </View>
               }
+              description={I18n.ColorValueDesc}
               hasError={!!detailsError.value}
               errorText={detailsError.value}>
               <CPNInput
                 value={details.value}
+                editable={!detailsRef.current.value}
                 onChangeText={value => {
                   detailsSet({...details, value});
                   detailsErrorSet({...detailsError, value: ''});
@@ -171,6 +173,11 @@ export function ColorManagementPage() {
                   !details.value.startsWith('rgb')
                 ) {
                   _detailsError.value = I18n.ColorValueError2;
+                } else if (
+                  details.value &&
+                  ColorsList.map(item => item.value).includes(details.value)
+                ) {
+                  _detailsError.value = I18n.ColorValueError3;
                 }
 
                 const errorList = Object.values(_detailsError).map(
@@ -181,8 +188,8 @@ export function ColorManagementPage() {
                   return;
                 }
 
-                if (!details.id) {
-                  details.id = getRandomStrMD5();
+                if (!details.value) {
+                  details.value = getRandomStrMD5();
                 }
                 await dbSetColor(details);
                 await getDBColors();
@@ -203,7 +210,7 @@ export function ColorManagementPage() {
           <CPNCellGroup>
             {dataShowMemo.map(item => (
               <CPNCell
-                key={item.id}
+                key={item.value}
                 title={
                   <>
                     <View
@@ -219,7 +226,7 @@ export function ColorManagementPage() {
                 }
                 value={item.value}
                 onPress={
-                  ColorsUsedIds.includes(item.id)
+                  ColorsUsedIds.includes(item.value)
                     ? undefined
                     : () => {
                         detailsSet(item);

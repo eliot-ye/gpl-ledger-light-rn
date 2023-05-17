@@ -1,7 +1,6 @@
 import {SchemaName, createObjectSchema} from '../schemaType';
 
 export interface CurrencyItem {
-  id: string;
   name: string;
   abbreviation: string;
   symbol: string;
@@ -9,9 +8,8 @@ export interface CurrencyItem {
 
 export const CurrencySchema = createObjectSchema<CurrencyItem>({
   name: SchemaName.Currency,
-  primaryKey: 'id',
+  primaryKey: 'abbreviation',
   properties: {
-    id: 'string',
     name: 'string',
     abbreviation: 'string',
     symbol: 'string',

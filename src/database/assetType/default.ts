@@ -1,14 +1,13 @@
-import {getRandomStrMD5} from '@/utils/tools';
 import {AssetTypeItem} from './schema';
 
 export function getDefaultAssetTypes(): AssetTypeItem[] {
   return [
-    {id: getRandomStrMD5(), name: '现金', isAvailableAssets: true},
-    {id: getRandomStrMD5(), name: '支付宝', isAvailableAssets: true},
-    {id: getRandomStrMD5(), name: '微信', isAvailableAssets: true},
+    {symbol: 'Cash', name: '现金', isAvailableAssets: true},
+    {symbol: 'Alipay', name: '支付宝', isAvailableAssets: true},
+    {symbol: 'WeChat', name: '微信', isAvailableAssets: true},
 
-    {id: getRandomStrMD5(), name: '基金', isAvailableAssets: false},
-    {id: getRandomStrMD5(), name: '定期', isAvailableAssets: false},
-    {id: getRandomStrMD5(), name: '理财', isAvailableAssets: false},
+    {symbol: 'Funds', name: '基金', isAvailableAssets: false},
+    {symbol: 'FixedDeposit', name: '定期', isAvailableAssets: false},
+    {symbol: 'FinancialManagement', name: '理财', isAvailableAssets: false},
   ];
 }
