@@ -126,7 +126,7 @@ export function throttle<T extends Array<any>>(
   wait: number = 500,
 ): (...args: T) => void {
   let startTime = 0;
-  return function (...args: T) {
+  return (...args: T) => {
     const now = +new Date();
     if (now - startTime >= wait) {
       startTime = now;
