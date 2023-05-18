@@ -1,5 +1,7 @@
 export default {
-  formatDate: 'yyyy-MM-dd',
+  fromatDateMonth: 'MM-dd',
+  formatDateFull: 'yyyy-MM-dd',
+  formatDateTime: 'yyyy-MM-dd HH:mm',
 
   OK: '好的',
   Confirm: '确认',

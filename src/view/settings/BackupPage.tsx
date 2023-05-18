@@ -133,6 +133,10 @@ async function recoveryFromJSON(backupData: any) {
   const ledgerData = JSON.parse(
     AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password || ''),
   );
+  if (ledgerData.username !== SessionStorage.username) {
+    CPNAlert.open({message: I18n.BackupFileError2});
+    return Promise.reject();
+  }
   await dbSetLedgerList(ledgerData.ledger);
   await dbSetAssetTypeList(ledgerData.assetType);
   await dbSetColorList(ledgerData.color);

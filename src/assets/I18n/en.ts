@@ -1,5 +1,5 @@
 export default {
-  formatDate: 'dd-MMM-yyyy',
+  fromatDateMonth: 'dd-MMM',
 
   OK: 'OK',
   Confirm: 'Confirm',
