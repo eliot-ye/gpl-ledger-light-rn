@@ -1,8 +1,19 @@
 import DeviceInfo from 'react-native-device-info';
 
-export type ApiServerMap = typeof apiServerMap;
+export type ApiServerMap = typeof ServerMap;
 export type ApiServerName = keyof ApiServerMap;
-const apiServerMap = {
+interface ApiServerItem {
+  /** 必须以 `/` 结尾 */
+  readonly Domain: string;
+  /** 不可以以 `/` 开头和结尾 */
+  readonly ServerMap?: Partial<ApiServerMap>;
+  readonly ServerEnable?: ApiServerName[];
+}
+interface CEApiServerItem extends ApiServerItem {
+  readonly ServerEnable: ApiServerName[];
+}
+
+const ServerMap = {
   giteePublic: 'public/GPL/ledger-light-rn',
 };
 
@@ -16,14 +27,14 @@ export default {
   versionName: DeviceInfo.getVersion(),
   versionCode: DeviceInfo.getBuildNumber(),
 
-  /** 必须以 `/` 结尾 */
-  apiDomain: 'https://eliot-ye.gitee.io/',
-  /** 不可以以 `/` 开头和结尾 */
-  apiServerMap,
+  apiServerMap: ServerMap,
 
-  /** 必须以 `/` 结尾 */
-  CE_ApiDomain: '',
-  /** 不可以以 `/` 开头和结尾 */
-  CE_ApiServerMap: {} as Partial<ApiServerMap>,
-  CE_ApiServerEnable: [] as ApiServerName[],
+  ApiServerList: [
+    {
+      Domain: 'https://eliot-ye.gitee.io/',
+      ServerEnable: ['giteePublic'],
+    },
+  ] as ApiServerItem[],
+
+  CE_ApiServerList: [] as CEApiServerItem[],
 };

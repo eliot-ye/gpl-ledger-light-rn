@@ -39,13 +39,21 @@ export function setAppEnv(envValue: Partial<EnvVariable>) {
 }
 
 export function getFetchUrl(serverName: ApiServerName, path: string) {
-  let domain = envConstant.apiDomain;
+  let domain = '';
   let serverPath = envConstant.apiServerMap[serverName];
 
-  if (envConstant.CE_ApiServerEnable.includes(serverName)) {
-    domain = envConstant.CE_ApiDomain || domain;
-    serverPath = envConstant.CE_ApiServerMap[serverName] || serverPath;
-  }
+  envConstant.ApiServerList.concat(envConstant.CE_ApiServerList).forEach(
+    item => {
+      if (
+        !item.ServerEnable ||
+        (item.ServerEnable && item.ServerEnable.includes(serverName))
+      ) {
+        domain = item.Domain || domain;
+        serverPath =
+          (item.ServerMap && item.ServerMap[serverName]) || serverPath;
+      }
+    },
+  );
 
   return {domain, path: `${serverPath}${path}`};
 }
