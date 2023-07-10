@@ -21,7 +21,7 @@ import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   borderWidth: 0.5,
-  itemShowNum: 3,
+  itemShowNum: 5,
   offset: 0,
 } as const;
 const styles = StyleSheet.create({
