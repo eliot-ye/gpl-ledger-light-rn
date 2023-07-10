@@ -4,16 +4,17 @@ interface Handler<T> {
   (eventData: T): void;
 }
 
-let eventCount = 0;
+let serialNumber = 0;
 
-export function CreateEvents<T = any>(eventName?: string) {
-  const _eventName = eventName || `eventName-${eventCount}`;
+export function createSubscribeEvents<T = any>(mark?: string) {
+  serialNumber++;
+  const _mark = mark || `SerialNumber-${serialNumber}`;
 
-  let handlerMap: {[id: string]: Handler<T> | undefined} = {};
-  let ids: string[] = [];
+  const handlerMap: {[id: string]: Handler<T> | undefined} = {};
+  const ids: string[] = [];
 
   return {
-    eventName: _eventName,
+    mark: _mark,
 
     subscribe(handler: Handler<T>) {
       let id = getOnlyStr(ids);
@@ -36,7 +37,7 @@ export function CreateEvents<T = any>(eventName?: string) {
           const handler = handlerMap[id];
           handler && handler(eventData);
         } catch (error) {
-          console.error(`${_eventName} publish (id: ${id}) error:`, error);
+          console.error(`${_mark} publish (id: ${id}) error:`, error);
         }
       }
     },

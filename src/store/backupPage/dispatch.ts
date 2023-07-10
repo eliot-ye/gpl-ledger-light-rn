@@ -1,4 +1,4 @@
-import {createDispatch} from '@/libs/CreateStore';
+import {createDispatch} from '@/libs/ReactContextStore';
 import initialState from './initialState';
 
 const initialStateStr = JSON.stringify(initialState);

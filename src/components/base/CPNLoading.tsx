@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Animated, useWindowDimensions} from 'react-native';
 import {Colors} from '@/configs/colors';
-import {CreateEvents} from '@/libs/CreateEvents';
+import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 
 export function createCPNLoading() {
-  const ev = CreateEvents<'show' | 'close'>();
+  const ev = createSubscribeEvents<'show' | 'close'>();
 
   function CPNLoading() {
     const [loadingCount, setLoadingCount] = useState(0);

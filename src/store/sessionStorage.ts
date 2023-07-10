@@ -1,5 +1,5 @@
-import {CreateReactiveConstant} from '@/libs/CreateReactiveConstant';
-import {WebDAVObject} from '@/libs/CreateWebDAV';
+import {createReactiveConstant} from '@/libs/ReactiveConstant';
+import {WebDAVObject} from '@/libs/WebDAV';
 
 const sessionStorageDefault = {
   userId: undefined as string | undefined,
@@ -11,7 +11,7 @@ const sessionStorageDefault = {
 type SessionStorageDefault = typeof sessionStorageDefault;
 type SessionStorageKey = keyof SessionStorageDefault;
 
-export const SessionStorage = CreateReactiveConstant({
+export const SessionStorage = createReactiveConstant({
   default: sessionStorageDefault,
 });
 

@@ -4,7 +4,7 @@ import {Colors} from '@/configs/colors';
 import {StyleGet} from '@/configs/styles';
 import {getOnlyStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
-import {CreateEvents} from '@/libs/CreateEvents';
+import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 
 const Config = {
   borderRadius: 30,
@@ -48,7 +48,10 @@ interface OptionMap {
 }
 
 export function createCPNToast() {
-  const ev = CreateEvents<{id: string; opt: CPNToastOption | undefined}>();
+  const ev = createSubscribeEvents<{
+    id: string;
+    opt: CPNToastOption | undefined;
+  }>();
   let ids: string[] = [];
   let idListCache: string[] = [];
 

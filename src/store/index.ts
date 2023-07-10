@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {createStore} from '@/libs/CreateStore';
+import {createStore} from '@/libs/ReactContextStore';
 import {resetSessionStorage} from './sessionStorage';
 
 import dispatchAggregateRoot from './root/dispatch';

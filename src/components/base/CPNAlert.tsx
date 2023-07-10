@@ -11,7 +11,7 @@ import {Colors} from '@/configs/colors';
 import {StyleGet} from '@/configs/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
-import {CreateEvents} from '@/libs/CreateEvents';
+import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
@@ -268,8 +268,8 @@ export function CPNAlertView(props: CPNAlertViewProps) {
 
 export function createCPNAlert() {
   let ids: string[] = [];
-  const showEv = CreateEvents<CPNAlertOption>();
-  const closeEv = CreateEvents<string>();
+  const showEv = createSubscribeEvents<CPNAlertOption>();
+  const closeEv = createSubscribeEvents<string>();
 
   function CPNAlert() {
     const [alertOptionList, setAlertOptionList] = useState<CPNAlertOption[]>(

@@ -1,6 +1,6 @@
 import {I18n, LangCode} from '@assets/I18n';
 import {Colors, ThemeCode} from '@/configs/colors';
-import {createDispatch} from '@/libs/CreateStore';
+import {createDispatch} from '@/libs/ReactContextStore';
 import initialState from './initialState';
 
 const initialStateStr = JSON.stringify(initialState);

@@ -1,4 +1,4 @@
-import {CreateReactiveConstant} from '@/libs/CreateReactiveConstant';
+import {createReactiveConstant} from '@/libs/ReactiveConstant';
 import DeviceInfo from 'react-native-device-info';
 import envDefault, {ApiServerName} from './env.default';
 import envUat from './env.uat';
@@ -14,7 +14,7 @@ enum EnvCode {
 }
 const envList: EnvListItem[] = [{code: EnvCode.UAT, bundleId: []}];
 
-export const envConstant = CreateReactiveConstant({
+export const envConstant = createReactiveConstant({
   [EnvCode.UAT]: {...envDefault, ...envUat},
 });
 

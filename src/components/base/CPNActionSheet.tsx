@@ -14,7 +14,7 @@ import {I18n} from '@assets/I18n';
 import {Colors} from '@/configs/colors';
 import {getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
-import {CreateEvents} from '@/libs/CreateEvents';
+import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {StyleGet} from '@/configs/styles';
 
 const Config = {
@@ -268,7 +268,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
 }
 
 export function createCPNActionSheet() {
-  const ev = CreateEvents<ActionSheetOption<any> | undefined>();
+  const ev = createSubscribeEvents<ActionSheetOption<any> | undefined>();
 
   function CPNActionSheet() {
     const [data, dataSet] = useState<undefined | ActionSheetOption<any>>();

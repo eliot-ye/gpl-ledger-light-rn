@@ -28,7 +28,7 @@ import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
 import {CPNDivisionLine} from '@/components/CPNDivisionLine';
-import {createWebDAV} from '@/libs/CreateWebDAV';
+import {createWebDAV} from '@/libs/WebDAV';
 import {CusLog} from '@/utils/tools';
 
 import {recoveryFromWebDAV} from '../settings/BackupPage';
