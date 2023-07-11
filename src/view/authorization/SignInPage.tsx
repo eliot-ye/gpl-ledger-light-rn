@@ -206,10 +206,11 @@ export function SignInPage() {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: 60,
-          paddingBottom: 30,
+          paddingTop: 30,
         }}>
         <TouchableOpacity
+          accessibilityLabel={I18n.BiometricsSignIn}
+          style={{padding: 30}}
           onPress={async () => {
             try {
               if (!userInfo.id) {
