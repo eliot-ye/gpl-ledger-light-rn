@@ -20,6 +20,22 @@ export function SettingPage() {
     });
   }, []);
   const [enableBiometrics, enableBiometricsSet] = useState(false);
+  useEffect(() => {
+    if (SessionStorage.userId) {
+      biometrics
+        .getUserFlag(SessionStorage.userId)
+        .then(res => {
+          if (res === 'true') {
+            enableBiometricsSet(true);
+          } else {
+            enableBiometricsSet(false);
+          }
+        })
+        .catch(() => {
+          enableBiometricsSet(false);
+        });
+    }
+  }, []);
   function renderBiometrics() {
     return (
       <CPNCellGroup style={{marginBottom: 20}}>
@@ -29,18 +45,17 @@ export function SettingPage() {
             <Switch
               value={enableBiometrics}
               onChange={async () => {
-                if (
-                  !enableBiometrics &&
-                  SessionStorage.userId &&
-                  SessionStorage.password
-                ) {
-                  await biometrics.setUser(
-                    SessionStorage.userId,
-                    SessionStorage.password,
-                  );
+                if (!SessionStorage.userId) {
+                  return;
+                }
+                if (!enableBiometrics && SessionStorage.password) {
+                  await biometrics.setUser(SessionStorage.userId, {
+                    userId: SessionStorage.userId,
+                    password: SessionStorage.password,
+                  });
                   enableBiometricsSet(true);
                 } else {
-                  await biometrics.deleteUser();
+                  await biometrics.deleteUser(SessionStorage.userId);
                   enableBiometricsSet(false);
                 }
               }}

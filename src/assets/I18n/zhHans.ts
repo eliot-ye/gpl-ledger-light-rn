@@ -6,6 +6,8 @@ export default {
   OK: '好的',
   Confirm: '确认',
   Cancel: '取消',
+  Cancelled: '已取消',
+  NotRecognized: '未识别',
   GoBack: '返回',
   Close: '关闭',
   Refresh: '刷新',
@@ -131,5 +133,8 @@ export default {
   ViewVersionLog: '查看更新记录',
   VersionLog: '更新记录',
   Biometrics: '生物认证',
+  BiometricsSignIn: '生物认证登入',
+  BiometricsDescription: '我们需要您的许可才能检索加密数据',
   BiometricsError: '生物认证失败，请使用密码登入',
+  BiometricsSuccess: '生物认证成功',
 } as const;

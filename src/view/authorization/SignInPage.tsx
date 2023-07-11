@@ -194,21 +194,29 @@ export function SignInPage() {
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
     biometrics.isSensorAvailable().then(async ({available}) => {
-      if (available) {
-        const {username} = await biometrics.getUser();
-        availableBiometricsSet(userInfo.id === username);
+      if (available && userInfo.id) {
+        const res = await biometrics.getUserFlag(userInfo.id);
+        availableBiometricsSet(res === 'true');
       }
     });
   }, [userInfo.id]);
   function renderBiometrics() {
     return (
       <View
-        style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: 60,
+          paddingBottom: 30,
+        }}>
         <TouchableOpacity
           onPress={async () => {
             try {
-              const res = await biometrics.loginBiometricAuth();
-              await loginAuth(res.password, res.username);
+              if (!userInfo.id) {
+                return;
+              }
+              const res = await biometrics.getUser(userInfo.id);
+              await loginAuth(res.password, res.userId);
             } catch (error) {
               CPNAlert.open({message: I18n.BiometricsError});
             }
@@ -242,8 +250,8 @@ export function SignInPage() {
           {renderUserInfoInput()}
           {renderPasswordInput()}
           {renderSubmitButton()}
-          {renderGoSignUpButton()}
           {availableBiometrics && renderBiometrics()}
+          {renderGoSignUpButton()}
         </View>
         <View>{renderGoLangSettingButton()}</View>
       </View>
