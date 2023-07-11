@@ -164,12 +164,16 @@ export function CPNDropdown<ItemT extends DataConstraint>(
             </CPNText>
           )}
         </View>
-        <CPNIonicons
-          pointerEvents="none"
-          name={IONName.DropDown}
-          color={props.disabled ? Colors.backgroundDisabled : Colors.fontTitle}
-          size={16}
-        />
+        <View pointerEvents="none">
+          <CPNIonicons
+            pointerEvents="none"
+            name={IONName.DropDown}
+            color={
+              props.disabled ? Colors.backgroundDisabled : Colors.fontTitle
+            }
+            size={16}
+          />
+        </View>
       </TouchableOpacity>
       <Modal
         visible={show}
