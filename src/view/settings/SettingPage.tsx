@@ -40,7 +40,7 @@ export function SettingPage() {
     return (
       <CPNCellGroup style={{marginBottom: 20}}>
         <CPNCell
-          title={I18n.Biometrics}
+          title={I18n.BiometricsEnable}
           rightIcon={
             <Switch
               value={enableBiometrics}

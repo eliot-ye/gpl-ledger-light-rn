@@ -133,6 +133,7 @@ export default {
   ViewVersionLog: '查看更新记录',
   VersionLog: '更新记录',
   Biometrics: '生物认证',
+  BiometricsEnable: '启用生物认证',
   BiometricsSignIn: '生物认证登入',
   BiometricsDescription: '我们需要您的许可才能检索加密数据',
   BiometricsError: '生物认证失败，请使用密码登入',

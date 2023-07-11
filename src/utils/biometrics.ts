@@ -10,12 +10,16 @@ interface UserInfo {
 
 export const biometrics = {
   isSensorAvailable: async () => {
-    CusLog.success('biometrics', 'isSensorAvailable');
     const hasAnySensors = await SInfo.isSensorAvailable();
-    CusLog.success('biometrics', 'hasAnySensors', hasAnySensors);
+    CusLog.success('biometrics', 'isSensorAvailable');
 
     if (Platform.OS === 'android') {
       const hasAnyFingerprintsEnrolled = await SInfo.hasEnrolledFingerprints();
+      CusLog.success(
+        'biometrics',
+        'hasAnyFingerprintsEnrolled',
+        hasAnyFingerprintsEnrolled,
+      );
       return {available: !!hasAnySensors && hasAnyFingerprintsEnrolled};
     }
 
@@ -32,7 +36,7 @@ export const biometrics = {
       showModal: true, //required (Android) - Will prompt user's fingerprint on Android
       strings: {
         // optional (Android) - You can personalize your prompt
-        header: I18n.BiometricsSignIn,
+        header: I18n.Biometrics,
         description: I18n.BiometricsDescription,
         hint: I18n.BiometricsDescription,
         success: I18n.BiometricsSuccess,
@@ -55,7 +59,7 @@ export const biometrics = {
         showModal: true,
         strings: {
           // optional (Android) - You can personalize your prompt
-          header: I18n.BiometricsSignIn,
+          header: I18n.Biometrics,
           description: I18n.BiometricsDescription,
           hint: I18n.BiometricsDescription,
           success: I18n.BiometricsSuccess,
