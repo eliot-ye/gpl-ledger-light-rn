@@ -259,7 +259,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 await recoveryFromJSON(backupData);
                 CPNToast.open({text: I18n.RecoverySuccess});
               } catch (error) {
-                CPNToast.open({text: I18n.RecoverySuccess});
+                CPNToast.open({text: I18n.RecoveryFailed});
               }
             }}
             isLast
