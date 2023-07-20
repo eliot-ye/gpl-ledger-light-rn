@@ -18,6 +18,6 @@ export const SessionStorage = createReactiveConstant({
 const sessionStorageCopy = JSON.parse(JSON.stringify(sessionStorageDefault));
 export function resetSessionStorage() {
   (Object.keys(sessionStorageCopy) as SessionStorageKey[]).forEach(key => {
-    SessionStorage.setValue(key, sessionStorageCopy[key]);
+    SessionStorage.$setValue(key, sessionStorageCopy[key]);
   });
 }

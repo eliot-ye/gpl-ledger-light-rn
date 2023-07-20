@@ -135,6 +135,15 @@ export function throttle<T extends Array<any>>(
   };
 }
 
+export function getValueFromStringKey(strKey: string, objState: any) {
+  const keyList = strKey.split('.');
+  let data = objState;
+  for (const key of keyList) {
+    data = data[key];
+  }
+  return data;
+}
+
 /** 字符串首字母大写，其余都小写 */
 export function toTitleCase(str: string) {
   return str.slice(0, 1).toUpperCase() + str.slice(1).toLowerCase();

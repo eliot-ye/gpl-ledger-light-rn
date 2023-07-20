@@ -117,15 +117,15 @@ export function SignInPage() {
       if (dbKey) {
         await getRealm(userId, dbKey);
 
-        SessionStorage.setValue('userId', userId);
-        SessionStorage.setValue('username', userInfo.username);
-        SessionStorage.setValue('password', pwd);
+        SessionStorage.$setValue('userId', userId);
+        SessionStorage.$setValue('username', userInfo.username);
+        SessionStorage.$setValue('password', pwd);
 
         if (userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
-            SessionStorage.setValue('WebDAVObject', WebDAV);
+            SessionStorage.$setValue('WebDAVObject', WebDAV);
             const enabled = await LS_WebDAVAutoSync.get();
             enabled && (await recoveryFromWebDAV(false));
           } catch (error) {

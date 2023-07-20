@@ -21,7 +21,7 @@ export const envConstant = createReactiveConstant({
 const bundleId = DeviceInfo.getBundleId();
 envList.forEach(_envItem => {
   if (_envItem.bundleId.includes(bundleId)) {
-    envConstant.setCode(_envItem.code);
+    envConstant.$setCode(_envItem.code);
   }
 });
 
@@ -32,7 +32,7 @@ export function setAppEnv(envValue: Partial<EnvVariable>) {
     if (_key.indexOf('CE_') === 0) {
       const _value = envValue[_key];
       if (_value !== undefined) {
-        envConstant.setValue(_key, _value);
+        envConstant.$setValue(_key, _value);
       }
     }
   });

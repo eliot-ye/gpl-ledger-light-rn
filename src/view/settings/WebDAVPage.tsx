@@ -117,7 +117,7 @@ export function WebDAVPage() {
                         id: SessionStorage.userId,
                         web_dav: '',
                       });
-                      SessionStorage.setValue('WebDAVObject', null);
+                      SessionStorage.$setValue('WebDAVObject', null);
                       WebDAVDetailsSet({
                         serverPath: '',
                         account: '',
@@ -169,7 +169,7 @@ export function WebDAVPage() {
             CPNLoading.open();
             try {
               const WebDAVObject = await onSubmit();
-              SessionStorage.setValue('WebDAVObject', WebDAVObject || null);
+              SessionStorage.$setValue('WebDAVObject', WebDAVObject || null);
 
               if (SessionStorage.password) {
                 await LS_UserInfo.update({

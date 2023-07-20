@@ -5,8 +5,8 @@ type Option<C extends string, T extends JSONConstraint> = {
   [code in C]: T;
 };
 
-interface ListenerFn<C, T> {
-  (code: C, keys: (keyof T)[]): void;
+interface ListenerFn<C> {
+  (code: C): void;
 }
 
 interface SubscribeFn<T> {
@@ -29,13 +29,13 @@ export function createReactiveConstant<
   type Key = keyof T;
 
   type ListenerId = string;
-  let listenerMap: {[id: ListenerId]: ListenerFn<C, T> | undefined} = {};
+  let listenerMap: {[id: ListenerId]: ListenerFn<C> | undefined} = {};
   let listenerIds: ListenerId[] = [];
-  function listenerHandle(_activeCode: C, changeKeys: Key[]) {
+  function listenerHandle(_activeCode: C) {
     for (let i = 0; i < listenerIds.length; i++) {
       const listener = listenerMap[listenerIds[i]];
       try {
-        listener && listener(_activeCode, changeKeys);
+        listener && listener(_activeCode);
       } catch (error) {
         console.error(
           `${_mark} listener (id: ${listenerIds[i]}) error:`,
@@ -85,11 +85,14 @@ export function createReactiveConstant<
   const returnValue = {
     ...defaultValue,
 
+    _interfaceType: 'ReactiveConstant',
+    _mark,
+
     /**
      * - setValue 内部会进行数据的浅层对比。对比相同的属性，不会更新和触发订阅函数。
      * @param value - 不能是`undefined`和是函数
      */
-    setValue<K extends Key>(key: K, value: T[K]) {
+    $setValue<K extends Key>(key: K, value: T[K]) {
       const oldValue = returnValue[key];
       if (
         oldValue !== value &&
@@ -99,10 +102,9 @@ export function createReactiveConstant<
         returnValue[key] = value;
         effectKeys.push(key);
         effectHandler(returnValue);
-        listenerHandle(activeCode, [key]);
       }
     },
-    setCode(code: C) {
+    $setCode(code: C) {
       if (activeCode !== code) {
         activeCode = code;
 
@@ -121,24 +123,24 @@ export function createReactiveConstant<
         });
 
         effectHandler(returnValue);
-        listenerHandle(activeCode, changeKeys);
+        listenerHandle(activeCode);
       }
     },
-    getCode() {
+    $getCode() {
       return activeCode;
     },
 
     /**
      * @param fn - 订阅函数
      * - 初始化时会执行一次
-     * - 使用 setValue 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
-     * - 短时间内多次使用 setValue 时，会触发防抖处理，订阅函数只执行一次。
+     * - 使用 $setValue 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
+     * - 短时间内多次使用 $setValue 时，会触发防抖处理，订阅函数只执行一次。
      * @param keys - 订阅属性
      * - 只有订阅的属性发生了更改才触发执行订阅函数。如果不传入该参数，则所有属性更改都会执行。
      * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 SubscribeId
      * @returns `subscribeId`
      */
-    subscribe<K extends Key>(fn: SubscribeFn<T>, keys?: K[]) {
+    $subscribe<K extends Key>(fn: SubscribeFn<T>, keys?: K[]) {
       try {
         fn(returnValue);
       } catch (error) {
@@ -157,23 +159,23 @@ export function createReactiveConstant<
 
       return id;
     },
-    unsubscribe(subscribeId: SubscribeId) {
+    $unsubscribe(subscribeId: SubscribeId) {
       subscribeMap[subscribeId] = undefined;
       subscribeIds.splice(subscribeIds.indexOf(subscribeId), 1);
     },
 
     /**
      * - 监听函数初始化不执行
-     * - 监听函数在每次数据更改时（执行setValue, setCode时）都执行
+     * - 监听函数在每次更改 Code 时（执行 $setCode 时）执行
      * @returns `listenerId`
      */
-    addListener(fn: ListenerFn<C, T>) {
+    $addListener(fn: ListenerFn<C>) {
       const id: ListenerId = getOnlyStr(listenerIds);
       listenerMap[id] = fn;
       listenerIds.push(id);
       return id;
     },
-    removeListener(listenerId: ListenerId) {
+    $removeListener(listenerId: ListenerId) {
       listenerMap[listenerId] = undefined;
       listenerIds.splice(listenerIds.indexOf(listenerId), 1);
     },

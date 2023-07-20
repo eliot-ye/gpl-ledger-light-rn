@@ -112,9 +112,9 @@ export function SignUpPage() {
               token: AESEncrypt(dbKey, formData.password),
             });
 
-            SessionStorage.setValue('userId', id);
-            SessionStorage.setValue('username', formData.username);
-            SessionStorage.setValue('password', formData.password);
+            SessionStorage.$setValue('userId', id);
+            SessionStorage.$setValue('username', formData.username);
+            SessionStorage.$setValue('password', formData.password);
             RootDispatch('isSignIn', true);
             navigation.replace('Tabbar', {screen: 'HomePage'});
           }}

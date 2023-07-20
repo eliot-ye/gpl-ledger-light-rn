@@ -1,4 +1,4 @@
-import {debounce, getOnlyStr} from '@/utils/tools';
+import {debounce, getOnlyStr, getValueFromStringKey} from '@/utils/tools';
 
 interface SubscribeFn<T> {
   (state: T): void;
@@ -16,7 +16,7 @@ export function createSubscribeState<T extends Record<string, any>>(
 
   const state = {...initialState};
   function getCopyState() {
-    return JSON.parse(JSON.stringify(state)) as T;
+    return JSON.parse(JSON.stringify(state)) as Readonly<T>;
   }
 
   type SubscribeId = string;
@@ -58,18 +58,25 @@ export function createSubscribeState<T extends Record<string, any>>(
   );
 
   return {
-    getStateRaw() {
+    _interfaceType: 'SubscribeState',
+    _mark,
+
+    $getStateRaw() {
       return state;
     },
-    getStateFrom<K extends StateKeys>(key: K) {
-      return JSON.parse(JSON.stringify(state[key])) as T[K];
+    $getState: getCopyState,
+    /** 获取对应的状态的 Copy 值 */
+    $get<K extends StateKeys>(key: K) {
+      return JSON.parse(JSON.stringify(state[key])) as Readonly<T[K]>;
     },
-    getState: getCopyState,
+    $getFromStringKey(key: string) {
+      return getValueFromStringKey(key, getCopyState());
+    },
 
     /**
-     * - setState 内部会进行数据的浅层对比。对比相同的属性，不会更新和触发订阅函数。
+     * - $set 内部会进行数据的浅层对比。对比相同的属性，不会更新和触发订阅函数。
      */
-    setState<K extends StateKeys>(key: K, value: T[K]) {
+    $set<K extends StateKeys>(key: K, value: T[K]) {
       const oldValue = state[key];
       if (oldValue !== value) {
         state[key] = value;
@@ -77,17 +84,31 @@ export function createSubscribeState<T extends Record<string, any>>(
         effectHandler();
       }
     },
+    $setFromStringKey(key: string, value: any) {
+      const oldValue = getValueFromStringKey(key, state);
+      if (oldValue !== value) {
+        const keyList = key.split('.');
+        let dataPre: any = state;
+        for (let i = 0; i < keyList.length - 1; i++) {
+          dataPre = dataPre[keyList[i]];
+        }
+        const preKey = keyList[keyList.length - 1];
+        dataPre[preKey] = value;
+        effectKeys.push(keyList[0]);
+        effectHandler();
+      }
+    },
 
     /**
      * @param fn - 订阅函数
      * - 初始化时会执行一次
-     * - 使用 setState 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
-     * - 短时间内多次使用 setState 时，会触发防抖处理，订阅函数只执行一次。
+     * - 使用 $set 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
+     * - 短时间内多次使用 $set 时，会触发防抖处理，订阅函数只执行一次。
      * @param keys - 订阅属性
      * - 只有订阅的属性发生了更改才触发执行订阅函数。如果不传入该参数，则所有属性更改都会执行。
      * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 subscribeId
      */
-    subscribe<K extends StateKeys>(fn: SubscribeFn<T>, keys?: K[]) {
+    $subscribe<K extends StateKeys>(fn: SubscribeFn<Readonly<T>>, keys?: K[]) {
       try {
         fn(getCopyState());
       } catch (error) {
@@ -106,7 +127,7 @@ export function createSubscribeState<T extends Record<string, any>>(
 
       return id;
     },
-    unsubscribe(id: SubscribeId) {
+    $unsubscribe(id: SubscribeId) {
       subscribeMap[id] = undefined;
       subscribeIds.splice(subscribeIds.indexOf(id), 1);
     },
