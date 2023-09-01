@@ -1,29 +1,35 @@
 import {LangCode, langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
-import {createObjectSchema} from '@/database/schemaType';
+import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
 
 interface LSItem {
   key: string;
   value: string;
 }
 const LSSchema = createObjectSchema<LSItem>({
-  name: 'LSItem',
+  name: LSSchemaName.LSItem,
   primaryKey: 'key',
   properties: {
     key: 'string',
-    value: 'string?',
+    value: {
+      type: 'string',
+      optional: true,
+    },
   },
 });
 
 const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
-  name: 'LSUserInfo',
+  name: LSSchemaName.LSUserInfo,
   primaryKey: 'id',
   properties: {
     id: 'string',
     username: 'string',
     token: 'string',
-    web_dav: 'string?',
+    web_dav: {
+      type: 'string',
+      optional: true,
+    },
   },
 });
 

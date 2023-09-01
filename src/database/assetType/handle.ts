@@ -1,3 +1,4 @@
+import {UpdateMode} from 'realm';
 import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
@@ -34,7 +35,7 @@ export async function dbSetAssetType(item: Partial<AssetTypeItem>) {
   const realm = await getRealm();
 
   realm.write(() => {
-    realm.create(SchemaName.AssetType, item, Realm.UpdateMode.Modified);
+    realm.create(SchemaName.AssetType, item, UpdateMode.Modified);
   });
 }
 export async function dbSetAssetTypeList(list: Partial<AssetTypeItem>[]) {
@@ -42,7 +43,7 @@ export async function dbSetAssetTypeList(list: Partial<AssetTypeItem>[]) {
 
   realm.write(() => {
     list.forEach(item => {
-      realm.create(SchemaName.AssetType, item, Realm.UpdateMode.Modified);
+      realm.create(SchemaName.AssetType, item, UpdateMode.Modified);
     });
   });
 }

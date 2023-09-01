@@ -1,19 +1,22 @@
-import type {ObjectSchemaProperty, PropertyType} from 'realm';
+import type {BaseObjectSchema, PropertySchema, PropertyTypeName} from 'realm';
 
 interface Schema<T extends Record<string, any>> {
-  name: string;
-  embedded?: boolean;
-  asymmetric?: boolean;
+  name: LSSchemaName | SchemaName;
   primaryKey?: keyof T;
   properties: {
-    [K in keyof T]: ObjectSchemaProperty | PropertyType;
+    [K in keyof T]: PropertyTypeName | PropertySchema;
   };
 }
 
 export function createObjectSchema<T extends Record<string, any>>(
-  schema: Schema<T>,
+  schema: Schema<T> & BaseObjectSchema,
 ) {
   return schema;
+}
+
+export enum LSSchemaName {
+  LSItem = 'LSItem',
+  LSUserInfo = 'LSUserInfo',
 }
 
 export enum SchemaName {

@@ -1,3 +1,4 @@
+import {UpdateMode} from 'realm';
 import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
@@ -35,7 +36,7 @@ export async function dbSetColor(item: Partial<ColorItem>) {
   const realm = await getRealm();
 
   realm.write(() => {
-    realm.create(SchemaName.Color, item, Realm.UpdateMode.Modified);
+    realm.create(SchemaName.Color, item, UpdateMode.Modified);
   });
 }
 export async function dbSetColorList(list: Partial<ColorItem>[]) {
@@ -43,7 +44,7 @@ export async function dbSetColorList(list: Partial<ColorItem>[]) {
 
   realm.write(() => {
     list.forEach(item => {
-      realm.create(SchemaName.Color, item, Realm.UpdateMode.Modified);
+      realm.create(SchemaName.Color, item, UpdateMode.Modified);
     });
   });
 }

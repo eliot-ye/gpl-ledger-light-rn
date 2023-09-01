@@ -1,3 +1,4 @@
+import {UpdateMode} from 'realm';
 import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
@@ -35,7 +36,7 @@ export async function dbSetCurrency(item: Partial<CurrencyItem>) {
   const realm = await getRealm();
 
   realm.write(() => {
-    realm.create(SchemaName.Currency, item, Realm.UpdateMode.Modified);
+    realm.create(SchemaName.Currency, item, UpdateMode.Modified);
   });
 }
 export async function dbSetCurrencyList(list: Partial<CurrencyItem>[]) {
@@ -43,7 +44,7 @@ export async function dbSetCurrencyList(list: Partial<CurrencyItem>[]) {
 
   realm.write(() => {
     list.forEach(item => {
-      realm.create(SchemaName.Currency, item, Realm.UpdateMode.Modified);
+      realm.create(SchemaName.Currency, item, UpdateMode.Modified);
     });
   });
 }

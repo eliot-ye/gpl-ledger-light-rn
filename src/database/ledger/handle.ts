@@ -1,3 +1,4 @@
+import {UpdateMode} from 'realm';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
 import {LedgerItem} from './schema';
@@ -14,7 +15,7 @@ export async function dbSetLedger(item: Partial<LedgerItem>) {
   const realm = await getRealm();
 
   realm.write(() => {
-    realm.create(SchemaName.Ledger, item, Realm.UpdateMode.Modified);
+    realm.create(SchemaName.Ledger, item, UpdateMode.Modified);
   });
 }
 export async function dbSetLedgerList(list: Partial<LedgerItem>[]) {
@@ -22,7 +23,7 @@ export async function dbSetLedgerList(list: Partial<LedgerItem>[]) {
 
   realm.write(() => {
     list.forEach(item => {
-      realm.create(SchemaName.Ledger, item, Realm.UpdateMode.Modified);
+      realm.create(SchemaName.Ledger, item, UpdateMode.Modified);
     });
   });
 }

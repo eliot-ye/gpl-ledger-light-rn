@@ -35,7 +35,7 @@
     "react-native-sensitive-info": "^6.0.0-alpha.9",
     "react-native-svg": "^13.9.0",
     "react-native-vector-icons": "^9.2.0",
-    "realm": "^11.8.0",
+    "realm": "^12.1.0",
     "utf8-byte-length": "^1.0.4"
   },
   "devDependencies": {

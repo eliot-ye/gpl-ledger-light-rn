@@ -779,7 +779,7 @@ PODS:
     - React-perflogger (= 0.71.7)
   - ReactNativeLocalization (2.3.1):
     - React-Core
-  - RealmJS (11.8.0):
+  - RealmJS (12.1.0):
     - React
   - RNDeviceInfo (10.5.0):
     - React-Core
@@ -1088,7 +1088,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c5c89f8f543842dd864b63ded1b0bbb9c9445328
   ReactCommon: dbfbe2f7f3c5ce4ce44f43f2fd0d5950d1eb67c5
   ReactNativeLocalization: 076497d7ca70341c751cd3b3e7c86187332a182d
-  RealmJS: 27b8d695fa4bc9606a4a4a378de55511edc2084c
+  RealmJS: 62267ccc7bec0b40dcd5a64cd63a21346648230c
   RNDeviceInfo: 1d0af8eafb25c0391c548df5143d69e4a6a2bc71
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 9d2ebd17a9fef618d9720e3d95ff5e6607acf8d4

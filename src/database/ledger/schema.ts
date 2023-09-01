@@ -35,9 +35,18 @@ export const LedgerSchema = createObjectSchema<LedgerItem>({
     id: 'string',
     name: 'string',
     amountMoney: 'float',
-    color: SchemaName.Color,
-    currency: SchemaName.Currency,
-    assetType: SchemaName.AssetType,
+    color: {
+      type: 'object',
+      objectType: SchemaName.Color,
+    },
+    currency: {
+      type: 'object',
+      objectType: SchemaName.Currency,
+    },
+    assetType: {
+      type: 'object',
+      objectType: SchemaName.AssetType,
+    },
     history: {type: 'list', objectType: SchemaName.History},
   },
 });
