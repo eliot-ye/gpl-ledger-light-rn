@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "RNRunner.app"
-               BlueprintName = "RNRunner"
-               ReferencedContainer = "container:RNRunner.xcodeproj">
+               BuildableName = "GplLedgerLight.app"
+               BlueprintName = "GplLedgerLight"
+               ReferencedContainer = "container:GplLedgerLight.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RNRunnerTests.xctest"
-               BlueprintName = "RNRunnerTests"
-               ReferencedContainer = "container:RNRunner.xcodeproj">
+               BuildableName = "GplLedgerLightTests.xctest"
+               BlueprintName = "GplLedgerLightTests"
+               ReferencedContainer = "container:GplLedgerLight.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "RNRunner.app"
-            BlueprintName = "RNRunner"
-            ReferencedContainer = "container:RNRunner.xcodeproj">
+            BuildableName = "GplLedgerLight.app"
+            BlueprintName = "GplLedgerLight"
+            ReferencedContainer = "container:GplLedgerLight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "RNRunner.app"
-            BlueprintName = "RNRunner"
-            ReferencedContainer = "container:RNRunner.xcodeproj">
+            BuildableName = "GplLedgerLight.app"
+            BlueprintName = "GplLedgerLight"
+            ReferencedContainer = "container:GplLedgerLight.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

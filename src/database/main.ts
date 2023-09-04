@@ -1,4 +1,4 @@
-import Realm from 'realm';
+import Realm, {UpdateMode} from 'realm';
 import {stringToUint8Array} from '@/utils/encoding';
 import {navigationRef} from '@/view/Router';
 import {CPNAlert, CPNToast} from '@/components/base';
@@ -43,15 +43,15 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         encryptionKey: stringToUint8Array(encryptionKeyCache),
         onFirstOpen(_realm) {
           getDefaultColors().forEach(item => {
-            _realm.create(ColorSchema.name, item);
+            _realm.create(ColorSchema.name, item, UpdateMode.Never);
           });
 
           getDefaultCurrency().forEach(item => {
-            _realm.create(CurrencySchema.name, item);
+            _realm.create(CurrencySchema.name, item, UpdateMode.Never);
           });
 
           getDefaultAssetTypes().forEach(item => {
-            _realm.create(AssetTypeSchema.name, item);
+            _realm.create(AssetTypeSchema.name, item, UpdateMode.Never);
           });
         },
       });

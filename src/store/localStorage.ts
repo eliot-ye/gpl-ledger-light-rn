@@ -73,7 +73,9 @@ export const LS_Theme = {
   key: 'theme_code',
   async get() {
     const data = await LSRealmStorage.get(this.key);
-    return (data || ThemeCode.default) as ThemeCode;
+    if (data) {
+      return data as ThemeCode;
+    }
   },
   set(data: ThemeCode) {
     return LSRealmStorage.set(this.key, data);

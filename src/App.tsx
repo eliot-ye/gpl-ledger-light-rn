@@ -10,15 +10,20 @@ import {
 import {RouterView} from '@/view/RouterView';
 import {StoreRoot, StoreHomePage, StoreBackupPage} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
+import {useColorScheme} from 'react-native';
+import {ThemeCode} from './configs/colors';
 
 function RootView() {
   const RootDispatch = StoreRoot.useDispatch();
 
+  const systemTheme = useColorScheme() as ThemeCode;
   useEffect(() => {
     LS_Theme.get().then(_code => {
-      RootDispatch('theme', _code);
+      RootDispatch('theme', _code || systemTheme || ThemeCode.default);
     });
+  }, [RootDispatch, systemTheme]);
 
+  useEffect(() => {
     LS_Lang.get().then(_code => {
       RootDispatch('langCode', _code);
     });

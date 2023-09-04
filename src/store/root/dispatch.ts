@@ -14,24 +14,23 @@ interface DispatchPayloadRoot {
 
 export default createDispatch<typeof initialState, DispatchPayloadRoot>({
   reset: () => JSON.parse(initialStateStr),
-  theme: (state, theme: ThemeCode) => {
+
+  theme: (state, theme) => {
     if (theme === state.theme) {
       return state;
     }
-
-    Colors.setCode(theme);
-
+    Colors.$setCode(theme);
     return {...state, theme};
   },
-  langCode: (state, langCode: LangCode) => {
+
+  langCode: (state, langCode) => {
     if (langCode === state.langCode) {
       return state;
     }
-
     I18n.setLanguage(langCode);
-
     return {...state, langCode};
   },
+
   isSignIn: (state, isSignIn) =>
     state.isSignIn === isSignIn ? state : {...state, isSignIn},
 });
