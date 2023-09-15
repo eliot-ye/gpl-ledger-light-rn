@@ -1181,13 +1181,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNVectorIcons (10.0.0):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
+  - RNVectorIcons (9.2.0):
     - React-Core
-    - ReactCommon/turbomodule/core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -1467,7 +1462,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 0f92ab218707c97810df75609886828ee1b7c5e3
   RNScreens: cba72a26a6c967765a8388fe85f78e7771012ca1
   RNSVG: e136c0e3c70ff4fb98687fc5a887039c436c65e6
-  RNVectorIcons: eed89cb6d4032c2158c0e42dceace20b0a60eda4
+  RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
