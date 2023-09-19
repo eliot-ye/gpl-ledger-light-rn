@@ -5,6 +5,7 @@ const titleMap = {
   h2: 20,
   h3: 18,
   h4: 16,
+  h5: 14,
 } as const;
 type TitleType = keyof typeof titleMap;
 function title<T extends TitleType>(type: T, isReverse?: boolean) {

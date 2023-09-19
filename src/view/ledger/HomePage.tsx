@@ -98,7 +98,7 @@ export function HomePage() {
       <View style={{padding: 20}}>
         {AvailableAssets.length > 0 && (
           <>
-            <CPNText style={StyleGet.title('h3')}>
+            <CPNText style={[StyleGet.title('h5'), {marginBottom: 6}]}>
               {I18n.t('AvailableAssets')}
             </CPNText>
             <CPNCellGroup style={{marginBottom: 20}}>
@@ -136,7 +136,7 @@ export function HomePage() {
 
         {UnAvailableAssets.length > 0 && (
           <>
-            <CPNText style={StyleGet.title('h3')}>
+            <CPNText style={[StyleGet.title('h5'), {marginBottom: 6}]}>
               {I18n.t('UnavailableAssets')}
             </CPNText>
             <CPNCellGroup>
