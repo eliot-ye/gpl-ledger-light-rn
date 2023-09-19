@@ -57,7 +57,7 @@ export const StyleGet = {
 
   cellTitleView() {
     return {
-      height: 20,
+      height: 24,
     } as const;
   },
   cellView() {
