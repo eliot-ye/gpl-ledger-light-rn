@@ -27,6 +27,9 @@ export default {
   versionName: DeviceInfo.getVersion(),
   versionCode: DeviceInfo.getBuildNumber(),
 
+  envControlPath: '',
+  CE_OnChangeRoute: false,
+
   apiServerMap: ServerMap,
 
   ApiServerList: [

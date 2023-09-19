@@ -1,21 +1,28 @@
 import {createReactiveConstant} from '@/libs/ReactiveConstant';
 import DeviceInfo from 'react-native-device-info';
 import envDefault, {ApiServerName} from './env.default';
-import envUat from './env.uat';
+import envProd from './env.prod';
 
 export type EnvVariable = typeof envDefault;
+export type CEnvKey = Include<keyof EnvVariable, `CE_${string}`>;
+export type CEnvVariable = Partial<Pick<EnvVariable, CEnvKey>>;
 
 interface EnvListItem {
   code: EnvCode;
   bundleId: string[];
 }
 enum EnvCode {
-  UAT = 'UAT',
+  DEV = 'DEV',
+  PROD = 'PROD',
 }
-const envList: EnvListItem[] = [{code: EnvCode.UAT, bundleId: []}];
+const envList: EnvListItem[] = [
+  {code: EnvCode.DEV, bundleId: []},
+  {code: EnvCode.PROD, bundleId: []},
+];
 
 export const envConstant = createReactiveConstant({
-  [EnvCode.UAT]: {...envDefault, ...envUat},
+  [EnvCode.DEV]: {...envDefault},
+  [EnvCode.PROD]: {...envDefault, ...envProd},
 });
 
 const bundleId = DeviceInfo.getBundleId();
@@ -26,8 +33,8 @@ envList.forEach(_envItem => {
 });
 
 /** 只接受以 `CE_` 开头的 env key */
-export function setAppEnv(envValue: Partial<EnvVariable>) {
-  const keyList = Object.keys(envValue) as (keyof EnvVariable)[];
+export function setAppEnv(envValue: CEnvVariable) {
+  const keyList = Object.keys(envValue) as CEnvKey[];
   keyList.forEach(_key => {
     if (_key.indexOf('CE_') === 0) {
       const _value = envValue[_key];

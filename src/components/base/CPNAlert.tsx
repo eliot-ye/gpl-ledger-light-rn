@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
 });
 
-interface AlertButton {
+export interface AlertButton {
   text: string;
   textColor?: string;
   backgroundColor?: string;
@@ -224,6 +224,7 @@ interface CPNAlertViewProps extends AlertOption {
 }
 export function CPNAlertView(props: CPNAlertViewProps) {
   I18n.useLocal();
+
   const animatedValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     if (props.show) {
