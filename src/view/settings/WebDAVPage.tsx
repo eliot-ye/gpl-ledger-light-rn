@@ -30,6 +30,8 @@ export function getWebDAVFileData() {
 }
 
 export function WebDAVPage() {
+  I18n.useLocal();
+
   const BackupPageState = StoreBackupPage.useState();
   const BackupPageDispatch = StoreBackupPage.useDispatch();
 
@@ -98,20 +100,20 @@ export function WebDAVPage() {
 
   return (
     <CPNPageView
-      title={I18n.WebDAV}
+      title={I18n.t('WebDAV')}
       rightIcon={
         !!SessionStorage.WebDAVObject && (
           <TouchableOpacity
             onPress={async () => {
               CPNAlert.open({
-                message: I18n.formatString(
-                  I18n.DeleteConfirm,
-                  ' ' + I18n.WebDAV,
+                message: I18n.f(
+                  I18n.t('DeleteConfirm'),
+                  ' ' + I18n.t('WebDAV'),
                 ),
                 buttons: [
-                  {text: I18n.Cancel},
+                  {text: I18n.t('Cancel')},
                   {
-                    text: I18n.Confirm,
+                    text: I18n.t('Confirm'),
                     async onPress() {
                       await LS_UserInfo.update({
                         id: SessionStorage.userId,
@@ -137,7 +139,9 @@ export function WebDAVPage() {
         )
       }>
       <View style={{padding: 20}}>
-        <CPNFormItem style={{paddingBottom: 10}} title={I18n.WebDAVServerPath}>
+        <CPNFormItem
+          style={{paddingBottom: 10}}
+          title={I18n.t('WebDAVServerPath')}>
           <CPNInput
             value={WebDAVDetails.serverPath}
             onChangeText={serverPath => {
@@ -145,7 +149,9 @@ export function WebDAVPage() {
             }}
           />
         </CPNFormItem>
-        <CPNFormItem style={{paddingBottom: 10}} title={I18n.WebDAVAccount}>
+        <CPNFormItem
+          style={{paddingBottom: 10}}
+          title={I18n.t('WebDAVAccount')}>
           <CPNInput
             value={WebDAVDetails.account}
             onChangeText={account => {
@@ -153,7 +159,9 @@ export function WebDAVPage() {
             }}
           />
         </CPNFormItem>
-        <CPNFormItem style={{paddingBottom: 50}} title={I18n.WebDAVPassword}>
+        <CPNFormItem
+          style={{paddingBottom: 50}}
+          title={I18n.t('WebDAVPassword')}>
           <CPNInput
             value={WebDAVDetails.password}
             onChangeText={password => {
@@ -164,7 +172,7 @@ export function WebDAVPage() {
         </CPNFormItem>
 
         <CPNButton
-          children={I18n.WebDAVSubmit}
+          children={I18n.t('WebDAVSubmit')}
           onPress={async () => {
             CPNLoading.open();
             try {
@@ -185,14 +193,14 @@ export function WebDAVPage() {
                 'updateCount',
                 BackupPageState.updateCount + 1,
               );
-              CPNToast.open({text: I18n.WebDAVSuccess});
+              CPNToast.open({text: I18n.t('WebDAVSuccess')});
             } catch (error: any) {
               if (error.message) {
                 CPNToast.open({text: error.message});
               } else if (error.status === 401) {
-                CPNAlert.open({message: I18n.WebDAVUnauthorized});
+                CPNAlert.open({message: I18n.t('WebDAVUnauthorized')});
               } else {
-                CPNToast.open({text: I18n.WebDAVFailed});
+                CPNToast.open({text: I18n.t('WebDAVFailed')});
               }
             }
             CPNLoading.close();

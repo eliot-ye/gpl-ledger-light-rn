@@ -108,33 +108,30 @@ export async function recoveryFromWebDAV(showSuccess = true) {
     await recoveryFromJSON(backupData);
     if (showSuccess) {
       CPNToast.open({
-        text: I18n.WebDAVRecoverySuccess,
+        text: I18n.t('WebDAVRecoverySuccess'),
       });
     }
   } else {
     CPNToast.open({
-      text: I18n.formatString(
-        I18n.WebDAVGetError,
-        `[${WebDAVFileData.path}]`,
-      ) as string,
+      text: I18n.f(I18n.t('WebDAVGetError'), `[${WebDAVFileData.path}]`),
     });
   }
 }
 
 async function recoveryFromJSON(backupData: any) {
   if (backupData.appId !== envConstant.bundleId) {
-    CPNAlert.open({message: I18n.BackupFileError});
+    CPNAlert.open({message: I18n.t('BackupFileError')});
     return Promise.reject();
   }
   if (backupData.username !== SessionStorage.username) {
-    CPNAlert.open({message: I18n.BackupFileError2});
+    CPNAlert.open({message: I18n.t('BackupFileError2')});
     return Promise.reject();
   }
   const ledgerData = JSON.parse(
     AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password || ''),
   );
   if (ledgerData.username !== SessionStorage.username) {
-    CPNAlert.open({message: I18n.BackupFileError2});
+    CPNAlert.open({message: I18n.t('BackupFileError2')});
     return Promise.reject();
   }
   await dbSetLedgerList(ledgerData.ledger);
@@ -144,6 +141,7 @@ async function recoveryFromJSON(backupData: any) {
 }
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
+  I18n.useLocal();
   StoreBackupPage.useState();
 
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
@@ -154,11 +152,11 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
   const hasWebDAV = !!SessionStorage.WebDAVObject;
 
   return (
-    <CPNPageView title={I18n.Backup}>
+    <CPNPageView title={I18n.t('Backup')}>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
-            title={I18n.WebDAV}
+            title={I18n.t('WebDAV')}
             value={SessionStorage.WebDAVObject?.account}
             onPress={() => {
               navigation.navigate('WebDAVPage');
@@ -168,7 +166,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
           {hasWebDAV && (
             <>
               <CPNCell
-                title={I18n.WebDAVSync}
+                title={I18n.t('WebDAVSync')}
                 value={
                   <Switch
                     value={enableWebDAVSync}
@@ -180,7 +178,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 }
               />
               <CPNCell
-                title={I18n.WebDAVRecovery}
+                title={I18n.t('WebDAVRecovery')}
                 value={getWebDAVFileData().name}
                 onPress={async () => {
                   CPNLoading.open();
@@ -199,7 +197,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
 
         <CPNCellGroup>
           <CPNCell
-            title={I18n.BackupNow}
+            title={I18n.t('BackupNow')}
             onPress={async () => {
               try {
                 const backupDataStr = getBackupDataStr(await getLedgerData());
@@ -213,7 +211,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     );
                     if (status !== PermissionsAndroid.RESULTS.GRANTED) {
-                      CPNToast.open({text: I18n.InsufficientPermissions});
+                      CPNToast.open({text: I18n.t('InsufficientPermissions')});
                       return;
                     }
                   }
@@ -222,10 +220,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                     backupDataStr,
                   );
                   CPNToast.open({
-                    text: I18n.formatString(
-                      I18n.BackupSuccessTo,
-                      backupFilePath,
-                    ) as string,
+                    text: I18n.f(I18n.t('BackupSuccessTo'), backupFilePath),
                   });
                 }
 
@@ -236,19 +231,19 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                   );
                   const res = await Share.share({url: backupFilePath});
                   if (res.action === Share.dismissedAction) {
-                    CPNToast.open({text: I18n.CanceledSave});
+                    CPNToast.open({text: I18n.t('CanceledSave')});
                     return;
                   }
-                  CPNToast.open({text: I18n.BackupSuccess});
+                  CPNToast.open({text: I18n.t('BackupSuccess')});
                 }
               } catch (error) {
-                CPNToast.open({text: I18n.BackupFailed});
+                CPNToast.open({text: I18n.t('BackupFailed')});
                 CusLog.error('backup', 'error', error);
               }
             }}
           />
           <CPNCell
-            title={I18n.RecoveryNow}
+            title={I18n.t('RecoveryNow')}
             onPress={async () => {
               try {
                 const backupItem = getBackupPath(
@@ -257,9 +252,9 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 const res = await FS.readFile(backupItem.filePath);
                 const backupData = JSON.parse(res);
                 await recoveryFromJSON(backupData);
-                CPNToast.open({text: I18n.RecoverySuccess});
+                CPNToast.open({text: I18n.t('RecoverySuccess')});
               } catch (error) {
-                CPNToast.open({text: I18n.RecoveryFailed});
+                CPNToast.open({text: I18n.t('RecoveryFailed')});
               }
             }}
             isLast
@@ -272,14 +267,14 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
               color: Colors.fontSubtitle,
               marginBottom: 10,
             }}>
-            {I18n.formatString(
-              I18n.BackupPlaceholder,
+            {I18n.f(
+              I18n.t('BackupPlaceholder'),
               getBackupPath(backupDirBase || FS.DocumentDirectoryPath).filePath,
             )}
           </CPNText>
           {Platform.OS === 'ios' && (
             <CPNText style={{fontSize: 12, color: Colors.fontSubtitle}}>
-              {I18n.BackupPlaceholderIOS}
+              {I18n.t('BackupPlaceholderIOS')}
             </CPNText>
           )}
         </View>

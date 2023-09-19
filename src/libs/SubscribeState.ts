@@ -5,7 +5,7 @@ interface SubscribeFn<T> {
 }
 let serialNumber = 0;
 
-export function createSubscribeState<T extends Record<string, any>>(
+export function createSubscribeState<T extends JSONConstraint>(
   initialState: T,
   mark?: string,
 ) {

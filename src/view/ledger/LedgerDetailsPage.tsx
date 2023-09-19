@@ -38,6 +38,7 @@ export function LedgerDetailsPage() {
   const navigation =
     useNavigation<PageProps<'LedgerDetailsPage'>['navigation']>();
   const route = useRoute<PageProps<'LedgerDetailsPage'>['route']>();
+  I18n.useLocal();
 
   const HomePageDispatch = StoreHomePage.useDispatch();
   const HomePageState = StoreHomePage.useState();
@@ -129,22 +130,22 @@ export function LedgerDetailsPage() {
       headerBackgroundColor={route.params?.color.value}
       title={
         route.params?.id
-          ? I18n.formatString(I18n.EditAsset, route.params.name || '')
-          : I18n.AddAsset
+          ? I18n.f(I18n.t('EditAsset'), route.params.name || '')
+          : I18n.t('AddAsset')
       }
       rightIcon={
         !!route.params?.id && (
           <TouchableOpacity
             onPress={async () => {
               CPNAlert.open({
-                message: I18n.formatString(
-                  I18n.DeleteConfirm,
+                message: I18n.f(
+                  I18n.t('DeleteConfirm'),
                   route.params?.name || '',
                 ),
                 buttons: [
-                  {text: I18n.Cancel},
+                  {text: I18n.t('Cancel')},
                   {
-                    text: I18n.Confirm,
+                    text: I18n.t('Confirm'),
                     async onPress() {
                       if (route.params?.id) {
                         dbDeleteLedger(route.params?.id);
@@ -167,7 +168,7 @@ export function LedgerDetailsPage() {
       <View style={{padding: 20}}>
         <CPNFormItem
           style={{paddingBottom: 20}}
-          title={I18n.AssetName}
+          title={I18n.t('AssetName')}
           hasError={!!detailsError.name}
           errorText={detailsError.name}>
           <CPNInput
@@ -182,8 +183,8 @@ export function LedgerDetailsPage() {
         {!route.params?.id && (
           <CPNFormItem
             style={{paddingBottom: 20}}
-            title={I18n.AssetType}
-            description={I18n.CreateDescription1}
+            title={I18n.t('AssetType')}
+            description={I18n.t('CreateDescription1')}
             hasError={!!detailsError.assetType}
             errorText={detailsError.assetType}>
             <CPNDropdown
@@ -193,8 +194,8 @@ export function LedgerDetailsPage() {
                     ...item,
                     label: `${item.name}(${
                       item.isAvailableAssets
-                        ? I18n.AvailableAssets
-                        : I18n.UnavailableAssets
+                        ? I18n.t('AvailableAssets')
+                        : I18n.t('UnavailableAssets')
                     })`,
                     value: item.symbol,
                   })),
@@ -217,7 +218,7 @@ export function LedgerDetailsPage() {
                 style={{
                   color: route.params?.color.value || Colors.theme,
                 }}>
-                {I18n.Color}
+                {I18n.t('Color')}
               </CPNText>
               <View
                 style={{
@@ -247,7 +248,7 @@ export function LedgerDetailsPage() {
                 {colorsUsedIds.includes(item.value) && (
                   <CPNText
                     style={{color: Colors.fontPlaceholder, fontSize: 12}}>
-                    ({I18n.Used})
+                    ({I18n.t('Used')})
                   </CPNText>
                 )}
               </View>
@@ -267,8 +268,8 @@ export function LedgerDetailsPage() {
         {!route.params?.id && (
           <CPNFormItem
             style={{paddingBottom: 20}}
-            title={I18n.Currency}
-            description={I18n.CreateDescription1}
+            title={I18n.t('Currency')}
+            description={I18n.t('CreateDescription1')}
             hasError={!!detailsError.currency}
             errorText={detailsError.currency}>
             <CPNDropdown
@@ -292,7 +293,7 @@ export function LedgerDetailsPage() {
 
         <CPNFormItem
           style={{paddingBottom: 20}}
-          title={I18n.AmountMoney}
+          title={I18n.t('AmountMoney')}
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
           <CPNInput
@@ -307,7 +308,7 @@ export function LedgerDetailsPage() {
               if (Number.isNaN(amountMoney)) {
                 detailsErrorSet({
                   ...detailsError,
-                  amountMoney: I18n.AmountMoneyError1,
+                  amountMoney: I18n.t('AmountMoneyError1'),
                 });
               } else {
                 detailsSet({...details, amountMoney});
@@ -318,23 +319,23 @@ export function LedgerDetailsPage() {
         </CPNFormItem>
 
         <CPNButton
-          children={I18n.Submit}
+          children={I18n.t('Submit')}
           onPress={async () => {
             const _detailsError: ErrorItem<LedgerItem> = {};
             if (!details.name) {
-              _detailsError.name = I18n.AssetNameError1;
+              _detailsError.name = I18n.t('AssetNameError1');
             }
             if (!details.assetType) {
-              _detailsError.assetType = I18n.AssetTypeError;
+              _detailsError.assetType = I18n.t('AssetTypeError');
             }
             if (!details.color) {
-              _detailsError.color = I18n.ColorError;
+              _detailsError.color = I18n.t('ColorError');
             }
             if (!details.currency) {
-              _detailsError.currency = I18n.CurrencyError;
+              _detailsError.currency = I18n.t('CurrencyError');
             }
             if (details.amountMoney === undefined) {
-              _detailsError.amountMoney = I18n.AmountMoneyError1;
+              _detailsError.amountMoney = I18n.t('AmountMoneyError1');
             }
 
             if (

@@ -27,6 +27,8 @@ import {Colors} from '@/configs/colors';
 import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
 
 export function ColorManagementPage() {
+  I18n.useLocal();
+
   const [ColorsList, ColorsListSet] = useState<ColorItem[]>([]);
   const [ColorsUsedIds, ColorsUsedIdsSet] = useState<string[]>([]);
   const getDBColors = useCallback(async () => {
@@ -72,8 +74,8 @@ export function ColorManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.value
-              ? I18n.formatString(I18n.EditColor, detailsRef.current.name || '')
-              : I18n.AddColor
+              ? I18n.f(I18n.t('EditColor'), detailsRef.current.name || '')
+              : I18n.t('AddColor')
           }
           scrollEnabled={false}
           headerBackgroundColor={detailsRef.current.value}
@@ -85,14 +87,14 @@ export function ColorManagementPage() {
               <TouchableOpacity
                 onPress={async () => {
                   CPNAlert.open({
-                    message: I18n.formatString(
-                      I18n.DeleteConfirm,
+                    message: I18n.f(
+                      I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
                     buttons: [
-                      {text: I18n.Cancel},
+                      {text: I18n.t('Cancel')},
                       {
-                        text: I18n.Confirm,
+                        text: I18n.t('Confirm'),
                         async onPress() {
                           if (detailsRef.current.value) {
                             dbDeleteColor(detailsRef.current.value);
@@ -111,7 +113,7 @@ export function ColorManagementPage() {
           <View style={{padding: 20}}>
             <CPNFormItem
               style={{paddingBottom: 10}}
-              title={I18n.ColorName}
+              title={I18n.t('ColorName')}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
               <CPNInput
@@ -133,7 +135,7 @@ export function ColorManagementPage() {
                   ]}>
                   <CPNText
                     style={{color: detailsRef.current.value || Colors.theme}}>
-                    {I18n.ColorValue}
+                    {I18n.t('ColorValue')}
                   </CPNText>
                   <View
                     style={{
@@ -145,7 +147,7 @@ export function ColorManagementPage() {
                   />
                 </View>
               }
-              description={I18n.ColorValueDesc}
+              description={I18n.t('ColorValueDesc')}
               hasError={!!detailsError.value}
               errorText={detailsError.value}>
               <CPNInput
@@ -159,25 +161,25 @@ export function ColorManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              children={I18n.Submit}
+              children={I18n.t('Submit')}
               onPress={async () => {
                 const _detailsError: ErrorItem<ColorItem> = {};
                 if (!details.name) {
-                  _detailsError.name = I18n.ColorNameError1;
+                  _detailsError.name = I18n.t('ColorNameError1');
                 }
 
                 if (!details.value) {
-                  _detailsError.value = I18n.ColorValueError1;
+                  _detailsError.value = I18n.t('ColorValueError1');
                 } else if (
                   !details.value.startsWith('#') &&
                   !details.value.startsWith('rgb')
                 ) {
-                  _detailsError.value = I18n.ColorValueError2;
+                  _detailsError.value = I18n.t('ColorValueError2');
                 } else if (
                   details.value &&
                   ColorsList.map(item => item.value).includes(details.value)
                 ) {
-                  _detailsError.value = I18n.ColorValueError3;
+                  _detailsError.value = I18n.t('ColorValueError3');
                 }
 
                 const errorList = Object.values(_detailsError).map(
@@ -204,7 +206,7 @@ export function ColorManagementPage() {
 
   return (
     <>
-      <CPNPageView title={I18n.ColorManagement}>
+      <CPNPageView title={I18n.t('ColorManagement')}>
         <View style={{padding: 20}}>
           {renderTab()}
           <CPNCellGroup>

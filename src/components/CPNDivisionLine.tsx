@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
 });
 
 export function CPNDivisionLine(props: ViewProps) {
+  I18n.useLocal();
+
   return (
     <View
       {...props}
@@ -27,7 +29,7 @@ export function CPNDivisionLine(props: ViewProps) {
           fontSize: 12,
           color: Colors.fontSubtitle,
         }}>
-        {props.children || I18n.OR}
+        {props.children || I18n.t('OR')}
       </CPNText>
       <View style={styles.line} />
     </View>

@@ -12,6 +12,7 @@ import {StoreRoot, StoreHomePage, StoreBackupPage} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
 import {useColorScheme} from 'react-native';
 import {ThemeCode} from './configs/colors';
+import {I18n} from './assets/I18n';
 
 function RootView() {
   const RootDispatch = StoreRoot.useDispatch();
@@ -25,7 +26,7 @@ function RootView() {
 
   useEffect(() => {
     LS_Lang.get().then(_code => {
-      RootDispatch('langCode', _code);
+      I18n.setLangCode(_code);
     });
   }, [RootDispatch]);
 
@@ -41,15 +42,17 @@ function RootView() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StoreRoot.Provider>
-        <CPNPageModal.Provider>
-          <RootView />
-        </CPNPageModal.Provider>
-        <CPNActionSheet.Provider />
-        <CPNAlert.Provider />
-        <CPNToast.Provider />
-        <CPNLoading.Provider />
-      </StoreRoot.Provider>
+      <I18n.Provider>
+        <StoreRoot.Provider>
+          <CPNPageModal.Provider>
+            <RootView />
+          </CPNPageModal.Provider>
+          <CPNActionSheet.Provider />
+          <CPNAlert.Provider />
+          <CPNToast.Provider />
+          <CPNLoading.Provider />
+        </StoreRoot.Provider>
+      </I18n.Provider>
     </SafeAreaProvider>
   );
 }

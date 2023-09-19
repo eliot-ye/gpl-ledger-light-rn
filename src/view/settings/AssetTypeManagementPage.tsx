@@ -26,6 +26,8 @@ import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 
 export function AssetTypeManagementPage() {
+  I18n.useLocal();
+
   const [AssetTypeList, AssetTypeListSet] = useState<AssetTypeItem[]>([]);
   const [AssetTypeUsedIds, AssetTypeUsedIdsSet] = useState<string[]>([]);
   const getDBAssetTypes = useCallback(async () => {
@@ -77,11 +79,8 @@ export function AssetTypeManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.symbol
-              ? I18n.formatString(
-                  I18n.EditAssetType,
-                  detailsRef.current.name || '',
-                )
-              : I18n.AddAssetType
+              ? I18n.f(I18n.t('EditAssetType'), detailsRef.current.name || '')
+              : I18n.t('AddAssetType')
           }
           scrollEnabled={false}
           safeArea={false}
@@ -92,14 +91,14 @@ export function AssetTypeManagementPage() {
               <TouchableOpacity
                 onPress={async () => {
                   CPNAlert.open({
-                    message: I18n.formatString(
-                      I18n.DeleteConfirm,
+                    message: I18n.f(
+                      I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
                     buttons: [
-                      {text: I18n.Cancel},
+                      {text: I18n.t('Cancel')},
                       {
-                        text: I18n.Confirm,
+                        text: I18n.t('Confirm'),
                         async onPress() {
                           if (detailsRef.current.symbol) {
                             dbDeleteAssetType(detailsRef.current.symbol);
@@ -118,7 +117,7 @@ export function AssetTypeManagementPage() {
           <View style={{padding: 20}}>
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.AssetTypeName}
+              title={I18n.t('AssetTypeName')}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
               <CPNInput
@@ -132,8 +131,8 @@ export function AssetTypeManagementPage() {
 
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.Symbol}
-              description={I18n.SymbolDesc}
+              title={I18n.t('Symbol')}
+              description={I18n.t('SymbolDesc')}
               hasError={!!detailsError.symbol}
               errorText={detailsError.symbol}>
               <CPNInput
@@ -148,12 +147,12 @@ export function AssetTypeManagementPage() {
 
             <CPNFormItem
               style={{paddingBottom: 30}}
-              title={I18n.AssetType}
+              title={I18n.t('AssetType')}
               hasError={!!detailsError.isAvailableAssets}
               errorText={detailsError.isAvailableAssets}>
               <View style={{flexDirection: 'row'}}>
                 <CPNCheckbox
-                  label={I18n.AvailableAssets}
+                  label={I18n.t('AvailableAssets')}
                   checked={details.isAvailableAssets === true}
                   isRadio
                   onPress={() => {
@@ -163,7 +162,7 @@ export function AssetTypeManagementPage() {
                 />
                 <CPNCheckbox
                   checked={details.isAvailableAssets === false}
-                  label={I18n.UnavailableAssets}
+                  label={I18n.t('UnavailableAssets')}
                   isRadio
                   onPress={() => {
                     detailsSet({...details, isAvailableAssets: false});
@@ -174,26 +173,26 @@ export function AssetTypeManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              children={I18n.Submit}
+              children={I18n.t('Submit')}
               onPress={async () => {
                 const _detailsError: ErrorItem<AssetTypeItem> = {};
                 if (!details.name) {
-                  _detailsError.name = I18n.AssetTypeNameError1;
+                  _detailsError.name = I18n.t('AssetTypeNameError1');
                 }
 
                 if (details.isAvailableAssets === undefined) {
-                  _detailsError.isAvailableAssets = I18n.AssetTypeError;
+                  _detailsError.isAvailableAssets = I18n.t('AssetTypeError');
                 }
 
                 if (!details.symbol) {
-                  _detailsError.symbol = I18n.SymbolError;
+                  _detailsError.symbol = I18n.t('SymbolError');
                 } else if (
                   details.symbol &&
                   AssetTypeList.map(item => item.symbol).includes(
                     details.symbol,
                   )
                 ) {
-                  _detailsError.symbol = I18n.SymbolError2;
+                  _detailsError.symbol = I18n.t('SymbolError2');
                 }
 
                 const errorList = Object.values(_detailsError).map(
@@ -217,7 +216,7 @@ export function AssetTypeManagementPage() {
 
   return (
     <>
-      <CPNPageView title={I18n.AssetTypeManagement}>
+      <CPNPageView title={I18n.t('AssetTypeManagement')}>
         <View style={{padding: 20}}>
           {renderTab()}
           <CPNCellGroup>
@@ -227,8 +226,8 @@ export function AssetTypeManagementPage() {
                 title={item.name}
                 value={
                   item.isAvailableAssets
-                    ? I18n.AvailableAssets
-                    : I18n.UnavailableAssets
+                    ? I18n.t('AvailableAssets')
+                    : I18n.t('UnavailableAssets')
                 }
                 onPress={
                   AssetTypeUsedIds.includes(item.symbol)

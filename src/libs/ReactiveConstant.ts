@@ -1,11 +1,10 @@
 import {debounce, getOnlyStr} from '@/utils/tools';
 
-type JSONConstraint = Record<string, any>;
-type Option<C extends string, T extends JSONConstraint> = {
+export type Option<C extends string, T extends JSONConstraint> = {
   [code in C]: T;
 };
 
-interface ListenerFn<C> {
+interface ListenerCodeFn<C> {
   (code: C): void;
 }
 
@@ -29,16 +28,16 @@ export function createReactiveConstant<
   type Key = keyof T;
 
   type ListenerId = string;
-  let listenerMap: {[id: ListenerId]: ListenerFn<C> | undefined} = {};
-  let listenerIds: ListenerId[] = [];
-  function listenerHandle(_activeCode: C) {
-    for (let i = 0; i < listenerIds.length; i++) {
-      const listener = listenerMap[listenerIds[i]];
+  const listenerCodeMap: {[id: ListenerId]: ListenerCodeFn<C> | undefined} = {};
+  const listenerCodeIds: ListenerId[] = [];
+  function listenerCodeHandle(_activeCode: C) {
+    for (let i = 0; i < listenerCodeIds.length; i++) {
+      const listener = listenerCodeMap[listenerCodeIds[i]];
       try {
         listener && listener(_activeCode);
       } catch (error) {
         console.error(
-          `${_mark} listener (id: ${listenerIds[i]}) error:`,
+          `${_mark} listener (id: ${listenerCodeIds[i]}) error:`,
           error,
         );
       }
@@ -93,42 +92,54 @@ export function createReactiveConstant<
      * @param value - 不能是`undefined`和是函数
      */
     $setValue<K extends Key>(key: K, value: T[K]) {
-      const oldValue = returnValue[key];
-      if (
-        oldValue !== value &&
-        value !== undefined &&
-        typeof returnValue[value] !== 'function'
-      ) {
-        returnValue[key] = value;
-        effectKeys.push(key);
-        effectHandler(returnValue);
+      if (value === undefined) {
+        console.error(
+          `${_mark} $setValue error: "${String(
+            key,
+          )}" value cannot be undefined`,
+        );
+        return;
       }
+      if (typeof value === 'function') {
+        console.error(
+          `${_mark} $setValue error: "${String(
+            key,
+          )}" value cannot be a function`,
+        );
+        return;
+      }
+      const oldValue = returnValue[key];
+      if (typeof oldValue === 'function') {
+        console.error(
+          `${_mark} $setValue error: "${String(key)}" is a read-only function`,
+        );
+        return;
+      }
+      if (oldValue === value) {
+        return;
+      }
+
+      returnValue[key] = value;
+      effectKeys.push(key);
+      effectHandler(returnValue);
     },
     $setCode(code: C) {
       if (activeCode !== code) {
         activeCode = code;
 
         const valueMap: T = opt[activeCode];
+        if (!valueMap) {
+          console.error(`${_mark} $setCode error: "${activeCode}" not found`);
+          return;
+        }
 
-        let changeKeys: Key[] = [];
-
-        const keyList = Object.keys(valueMap) as Key[];
-        keyList.forEach(_key => {
-          const valueStr = valueMap[_key];
-          if (valueStr !== undefined && returnValue[_key] !== valueStr) {
-            changeKeys.push(_key);
-            effectKeys.push(_key);
-            returnValue[_key] = valueStr;
-          }
+        Object.keys(valueMap).forEach(_key => {
+          returnValue.$setValue(_key, valueMap[_key]);
         });
-
-        effectHandler(returnValue);
-        listenerHandle(activeCode);
+        listenerCodeHandle(activeCode);
       }
     },
-    $getCode() {
-      return activeCode;
-    },
+    $getCode: () => activeCode,
 
     /**
      * @param fn - 订阅函数
@@ -144,7 +155,7 @@ export function createReactiveConstant<
       try {
         fn(returnValue);
       } catch (error) {
-        console.error(`${_mark} subscribe error:`, error);
+        console.error(`${_mark} $subscribe error:`, error);
       }
 
       if (keys?.length === 0) {
@@ -165,19 +176,25 @@ export function createReactiveConstant<
     },
 
     /**
-     * - 监听函数初始化不执行
+     * @param fn - 监听函数
+     * - 监听函数初始化执行一次
      * - 监听函数在每次更改 Code 时（执行 $setCode 时）执行
      * @returns `listenerId`
      */
-    $addListener(fn: ListenerFn<C>) {
-      const id: ListenerId = getOnlyStr(listenerIds);
-      listenerMap[id] = fn;
-      listenerIds.push(id);
+    $addListenerCode(fn: ListenerCodeFn<C>) {
+      try {
+        fn(activeCode);
+      } catch (error) {
+        console.error(`${_mark} $addListener error:`, error);
+      }
+      const id: ListenerId = getOnlyStr(listenerCodeIds);
+      listenerCodeMap[id] = fn;
+      listenerCodeIds.push(id);
       return id;
     },
-    $removeListener(listenerId: ListenerId) {
-      listenerMap[listenerId] = undefined;
-      listenerIds.splice(listenerIds.indexOf(listenerId), 1);
+    $removeListenerCode(listenerId: ListenerId) {
+      listenerCodeMap[listenerId] = undefined;
+      listenerCodeIds.splice(listenerCodeIds.indexOf(listenerId), 1);
     },
   } as const;
 

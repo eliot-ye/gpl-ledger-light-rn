@@ -8,7 +8,7 @@ const localeList: {langCode: LangCode; locale: Locale}[] = [
 ];
 
 export function fromatDateMonth(date: number | Date) {
-  const langCode = I18n.getLanguage();
+  const langCode = I18n.getLangCode();
   const localeItem = localeList.find(item => item.langCode === langCode);
-  return format(date, I18n.fromatDateMonth, {locale: localeItem?.locale});
+  return format(date, I18n.t('fromatDateMonth'), {locale: localeItem?.locale});
 }

@@ -6,11 +6,6 @@ import React, {
   useReducer,
 } from 'react';
 
-type ExtractValues<T, V> = {
-  [Key in keyof T as T[Key] extends V ? Key : never]: T[Key];
-};
-type JSONConstraint = Record<string, any>;
-
 type DispatchAggregate<InitialState, DispatchPayload> = {
   [K in keyof DispatchPayload]: (
     state: InitialState,

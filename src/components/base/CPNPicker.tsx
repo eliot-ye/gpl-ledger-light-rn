@@ -77,9 +77,11 @@ interface PickerSingleProps extends CPNPicker {
   onChange?: (index: number) => void;
 }
 export function CPNPickerSingle(props: PickerSingleProps) {
+  I18n.useLocal();
+
   const themeColor = useContext(CPNPageViewThemeColor);
 
-  const SVRef = useRef<ScrollView | undefined>();
+  const SVRef = useRef<ScrollView>();
 
   const [activeIndex, activeIndexSet] = useState(props.initActive || 0);
 
@@ -130,7 +132,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
           {height: itemHeight * itemShowNum},
         ]}>
         <Animated.ScrollView
-          ref={SVRef}
+          ref={SVRef as any}
           style={[{width: '100%', height: '100%'}, props.scrollViewStyle]}
           contentOffset={contentOffset.current}
           showsVerticalScrollIndicator={false}
@@ -269,6 +271,8 @@ interface ModalPickerProps extends CPNPicker {
   initActiveList?: (number | undefined)[];
 }
 export function CPNModalPicker(props: ModalPickerProps) {
+  I18n.useLocal();
+
   const itemHeight = props.itemHeight || Config.itemHeight;
   const itemShowNum = props.itemShowNum || Config.itemShowNum;
 
@@ -350,7 +354,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
         style={[stylesModalPicker.btnWrapper, {height: Config.headerHeight}]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.cancelText || I18n.Cancel}
+            {props.cancelText || I18n.t('Cancel')}
           </CPNText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -376,7 +380,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
             props.onConfirm && props.onConfirm(_itemList, _indexList);
           }}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.confirmText || I18n.Confirm}
+            {props.confirmText || I18n.t('Confirm')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -457,6 +461,8 @@ interface DateTimePickerProps {
   cancelText?: string;
 }
 export function CPNDateTimePicker(props: DateTimePickerProps) {
+  I18n.useLocal();
+
   const {typeString, typeObject} = useMemo(() => {
     let _typeString: DateTimeType[] = [];
     let _typeObject: DateTimeTypeObject[] = [];
@@ -867,7 +873,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
         style={[stylesModalPicker.btnWrapper, {height: Config.headerHeight}]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.cancelText || I18n.Cancel}
+            {props.cancelText || I18n.t('Cancel')}
           </CPNText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -884,7 +890,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
               });
           }}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.confirmText || I18n.Confirm}
+            {props.confirmText || I18n.t('Confirm')}
           </CPNText>
         </TouchableOpacity>
       </View>

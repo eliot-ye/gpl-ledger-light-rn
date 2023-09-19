@@ -8,6 +8,7 @@ export default {
   Close: 'Close',
   Refresh: 'Refresh',
   Submit: 'Submit',
+  OR: 'OR',
 
   SignIn: 'Sign In',
   SignUp: 'Sign Up',

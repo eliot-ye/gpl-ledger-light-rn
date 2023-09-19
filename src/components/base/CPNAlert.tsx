@@ -223,6 +223,7 @@ interface CPNAlertViewProps extends AlertOption {
   onClose: () => void;
 }
 export function CPNAlertView(props: CPNAlertViewProps) {
+  I18n.useLocal();
   const animatedValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     if (props.show) {
@@ -256,7 +257,7 @@ export function CPNAlertView(props: CPNAlertViewProps) {
             index={1}
             animatedScale={animatedValue}
             buttons={useMemo(
-              () => props.buttons || [{text: I18n.OK}],
+              () => props.buttons || [{text: I18n.t('OK')}],
               [props.buttons],
             )}
           />
@@ -365,7 +366,7 @@ export function createCPNAlert() {
       showEv.publish({
         id,
         backButtonClose: true,
-        buttons: [{text: I18n.OK}],
+        buttons: [{text: I18n.t('OK')}],
         animatedValue: new Animated.Value(0),
         ...option,
       });

@@ -7,11 +7,10 @@ import {useNavigation} from '@react-navigation/native';
 import {envConstant} from '@/configs/env';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
-import {StoreRoot} from '@/store';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
-  StoreRoot.useState();
+  I18n.useLocal();
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
@@ -40,7 +39,7 @@ export function SettingPage() {
     return (
       <CPNCellGroup style={{marginBottom: 20}}>
         <CPNCell
-          title={I18n.BiometricsEnable}
+          title={I18n.t('BiometricsEnable')}
           rightIcon={
             <Switch
               value={enableBiometrics}
@@ -68,23 +67,23 @@ export function SettingPage() {
   }
 
   return (
-    <CPNPageView title={I18n.Settings} isTabbarPage>
+    <CPNPageView title={I18n.t('Settings')} isTabbarPage>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
-            title={I18n.ColorManagement}
+            title={I18n.t('ColorManagement')}
             onPress={() => {
               navigation.navigate('ColorManagementPage');
             }}
           />
           <CPNCell
-            title={I18n.CurrencyManagement}
+            title={I18n.t('CurrencyManagement')}
             onPress={() => {
               navigation.navigate('CurrencyManagementPage');
             }}
           />
           <CPNCell
-            title={I18n.AssetTypeManagement}
+            title={I18n.t('AssetTypeManagement')}
             onPress={() => {
               navigation.navigate('AssetTypeManagementPage');
             }}
@@ -94,13 +93,13 @@ export function SettingPage() {
 
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
-            title={I18n.LanguageSetting}
+            title={I18n.t('LanguageSetting')}
             onPress={() => {
               navigation.navigate('LangSettingPage');
             }}
           />
           <CPNCell
-            title={I18n.Backup}
+            title={I18n.t('Backup')}
             onPress={() => {
               navigation.navigate('BackupPage');
             }}
@@ -112,7 +111,7 @@ export function SettingPage() {
 
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
-            title={I18n.About}
+            title={I18n.t('About')}
             value={`v${envConstant.versionName}`}
             onPress={() => {
               navigation.navigate('AboutPage');

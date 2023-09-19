@@ -214,10 +214,10 @@ export function useFetch(
             // await LSLogout();
             resetStore();
             CPNAlert.open({
-              message: I18n.SessionExpired,
+              message: I18n.t('SessionExpired'),
               buttons: [
                 {
-                  text: I18n.Confirm,
+                  text: I18n.t('Confirm'),
                   onPress() {
                     showExpiredFlag = false;
                   },
@@ -229,10 +229,10 @@ export function useFetch(
           if (responseStatus !== 403 && !showNetworkErrorFlag) {
             showNetworkErrorFlag = true;
             CPNAlert.open({
-              message: I18n.NetworkError,
+              message: I18n.t('NetworkError'),
               buttons: [
                 {
-                  text: I18n.Confirm,
+                  text: I18n.t('Confirm'),
                   onPress() {
                     showNetworkErrorFlag = false;
                   },

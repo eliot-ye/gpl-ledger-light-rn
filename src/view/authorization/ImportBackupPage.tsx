@@ -4,8 +4,10 @@ import React from 'react';
 import {View} from 'react-native';
 
 export function ImportBackupPage() {
+  I18n.useLocal();
+
   return (
-    <CPNPageView title={I18n.ImportBackup}>
+    <CPNPageView title={I18n.t('ImportBackup')}>
       <View style={{padding: 20}}></View>
     </CPNPageView>
   );

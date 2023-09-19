@@ -82,10 +82,10 @@ export async function getRealm(path?: string, encryptionKey?: string) {
     } else {
       if (navigationRef.isReady()) {
         CPNAlert.open({
-          message: I18n.SessionExpired,
+          message: I18n.t('SessionExpired'),
           buttons: [
             {
-              text: I18n.Confirm,
+              text: I18n.t('Confirm'),
               onPress() {
                 navigationRef.resetRoot({
                   routes: [{name: 'SignInPage'}],

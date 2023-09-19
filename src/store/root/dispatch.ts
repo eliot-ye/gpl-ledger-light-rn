@@ -1,4 +1,3 @@
-import {I18n, LangCode} from '@assets/I18n';
 import {Colors, ThemeCode} from '@/configs/colors';
 import {createDispatch} from '@/libs/ReactContextStore';
 import initialState from './initialState';
@@ -8,7 +7,6 @@ const initialStateStr = JSON.stringify(initialState);
 interface DispatchPayloadRoot {
   reset: undefined;
   theme: ThemeCode;
-  langCode: LangCode;
   isSignIn: boolean;
 }
 
@@ -21,14 +19,6 @@ export default createDispatch<typeof initialState, DispatchPayloadRoot>({
     }
     Colors.$setCode(theme);
     return {...state, theme};
-  },
-
-  langCode: (state, langCode) => {
-    if (langCode === state.langCode) {
-      return state;
-    }
-    I18n.setLanguage(langCode);
-    return {...state, langCode};
   },
 
   isSignIn: (state, isSignIn) =>

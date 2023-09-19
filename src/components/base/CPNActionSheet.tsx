@@ -84,6 +84,8 @@ interface CPNActionSheetViewProps<ItemB extends ActionSheetButton>
 export function CPNActionSheetView<ItemB extends ActionSheetButton>(
   props: CPNActionSheetViewProps<ItemB>,
 ) {
+  I18n.useLocal();
+
   const buttonList = useMemo<CPNActionSheetButton[]>(() => {
     return props.buttons.map(_item => ({id: getRandomStr(), ..._item})) || [];
   }, [props.buttons]);
@@ -256,7 +258,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                     styles.buttonText,
                     {color: Colors.warning, fontWeight: '600'},
                   ]}>
-                  {props.cancelText || I18n.Cancel}
+                  {props.cancelText || I18n.t('Cancel')}
                 </CPNText>
               </TouchableOpacity>
             )}

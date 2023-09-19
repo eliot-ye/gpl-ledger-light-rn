@@ -71,6 +71,8 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
 export function CPNDropdown<ItemT extends DataConstraint>(
   props: CPNDropdownProps<ItemT>,
 ) {
+  I18n.useLocal();
+
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
   const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
@@ -159,7 +161,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               {activeItem?.label ||
                 activeItem?.value ||
                 (props.selectPlaceholder === undefined
-                  ? I18n.formatString(I18n.PlaceholderSelect, formItem.title)
+                  ? I18n.f(I18n.t('PlaceholderSelect'), formItem.title)
                   : props.selectPlaceholder)}
             </CPNText>
           )}

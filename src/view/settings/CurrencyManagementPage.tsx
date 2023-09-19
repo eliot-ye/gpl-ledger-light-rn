@@ -25,6 +25,8 @@ import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 
 export function CurrencyManagementPage() {
+  I18n.useLocal();
+
   const [CurrencyList, CurrencyListSet] = useState<CurrencyItem[]>([]);
   const [CurrencyUsedIds, CurrencyUsedIdsSet] = useState<string[]>([]);
   const getDBCurrency = useCallback(async () => {
@@ -74,11 +76,8 @@ export function CurrencyManagementPage() {
         <CPNPageView
           title={
             detailsRef.current.abbreviation
-              ? I18n.formatString(
-                  I18n.EditCurrency,
-                  detailsRef.current.name || '',
-                )
-              : I18n.AddCurrency
+              ? I18n.f(I18n.t('EditCurrency'), detailsRef.current.name || '')
+              : I18n.t('AddCurrency')
           }
           scrollEnabled={false}
           safeArea={false}
@@ -89,14 +88,14 @@ export function CurrencyManagementPage() {
               <TouchableOpacity
                 onPress={async () => {
                   CPNAlert.open({
-                    message: I18n.formatString(
-                      I18n.DeleteConfirm,
+                    message: I18n.f(
+                      I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
                     buttons: [
-                      {text: I18n.Cancel},
+                      {text: I18n.t('Cancel')},
                       {
-                        text: I18n.Confirm,
+                        text: I18n.t('Confirm'),
                         async onPress() {
                           if (detailsRef.current.abbreviation) {
                             dbDeleteCurrency(detailsRef.current.abbreviation);
@@ -115,7 +114,7 @@ export function CurrencyManagementPage() {
           <View style={{padding: 20}}>
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.CurrencyName}
+              title={I18n.t('CurrencyName')}
               hasError={!!detailsError.name}
               errorText={detailsError.name}>
               <CPNInput
@@ -129,8 +128,8 @@ export function CurrencyManagementPage() {
 
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.CurrencyAbbreviation}
-              description={I18n.CurrencyAbbreviationDesc}
+              title={I18n.t('CurrencyAbbreviation')}
+              description={I18n.t('CurrencyAbbreviationDesc')}
               hasError={!!detailsError.abbreviation}
               errorText={detailsError.abbreviation}>
               <CPNInput
@@ -145,7 +144,7 @@ export function CurrencyManagementPage() {
 
             <CPNFormItem
               style={{paddingBottom: 20}}
-              title={I18n.CurrencySymbol}
+              title={I18n.t('CurrencySymbol')}
               hasError={!!detailsError.symbol}
               errorText={detailsError.symbol}>
               <CPNInput
@@ -158,26 +157,30 @@ export function CurrencyManagementPage() {
             </CPNFormItem>
 
             <CPNButton
-              children={I18n.Submit}
+              children={I18n.t('Submit')}
               onPress={async () => {
                 const _detailsError: ErrorItem<CurrencyItem> = {};
                 if (!details.name) {
-                  _detailsError.name = I18n.CurrencyNameError1;
+                  _detailsError.name = I18n.t('CurrencyNameError1');
                 }
 
                 if (!details.abbreviation) {
-                  _detailsError.abbreviation = I18n.CurrencyAbbreviationError1;
+                  _detailsError.abbreviation = I18n.t(
+                    'CurrencyAbbreviationError1',
+                  );
                 } else if (
                   details.abbreviation &&
                   CurrencyList.map(item => item.abbreviation).includes(
                     details.abbreviation,
                   )
                 ) {
-                  _detailsError.abbreviation = I18n.CurrencyAbbreviationError2;
+                  _detailsError.abbreviation = I18n.t(
+                    'CurrencyAbbreviationError2',
+                  );
                 }
 
                 if (!details.symbol) {
-                  _detailsError.symbol = I18n.CurrencySymbolError1;
+                  _detailsError.symbol = I18n.t('CurrencySymbolError1');
                 }
 
                 const errorList = Object.values(_detailsError).map(
@@ -201,7 +204,7 @@ export function CurrencyManagementPage() {
 
   return (
     <>
-      <CPNPageView title={I18n.CurrencyManagement}>
+      <CPNPageView title={I18n.t('CurrencyManagement')}>
         <View style={{padding: 20}}>
           {renderTab()}
           <CPNCellGroup>

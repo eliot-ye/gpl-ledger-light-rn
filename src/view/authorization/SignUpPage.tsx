@@ -22,7 +22,7 @@ import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
 
-  StoreRoot.useState();
+  I18n.useLocal();
   const RootDispatch = StoreRoot.useDispatch();
 
   interface FormData {
@@ -42,7 +42,7 @@ export function SignUpPage() {
     return (
       <CPNFormItem
         style={{paddingBottom: 20}}
-        title={I18n.Username}
+        title={I18n.t('Username')}
         errorText={formDataError.username}
         hasError={!!formDataError.username}>
         <CPNInput
@@ -61,8 +61,8 @@ export function SignUpPage() {
     return (
       <CPNFormItem
         style={{paddingBottom: 30}}
-        title={I18n.Password}
-        errorText={I18n.PasswordError1}
+        title={I18n.t('Password')}
+        errorText={I18n.t('PasswordError1')}
         hasError={!!formDataError.password}>
         <CPNInput
           value={formData.password}
@@ -81,15 +81,15 @@ export function SignUpPage() {
     return (
       <View>
         <CPNButton
-          children={I18n.SignUp}
+          children={I18n.t('SignUp')}
           onPress={async () => {
             const _formDataError: ErrorItem<FormData> = {};
 
             if (!formData.username) {
-              _formDataError.username = I18n.UsernameError1;
+              _formDataError.username = I18n.t('UsernameError1');
             }
             if (!formData.password) {
-              _formDataError.password = I18n.PasswordError1;
+              _formDataError.password = I18n.t('PasswordError1');
             }
 
             if (
@@ -134,7 +134,7 @@ export function SignUpPage() {
             }}>
             <CPNText
               style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-              {I18n.ImportBackup}
+              {I18n.t('ImportBackup')}
             </CPNText>
           </TouchableOpacity>
         </View>
@@ -151,7 +151,7 @@ export function SignUpPage() {
           }}>
           <CPNText
             style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            {I18n.LanguageSetting}
+            {I18n.t('LanguageSetting')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -159,7 +159,7 @@ export function SignUpPage() {
   }
 
   return (
-    <CPNPageView title={I18n.SignUp}>
+    <CPNPageView title={I18n.t('SignUp')}>
       <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
         <View>
           {renderUsernameInput()}

@@ -30,6 +30,8 @@ interface CPNInputProps extends TextInputProps {
 }
 
 export function CPNInput(props: CPNInputProps) {
+  I18n.useLocal();
+
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
   const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
@@ -56,9 +58,7 @@ export function CPNInput(props: CPNInputProps) {
           allowFontScaling={false}
           autoCapitalize={'none'}
           multiline={!props.secureTextEntry && props.editable === false}
-          placeholder={
-            I18n.formatString(I18n.PlaceholderInput, formItem.title) as string
-          }
+          placeholder={I18n.f(I18n.t('PlaceholderInput'), formItem.title)}
           placeholderTextColor={Colors.fontPlaceholder}
           {...props}
           style={[styles.input, StyleGet.title('h4'), props.style]}

@@ -18,10 +18,11 @@ import {CusLog} from '@/utils/tools';
 
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
+  I18n.useLocal();
   const apiGiteePublic = useApiGiteePublic();
 
   return (
-    <CPNPageView title={I18n.About}>
+    <CPNPageView title={I18n.t('About')}>
       <View
         style={{
           height: 300,
@@ -33,7 +34,7 @@ export function AboutPage() {
       <View style={{padding: 20}}>
         <CPNCellGroup>
           <CPNCell
-            title={I18n.Version}
+            title={I18n.t('Version')}
             value={`v${envConstant.versionName} (${envConstant.versionCode})`}
             showChevron={false}
             onPress={() => {
@@ -41,7 +42,7 @@ export function AboutPage() {
             }}
           />
           <CPNCell
-            title={I18n.CheckUpdates}
+            title={I18n.t('CheckUpdates')}
             onPress={async () => {
               CPNLoading.open();
               try {
@@ -54,14 +55,14 @@ export function AboutPage() {
                   versionData.versionCode > Number(envConstant.versionCode)
                 ) {
                   CPNAlert.open({
-                    title: I18n.formatString(
-                      I18n.DiscoveringNewVersion,
+                    title: I18n.f(
+                      I18n.t('DiscoveringNewVersion'),
                       versionData.versionName,
                     ),
                     message: <CPNRichTextView richText={versionData.desc} />,
                     buttons: [
                       {
-                        text: I18n.Confirm,
+                        text: I18n.t('Confirm'),
                         onPress() {
                           let defaultUpdateLink = '';
                           if (Platform.OS === 'android') {
@@ -74,13 +75,13 @@ export function AboutPage() {
                         },
                       },
                       {
-                        text: I18n.ViewVersionLog,
+                        text: I18n.t('ViewVersionLog'),
                         onPress() {
                           navigation.navigate('VersionLogPage');
                         },
                       },
                       {
-                        text: I18n.Cancel,
+                        text: I18n.t('Cancel'),
                       },
                     ],
                   });

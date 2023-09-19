@@ -80,6 +80,8 @@ export interface CPNHeaderProps {
   showShadow?: boolean;
 }
 export function CPNHeader(props: CPNHeaderProps) {
+  I18n.useLocal();
+
   const backIcon = useMemo(() => {
     const canGoBack =
       navigationRef && navigationRef.isReady() && navigationRef.canGoBack();
@@ -91,7 +93,7 @@ export function CPNHeader(props: CPNHeaderProps) {
     return (
       <TouchableOpacity
         accessible
-        accessibilityLabel={I18n.GoBack}
+        accessibilityLabel={I18n.t('GoBack')}
         onPress={
           props.onPressLeftIcon ||
           (canGoBack && navigationRef.goBack) ||

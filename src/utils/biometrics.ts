@@ -36,16 +36,16 @@ export const biometrics = {
       showModal: true, //required (Android) - Will prompt user's fingerprint on Android
       strings: {
         // optional (Android) - You can personalize your prompt
-        header: I18n.Biometrics,
-        description: I18n.BiometricsDescription,
-        hint: I18n.BiometricsDescription,
-        success: I18n.BiometricsSuccess,
-        notRecognized: I18n.NotRecognized,
-        cancel: I18n.Cancel,
-        cancelled: I18n.Cancelled,
+        header: I18n.t('Biometrics'),
+        description: I18n.t('BiometricsDescription'),
+        hint: I18n.t('BiometricsDescription'),
+        success: I18n.t('BiometricsSuccess'),
+        notRecognized: I18n.t('NotRecognized'),
+        cancel: I18n.t('Cancel'),
+        cancelled: I18n.t('Cancelled'),
       },
       // required (iOS) -  A fallback string for iOS
-      kSecUseOperationPrompt: I18n.BiometricsDescription,
+      kSecUseOperationPrompt: I18n.t('BiometricsDescription'),
     });
 
     return JSON.parse(protectedData);
@@ -59,13 +59,13 @@ export const biometrics = {
         showModal: true,
         strings: {
           // optional (Android) - You can personalize your prompt
-          header: I18n.Biometrics,
-          description: I18n.BiometricsDescription,
-          hint: I18n.BiometricsDescription,
-          success: I18n.BiometricsSuccess,
-          notRecognized: I18n.NotRecognized,
-          cancel: I18n.Cancel,
-          cancelled: I18n.Cancelled,
+          header: I18n.t('Biometrics'),
+          description: I18n.t('BiometricsDescription'),
+          hint: I18n.t('BiometricsDescription'),
+          success: I18n.t('BiometricsSuccess'),
+          notRecognized: I18n.t('NotRecognized'),
+          cancel: I18n.t('Cancel'),
+          cancelled: I18n.t('Cancelled'),
         },
         kSecAccessControl: 'kSecAccessControlBiometryAny', // optional - Add support for FaceID
       }),

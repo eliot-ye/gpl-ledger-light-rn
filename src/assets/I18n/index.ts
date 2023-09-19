@@ -1,6 +1,7 @@
 import LocalizedStrings from 'react-native-localization';
 import zhHansTextCollection from './zhHans';
 import enTextCollection from './en';
+import {createReactI18n} from '@/libs/ReactI18n';
 
 export enum LangCode {
   zhHans = 'zh-Hans',
@@ -21,14 +22,12 @@ export const langList: ReadonlyArray<Readonly<LangItem>> = [
   {label: 'English', code: LangCode.en, scope: ['en']},
 ];
 
-/** 只有组件内使用时才具有反应性 */
-export const I18n = new LocalizedStrings({
-  [LangCode.zhHans]: zhHansTextCollection,
-  [LangCode.en]: {...zhHansTextCollection, ...enTextCollection} as const,
+const Localized = new LocalizedStrings({
+  [LangCode.zhHans]: {},
+  [LangCode.en]: {},
 });
-
-let defaultLang = LangCode.zhHans;
-const InterfaceLanguage = I18n.getInterfaceLanguage();
+let defaultLang = LangCode.zhHans as LangCode;
+const InterfaceLanguage = Localized.getInterfaceLanguage();
 langList.forEach(_langItem => {
   const _target = _langItem.scope.find(_scopeItem =>
     InterfaceLanguage.toLowerCase().includes(_scopeItem.toLowerCase()),
@@ -38,3 +37,12 @@ langList.forEach(_langItem => {
   }
 });
 export const langDefault = defaultLang;
+
+/** 只有组件内使用时才具有反应性 */
+export const I18n = createReactI18n(
+  {
+    [LangCode.zhHans]: zhHansTextCollection,
+    [LangCode.en]: {...zhHansTextCollection, ...enTextCollection} as const,
+  },
+  {defaultLang},
+);

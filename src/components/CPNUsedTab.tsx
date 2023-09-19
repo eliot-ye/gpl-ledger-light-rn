@@ -14,13 +14,15 @@ interface CPNUsedTabProps {
   onChange: (type: ShowTabType) => void;
 }
 export function CPNUsedTab(props: CPNUsedTabProps) {
+  I18n.useLocal();
+
   const tabButtons: {
     text: string;
     value: ShowTabType;
   }[] = [
-    {text: I18n.All, value: ShowTabType.All},
-    {text: I18n.Used, value: ShowTabType.Used},
-    {text: I18n.NotUsed, value: ShowTabType.NotUsed},
+    {text: I18n.t('All'), value: ShowTabType.All},
+    {text: I18n.t('Used'), value: ShowTabType.Used},
+    {text: I18n.t('NotUsed'), value: ShowTabType.NotUsed},
   ];
 
   return (

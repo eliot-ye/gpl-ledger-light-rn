@@ -36,7 +36,7 @@ import {recoveryFromWebDAV} from '../settings/BackupPage';
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
 
-  StoreRoot.useState();
+  I18n.useLocal();
   const RootDispatch = StoreRoot.useDispatch();
 
   const [useInfoList, useInfoListSet] = useState<LSUserInfo[]>([]);
@@ -55,12 +55,12 @@ export function SignInPage() {
   >({value: ''});
   function renderUserInfoInput() {
     return (
-      <CPNFormItem style={{paddingBottom: 20}} title={I18n.Username}>
+      <CPNFormItem style={{paddingBottom: 20}} title={I18n.t('Username')}>
         <CPNDropdown
           selectPlaceholder={
             useInfoListMemo.length > 0
-              ? I18n.SelectUser
-              : I18n.PleaseRegisterUser
+              ? I18n.t('SelectUser')
+              : I18n.t('PleaseRegisterUser')
           }
           data={useInfoListMemo}
           checked={userInfo.value}
@@ -93,8 +93,8 @@ export function SignInPage() {
     return (
       <CPNFormItem
         style={{paddingBottom: 30}}
-        title={I18n.Password}
-        errorText={I18n.PasswordError1}
+        title={I18n.t('Password')}
+        errorText={I18n.t('PasswordError1')}
         hasError={password.hasError}>
         <CPNInput
           value={password.value}
@@ -148,7 +148,7 @@ export function SignInPage() {
     return (
       <View>
         <CPNButton
-          children={I18n.SignIn}
+          children={I18n.t('SignIn')}
           onPress={async () => {
             if (!userInfo.token) {
               userInfoSet(val => ({...val, hasError: true}));
@@ -183,7 +183,7 @@ export function SignInPage() {
             }}>
             <CPNText
               style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-              {I18n.RegisteredUsers}
+              {I18n.t('RegisteredUsers')}
             </CPNText>
           </TouchableOpacity>
         </View>
@@ -209,7 +209,7 @@ export function SignInPage() {
           paddingTop: 30,
         }}>
         <TouchableOpacity
-          accessibilityLabel={I18n.BiometricsSignIn}
+          accessibilityLabel={I18n.t('BiometricsSignIn')}
           style={{padding: 30}}
           onPress={async () => {
             try {
@@ -219,7 +219,7 @@ export function SignInPage() {
               const res = await biometrics.getUser(userInfo.id);
               await loginAuth(res.password, res.userId);
             } catch (error) {
-              CPNAlert.open({message: I18n.BiometricsError});
+              CPNAlert.open({message: I18n.t('BiometricsError')});
             }
           }}>
           <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />
@@ -237,7 +237,7 @@ export function SignInPage() {
           }}>
           <CPNText
             style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            {I18n.LanguageSetting}
+            {I18n.t('LanguageSetting')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -245,7 +245,7 @@ export function SignInPage() {
   }
 
   return (
-    <CPNPageView title={I18n.SignIn}>
+    <CPNPageView title={I18n.t('SignIn')}>
       <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
         <View>
           {renderUserInfoInput()}

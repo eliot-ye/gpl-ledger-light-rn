@@ -13,6 +13,8 @@ import {StyleGet} from '@/configs/styles';
 import {CusLog} from '@/utils/tools';
 
 export function VersionLogPage() {
+  I18n.useLocal();
+
   const apiGiteePublic = useApiGiteePublic();
 
   const [logList, logListSet] = useState<VersionItem[]>([]);
@@ -31,7 +33,7 @@ export function VersionLogPage() {
   }, [apiGetLogData]);
 
   return (
-    <CPNPageView title={I18n.VersionLog}>
+    <CPNPageView title={I18n.t('VersionLog')}>
       <View style={{padding: 20}}>
         {logList.map(item => {
           return (

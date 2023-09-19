@@ -12,7 +12,7 @@ import {dbGetLedger, LedgerItem} from '@/database';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
-import {StoreHomePage, StoreRoot} from '@/store';
+import {StoreHomePage} from '@/store';
 import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
@@ -21,7 +21,7 @@ import {colorGetLightenBackground} from '@/utils/tools';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
-  StoreRoot.useState();
+  I18n.useLocal();
   const HomePageState = StoreHomePage.useState();
 
   const [ledgerList, ledgerListSet] = useState<LedgerItem[]>([]);
@@ -83,7 +83,7 @@ export function HomePage() {
 
   return (
     <CPNPageView
-      title={I18n.Ledger}
+      title={I18n.t('Ledger')}
       isTabbarPage
       alwaysBounceVertical={false}
       rightIcon={
@@ -99,7 +99,7 @@ export function HomePage() {
         {AvailableAssets.length > 0 && (
           <>
             <CPNText style={StyleGet.title('h3')}>
-              {I18n.AvailableAssets}
+              {I18n.t('AvailableAssets')}
             </CPNText>
             <CPNCellGroup style={{marginBottom: 20}}>
               {AvailableAssets.map((item, index) => (
@@ -137,7 +137,7 @@ export function HomePage() {
         {UnAvailableAssets.length > 0 && (
           <>
             <CPNText style={StyleGet.title('h3')}>
-              {I18n.UnavailableAssets}
+              {I18n.t('UnavailableAssets')}
             </CPNText>
             <CPNCellGroup>
               {UnAvailableAssets.map((item, index) => (
