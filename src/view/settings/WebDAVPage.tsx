@@ -15,6 +15,7 @@ import {StoreBackupPage} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {SessionStorage} from '@/store/sessionStorage';
 import {AESEncrypt} from '@/utils/encoding';
+import {CusLog} from '@/utils/tools';
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 
@@ -195,6 +196,7 @@ export function WebDAVPage() {
               );
               CPNToast.open({text: I18n.t('WebDAVSuccess')});
             } catch (error: any) {
+              CusLog.error('WebDAVSubmit', 'onSubmit', error);
               if (error.message) {
                 CPNToast.open({text: error.message});
               } else if (error.status === 401) {

@@ -244,7 +244,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 }
               } catch (error) {
                 CPNToast.open({text: I18n.t('BackupFailed')});
-                CusLog.error('backup', 'error', error);
+                CusLog.error('BackupNow', 'error', error);
               }
             }}
           />
@@ -261,6 +261,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 CPNToast.open({text: I18n.t('RecoverySuccess')});
               } catch (error) {
                 CPNToast.open({text: I18n.t('RecoveryFailed')});
+                CusLog.error('RecoveryNow', 'error', error);
               }
             }}
             isLast
