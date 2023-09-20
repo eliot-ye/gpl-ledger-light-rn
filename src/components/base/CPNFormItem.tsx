@@ -51,20 +51,22 @@ export function CPNFormItem(props: CPNFormItemProps) {
           {props.children}
         </View>
       </FormItemContext.Provider>
-      {!!props.description &&
-        !props.hasError &&
-        (['string', 'number'].includes(typeof props.description) ? (
-          <CPNText style={{fontSize: 12, opacity: 0.6}}>
-            {props.description}
+      <View style={{paddingStart: StyleGet.cellView().paddingHorizontal}}>
+        {!!props.description &&
+          !props.hasError &&
+          (['string', 'number'].includes(typeof props.description) ? (
+            <CPNText style={{fontSize: 12, opacity: 0.6}}>
+              {props.description}
+            </CPNText>
+          ) : (
+            props.description
+          ))}
+        {!!props.errorText && props.hasError && (
+          <CPNText style={{fontSize: 12, color: Colors.fail}}>
+            {props.errorText}
           </CPNText>
-        ) : (
-          props.description
-        ))}
-      {!!props.errorText && props.hasError && (
-        <CPNText style={{fontSize: 12, color: Colors.fail}}>
-          {props.errorText}
-        </CPNText>
-      )}
+        )}
+      </View>
     </View>
   );
 }
