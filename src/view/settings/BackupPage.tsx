@@ -90,10 +90,17 @@ async function backupHandler(basePath: string, backupDataStr: string) {
   return backupItem.filePath;
 }
 
-const backupDirBase = Platform.select({
+let backupDirBase = Platform.select({
   android: FS.DownloadDirectoryPath,
   ios: FS.DocumentDirectoryPath,
 });
+if (
+  Platform.OS === 'android' &&
+  Platform.Version > 29 &&
+  Platform.Version < 33
+) {
+  backupDirBase = FS.DocumentDirectoryPath;
+}
 
 export async function recoveryFromWebDAV(showSuccess = true) {
   if (!SessionStorage.WebDAVObject || !SessionStorage.password) {
@@ -203,20 +210,19 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 const backupDataStr = getBackupDataStr(await getLedgerData());
 
                 if (Platform.OS === 'android') {
-                  const permission = await PermissionsAndroid.check(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                  );
-                  if (!permission) {
+                  if (Platform.Version < 30) {
                     const status = await PermissionsAndroid.request(
                       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     );
                     if (status !== PermissionsAndroid.RESULTS.GRANTED) {
-                      CPNToast.open({text: I18n.t('InsufficientPermissions')});
+                      CPNToast.open({
+                        text: I18n.t('InsufficientPermissions'),
+                      });
                       return;
                     }
                   }
                   const backupFilePath = await backupHandler(
-                    backupDirBase || FS.ExternalDirectoryPath,
+                    backupDirBase || FS.DocumentDirectoryPath,
                     backupDataStr,
                   );
                   CPNToast.open({
