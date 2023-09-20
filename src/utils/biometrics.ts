@@ -64,7 +64,11 @@ export const biometrics = {
       cancelButtonText: I18n.t('Cancel'),
     });
     if (res.success) {
-      return LS_UserInfo.update({id: userKey, biometriceToken: undefined});
+      return Promise.all([
+        rnBiometrics.deleteKeys(),
+        LS_BiometriceKey.set(userKey, ''),
+        LS_UserInfo.update({id: userKey, biometriceToken: undefined}),
+      ]);
     }
   },
 };

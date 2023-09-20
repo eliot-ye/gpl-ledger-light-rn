@@ -25,7 +25,7 @@ export function SettingPage() {
       biometrics
         .getUserFlag(SessionStorage.userId)
         .then(res => {
-          if (res === 'true') {
+          if (res) {
             enableBiometricsSet(true);
           } else {
             enableBiometricsSet(false);
