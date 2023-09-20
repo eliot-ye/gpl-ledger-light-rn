@@ -109,7 +109,7 @@ export function WebDAVPage() {
               CPNAlert.open({
                 message: I18n.f(
                   I18n.t('DeleteConfirm'),
-                  ' ' + I18n.t('WebDAV'),
+                  ` ${I18n.t('WebDAV')}`,
                 ),
                 buttons: [
                   {text: I18n.t('Cancel')},
