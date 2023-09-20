@@ -2,6 +2,7 @@ import {LangCode, langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
+import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
 
 interface LSItem {
   key: string;
@@ -26,6 +27,10 @@ const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
     id: 'string',
     username: 'string',
     token: 'string',
+    biometriceToken: {
+      type: 'string',
+      optional: true,
+    },
     web_dav: {
       type: 'string',
       optional: true,
@@ -38,7 +43,7 @@ async function getLSRealm() {
   if (!LSRealm) {
     LSRealm = await Realm.open({
       schema: [LSSchema, LSUserInfoSchema],
-      schemaVersion: 2,
+      schemaVersion: 3,
     });
   }
   return LSRealm;
@@ -110,6 +115,7 @@ export interface LSUserInfo {
   id: string;
   username: string;
   token: string;
+  biometriceToken?: string;
   web_dav?: string;
 }
 export const LS_UserInfo = {
@@ -163,5 +169,29 @@ export const LS_WebDAVAutoSync = {
   },
   set(data: boolean) {
     return LSRealmStorage.set(this.key, `${data}`);
+  },
+};
+
+interface BiometriceKey {
+  [id: string]: string;
+}
+export const LS_BiometriceKey = {
+  key: 'biometrice_key',
+  async get() {
+    const str = await LSRealmStorage.get(this.key);
+    if (!str) {
+      return {};
+    }
+    const dataStr = AESDecrypt(str, this.key);
+    const data = JSON.parse(dataStr) as BiometriceKey;
+    return data;
+  },
+  async set(id: string, data: string) {
+    const oldData = await this.get();
+    oldData[id] = data;
+    return LSRealmStorage.set(
+      this.key,
+      AESEncrypt(JSON.stringify(oldData), this.key),
+    );
   },
 };

@@ -196,7 +196,7 @@ export function SignInPage() {
     biometrics.isSensorAvailable().then(async ({available}) => {
       if (available && userInfo.id) {
         const res = await biometrics.getUserFlag(userInfo.id);
-        availableBiometricsSet(res === 'true');
+        availableBiometricsSet(!!res);
       }
     });
   }, [userInfo.id]);
@@ -219,6 +219,7 @@ export function SignInPage() {
               const res = await biometrics.getUser(userInfo.id);
               await loginAuth(res.password, res.userId);
             } catch (error) {
+              CusLog.error('SignInPage', 'BiometricsSignIn', error);
               CPNAlert.open({message: I18n.t('BiometricsError')});
             }
           }}>

@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {envConstant} from '@/configs/env';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
+import {CusLog} from '@/utils/tools';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -47,15 +48,19 @@ export function SettingPage() {
                 if (!SessionStorage.userId) {
                   return;
                 }
-                if (!enableBiometrics && SessionStorage.password) {
-                  await biometrics.setUser(SessionStorage.userId, {
-                    userId: SessionStorage.userId,
-                    password: SessionStorage.password,
-                  });
-                  enableBiometricsSet(true);
-                } else {
-                  await biometrics.deleteUser(SessionStorage.userId);
-                  enableBiometricsSet(false);
+                try {
+                  if (!enableBiometrics && SessionStorage.password) {
+                    await biometrics.setUser(SessionStorage.userId, {
+                      userId: SessionStorage.userId,
+                      password: SessionStorage.password,
+                    });
+                    enableBiometricsSet(true);
+                  } else {
+                    await biometrics.deleteUser(SessionStorage.userId);
+                    enableBiometricsSet(false);
+                  }
+                } catch (error) {
+                  CusLog.error('SettingPage', 'BiometricsEnable', error);
                 }
               }}
             />
