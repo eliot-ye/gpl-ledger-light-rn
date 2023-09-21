@@ -136,6 +136,8 @@ export default {
   BiometricsEnable: '启用生物认证',
   BiometricsSignIn: '生物认证登入',
   BiometricsDescription: '我们需要您的许可才能检索加密数据',
-  BiometricsError: '生物认证失败，请使用密码登入',
+  BiometricsError: '生物认证失败',
+  BiometricsError1: '生物认证加密数据检索失败',
+  BiometricsError2: '生物认证失败，请使用密码登入',
   BiometricsSuccess: '生物认证成功',
 } as const;

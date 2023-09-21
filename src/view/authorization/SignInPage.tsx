@@ -194,12 +194,12 @@ export function SignInPage() {
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
     biometrics.isSensorAvailable().then(async ({available}) => {
-      if (available && userInfo.id) {
-        const res = await biometrics.getUserFlag(userInfo.id);
-        availableBiometricsSet(!!res);
+      if (available && userInfo.biometriceToken) {
+        const res = await biometrics.getUserFlag(userInfo.biometriceToken);
+        availableBiometricsSet(res);
       }
     });
-  }, [userInfo.id]);
+  }, [userInfo.biometriceToken]);
   function renderBiometrics() {
     return (
       <View
@@ -213,14 +213,14 @@ export function SignInPage() {
           style={{padding: 30}}
           onPress={async () => {
             try {
-              if (!userInfo.id) {
+              if (!userInfo.biometriceToken) {
                 return;
               }
-              const res = await biometrics.getUser(userInfo.id);
+              const res = await biometrics.getUser(userInfo.biometriceToken);
               await loginAuth(res.password, res.userId);
             } catch (error) {
               CusLog.error('SignInPage', 'BiometricsSignIn', error);
-              CPNAlert.open({message: I18n.t('BiometricsError')});
+              CPNAlert.open({message: I18n.t('BiometricsError2')});
             }
           }}>
           <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />

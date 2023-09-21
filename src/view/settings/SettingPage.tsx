@@ -1,5 +1,5 @@
 import {I18n} from '@/assets/I18n';
-import {CPNPageView, CPNCell, CPNCellGroup} from '@/components/base';
+import {CPNPageView, CPNCell, CPNCellGroup, CPNAlert} from '@/components/base';
 import React, {useEffect, useState} from 'react';
 import {Switch, View} from 'react-native';
 import {PageProps} from '../Router';
@@ -50,7 +50,7 @@ export function SettingPage() {
                 }
                 try {
                   if (!enableBiometrics && SessionStorage.password) {
-                    await biometrics.setUser(SessionStorage.userId, {
+                    await biometrics.setUser({
                       userId: SessionStorage.userId,
                       password: SessionStorage.password,
                     });
@@ -59,7 +59,8 @@ export function SettingPage() {
                     await biometrics.deleteUser(SessionStorage.userId);
                     enableBiometricsSet(false);
                   }
-                } catch (error) {
+                } catch (error: any) {
+                  CPNAlert.open({message: error});
                   CusLog.error('SettingPage', 'BiometricsEnable', error);
                 }
               }}

@@ -2,7 +2,6 @@ import {LangCode, langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
-import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
 
 interface LSItem {
   key: string;
@@ -49,7 +48,7 @@ async function getLSRealm() {
   return LSRealm;
 }
 
-const LSRealmStorage = {
+export const LSRealmStorage = {
   async get(key: string) {
     const LSR = await getLSRealm();
     const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
@@ -169,29 +168,5 @@ export const LS_WebDAVAutoSync = {
   },
   set(data: boolean) {
     return LSRealmStorage.set(this.key, `${data}`);
-  },
-};
-
-interface BiometriceKey {
-  [id: string]: string;
-}
-export const LS_BiometriceKey = {
-  key: 'biometrice_key',
-  async get() {
-    const str = await LSRealmStorage.get(this.key);
-    if (!str) {
-      return {};
-    }
-    const dataStr = AESDecrypt(str, this.key);
-    const data = JSON.parse(dataStr) as BiometriceKey;
-    return data;
-  },
-  async set(id: string, data: string) {
-    const oldData = await this.get();
-    oldData[id] = data;
-    return LSRealmStorage.set(
-      this.key,
-      AESEncrypt(JSON.stringify(oldData), this.key),
-    );
   },
 };
