@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Dimensions, Image, ImageProps, ImageSourcePropType} from 'react-native';
 import {ImageData, ImageNameMapType} from '@/configs/ImageData';
-import {StoreRoot} from '@/store';
+import {I18n} from '@/assets/I18n';
 
 interface CPNImageProps extends Partial<ImageProps> {
   /** 本地图片定义的名称，和`source`冲突时无效 */
@@ -12,7 +12,7 @@ interface CPNImageProps extends Partial<ImageProps> {
   autoHeight?: {imageWidth?: number; imageHight?: number; showWidth?: number};
 }
 export function CPNImage(props: CPNImageProps) {
-  const RootState = StoreRoot.useState();
+  const {langCode} = I18n.useLocal();
 
   const _source = useMemo<ImageSourcePropType>(() => {
     if (props.source) {
@@ -25,8 +25,8 @@ export function CPNImage(props: CPNImageProps) {
 
     const _imageNameDefaultMap = ImageData.default;
 
-    if (RootState.langCode) {
-      const _imageNameMap = ImageData[RootState.langCode];
+    if (langCode) {
+      const _imageNameMap = ImageData[langCode];
       if (!_imageNameMap) {
         return _imageNameDefaultMap[props.name];
       }
@@ -34,7 +34,7 @@ export function CPNImage(props: CPNImageProps) {
     }
 
     return _imageNameDefaultMap[props.name];
-  }, [props.name, props.source, RootState.langCode]);
+  }, [props.name, props.source, langCode]);
 
   const [imageWidth, imageWidthSet] = useState(props.autoHeight?.imageWidth);
   const [imageHight, imageHightSet] = useState(props.autoHeight?.imageHight);

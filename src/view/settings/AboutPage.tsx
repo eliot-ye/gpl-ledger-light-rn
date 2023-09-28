@@ -6,6 +6,7 @@ import {
   CPNLoading,
   CPNAlert,
   CPNRichTextView,
+  CPNImage,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import React from 'react';
@@ -29,8 +30,9 @@ export function AboutPage() {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: Colors.backgroundPanel,
-        }}
-      />
+        }}>
+        <CPNImage name="logo" size={200} />
+      </View>
       <View style={{padding: 20}}>
         <CPNCellGroup>
           <CPNCell
