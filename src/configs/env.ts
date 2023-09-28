@@ -16,8 +16,8 @@ enum EnvCode {
   PROD = 'PROD',
 }
 const envList: EnvListItem[] = [
-  {code: EnvCode.DEV, bundleId: []},
-  {code: EnvCode.PROD, bundleId: []},
+  {code: EnvCode.DEV, bundleId: ['com.gpl.ledger.light.rn.dev']},
+  {code: EnvCode.PROD, bundleId: ['com.gpl.ledger.light.rn']},
 ];
 
 export const envConstant = createReactiveConstant({
@@ -49,8 +49,9 @@ export function getFetchUrl(serverName: ApiServerName, path: string) {
   let domain = '';
   let serverPath = envConstant.apiServerMap[serverName];
 
-  envConstant.ApiServerList.concat(envConstant.CE_ApiServerList).forEach(
-    item => {
+  envConstant.apiServerList
+    .concat(envConstant.CE_ApiServerList)
+    .forEach(item => {
       if (
         !item.ServerEnable ||
         (item.ServerEnable && item.ServerEnable.includes(serverName))
@@ -59,8 +60,7 @@ export function getFetchUrl(serverName: ApiServerName, path: string) {
         serverPath =
           (item.ServerMap && item.ServerMap[serverName]) || serverPath;
       }
-    },
-  );
+    });
 
   return {domain, path: `${serverPath}${path}`};
 }

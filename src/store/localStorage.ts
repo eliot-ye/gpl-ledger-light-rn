@@ -1,7 +1,11 @@
+import 'react-native-get-random-values';
+import {MD5} from 'crypto-js';
+import {stringToUint8Array} from '@/utils/encoding';
 import {LangCode, langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
+import {envConstant} from '@/configs/env';
 
 interface LSItem {
   key: string;
@@ -43,6 +47,10 @@ async function getLSRealm() {
     LSRealm = await Realm.open({
       schema: [LSSchema, LSUserInfoSchema],
       schemaVersion: 3,
+      encryptionKey: stringToUint8Array(
+        MD5(envConstant.bundleId).toString() +
+          MD5(envConstant.bundleId).toString(),
+      ),
     });
   }
   return LSRealm;

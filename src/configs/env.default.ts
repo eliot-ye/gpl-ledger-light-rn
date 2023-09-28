@@ -14,7 +14,7 @@ interface CEApiServerItem extends ApiServerItem {
 }
 
 const ServerMap = {
-  giteePublic: 'public/GPL/ledger-light-rn',
+  giteePublic: 'public/GPL/ledger-light-rn-dev',
 };
 
 export default {
@@ -32,7 +32,7 @@ export default {
 
   apiServerMap: ServerMap,
 
-  ApiServerList: [
+  apiServerList: [
     {
       Domain: 'https://eliot-ye.gitee.io/',
       ServerEnable: ['giteePublic'],
