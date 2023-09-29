@@ -25,6 +25,7 @@ import {getRandomStrMD5} from '@/utils/tools';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
+import {CPNNoData} from '@/components/CPNNoData';
 
 export function ColorManagementPage() {
   I18n.useLocal();
@@ -239,6 +240,9 @@ export function ColorManagementPage() {
                 }
               />
             ))}
+
+            {dataShowMemo.length === 0 && <CPNNoData />}
+
             <TouchableOpacity
               style={[
                 StyleGet.cellView(),

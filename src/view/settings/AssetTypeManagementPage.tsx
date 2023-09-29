@@ -24,6 +24,7 @@ import {TouchableOpacity, View} from 'react-native';
 import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
+import {CPNNoData} from '@/components/CPNNoData';
 
 export function AssetTypeManagementPage() {
   I18n.useLocal();
@@ -241,6 +242,9 @@ export function AssetTypeManagementPage() {
                 }
               />
             ))}
+
+            {dataShowMemo.length === 0 && <CPNNoData />}
+
             <TouchableOpacity
               style={[
                 StyleGet.cellView(),

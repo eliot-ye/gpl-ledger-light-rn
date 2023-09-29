@@ -18,6 +18,7 @@ import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
 import {StyleGet} from '@/configs/styles';
 import {colorGetLightenBackground} from '@/utils/tools';
+import {CPNNoData} from '@/components/CPNNoData';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -96,6 +97,10 @@ export function HomePage() {
       }>
       {renderChart()}
       <View style={{padding: 20}}>
+        {AvailableAssets.length === 0 && UnAvailableAssets.length === 0 && (
+          <CPNNoData />
+        )}
+
         {AvailableAssets.length > 0 && (
           <>
             <CPNText style={[StyleGet.title('h5'), {marginBottom: 6}]}>

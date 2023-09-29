@@ -13,6 +13,7 @@ export default {
   Refresh: '刷新',
   Submit: '提交',
   OR: '或',
+  NoData: '暂无数据',
 
   SignIn: '登入',
   SignUp: '注册',
