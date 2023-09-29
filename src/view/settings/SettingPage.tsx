@@ -21,15 +21,11 @@ export function SettingPage() {
   }, []);
   const [enableBiometrics, enableBiometricsSet] = useState(false);
   useEffect(() => {
-    if (SessionStorage.userId) {
+    if (SessionStorage.biometriceToken) {
       biometrics
-        .getUserFlag(SessionStorage.userId)
+        .getUserFlag(SessionStorage.biometriceToken)
         .then(res => {
-          if (res) {
-            enableBiometricsSet(true);
-          } else {
-            enableBiometricsSet(false);
-          }
+          enableBiometricsSet(res || false);
         })
         .catch(() => {
           enableBiometricsSet(false);
@@ -45,7 +41,7 @@ export function SettingPage() {
             <Switch
               value={enableBiometrics}
               onChange={async () => {
-                if (!SessionStorage.userId) {
+                if (!SessionStorage.userId || !SessionStorage.biometriceToken) {
                   return;
                 }
                 try {
@@ -56,7 +52,7 @@ export function SettingPage() {
                     });
                     enableBiometricsSet(true);
                   } else {
-                    await biometrics.deleteUser(SessionStorage.userId);
+                    await biometrics.deleteUser(SessionStorage.biometriceToken);
                     enableBiometricsSet(false);
                   }
                 } catch (error: any) {

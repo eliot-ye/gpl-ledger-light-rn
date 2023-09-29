@@ -131,6 +131,14 @@ export const LS_UserInfo = {
     const LSR = await getLSRealm();
     return LSR.objects<LSUserInfo>(LSUserInfoSchema.name).toJSON() as any;
   },
+  async getById(id: string): Promise<LSUserInfo | undefined> {
+    const LSR = await getLSRealm();
+    const data = LSR.objectForPrimaryKey<LSUserInfo>(LSUserInfoSchema.name, id);
+    if (data) {
+      return data.toJSON() as any;
+    }
+    return undefined;
+  },
   async set(data: LSUserInfo) {
     const LSR = await getLSRealm();
     LSR.write(() => {

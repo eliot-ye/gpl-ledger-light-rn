@@ -121,6 +121,10 @@ export function SignInPage() {
         SessionStorage.$setValue('username', userInfo.username);
         SessionStorage.$setValue('password', pwd);
 
+        if (userInfo.biometriceToken) {
+          SessionStorage.$setValue('biometriceToken', userInfo.biometriceToken);
+        }
+
         if (userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
