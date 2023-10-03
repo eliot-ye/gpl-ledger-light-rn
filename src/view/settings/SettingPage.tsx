@@ -41,7 +41,7 @@ export function SettingPage() {
             <Switch
               value={enableBiometrics}
               onChange={async () => {
-                if (!SessionStorage.userId || !SessionStorage.biometriceToken) {
+                if (!SessionStorage.userId) {
                   return;
                 }
                 try {
@@ -52,7 +52,11 @@ export function SettingPage() {
                     });
                     enableBiometricsSet(true);
                   } else {
-                    await biometrics.deleteUser(SessionStorage.biometriceToken);
+                    if (SessionStorage.biometriceToken) {
+                      await biometrics.deleteUser(
+                        SessionStorage.biometriceToken,
+                      );
+                    }
                     enableBiometricsSet(false);
                   }
                 } catch (error: any) {
