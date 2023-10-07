@@ -56,6 +56,54 @@ async function getLSRealm() {
   return LSRealm;
 }
 
+export interface LSUserInfo {
+  id: string;
+  username: string;
+  token: string;
+  biometriceToken?: string;
+  web_dav?: string;
+}
+export const LS_UserInfo = {
+  key: 'user_info',
+  async get(): Promise<LSUserInfo[]> {
+    const LSR = await getLSRealm();
+    return LSR.objects<LSUserInfo>(LSUserInfoSchema.name).toJSON() as any;
+  },
+  async getById(id: string): Promise<LSUserInfo | undefined> {
+    const LSR = await getLSRealm();
+    const data = LSR.objectForPrimaryKey<LSUserInfo>(LSUserInfoSchema.name, id);
+    if (data) {
+      return data.toJSON() as any;
+    }
+    return undefined;
+  },
+  async set(data: LSUserInfo) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      LSR.create<LSUserInfo>(LSUserInfoSchema.name, data, Realm.UpdateMode.All);
+    });
+  },
+  async update(data: Partial<LSUserInfo>) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      LSR.create<LSUserInfo>(
+        LSUserInfoSchema.name,
+        data,
+        Realm.UpdateMode.Modified,
+      );
+    });
+  },
+  async remove(id: string) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      const data = LSR.objectForPrimaryKey(LSUserInfoSchema.name, id);
+      if (data) {
+        LSR.delete(data);
+      }
+    });
+  },
+};
+
 export const LSRealmStorage = {
   async get(key: string) {
     const LSR = await getLSRealm();
@@ -102,67 +150,6 @@ export const LS_Lang = {
   },
   set(data: LangCode) {
     return LSRealmStorage.set(this.key, data);
-  },
-};
-
-export const LS_Token = {
-  key: 'token',
-  async get() {
-    return LSRealmStorage.get(this.key);
-  },
-  async set(token: string) {
-    return LSRealmStorage.set(this.key, token);
-  },
-  remove() {
-    return LSRealmStorage.remove(this.key);
-  },
-};
-
-export interface LSUserInfo {
-  id: string;
-  username: string;
-  token: string;
-  biometriceToken?: string;
-  web_dav?: string;
-}
-export const LS_UserInfo = {
-  key: 'user_info',
-  async get(): Promise<LSUserInfo[]> {
-    const LSR = await getLSRealm();
-    return LSR.objects<LSUserInfo>(LSUserInfoSchema.name).toJSON() as any;
-  },
-  async getById(id: string): Promise<LSUserInfo | undefined> {
-    const LSR = await getLSRealm();
-    const data = LSR.objectForPrimaryKey<LSUserInfo>(LSUserInfoSchema.name, id);
-    if (data) {
-      return data.toJSON() as any;
-    }
-    return undefined;
-  },
-  async set(data: LSUserInfo) {
-    const LSR = await getLSRealm();
-    LSR.write(() => {
-      LSR.create<LSUserInfo>(LSUserInfoSchema.name, data, Realm.UpdateMode.All);
-    });
-  },
-  async update(data: Partial<LSUserInfo>) {
-    const LSR = await getLSRealm();
-    LSR.write(() => {
-      LSR.create<LSUserInfo>(
-        LSUserInfoSchema.name,
-        data,
-        Realm.UpdateMode.Modified,
-      );
-    });
-  },
-  async remove(id: string) {
-    const LSR = await getLSRealm();
-    LSR.write(() => {
-      const data = LSR.objectForPrimaryKey(LSUserInfoSchema.name, id);
-      if (data) {
-        LSR.delete(data);
-      }
-    });
   },
 };
 

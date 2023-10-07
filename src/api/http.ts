@@ -3,7 +3,7 @@ import {CPNAlert} from '@/components/base';
 import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
 import {useResetStore} from '@/store';
-import {LS_Lang, LS_Token} from '@/store/localStorage';
+import {LS_Lang} from '@/store/localStorage';
 import {CusLog} from '@/utils/tools';
 import {useCallback} from 'react';
 import {Platform} from 'react-native';
@@ -47,14 +47,12 @@ export async function getFetchData(
   body: any = {},
   option: HttpOption = {},
 ) {
-  const token = (await LS_Token.get()) || undefined;
   const langCode = await LS_Lang.get();
 
   const optionHeaders = option.headers || {};
   const headers = {
     ...headersDefault,
     'Content-Language': langCode,
-    Authorization: token,
     ...optionHeaders,
   };
 
