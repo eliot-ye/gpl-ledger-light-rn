@@ -179,11 +179,11 @@ export function LedgerDetailsPage() {
                 () =>
                   assetTypeList.map(item => ({
                     ...item,
-                    label: `${item.name}(${
+                    label: `(${
                       item.isAvailableAssets
                         ? I18n.t('AvailableAssets')
                         : I18n.t('UnavailableAssets')
-                    })`,
+                    })${item.name}`,
                     value: item.symbol,
                   })),
                 [assetTypeList],
@@ -222,7 +222,6 @@ export function LedgerDetailsPage() {
           <CPNDropdown
             renderItemContent={item => (
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <CPNText>{item.label}</CPNText>
                 <View
                   style={{
                     width: 10,
@@ -232,6 +231,7 @@ export function LedgerDetailsPage() {
                     marginRight: 10,
                   }}
                 />
+                <CPNText>{item.label}</CPNText>
                 {colorsUsedIds.includes(item.value) && (
                   <CPNText
                     style={{color: Colors.fontPlaceholder, fontSize: 12}}>
@@ -264,7 +264,7 @@ export function LedgerDetailsPage() {
                 () =>
                   currencyList.map(item => ({
                     ...item,
-                    label: `${item.name}(${item.abbreviation})`,
+                    label: `(${item.abbreviation})${item.name}`,
                     value: item.symbol,
                   })),
                 [currencyList],
