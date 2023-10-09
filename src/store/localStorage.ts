@@ -46,10 +46,9 @@ async function getLSRealm() {
   if (!LSRealm) {
     LSRealm = await Realm.open({
       schema: [LSSchema, LSUserInfoSchema],
-      schemaVersion: 3,
+      schemaVersion: 1,
       encryptionKey: stringToUint8Array(
-        MD5(envConstant.bundleId).toString() +
-          MD5(envConstant.bundleId).toString(),
+        MD5(envConstant.bundleId).toString() + MD5(envConstant.salt).toString(),
       ),
     });
   }

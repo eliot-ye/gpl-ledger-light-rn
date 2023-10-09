@@ -27,6 +27,8 @@ export default {
   versionName: DeviceInfo.getVersion(),
   versionCode: DeviceInfo.getBuildNumber(),
 
+  salt: 'salt',
+
   envControlPath: '',
   CE_OnChangeRoute: false,
 
