@@ -12,8 +12,6 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: Colors.transparent,
   },
   btn: {
     flex: 1,
@@ -55,7 +53,7 @@ export function CPNButtonGroup<T extends string | number>(
           key={item.value}
           style={[
             styles.btnContainer,
-            {borderLeftColor: index === 0 ? Colors.transparent : themeColor},
+            {borderColor: themeColor, borderLeftWidth: index === 0 ? 0 : 1},
             props.value === item.value && {backgroundColor: themeColor},
           ]}>
           <TouchableOpacity
