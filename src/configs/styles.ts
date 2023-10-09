@@ -64,8 +64,8 @@ export const StyleGet = {
     return {
       height: 46,
       paddingHorizontal: 10,
-      borderWidth: 2,
-      borderColor: Colors.transparent,
+      borderWidth: 0,
+      borderColor: Colors.line,
     } as const;
   },
 } as const;

@@ -25,7 +25,7 @@ interface CPNCellProps {
   rightIcon?: React.ReactElement;
 }
 export function CPNCell(props: CPNCellProps) {
-  const isCellGroup = useContext(CPNCellGroupContext);
+  const inCellGroup = useContext(CPNCellGroupContext);
 
   return (
     <View
@@ -34,12 +34,11 @@ export function CPNCell(props: CPNCellProps) {
         {
           paddingRight: 0,
           backgroundColor: Colors.backgroundPanel,
-          borderWidth: 0.5,
         },
-        isCellGroup && {
+        inCellGroup && {
           paddingLeft: 0,
           backgroundColor: Colors.transparent,
-          borderBottomColor: props.isLast ? Colors.transparent : Colors.line,
+          borderBottomWidth: props.isLast ? 0 : 0.5,
         },
       ]}>
       <TouchableOpacity

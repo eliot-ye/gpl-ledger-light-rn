@@ -47,7 +47,7 @@ export function CPNInput(props: CPNInputProps) {
           styles.inputContainer,
           {
             backgroundColor: Colors.backgroundPanel,
-            borderBottomColor: Colors.line,
+            borderBottomWidth: 2,
           },
           focused && {borderBottomColor: themeColor},
           formItem.hasError && {borderBottomColor: Colors.fail},
