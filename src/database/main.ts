@@ -56,6 +56,30 @@ export async function getRealm(path?: string, encryptionKey?: string) {
         },
       });
 
+      realm.write(() => {
+        if (!realm) {
+          return;
+        }
+        const ColorObject = realm.objects(ColorSchema.name);
+        if (ColorObject.length === 0) {
+          getDefaultColors().forEach(item => {
+            realm && realm.create(ColorSchema.name, item, UpdateMode.Never);
+          });
+        }
+        const CurrencyObject = realm.objects(CurrencySchema.name);
+        if (CurrencyObject.length === 0) {
+          getDefaultCurrency().forEach(item => {
+            realm && realm.create(CurrencySchema.name, item, UpdateMode.Never);
+          });
+        }
+        const AssetTypeObject = realm.objects(AssetTypeSchema.name);
+        if (AssetTypeObject.length === 0) {
+          getDefaultAssetTypes().forEach(item => {
+            realm && realm.create(AssetTypeSchema.name, item, UpdateMode.Never);
+          });
+        }
+      });
+
       realm.addListener(
         'change',
         debounce(async sender => {
