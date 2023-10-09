@@ -224,7 +224,7 @@ export function SignInPage() {
               await loginAuth(res.password, res.userId);
             } catch (error) {
               CusLog.error('SignInPage', 'BiometricsSignIn', error);
-              CPNAlert.open({message: I18n.t('BiometricsError2')});
+              CPNAlert.alert('', I18n.t('BiometricsError2'));
             }
           }}>
           <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />

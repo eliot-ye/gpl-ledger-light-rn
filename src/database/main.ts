@@ -81,19 +81,8 @@ export async function getRealm(path?: string, encryptionKey?: string) {
       );
     } else {
       if (navigationRef.isReady()) {
-        CPNAlert.open({
-          message: I18n.t('SessionExpired'),
-          buttons: [
-            {
-              text: I18n.t('Confirm'),
-              onPress() {
-                navigationRef.resetRoot({
-                  routes: [{name: 'SignInPage'}],
-                });
-              },
-            },
-          ],
-        });
+        await CPNAlert.alert('', I18n.t('SessionExpired'));
+        navigationRef.resetRoot({routes: [{name: 'SignInPage'}]});
       }
       return Promise.reject('realm is closed');
     }

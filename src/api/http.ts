@@ -211,31 +211,15 @@ export function useFetch(
             showExpiredFlag = true;
             // await LSLogout();
             resetStore();
-            CPNAlert.open({
-              message: I18n.t('SessionExpired'),
-              buttons: [
-                {
-                  text: I18n.t('Confirm'),
-                  onPress() {
-                    showExpiredFlag = false;
-                  },
-                },
-              ],
+            CPNAlert.alert('', I18n.t('SessionExpired')).then(() => {
+              showExpiredFlag = false;
             });
           }
 
           if (responseStatus !== 403 && !showNetworkErrorFlag) {
             showNetworkErrorFlag = true;
-            CPNAlert.open({
-              message: I18n.t('NetworkError'),
-              buttons: [
-                {
-                  text: I18n.t('Confirm'),
-                  onPress() {
-                    showNetworkErrorFlag = false;
-                  },
-                },
-              ],
+            CPNAlert.alert('', I18n.t('NetworkError')).then(() => {
+              showNetworkErrorFlag = false;
             });
           }
 

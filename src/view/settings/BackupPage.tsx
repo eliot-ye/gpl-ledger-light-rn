@@ -127,18 +127,18 @@ export async function recoveryFromWebDAV(showSuccess = true) {
 
 async function recoveryFromJSON(backupData: any) {
   if (backupData.appId !== envConstant.bundleId) {
-    CPNAlert.open({message: I18n.t('BackupFileError')});
+    CPNAlert.alert('', I18n.t('BackupFileError'));
     return Promise.reject();
   }
   if (backupData.username !== SessionStorage.username) {
-    CPNAlert.open({message: I18n.t('BackupFileError2')});
+    CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
   const ledgerData = JSON.parse(
     AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password || ''),
   );
   if (ledgerData.username !== SessionStorage.username) {
-    CPNAlert.open({message: I18n.t('BackupFileError2')});
+    CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
   await dbSetLedgerList(ledgerData.ledger);

@@ -137,28 +137,15 @@ export function LedgerDetailsPage() {
         !!route.params?.id && (
           <TouchableOpacity
             onPress={async () => {
-              CPNAlert.open({
-                message: I18n.f(
-                  I18n.t('DeleteConfirm'),
-                  route.params?.name || '',
-                ),
-                buttons: [
-                  {text: I18n.t('Cancel')},
-                  {
-                    text: I18n.t('Confirm'),
-                    async onPress() {
-                      if (route.params?.id) {
-                        dbDeleteLedger(route.params?.id);
-                        HomePageDispatch(
-                          'updateCount',
-                          HomePageState.updateCount + 1,
-                        );
-                        navigation.goBack();
-                      }
-                    },
-                  },
-                ],
-              });
+              await CPNAlert.confirm(
+                '',
+                I18n.f(I18n.t('DeleteConfirm'), route.params?.name || ''),
+              );
+              if (route.params?.id) {
+                dbDeleteLedger(route.params?.id);
+                HomePageDispatch('updateCount', HomePageState.updateCount + 1);
+                navigation.goBack();
+              }
             }}>
             <CPNIonicons name={IONName.Delete} />
           </TouchableOpacity>

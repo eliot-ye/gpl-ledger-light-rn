@@ -88,25 +88,18 @@ export function CurrencyManagementPage() {
             !!detailsRef.current.abbreviation && (
               <TouchableOpacity
                 onPress={async () => {
-                  CPNAlert.open({
-                    message: I18n.f(
+                  await CPNAlert.confirm(
+                    '',
+                    I18n.f(
                       I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
-                    buttons: [
-                      {text: I18n.t('Cancel')},
-                      {
-                        text: I18n.t('Confirm'),
-                        async onPress() {
-                          if (detailsRef.current.abbreviation) {
-                            dbDeleteCurrency(detailsRef.current.abbreviation);
-                            await getDBCurrency();
-                            showDetailsModalSet(false);
-                          }
-                        },
-                      },
-                    ],
-                  });
+                  );
+                  if (detailsRef.current.abbreviation) {
+                    dbDeleteCurrency(detailsRef.current.abbreviation);
+                    await getDBCurrency();
+                    showDetailsModalSet(false);
+                  }
                 }}>
                 <CPNIonicons name={IONName.Delete} />
               </TouchableOpacity>

@@ -367,7 +367,7 @@ export function createCPNAlert() {
       showEv.publish({
         id,
         backButtonClose: true,
-        buttons: [{text: I18n.t('OK')}],
+        buttons: [{text: I18n.t('Confirm')}],
         animatedValue: new Animated.Value(0),
         ...option,
       });
@@ -376,6 +376,41 @@ export function createCPNAlert() {
     },
     close(id: string) {
       closeEv.publish(id);
+    },
+    /**
+     * @returns `Id` 用于 `CPNAlert.close`
+     */
+    alert(title: React.ReactNode, message?: React.ReactNode) {
+      return new Promise<string>(resolve => {
+        const id = getOnlyStr(ids);
+        showEv.publish({
+          id,
+          backButtonClose: true,
+          animatedValue: new Animated.Value(0),
+          title,
+          message,
+          buttons: [{text: I18n.t('Confirm'), onPress: () => resolve(id)}],
+        });
+      });
+    },
+    /**
+     * @returns `Id` 用于 `CPNAlert.close`
+     */
+    confirm(title: React.ReactNode, message?: React.ReactNode) {
+      return new Promise<string>((resolve, reject) => {
+        const id = getOnlyStr(ids);
+        showEv.publish({
+          id,
+          backButtonClose: true,
+          animatedValue: new Animated.Value(0),
+          title,
+          message,
+          buttons: [
+            {text: I18n.t('Cancel'), onPress: () => reject(id)},
+            {text: I18n.t('Confirm'), onPress: () => resolve(id)},
+          ],
+        });
+      });
     },
   } as const;
 }

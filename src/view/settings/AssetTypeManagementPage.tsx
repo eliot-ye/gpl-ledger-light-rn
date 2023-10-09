@@ -91,25 +91,18 @@ export function AssetTypeManagementPage() {
             !!detailsRef.current.symbol && (
               <TouchableOpacity
                 onPress={async () => {
-                  CPNAlert.open({
-                    message: I18n.f(
+                  await CPNAlert.confirm(
+                    '',
+                    I18n.f(
                       I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
-                    buttons: [
-                      {text: I18n.t('Cancel')},
-                      {
-                        text: I18n.t('Confirm'),
-                        async onPress() {
-                          if (detailsRef.current.symbol) {
-                            dbDeleteAssetType(detailsRef.current.symbol);
-                            await getDBAssetTypes();
-                            showDetailsModalSet(false);
-                          }
-                        },
-                      },
-                    ],
-                  });
+                  );
+                  if (detailsRef.current.symbol) {
+                    dbDeleteAssetType(detailsRef.current.symbol);
+                    await getDBAssetTypes();
+                    showDetailsModalSet(false);
+                  }
                 }}>
                 <CPNIonicons name={IONName.Delete} />
               </TouchableOpacity>

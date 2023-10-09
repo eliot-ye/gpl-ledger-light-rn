@@ -87,25 +87,18 @@ export function ColorManagementPage() {
             !!detailsRef.current.value && (
               <TouchableOpacity
                 onPress={async () => {
-                  CPNAlert.open({
-                    message: I18n.f(
+                  await CPNAlert.confirm(
+                    '',
+                    I18n.f(
                       I18n.t('DeleteConfirm'),
                       detailsRef.current.name || '',
                     ),
-                    buttons: [
-                      {text: I18n.t('Cancel')},
-                      {
-                        text: I18n.t('Confirm'),
-                        async onPress() {
-                          if (detailsRef.current.value) {
-                            dbDeleteColor(detailsRef.current.value);
-                            await getDBColors();
-                            showDetailsModalSet(false);
-                          }
-                        },
-                      },
-                    ],
-                  });
+                  );
+                  if (detailsRef.current.value) {
+                    dbDeleteColor(detailsRef.current.value);
+                    await getDBColors();
+                    showDetailsModalSet(false);
+                  }
                 }}>
                 <CPNIonicons name={IONName.Delete} />
               </TouchableOpacity>

@@ -106,34 +106,24 @@ export function WebDAVPage() {
         !!SessionStorage.WebDAVObject && (
           <TouchableOpacity
             onPress={async () => {
-              CPNAlert.open({
-                message: I18n.f(
-                  I18n.t('DeleteConfirm'),
-                  ` ${I18n.t('WebDAV')}`,
-                ),
-                buttons: [
-                  {text: I18n.t('Cancel')},
-                  {
-                    text: I18n.t('Confirm'),
-                    async onPress() {
-                      await LS_UserInfo.update({
-                        id: SessionStorage.userId,
-                        web_dav: '',
-                      });
-                      SessionStorage.$setValue('WebDAVObject', null);
-                      WebDAVDetailsSet({
-                        serverPath: '',
-                        account: '',
-                        password: '',
-                      });
-                      BackupPageDispatch(
-                        'updateCount',
-                        BackupPageState.updateCount + 1,
-                      );
-                    },
-                  },
-                ],
+              await CPNAlert.confirm(
+                '',
+                I18n.f(I18n.t('DeleteConfirm'), ` ${I18n.t('WebDAV')}`),
+              );
+              await LS_UserInfo.update({
+                id: SessionStorage.userId,
+                web_dav: '',
               });
+              SessionStorage.$setValue('WebDAVObject', null);
+              WebDAVDetailsSet({
+                serverPath: '',
+                account: '',
+                password: '',
+              });
+              BackupPageDispatch(
+                'updateCount',
+                BackupPageState.updateCount + 1,
+              );
             }}>
             <CPNIonicons name={IONName.Delete} />
           </TouchableOpacity>
@@ -200,7 +190,7 @@ export function WebDAVPage() {
               if (error.message) {
                 CPNToast.open({text: error.message});
               } else if (error.status === 401) {
-                CPNAlert.open({message: I18n.t('WebDAVUnauthorized')});
+                CPNAlert.alert('', I18n.t('WebDAVUnauthorized'));
               } else {
                 CPNToast.open({text: I18n.t('WebDAVFailed')});
               }

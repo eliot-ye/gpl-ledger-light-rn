@@ -60,7 +60,7 @@ export function SettingPage() {
                     enableBiometricsSet(false);
                   }
                 } catch (error: any) {
-                  CPNAlert.open({message: error});
+                  CPNAlert.alert('', error);
                   CusLog.error('SettingPage', 'BiometricsEnable', error);
                 }
               }}
