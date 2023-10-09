@@ -12,7 +12,7 @@ enum Error {
 
 interface ControlJSON extends CEnvVariable {
   versionName: string;
-  platform: 'all' | typeof Platform.OS;
+  platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
 }
 
@@ -55,7 +55,7 @@ export async function getControlJSON() {
       const jsonList = JSON.parse(_text) as ControlJSON[];
       const controlJSON = jsonList.find(
         _item =>
-          (_item.platform === 'all' || _item.platform === Platform.OS) &&
+          _item.platform.includes(Platform.OS) &&
           _item.versionName === envConstant.versionName,
       );
       if (!controlJSON) {
@@ -67,7 +67,7 @@ export async function getControlJSON() {
     }
   } catch (error) {
     console.error(error);
-    return Promise.reject('网络错误');
+    return Promise.reject(I18n.t('NetworkError'));
   }
 }
 
