@@ -1,31 +1,37 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import {CPNCellGroupContext, CPNText} from './base';
+import {CPNCellGroupContext, CPNImage, CPNText} from './base';
 import {Colors} from '@/configs/colors';
 import {I18n} from '@/assets/I18n';
 import {StyleGet} from '@/configs/styles';
 
 interface CPNNoDataProps {
-  height?: number;
+  title?: string;
 }
 export function CPNNoData(props: CPNNoDataProps) {
-  const isCellGroup = useContext(CPNCellGroupContext);
+  const inCellGroup = useContext(CPNCellGroupContext);
+
   return (
     <View
       style={[
         {
-          height: props.height || 200,
           justifyContent: 'center',
           alignItems: 'center',
         },
-        isCellGroup && {
+        inCellGroup && {
           ...StyleGet.cellView(),
           borderWidth: 0,
-          borderBottomWidth: 1,
+          borderBottomWidth: 0.5,
           borderColor: Colors.line,
         },
+        !inCellGroup && {
+          paddingTop: 100,
+        },
       ]}>
-      <CPNText style={{color: Colors.fontSubtitle}}>{I18n.t('NoData')}</CPNText>
+      {!inCellGroup && <CPNImage name="NoDataAvailable" size={200} />}
+      <CPNText style={{color: Colors.fontSubtitle}}>
+        {props.title || I18n.t('NoData')}
+      </CPNText>
     </View>
   );
 }
