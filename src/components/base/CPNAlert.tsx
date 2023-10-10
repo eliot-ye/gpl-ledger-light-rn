@@ -202,10 +202,10 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
                     fontWeight: '500',
                     color:
                       _btn.textColor ||
-                      (!isColumnButtons && isLast) ||
+                      ((!isColumnButtons && isLast) ||
                       (isColumnButtons && isFirst)
                         ? themeColor
-                        : undefined,
+                        : Colors.fontSubtitle),
                   }}>
                   {_btn.text}
                 </CPNText>
