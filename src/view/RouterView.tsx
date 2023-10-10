@@ -16,6 +16,7 @@ import {I18n} from '@/assets/I18n';
 import {renderAuthorizationRouterView} from './authorization/routes';
 import {HomePage, renderHomeRouterView} from './ledger/routes';
 import {renderSettingsRouterView, SettingPage} from './settings/routes';
+import {StoreRoot} from '@/store';
 
 export function RouterView() {
   async function navReady() {
@@ -50,6 +51,7 @@ export function RouterView() {
 
 function TabBarView() {
   I18n.useLocal();
+  StoreRoot.useState();
 
   const tabbarOptionList: TabbarOption[] = [
     {

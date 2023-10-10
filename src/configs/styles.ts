@@ -23,21 +23,22 @@ type JustifyContent =
   | 'space-around'
   | 'space-evenly';
 
+const windowSize = Dimensions.get('window');
+const screenSize = Dimensions.get('screen');
+
 export const StyleGet = {
   title,
 
   windowSize() {
-    const windowSize = Dimensions.get('window');
     return {
       width: windowSize.width,
       height: windowSize.height,
     } as const;
   },
   modalView(justifyContent?: JustifyContent) {
-    const windowSize = Dimensions.get('window');
     return {
-      width: windowSize.width,
-      height: windowSize.height,
+      width: screenSize.width,
+      height: screenSize.height,
       backgroundColor: Colors.backgroundModal,
       justifyContent: justifyContent || 'center',
       alignItems: 'center',

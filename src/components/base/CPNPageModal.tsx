@@ -34,11 +34,11 @@ export function createCPNPageModal() {
         () => edgeInsets.top || Config.offset,
         [edgeInsets.top],
       );
-      const {height: windowHeight, width: windowWidth} =
+      const {height: screenHeight, width: screenWidth} =
         useDimensions('screen');
       const boxHeight = useMemo(
-        () => windowHeight - statusBarHeight - Config.offset,
-        [statusBarHeight, windowHeight],
+        () => screenHeight - statusBarHeight - Config.offset,
+        [statusBarHeight, screenHeight],
       );
 
       useEffect(() => {
@@ -68,7 +68,7 @@ export function createCPNPageModal() {
                   {
                     scale: translateY.interpolate<number>({
                       inputRange: [0, boxHeight],
-                      outputRange: [1 - Config.offset / windowWidth, 1],
+                      outputRange: [1 - Config.offset / screenWidth, 1],
                       extrapolate: 'clamp',
                     }),
                   },
