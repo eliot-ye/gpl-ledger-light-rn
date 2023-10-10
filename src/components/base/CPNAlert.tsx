@@ -270,18 +270,20 @@ export function CPNAlertView(props: CPNAlertViewProps) {
 
 export function createCPNAlert() {
   let ids: string[] = [];
-  const showEv = createSubscribeEvents<CPNAlertOption>();
-  const closeEv = createSubscribeEvents<string>();
+  const eventInstance = createSubscribeEvents<{
+    close: string;
+    show: CPNAlertOption;
+  }>();
 
   function CPNAlert() {
     const [alertOptionList, setAlertOptionList] = useState<CPNAlertOption[]>(
       [],
     );
     useEffect(() => {
-      const showId = showEv.subscribe(opt => {
+      const showId = eventInstance.subscribe('show', opt => {
         setAlertOptionList(_opts => [..._opts, opt]);
       });
-      const closeId = closeEv.subscribe(id => {
+      const closeId = eventInstance.subscribe('close', id => {
         setAlertOptionList(_opts => {
           const index = _opts.map(_item => _item.id).indexOf(id);
           if (index > -1) {
@@ -292,8 +294,8 @@ export function createCPNAlert() {
       });
 
       return () => {
-        showEv.unsubscribe(showId);
-        closeEv.unsubscribe(closeId);
+        eventInstance.unsubscribe('show', showId);
+        eventInstance.unsubscribe('close', closeId);
       };
     }, []);
 
@@ -321,7 +323,10 @@ export function createCPNAlert() {
         onRequestClose={() => {
           const alertOption = alertOptionList[alertOptionList.length - 1];
           if (alertOption && alertOption.backButtonClose) {
-            closeEv.publish(alertOptionList[alertOptionList.length - 1].id);
+            eventInstance.publish(
+              'close',
+              alertOptionList[alertOptionList.length - 1].id,
+            );
           }
         }}>
         <View style={StyleGet.modalView()}>
@@ -339,12 +344,12 @@ export function createCPNAlert() {
                     useNativeDriver: false,
                   }).start(() => {
                     if (_index > 0) {
-                      closeEv.publish(_item.id);
+                      eventInstance.publish('close', _item.id);
                     }
                   });
                   if (_index === 0) {
                     setTimeout(() => {
-                      closeEv.publish(_item.id);
+                      eventInstance.publish('close', _item.id);
                     }, 100);
                   }
                 }}
@@ -364,7 +369,7 @@ export function createCPNAlert() {
      */
     open(option: AlertOption) {
       const id = getOnlyStr(ids);
-      showEv.publish({
+      eventInstance.publish('show', {
         id,
         backButtonClose: true,
         buttons: [{text: I18n.t('Confirm')}],
@@ -375,7 +380,7 @@ export function createCPNAlert() {
       return id;
     },
     close(id: string) {
-      closeEv.publish(id);
+      eventInstance.publish('close', id);
     },
     /**
      * @returns `Id` 用于 `CPNAlert.close`
@@ -383,7 +388,7 @@ export function createCPNAlert() {
     alert(title: React.ReactNode, message?: React.ReactNode) {
       return new Promise<string>(resolve => {
         const id = getOnlyStr(ids);
-        showEv.publish({
+        eventInstance.publish('show', {
           id,
           backButtonClose: true,
           animatedValue: new Animated.Value(0),
@@ -399,7 +404,7 @@ export function createCPNAlert() {
     confirm(title: React.ReactNode, message?: React.ReactNode) {
       return new Promise<string>((resolve, reject) => {
         const id = getOnlyStr(ids);
-        showEv.publish({
+        eventInstance.publish('show', {
           id,
           backButtonClose: true,
           animatedValue: new Animated.Value(0),

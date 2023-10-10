@@ -270,13 +270,15 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
 }
 
 export function createCPNActionSheet() {
-  const ev = createSubscribeEvents<ActionSheetOption<any> | undefined>();
+  const ev = createSubscribeEvents<{
+    trigger: ActionSheetOption<any> | undefined;
+  }>();
 
   function CPNActionSheet() {
     const [data, dataSet] = useState<undefined | ActionSheetOption<any>>();
     useEffect(() => {
-      const id = ev.subscribe(ed => dataSet(ed));
-      return () => ev.unsubscribe(id);
+      const id = ev.subscribe('trigger', ed => dataSet(ed));
+      return () => ev.unsubscribe('trigger', id);
     }, []);
 
     return (
@@ -292,10 +294,10 @@ export function createCPNActionSheet() {
   return {
     Provider: CPNActionSheet,
     open<ItemB extends ActionSheetButton>(option: ActionSheetOption<ItemB>) {
-      ev.publish(option);
+      ev.publish('trigger', option);
     },
     close() {
-      ev.publish(undefined);
+      ev.publish('trigger', undefined);
     },
   } as const;
 }

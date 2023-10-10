@@ -5,12 +5,12 @@ import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {useDimensions} from '@/utils/useDimensions';
 
 export function createCPNLoading() {
-  const ev = createSubscribeEvents<'show' | 'close'>();
+  const ev = createSubscribeEvents<{trigger: 'show' | 'close'}>();
 
   function CPNLoading() {
     const [loadingCount, setLoadingCount] = useState(0);
     useEffect(() => {
-      const id = ev.subscribe(type =>
+      const id = ev.subscribe('trigger', type =>
         setLoadingCount(c => {
           if (type === 'show') {
             return c + 1;
@@ -21,7 +21,7 @@ export function createCPNLoading() {
           return c;
         }),
       );
-      return () => ev.unsubscribe(id);
+      return () => ev.unsubscribe('trigger', id);
     }, []);
 
     const [show, showSet] = useState(false);
@@ -70,10 +70,10 @@ export function createCPNLoading() {
   return {
     Provider: CPNLoading,
     open() {
-      ev.publish('show');
+      ev.publish('trigger', 'show');
     },
     close() {
-      ev.publish('close');
+      ev.publish('trigger', 'close');
     },
   } as const;
 }

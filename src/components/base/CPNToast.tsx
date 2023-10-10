@@ -49,8 +49,10 @@ interface OptionMap {
 
 export function createCPNToast() {
   const ev = createSubscribeEvents<{
-    id: string;
-    opt: CPNToastOption | undefined;
+    trigger: {
+      id: string;
+      opt: CPNToastOption | undefined;
+    };
   }>();
   let ids: string[] = [];
   let idListCache: string[] = [];
@@ -58,13 +60,13 @@ export function createCPNToast() {
   function CPNToast() {
     const [optionMap, setOptionMap] = useState<OptionMap>({});
     useEffect(() => {
-      const id = ev.subscribe(ed => {
+      const id = ev.subscribe('trigger', ed => {
         setOptionMap(_data => ({
           ..._data,
           [ed.id]: ed.opt,
         }));
       });
-      return () => ev.unsubscribe(id);
+      return () => ev.unsubscribe('trigger', id);
     }, []);
 
     const idList = useMemo(() => Object.keys(optionMap), [optionMap]);
@@ -88,7 +90,7 @@ export function createCPNToast() {
               useNativeDriver: false,
             }).start();
             setTimeout(() => {
-              ev.publish({id, opt: undefined});
+              ev.publish('trigger', {id, opt: undefined});
             }, 200);
           }, option.keepTime);
         }
@@ -135,7 +137,7 @@ export function createCPNToast() {
     open(option: ToastOption) {
       const id = getOnlyStr(ids);
 
-      ev.publish({
+      ev.publish('trigger', {
         id,
         opt: {
           keepTime: 2000,
@@ -149,7 +151,7 @@ export function createCPNToast() {
       return id;
     },
     close(id: string) {
-      ev.publish({id, opt: undefined});
+      ev.publish('trigger', {id, opt: undefined});
     },
   } as const;
 }
