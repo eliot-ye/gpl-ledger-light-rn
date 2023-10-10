@@ -221,7 +221,7 @@ export function SignInPage() {
                 return;
               }
               const res = await biometrics.getUser(userInfo.biometriceToken);
-              await loginAuth(res.password, res.userId);
+              await loginAuth(res.password, userInfo.id);
             } catch (error) {
               CusLog.error('SignInPage', 'BiometricsSignIn', error);
               CPNAlert.alert('', I18n.t('BiometricsError2'));

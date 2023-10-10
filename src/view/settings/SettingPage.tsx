@@ -14,24 +14,23 @@ export function SettingPage() {
   I18n.useLocal();
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
-  useEffect(() => {
-    biometrics.isSensorAvailable().then(({available}) => {
-      availableBiometricsSet(available);
-    });
-  }, []);
   const [enableBiometrics, enableBiometricsSet] = useState(false);
   useEffect(() => {
-    if (SessionStorage.biometriceToken) {
-      biometrics
-        .getUserFlag(SessionStorage.biometriceToken)
-        .then(res => {
-          enableBiometricsSet(res || false);
-        })
-        .catch(() => {
-          enableBiometricsSet(false);
-        });
-    }
+    biometrics
+      .isSensorAvailable()
+      .then(({available}) => {
+        availableBiometricsSet(available);
+
+        if (available && SessionStorage.biometriceToken) {
+          return biometrics.getUserFlag(SessionStorage.biometriceToken);
+        }
+        return Promise.reject();
+      })
+      .then(hasUserFlag => {
+        enableBiometricsSet(hasUserFlag);
+      });
   }, []);
+
   function renderBiometrics() {
     return (
       <CPNCellGroup style={{marginBottom: 20}}>
