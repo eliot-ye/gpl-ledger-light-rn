@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {
+  ActivityIndicator,
   StyleProp,
   StyleSheet,
   TextStyle,
@@ -19,6 +20,7 @@ const Config = {
 const styles = StyleSheet.create({
   wrapper: {
     height: Config.height,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -34,6 +36,7 @@ interface CPNButtonTypeItem {
 
 interface CPNButtonProps extends TouchableOpacityProps {
   textStyle?: StyleProp<TextStyle>;
+  /** @default 'theme' */
   type?: CPNButtonType;
   shape?: 'square';
   plain?: boolean;
@@ -43,6 +46,7 @@ interface CPNButtonProps extends TouchableOpacityProps {
   disabledText?: string;
   /** 按钮是否初始禁用 */
   disabledInit?: boolean;
+  isLoading?: boolean;
 }
 export function CPNButton(props: CPNButtonProps) {
   const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
@@ -90,16 +94,9 @@ export function CPNButton(props: CPNButtonProps) {
     }
   }, [props.disabledTimer, disabledTimer]);
 
-  const disabled = props.disabled || disabledTimer > 0;
+  const disabled = props.disabled || props.isLoading || disabledTimer > 0;
 
   const btnStyle = useMemo(() => {
-    if (props.disabled) {
-      return {
-        textColor: Colors.fontTextReverse,
-        backgroundColor: Colors.backgroundDisabled,
-      };
-    }
-
     const _btnStyle = CPNButtonTypeList.find(
       _item => _item.type === (props.type || 'theme'),
     );
@@ -111,7 +108,7 @@ export function CPNButton(props: CPNButtonProps) {
       textColor: Colors.fontTextReverse,
       backgroundColor: themeColor,
     };
-  }, [CPNButtonTypeList, props.disabled, props.type, themeColor]);
+  }, [CPNButtonTypeList, props.type, themeColor]);
 
   return (
     <TouchableOpacity
@@ -128,15 +125,18 @@ export function CPNButton(props: CPNButtonProps) {
         StyleGet.boxShadow(),
         {
           backgroundColor: props.plain
-            ? Colors.backgroundPanel
+            ? disabled
+              ? Colors.backgroundDisabled
+              : Colors.backgroundPanel
             : btnStyle.backgroundColor,
           borderColor: btnStyle.backgroundColor,
           borderWidth: 1,
           borderRadius: props.shape === 'square' ? 0 : Config.borderRadius,
-          opacity: disabled ? 0.6 : undefined,
+          opacity: disabled ? 0.4 : undefined,
         },
         props.style,
       ]}>
+      {props.isLoading && <RenderActivityIndicator />}
       <CPNTextColorContext.Provider
         value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
         {disabled && props.disabledText ? (
@@ -150,5 +150,12 @@ export function CPNButton(props: CPNButtonProps) {
         )}
       </CPNTextColorContext.Provider>
     </TouchableOpacity>
+  );
+}
+
+function RenderActivityIndicator() {
+  const color = useContext(CPNTextColorContext);
+  return (
+    <ActivityIndicator size="small" color={color} style={{marginRight: 10}} />
   );
 }
