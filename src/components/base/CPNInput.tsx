@@ -49,8 +49,8 @@ export function CPNInput(props: CPNInputProps) {
             backgroundColor: Colors.backgroundPanel,
             borderBottomWidth: 2,
           },
-          focused && {borderBottomColor: themeColor},
-          formItem.hasError && {borderBottomColor: Colors.fail},
+          focused && {borderColor: themeColor},
+          formItem.hasError && {borderColor: Colors.fail},
         ]}>
         <TextInput
           pointerEvents={props.editable === false ? 'none' : 'auto'}
