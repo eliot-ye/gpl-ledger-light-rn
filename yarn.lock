@@ -6328,6 +6328,11 @@ react-native-localization@^2.3.2:
   dependencies:
     react-localization "^1.0.17"
 
+react-native-permissions@^3.9.3:
+  version "3.9.3"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.9.3.tgz#b12b118634437784205b5fd56c2a7edd69707314"
+  integrity sha512-2UqG2Em4xHxLq0E1XynXMdQ//XZltxVUjTn/i4fPIZuuZ0cQ+ydAQmLXqDPxOXvG0sICwc3oe0orJmQdqpa1sQ==
+
 react-native-render-html@^6.3.4:
   version "6.3.4"
   resolved "https://registry.yarnpkg.com/react-native-render-html/-/react-native-render-html-6.3.4.tgz#01684897bed2de84829e540a1dbb3a7bdf9d0e57"
