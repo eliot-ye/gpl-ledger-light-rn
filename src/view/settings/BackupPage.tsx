@@ -26,18 +26,35 @@ import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
 import {CusLog} from '@/utils/tools';
 import {Colors} from '@/configs/colors';
 import {PageProps} from '../Router';
-import {LS_WebDAVAutoSync} from '@/store/localStorage';
+import {LS_UserInfo, LS_WebDAVAutoSync} from '@/store/localStorage';
 import {envConstant} from '@/configs/env';
 import {getWebDAVFileData} from './WebDAVPage';
 import {StoreBackupPage} from '@/store';
+import {formatDateTime} from '@/utils/dateFn';
 
-export function getBackupDataStr(ledgerData: any) {
+interface BackupData {
+  appId: string;
+  versionName: string;
+  versionCode: string;
+  username?: string;
+  backupTime: string;
+  ledgerCiphertext: string;
+}
+interface LedgerData {
+  username: string | undefined;
+  assetType: any[];
+  color: any[];
+  currency: any[];
+  ledger: any[];
+}
+export function getBackupDataStr(ledgerData: LedgerData) {
   const ledgerStr = JSON.stringify(ledgerData);
-  const backupData = {
+  const backupData: BackupData = {
     appId: envConstant.bundleId,
     versionName: envConstant.versionName,
     versionCode: envConstant.versionCode,
     username: SessionStorage.username,
+    backupTime: String(Date.now()),
     ledgerCiphertext: '',
   };
   if (SessionStorage.password) {
@@ -90,18 +107,6 @@ async function backupHandler(basePath: string, backupDataStr: string) {
   return backupItem.filePath;
 }
 
-let backupDirBase = Platform.select({
-  android: FS.DownloadDirectoryPath,
-  ios: FS.DocumentDirectoryPath,
-});
-if (
-  Platform.OS === 'android' &&
-  Platform.Version > 29 &&
-  Platform.Version < 33
-) {
-  backupDirBase = FS.DocumentDirectoryPath;
-}
-
 export async function recoveryFromWebDAV(showSuccess = true) {
   if (!SessionStorage.WebDAVObject || !SessionStorage.password) {
     return;
@@ -125,9 +130,9 @@ export async function recoveryFromWebDAV(showSuccess = true) {
   }
 }
 
-async function recoveryFromJSON(backupData: any) {
+async function recoveryFromJSON(backupData: BackupData) {
   if (backupData.appId !== envConstant.bundleId) {
-    CPNAlert.alert('', I18n.t('BackupFileError'));
+    CPNAlert.alert('', I18n.t('BackupFileError1'));
     return Promise.reject();
   }
   if (backupData.username !== SessionStorage.username) {
@@ -141,10 +146,41 @@ async function recoveryFromJSON(backupData: any) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
+
+  if (SessionStorage.userId) {
+    const useInfo = await LS_UserInfo.getById(SessionStorage.userId);
+    if (
+      useInfo &&
+      useInfo.lastModified &&
+      backupData.backupTime < useInfo.lastModified
+    ) {
+      await CPNAlert.confirm(
+        I18n.t('BackupFileTips1'),
+        I18n.f(
+          I18n.t('BackupFileTips2'),
+          formatDateTime(Number(backupData.backupTime)),
+          formatDateTime(Number(useInfo.lastModified)),
+        ),
+      );
+    }
+  }
+
   await dbSetLedgerList(ledgerData.ledger);
   await dbSetAssetTypeList(ledgerData.assetType);
   await dbSetColorList(ledgerData.color);
   await dbSetCurrencyList(ledgerData.currency);
+}
+
+let backupDirBase = Platform.select({
+  android: FS.DownloadDirectoryPath,
+  ios: FS.DocumentDirectoryPath,
+});
+if (
+  Platform.OS === 'android' &&
+  Platform.Version > 29 &&
+  Platform.Version < 33
+) {
+  backupDirBase = FS.DocumentDirectoryPath;
 }
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {

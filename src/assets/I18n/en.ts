@@ -1,6 +1,4 @@
 export default {
-  fromatDateMonth: 'dd-MMM',
-
   OK: 'OK',
   Confirm: 'Confirm',
   Cancel: 'Cancel',

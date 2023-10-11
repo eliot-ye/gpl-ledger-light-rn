@@ -1,5 +1,5 @@
 export default {
-  fromatDateMonth: 'MM-dd',
+  formatDateMonth: 'MM-dd',
   formatDateFull: 'yyyy-MM-dd',
   formatDateTime: 'yyyy-MM-dd HH:mm',
 
@@ -104,7 +104,9 @@ export default {
   RecoveryNow: '从本地恢复',
   RecoverySuccess: '恢复成功',
   RecoveryFailed: '恢复失败，请检查备份文件是否存在或是否正确',
-  BackupFileError: '备份文件错误',
+  BackupFileTips1: '是否覆盖本地数据?',
+  BackupFileTips2: '备份数据创建时间为：\n{0}\n\n本地数据更新时间为：\n{1}',
+  BackupFileError1: '备份文件错误',
   BackupFileError2: '备份文件与登入账号不一致',
   BackupPlaceholder: '备份与恢复文件路径：{0}',
   BackupPlaceholderIOS: '请在分享页面中存储备份文件',

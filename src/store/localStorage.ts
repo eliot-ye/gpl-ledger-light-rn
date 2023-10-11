@@ -38,6 +38,10 @@ const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
       type: 'string',
       optional: true,
     },
+    lastModified: {
+      type: 'string',
+      optional: true,
+    },
   },
 });
 
@@ -61,6 +65,7 @@ export interface LSUserInfo {
   token: string;
   biometriceToken?: string;
   web_dav?: string;
+  lastModified?: string;
 }
 export const LS_UserInfo = {
   key: 'user_info',
