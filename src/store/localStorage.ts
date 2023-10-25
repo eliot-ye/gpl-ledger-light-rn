@@ -156,6 +156,16 @@ export const LS_Lang = {
     return LSRealmStorage.set(this.key, data);
   },
 };
+export const LS_EnvAlertOnceId = {
+  key: 'env_alert_onceId',
+  async get() {
+    const data = await LSRealmStorage.get(this.key);
+    return data;
+  },
+  async set(data: string) {
+    return LSRealmStorage.set(this.key, data);
+  },
+};
 
 export const LS_LastUserId = {
   key: 'last_user_id',

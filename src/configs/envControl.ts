@@ -1,8 +1,9 @@
+import React from 'react';
 import {Linking, Platform, ScrollView, View} from 'react-native';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {AlertButton, CPNAlert, CPNRichTextView} from '@/components/base';
 import {I18n, LangCode} from '@/assets/I18n';
-import React from 'react';
+import {LS_EnvAlertOnceId} from '@/store/localStorage';
 
 enum Error {
   NO_CONTROL_PATH = 'NO_CONTROL_PATH',
@@ -17,6 +18,8 @@ interface ControlJSON extends CEnvVariable {
 }
 
 interface ControlJSONAlert {
+  /** 如果有值，则相同ID的弹窗只显示一次 */
+  onceId?: string;
   title?: string;
   message?: string;
   /** 点击确认按钮退出 app */
@@ -87,6 +90,14 @@ export async function injectControlJSON() {
 
   if (controlJSON.alert) {
     const alert = controlJSON.alert;
+
+    if (alert.onceId) {
+      const oldId = await LS_EnvAlertOnceId.get();
+      if (oldId === alert.onceId) {
+        return;
+      }
+      LS_EnvAlertOnceId.set(alert.onceId);
+    }
 
     let title: React.ReactNode = alert.title;
     let message: React.ReactNode = alert.message;
