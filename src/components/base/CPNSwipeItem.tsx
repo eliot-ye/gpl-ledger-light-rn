@@ -1,13 +1,14 @@
-import React, {useMemo, useRef} from 'react';
+import {Colors} from '@/configs/colors';
+import React, {useMemo, useRef, useState} from 'react';
 import {
   Animated,
+  Dimensions,
   PanResponder,
   TouchableOpacity,
   View,
   ViewProps,
   ViewStyle,
 } from 'react-native';
-import {Colors} from '@/configs/colors';
 import {CPNText} from './CPNText';
 
 const Config = {
@@ -17,8 +18,14 @@ const Config = {
 } as const;
 
 interface CPNSwipeButton {
-  text: string;
-  onPress?: () => void;
+  text: React.ReactNode;
+  /**
+   * - 如果返回 `true` 将触发删除动画，动画时间为 500ms
+   * - 如果返回 Callback 将触发删除动画，动画时间为 500ms，并在动画结束后调用 Callback
+   * */
+  onPress?: (
+    additional?: any,
+  ) => Promise<(() => void) | boolean | void> | boolean | void | (() => void);
   backgroundColor?: string;
   textColor?: string;
   /** @default 72 */
@@ -26,6 +33,7 @@ interface CPNSwipeButton {
 }
 
 interface CPNSwipeItemProps extends ViewProps {
+  additional?: any;
   /** ___use memoized value___ */
   buttons: CPNSwipeButton[];
   /** @default 0 */
@@ -108,16 +116,21 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
     borderRadius: radius,
   };
 
+  const [hideButtons, hideButtonsSet] = useState(false);
+
   return (
     <View style={containerStyle}>
       <View
-        style={{
-          position: 'absolute',
-          right: 1,
-          top: 1,
-          bottom: 1,
-          flexDirection: 'row-reverse',
-        }}>
+        style={[
+          {
+            position: 'absolute',
+            right: 1,
+            top: 1,
+            bottom: 1,
+            flexDirection: 'row-reverse',
+          },
+          hideButtons && {opacity: 0},
+        ]}>
         {buttons.map((item, index) => {
           return (
             <TouchableOpacity
@@ -136,16 +149,37 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
                   borderTopEndRadius: radius,
                 },
               ]}
-              onPress={() => {
+              onPress={async () => {
                 translateXRef.current = 0;
-                // translateXAnimated.setValue(translateXRef.current);
+                try {
+                  if (item.onPress) {
+                    const isDelete = await item.onPress(props.additional);
+                    if (isDelete === true || typeof isDelete === 'function') {
+                      hideButtonsSet(true);
+                      translateXRef.current = -Dimensions.get('screen').width;
+                    }
+                    if (typeof isDelete === 'function') {
+                      translateXAnimated.addListener(ev => {
+                        if (ev.value === -Dimensions.get('screen').width) {
+                          isDelete();
+                        }
+                      });
+                    }
+                  }
+                } catch (error) {
+                  console.error('CPNSwipeItem buttons:', error);
+                }
+
                 Animated.timing(translateXAnimated, {
                   toValue: translateXRef.current,
                   useNativeDriver: true,
                 }).start();
-                item.onPress && item.onPress();
               }}>
-              <CPNText style={{color: item.textColor}}>{item.text}</CPNText>
+              {['number', 'string'].includes(typeof item.text) ? (
+                <CPNText style={{color: item.textColor}}>{item.text}</CPNText>
+              ) : (
+                item.text
+              )}
             </TouchableOpacity>
           );
         })}
