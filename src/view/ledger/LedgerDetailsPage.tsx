@@ -29,7 +29,7 @@ import {
 } from '@/database';
 import {Colors} from '@/configs/colors';
 import {StoreHomePage} from '@/store';
-import {fromatDateMonth} from '@/utils/dateFn';
+import {formatDateMonth} from '@/utils/dateFn';
 import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import {useDimensions} from '@/utils/useDimensions';
@@ -88,7 +88,7 @@ export function LedgerDetailsPage() {
     );
 
     return {
-      labels: historyList.map(item => fromatDateMonth(item.date)),
+      labels: historyList.map(item => formatDateMonth(item.date)),
       datasets: [
         {
           data: historyList.map(item => item.amountMoney),
