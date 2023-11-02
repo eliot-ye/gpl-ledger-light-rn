@@ -1115,14 +1115,6 @@ PODS:
     - React-jsi (= 0.72.4)
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
-  - ReactNativeFileAccess (3.0.4):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
-    - React-Core
-    - ReactCommon/turbomodule/core
-    - ZIPFoundation (= 0.9.11)
   - ReactNativeLocalization (2.3.2):
     - React-Core
   - RealmJS (12.1.0):
@@ -1211,7 +1203,6 @@ PODS:
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
-  - ZIPFoundation (0.9.11)
 
 DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
@@ -1284,7 +1275,6 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeFileAccess (from `../node_modules/react-native-file-access`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - RealmJS (from `../node_modules/realm`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -1312,7 +1302,6 @@ SPEC REPOS:
     - OpenSSL-Universal
     - SocketRocket
     - YogaKit
-    - ZIPFoundation
 
 EXTERNAL SOURCES:
   boost:
@@ -1406,8 +1395,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeFileAccess:
-    :path: "../node_modules/react-native-file-access"
   ReactNativeLocalization:
     :path: "../node_modules/react-native-localization"
   RealmJS:
@@ -1487,7 +1474,6 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
-  ReactNativeFileAccess: 6f6ae6b81197667349178976bafabc4ba4975821
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   RealmJS: 62267ccc7bec0b40dcd5a64cd63a21346648230c
   RNDeviceInfo: 02ea8b23e2280fa18e00a06d7e62804d74028579
@@ -1500,7 +1486,6 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
-  ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
 PODFILE CHECKSUM: d73d293170bcde733be590cee7ce343534afef21
 
