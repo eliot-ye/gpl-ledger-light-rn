@@ -31,7 +31,7 @@ export function AboutPage() {
           alignItems: 'center',
           backgroundColor: Colors.backgroundPanel,
         }}>
-        <CPNImage name="logo" size={200} />
+        <CPNImage name="logoGreen" size={300} />
       </View>
       <View style={{padding: 20}}>
         <CPNCellGroup>
