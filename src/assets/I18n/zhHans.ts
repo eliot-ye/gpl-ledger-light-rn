@@ -99,6 +99,10 @@ export default {
   CreateDescription1: '注意：创建后不可更改',
 
   LanguageSetting: '语言设置',
+  ThemeSetting: '主题设置',
+  ThemeLight: '亮色主题',
+  ThemeDark: '暗色主题',
+  ThemeSystem: '跟随系统',
   Backup: '备份',
   BackupNow: '立即备份',
   RecoveryNow: '从本地恢复',

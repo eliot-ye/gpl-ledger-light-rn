@@ -10,6 +10,7 @@ import {AboutPage} from './AboutPage';
 import {VersionLogPage} from './VersionLogPage';
 import {BackupPage} from './BackupPage';
 import {WebDAVPage} from './WebDAVPage';
+import {ThemeSettingPage} from './ThemeSettingPage';
 
 export type SettingsStackParamList = {
   ColorManagementPage: undefined;
@@ -17,6 +18,7 @@ export type SettingsStackParamList = {
   AssetTypeManagementPage: undefined;
 
   LangSettingPage: undefined;
+  ThemeSettingPage: undefined;
   BackupPage: undefined;
   WebDAVPage: undefined;
 
@@ -40,6 +42,7 @@ export const renderSettingsRouterView = (
     />
 
     <RootStack.Screen name="LangSettingPage" component={LangSettingPage} />
+    <RootStack.Screen name="ThemeSettingPage" component={ThemeSettingPage} />
     <RootStack.Screen name="BackupPage" component={BackupPage} />
     <RootStack.Screen name="WebDAVPage" component={WebDAVPage} />
 

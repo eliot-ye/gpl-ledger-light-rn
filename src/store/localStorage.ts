@@ -137,12 +137,13 @@ export const LS_Theme = {
   key: 'theme_code',
   async get() {
     const data = await LSRealmStorage.get(this.key);
-    if (data) {
-      return data as ThemeCode;
+    if (!data) {
+      return null;
     }
+    return data as ThemeCode;
   },
-  set(data: ThemeCode) {
-    return LSRealmStorage.set(this.key, data);
+  set(data: ThemeCode | null) {
+    return LSRealmStorage.set(this.key, data || '');
   },
 };
 

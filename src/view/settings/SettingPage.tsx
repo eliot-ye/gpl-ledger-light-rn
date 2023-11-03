@@ -104,6 +104,16 @@ export function SettingPage() {
             }}
           />
           <CPNCell
+            title={I18n.t('ThemeSetting')}
+            onPress={() => {
+              navigation.navigate('ThemeSettingPage');
+            }}
+            isLast
+          />
+        </CPNCellGroup>
+
+        <CPNCellGroup style={{marginBottom: 20}}>
+          <CPNCell
             title={I18n.t('Backup')}
             onPress={() => {
               navigation.navigate('BackupPage');
