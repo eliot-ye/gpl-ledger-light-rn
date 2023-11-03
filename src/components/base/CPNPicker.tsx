@@ -22,7 +22,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
 import {Colors} from '@/configs/colors';
-import {toTitleCase} from '@/utils/tools';
+import {colorGetBackground, toTitleCase} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {DataConstraint} from './CPNDropdown';
 import {CPNPageViewThemeColor} from './CPNPageView';
@@ -236,7 +236,7 @@ const stylesModalPicker = StyleSheet.create({
   columnTitle: {
     paddingVertical: 10,
     marginHorizontal: 0.5,
-    backgroundColor: Colors.themeTransparent,
+    backgroundColor: colorGetBackground(Colors.theme),
     width: '99%',
   },
   columnTitleText: {

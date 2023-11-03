@@ -159,6 +159,6 @@ export function toEachTitleUpperCase(str: string) {
   return newStr.join(' ');
 }
 
-export function colorGetLightenBackground(colorStr: string, ratio = 0.66) {
-  return ColorProcessor(colorStr).lighten(ratio).toString();
+export function colorGetBackground(colorStr: string, ratio = 0.2) {
+  return ColorProcessor(colorStr).alpha(ratio).toString();
 }

@@ -5,6 +5,7 @@ import {Colors} from '@/configs/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {CPNPageViewThemeColor} from './CPNPageView';
 import {FormItemContext} from './CPNFormItem';
+import {colorGetBackground} from '@/utils/tools';
 
 const Config = {
   size: 20,
@@ -75,7 +76,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
           {
             marginRight: props.labelShow !== false ? 10 : 0,
             borderColor: themeColor,
-            backgroundColor: Colors.backgroundTheme,
+            backgroundColor: colorGetBackground(themeColor),
           },
           !verticalCentering && {
             marginTop:

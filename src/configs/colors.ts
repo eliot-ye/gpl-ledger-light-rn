@@ -1,8 +1,7 @@
 import {createReactiveConstant} from '@/libs/ReactiveConstant';
 
 const colorsDefault = {
-  theme: '#1989fa',
-  themeTransparent: 'rgba(25, 137, 250, 0.2)',
+  theme: '#03A850',
 
   warning: '#F2B85F',
 
@@ -36,6 +35,9 @@ const colorsDefault = {
 const colorsDark = {
   ...colorsDefault,
   theme: '#00263A',
+
+  shadow: '#fff',
+  line: '#bbb',
 } as const;
 
 export enum ThemeCode {

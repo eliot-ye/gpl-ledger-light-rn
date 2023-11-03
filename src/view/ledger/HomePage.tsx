@@ -17,7 +17,7 @@ import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
 import {StyleGet} from '@/configs/styles';
-import {colorGetLightenBackground} from '@/utils/tools';
+import {colorGetBackground} from '@/utils/tools';
 import {CPNNoData} from '@/components/CPNNoData';
 
 export function HomePage() {
@@ -73,7 +73,7 @@ export function HomePage() {
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           }}
           accessor={'amountMoney'}
-          backgroundColor={colorGetLightenBackground(Colors.theme, 0.7)}
+          backgroundColor={colorGetBackground(Colors.theme)}
           paddingLeft={'20'}
           absolute
           avoidFalseZero
