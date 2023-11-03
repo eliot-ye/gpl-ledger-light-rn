@@ -4,6 +4,7 @@ import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {AlertButton, CPNAlert, CPNRichTextView} from '@/components/base';
 import {I18n, LangCode} from '@/assets/I18n';
 import {LS_EnvAlertOnceId} from '@/store/localStorage';
+import {Colors} from './colors';
 
 enum Error {
   NO_CONTROL_PATH = 'NO_CONTROL_PATH',
@@ -130,6 +131,7 @@ export async function injectControlJSON() {
     const buttons: AlertButton[] = [
       {
         text: confirmText || I18n.t('Confirm'),
+        textColor: Colors.theme,
         keep: !alert.confirmClose,
         async onPress() {
           if (alert.confirmOpenURL) {
@@ -140,7 +142,7 @@ export async function injectControlJSON() {
     ];
 
     if (alert.showCancel) {
-      buttons.unshift({
+      buttons.push({
         text: cancelText || I18n.t('Cancel'),
         async onPress() {
           if (alert.cancelOpenURL) {

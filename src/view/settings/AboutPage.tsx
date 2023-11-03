@@ -65,6 +65,7 @@ export function AboutPage() {
                     buttons: [
                       {
                         text: I18n.t('Confirm'),
+                        textColor: Colors.theme,
                         onPress() {
                           let defaultUpdateLink = '';
                           if (Platform.OS === 'android') {
@@ -78,6 +79,7 @@ export function AboutPage() {
                       },
                       {
                         text: I18n.t('ViewVersionLog'),
+                        textColor: Colors.theme,
                         onPress() {
                           navigation.navigate('VersionLogPage');
                         },

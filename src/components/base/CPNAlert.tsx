@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Animated,
   Modal,
@@ -12,12 +12,11 @@ import {StyleGet} from '@/configs/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
-import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
   width: '80%',
-  borderRadius: 14,
-  fontSize: 16,
+  borderRadius: 20,
+  fontSize: 14,
   titleFontSize: 18,
   titleFontWeight: '600',
   buttonHeight: 40,
@@ -82,8 +81,6 @@ interface CPNAlertBoxProps extends AlertOption {
   onClose: () => void;
 }
 function CPNAlertBox(props: CPNAlertBoxProps) {
-  const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
-
   const buttonsList = useMemo(
     () =>
       props.buttons
@@ -120,7 +117,6 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
               style={[
                 styles.text,
                 {
-                  color: themeColor,
                   fontWeight: Config.titleFontWeight,
                   fontSize: Config.titleFontSize,
                   marginBottom: !props.message ? 0 : 10,
@@ -133,9 +129,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
           ))}
         {!!props.message &&
           (['string', 'number'].includes(typeof props.message) ? (
-            <CPNText
-              role="contentinfo"
-              style={[styles.text, {color: themeColor}]}>
+            <CPNText role="contentinfo" style={[styles.text]}>
               {props.message}
             </CPNText>
           ) : (
@@ -146,7 +140,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
         style={{
           borderTopWidth: 1,
           borderColor: Colors.line,
-          flexDirection: isColumnButtons ? 'column' : 'row',
+          flexDirection: isColumnButtons ? 'column' : 'row-reverse',
         }}>
         {buttonsList.map((_btn, _btnIndex) => {
           const isFirst = _btnIndex === 0;
@@ -160,7 +154,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
 
                 !isColumnButtons &&
                   _btnIndex > 0 && {
-                    borderLeftWidth: 1,
+                    borderRightWidth: 1,
                   },
                 isColumnButtons &&
                   _btnIndex > 0 && {
@@ -200,12 +194,8 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
                 <CPNText
                   style={{
                     fontWeight: '500',
-                    color:
-                      _btn.textColor ||
-                      ((!isColumnButtons && isLast) ||
-                      (isColumnButtons && isFirst)
-                        ? themeColor
-                        : Colors.fontSubtitle),
+                    fontSize: Config.fontSize,
+                    color: _btn.textColor || Colors.fontText,
                   }}>
                   {_btn.text}
                 </CPNText>
@@ -258,7 +248,10 @@ export function CPNAlertView(props: CPNAlertViewProps) {
             index={1}
             animatedScale={animatedValue}
             buttons={useMemo(
-              () => props.buttons || [{text: I18n.t('OK')}],
+              () =>
+                props.buttons || [
+                  {text: I18n.t('Confirm'), textColor: Colors.theme},
+                ],
               [props.buttons],
             )}
           />
@@ -391,7 +384,13 @@ export function createCPNAlert() {
           animatedValue: new Animated.Value(0),
           title,
           message,
-          buttons: [{text: I18n.t('Confirm'), onPress: () => resolve()}],
+          buttons: [
+            {
+              text: I18n.t('Confirm'),
+              textColor: Colors.theme,
+              onPress: () => resolve(),
+            },
+          ],
         });
       });
     },
@@ -405,8 +404,12 @@ export function createCPNAlert() {
           title,
           message,
           buttons: [
+            {
+              text: I18n.t('Confirm'),
+              textColor: Colors.theme,
+              onPress: () => resolve(),
+            },
             {text: I18n.t('Cancel'), onPress: () => reject()},
-            {text: I18n.t('Confirm'), onPress: () => resolve()},
           ],
         });
       });
