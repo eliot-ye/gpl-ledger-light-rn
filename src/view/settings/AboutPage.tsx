@@ -10,7 +10,7 @@ import {
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import React from 'react';
-import {Linking, Platform, View} from 'react-native';
+import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/configs/env';
 import {useApiGiteePublic} from '@/api/http.giteePublic';
 import {useNavigation} from '@react-navigation/native';
@@ -61,7 +61,14 @@ export function AboutPage() {
                       I18n.t('DiscoveringNewVersion'),
                       versionData.versionName,
                     ),
-                    message: <CPNRichTextView richText={versionData.desc} />,
+                    message: (
+                      <ScrollView
+                        style={{
+                          maxHeight: Dimensions.get('window').height / 2,
+                        }}>
+                        <CPNRichTextView richText={versionData.desc} />
+                      </ScrollView>
+                    ),
                     buttons: [
                       {
                         text: I18n.t('Confirm'),
