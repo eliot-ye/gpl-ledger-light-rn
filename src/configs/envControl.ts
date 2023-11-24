@@ -1,5 +1,5 @@
 import React from 'react';
-import {Linking, Platform, ScrollView, View} from 'react-native';
+import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {AlertButton, CPNAlert, CPNRichTextView} from '@/components/base';
 import {I18n, LangCode} from '@/assets/I18n';
@@ -23,6 +23,8 @@ interface ControlJSONAlert {
   onceId?: string;
   title?: string;
   message?: string;
+  /** 富文本 `message` 字符串。如果有值，则覆盖 `message` */
+  richTextMessage?: string;
   /** 点击确认按钮退出 app */
   confirmExitApp?: boolean;
   /** 点击取消按钮退出 app */
@@ -33,8 +35,6 @@ interface ControlJSONAlert {
   cancelOpenURL?: string;
   /** 点击确认按钮关闭弹窗 */
   confirmClose?: boolean;
-  /** 默认: undefined, 如果有高度, 则使用 `CPNRichTextView` 渲染 `<div style="text-align: center; font-size: 16px">${props.message}<div>` */
-  richTextScrollViewHeight?: number;
   confirmText?: string;
   cancelText?: string;
   showCancel?: boolean;
@@ -114,18 +114,10 @@ export async function injectControlJSON() {
       confirmText = _i18nItem?.confirmText || confirmText;
       cancelText = _i18nItem?.cancelText || cancelText;
     }
-    if (alert.richTextScrollViewHeight) {
-      message = React.createElement(
-        View,
-        {style: {height: alert.richTextScrollViewHeight}},
-        React.createElement(
-          ScrollView,
-          {style: {flex: 1}},
-          React.createElement(CPNRichTextView, {
-            richText: `<div style="text-align: center; font-size: 16px">${message}<div>`,
-          }),
-        ),
-      );
+    if (alert.richTextMessage) {
+      message = React.createElement(CPNRichTextView, {
+        richText: `<div style="font-size: 16px">${alert.richTextMessage}<div>`,
+      });
     }
 
     const buttons: AlertButton[] = [
@@ -154,7 +146,11 @@ export async function injectControlJSON() {
 
     CPNAlert.open({
       title,
-      message,
+      message: React.createElement(
+        ScrollView,
+        {style: {maxHeight: Dimensions.get('window').height / 2}},
+        message,
+      ),
       backButtonClose: alert.showCancel,
       buttons,
     });
