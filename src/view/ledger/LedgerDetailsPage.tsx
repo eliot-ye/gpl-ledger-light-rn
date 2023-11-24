@@ -280,10 +280,13 @@ export function LedgerDetailsPage() {
 
         <CPNFormItem
           style={{paddingBottom: 20}}
-          title={I18n.t('AmountMoney')}
+          title={`${I18n.t('AmountMoney')}: ${
+            route.params?.currency.symbol || ''
+          }${route.params?.amountMoney || 0}`}
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
           <CPNInput
+            placeholder={I18n.t('PlaceholderInput', I18n.t('AmountMoney'))}
             keyboardType="numeric"
             value={
               details.amountMoney === undefined
@@ -301,6 +304,17 @@ export function LedgerDetailsPage() {
                 detailsSet({...details, amountMoney});
                 detailsErrorSet({...detailsError, amountMoney: ''});
               }
+            }}
+            rightIcon={
+              <CPNIonicons
+                name={IONName.CloseCircle}
+                color={route.params?.color.value || Colors.theme}
+                size={20}
+              />
+            }
+            onPressRightIcon={() => {
+              detailsSet({...details, amountMoney: undefined});
+              detailsErrorSet({...detailsError, amountMoney: ''});
             }}
           />
         </CPNFormItem>
