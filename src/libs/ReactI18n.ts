@@ -24,20 +24,20 @@ type InferKey<T> = InferKeyArray<T> extends Array<infer K extends string>
   ? K
   : T;
 type Formatted = string | number | JSX.Element;
-type KeyConstraint<K extends string, V extends Formatted> = Record<K, V>;
-type FormatReturn<V> = V extends JSX.Element ? V : string;
+type KeyConstraint<K extends string, V> = Record<K, V>;
+type FormatReturn<V, L> = V extends JSX.Element ? V : L;
 export function formatReactNode<L extends string, V extends Formatted>(
   langString: L,
   value: KeyConstraint<InferKey<L>, V>,
-): FormatReturn<V>;
+): FormatReturn<V, L>;
 export function formatReactNode<L extends string, V extends Formatted>(
   langString: L,
   ...values: V[]
-): FormatReturn<V>;
+): FormatReturn<V, L>;
 export function formatReactNode<L extends string, V extends Formatted>(
   langString: L,
   ...values: V[]
-): FormatReturn<V> {
+): FormatReturn<V, L> {
   const _len = values.length;
   let valuesForPlaceholders = Array(_len);
   for (let _key = 0; _key < _len; _key++) {
@@ -100,18 +100,18 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
   const LangContext = createContext(defaultLang);
 
   function translate<K extends keyof T>(key: K): T[K];
-  function translate<K extends keyof T, V extends Formatted>(
+  function translate<K extends keyof T, L extends T[K], V extends Formatted>(
     key: K,
-    value: KeyConstraint<InferKey<T[K]>, V>,
-  ): FormatReturn<V>;
-  function translate<K extends keyof T, V extends Formatted>(
-    key: K,
-    ...values: V[]
-  ): FormatReturn<V>;
-  function translate<K extends keyof T, V extends Formatted>(
+    value: KeyConstraint<InferKey<L>, V>,
+  ): FormatReturn<V, L>;
+  function translate<K extends keyof T, L extends T[K], V extends Formatted>(
     key: K,
     ...values: V[]
-  ): FormatReturn<V> {
+  ): FormatReturn<V, L>;
+  function translate<K extends keyof T, L extends T[K], V extends Formatted>(
+    key: K,
+    ...values: V[]
+  ): FormatReturn<V, L> {
     if (values.length) {
       return formatReactNode(RCI[key], ...values);
     }
