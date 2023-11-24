@@ -9,6 +9,7 @@ import {
   CPNIonicons,
   IONName,
   CPNAlert,
+  CPNImage,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {
@@ -210,11 +211,11 @@ export function SignInPage() {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: 30,
+          padding: 20,
         }}>
         <TouchableOpacity
           accessibilityLabel={I18n.t('BiometricsSignIn')}
-          style={{padding: 30}}
+          style={{padding: 10}}
           onPress={async () => {
             try {
               if (!userInfo.biometriceToken) {
@@ -250,7 +251,15 @@ export function SignInPage() {
   }
 
   return (
-    <CPNPageView title={I18n.t('SignIn')}>
+    <CPNPageView title={I18n.t('AppTitle')}>
+      <View
+        style={{
+          height: 160,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <CPNImage name="logoGreen" size={200} />
+      </View>
       <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
         <View>
           {renderUserInfoInput()}

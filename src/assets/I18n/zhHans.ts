@@ -35,6 +35,7 @@ export default {
   SessionExpired: '登录已失效',
   NetworkError: '网络错误，请稍后再试',
 
+  AppTitle: 'GPL轻账本',
   Ledger: '账本',
   Settings: '设置',
 
