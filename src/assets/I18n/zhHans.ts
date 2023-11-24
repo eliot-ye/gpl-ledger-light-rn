@@ -14,6 +14,7 @@ export default {
   Submit: '提交',
   OR: '或',
   NoData: '暂无数据',
+  Total: '总计',
 
   SignIn: '登入',
   SignUp: '注册',

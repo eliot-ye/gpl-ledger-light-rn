@@ -49,17 +49,27 @@ export function HomePage() {
 
   const {width} = useDimensions('window');
   const ChartData = useMemo(
-    () =>
-      ledgerList.map(item => ({
+    () => [
+      {
+        name: I18n.t('UnavailableAssets'),
+        amountMoney: UnAvailableAssets.reduce(
+          (pre, cur) => pre + cur.amountMoney,
+          0,
+        ),
+        color: Colors.backgroundDisabled,
+        legendFontColor: Colors.backgroundDisabled,
+      },
+      ...AvailableAssets.map(item => ({
         name: `${item.name}(${item.assetType.name})`,
         amountMoney: item.amountMoney,
         color: item.color.value,
         legendFontColor: item.color.value,
       })),
-    [ledgerList],
+    ],
+    [AvailableAssets, UnAvailableAssets],
   );
   function renderChart() {
-    if (ChartData.length < 1) {
+    if (ChartData.length < 2) {
       return;
     }
 
@@ -107,6 +117,13 @@ export function HomePage() {
               {I18n.t('AvailableAssets')}
             </CPNText>
             <CPNCellGroup style={{marginBottom: 20}}>
+              <CPNCell
+                title={I18n.t('Total')}
+                value={`${AvailableAssets.reduce(
+                  (pre, cur) => pre + cur.amountMoney,
+                  0,
+                ).toFixed(2)}`}
+              />
               {AvailableAssets.map((item, index) => (
                 <CPNCell
                   isLast={index === AvailableAssets.length - 1}
@@ -145,6 +162,13 @@ export function HomePage() {
               {I18n.t('UnavailableAssets')}
             </CPNText>
             <CPNCellGroup>
+              <CPNCell
+                title={I18n.t('Total')}
+                value={`${UnAvailableAssets.reduce(
+                  (pre, cur) => pre + cur.amountMoney,
+                  0,
+                ).toFixed(2)}`}
+              />
               {UnAvailableAssets.map((item, index) => (
                 <CPNCell
                   isLast={index === UnAvailableAssets.length - 1}
