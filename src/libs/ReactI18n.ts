@@ -141,7 +141,7 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
         });
 
         return () => {
-          RCI.$removeListener(_id);
+          RCI.$removeListenerCode(_id);
         };
       }, []);
 
