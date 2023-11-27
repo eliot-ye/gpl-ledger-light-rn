@@ -89,10 +89,7 @@ export function ColorManagementPage() {
                 onPress={async () => {
                   await CPNAlert.confirm(
                     '',
-                    I18n.f(
-                      I18n.t('DeleteConfirm'),
-                      detailsRef.current.name || '',
-                    ),
+                    I18n.t('DeleteConfirm', detailsRef.current.name || ''),
                   );
                   if (detailsRef.current.value) {
                     dbDeleteColor(detailsRef.current.value);

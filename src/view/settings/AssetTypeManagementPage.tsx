@@ -93,10 +93,7 @@ export function AssetTypeManagementPage() {
                 onPress={async () => {
                   await CPNAlert.confirm(
                     '',
-                    I18n.f(
-                      I18n.t('DeleteConfirm'),
-                      detailsRef.current.name || '',
-                    ),
+                    I18n.t('DeleteConfirm', detailsRef.current.name || ''),
                   );
                   if (detailsRef.current.symbol) {
                     dbDeleteAssetType(detailsRef.current.symbol);
