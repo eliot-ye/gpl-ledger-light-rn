@@ -16,6 +16,7 @@ export default {
   NotUsed: 'NotUsed',
 
   PlaceholderSelect: 'Please select {0}',
+  NoMoreOptions: 'No more options',
   PlaceholderInput: 'Please enter{0}',
   DeleteConfirm: 'Sure you want to delete {0}?',
 

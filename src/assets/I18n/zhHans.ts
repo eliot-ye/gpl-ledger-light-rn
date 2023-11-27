@@ -24,6 +24,7 @@ export default {
   NotUsed: '未使用',
 
   PlaceholderSelect: '请选择{0}',
+  NoMoreOptions: '没有更多选项了',
   PlaceholderInput: '请输入{0}',
   DeleteConfirm: '确定要删除{0}吗？',
 

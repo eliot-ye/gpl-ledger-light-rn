@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  useWindowDimensions,
   View,
   ViewStyle,
 } from 'react-native';
@@ -40,7 +39,9 @@ const styles = StyleSheet.create({
 });
 
 export interface DataConstraint {
+  id?: string;
   label?: string;
+  /** 注意：value 不可以 `_prev_id_` 字符开头 */
   value: any;
 }
 
@@ -56,6 +57,7 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
    *   value: any;
    * }
    * ```
+   * ___注意：`value` 不可以 `_prev_id_` 字符开头___
    * */
   data: ItemT[];
   checked?: ItemT['value'];
@@ -89,34 +91,36 @@ export function CPNDropdown<ItemT extends DataConstraint>(
     [boxHeight, props.itemShowNum],
   );
 
-  const windowHeight = useWindowDimensions().height;
-  const isShowBottom = useMemo(() => {
-    return containerHeight + boxPosition.Y < windowHeight - 100;
-  }, [boxPosition.Y, containerHeight, windowHeight]);
+  const prevCount = Math.floor((props.itemShowNum || Config.itemShowNum) / 2);
+  const dataShow = useMemo(() => {
+    const _data = [...props.data];
+    for (let i = 0; i < prevCount; i++) {
+      _data.unshift({value: '_prev_id_f_' + i} as ItemT);
+      _data.push({value: '_prev_id_e_' + i} as ItemT);
+    }
+    return _data;
+  }, [prevCount, props.data]);
 
   const [activeItem, activeItemSet] = useState<ItemT>();
   const [activeIndex, activeIndexSet] = useState(0);
-
   useEffect(() => {
-    props.data.forEach((_item, _index) => {
+    dataShow.forEach((_item, _index) => {
       if (_item.value === props.checked) {
         activeItemSet(_item);
         activeIndexSet(_index);
       }
     });
-  }, [props.checked, props.data]);
+  }, [props.checked, dataShow]);
 
   const FLRef = useRef<FlatList>(null);
   useEffect(() => {
     setTimeout(() => {
       FLRef.current?.scrollToOffset({
         animated: false,
-        offset: isShowBottom
-          ? activeIndex * (boxHeight + Config.borderWidth)
-          : (activeIndex - 2) * (boxHeight + Config.borderWidth),
+        offset: (activeIndex - 2) * (boxHeight + Config.borderWidth),
       });
     }, 0);
-  }, [activeIndex, boxHeight, isShowBottom, show]);
+  }, [activeIndex, boxHeight, show]);
 
   const windowSize = useDimensions('window');
 
@@ -164,7 +168,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               {activeItem?.label ||
                 activeItem?.value ||
                 (props.selectPlaceholder === undefined
-                  ? I18n.f(I18n.t('PlaceholderSelect'), formItem.title)
+                  ? I18n.t('PlaceholderSelect', formItem.title)
                   : props.selectPlaceholder)}
             </CPNText>
           )}
@@ -191,16 +195,10 @@ export function CPNDropdown<ItemT extends DataConstraint>(
             <View
               style={[
                 styles.container,
-                isShowBottom
-                  ? {top: boxPosition.Y + Config.offset}
-                  : {
-                      bottom:
-                        windowHeight -
-                        boxHeight -
-                        boxPosition.Y +
-                        Config.offset,
-                    },
                 {
+                  borderColor: themeColor,
+                  borderWidth: Config.borderWidth,
+                  top: boxPosition.Y + Config.offset - boxHeight * prevCount,
                   left: boxPosition.X,
                   backgroundColor: Colors.backgroundPanel,
                   width: boxWidth,
@@ -209,24 +207,84 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               ]}>
               <FlatList
                 {...props}
+                data={dataShow}
                 ref={FLRef}
                 getItemLayout={(data, index) => ({
                   length: boxHeight + Config.borderWidth,
                   offset: (boxHeight + Config.borderWidth) * index,
                   index,
                 })}
-                ItemSeparatorComponent={
-                  (
+                ItemSeparatorComponent={ev => {
+                  if (ev.leadingItem.value.includes('_prev_id_')) {
+                    if (ev.leadingItem.value === '_prev_id_f_0') {
+                      return (
+                        <View
+                          style={{
+                            height: Config.borderWidth,
+                            backgroundColor: Colors.line,
+                            marginHorizontal: 6,
+                          }}
+                        />
+                      );
+                    }
+                    return (
+                      <View
+                        style={{
+                          height: Config.borderWidth,
+                          backgroundColor: Colors.transparent,
+                          marginHorizontal: 6,
+                        }}
+                      />
+                    );
+                  }
+                  return (
                     <View
                       style={{
-                        borderBottomWidth: Config.borderWidth,
-                        borderColor: Colors.line,
+                        height: Config.borderWidth,
+                        backgroundColor: Colors.line,
                         marginHorizontal: 6,
                       }}
                     />
-                  ) as any
-                }
+                  );
+                }}
                 renderItem={({item}) => {
+                  if (item.value.indexOf('_prev_id_') === 0) {
+                    if (
+                      item.value === '_prev_id_f_0' ||
+                      item.value === '_prev_id_e_0'
+                    ) {
+                      return (
+                        <TouchableWithoutFeedback
+                          onPress={() => showSet(false)}>
+                          <View
+                            style={[
+                              {
+                                height: boxHeight,
+                                alignItems: 'center',
+                                justifyContent:
+                                  item.value === '_prev_id_f_0'
+                                    ? 'flex-start'
+                                    : 'flex-end',
+                              },
+                              props.itemStyle,
+                            ]}>
+                            <CPNText
+                              style={{
+                                color: Colors.fontPlaceholder,
+                                fontSize: 12,
+                              }}>
+                              {I18n.t('NoMoreOptions')}
+                            </CPNText>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      );
+                    }
+                    return (
+                      <TouchableWithoutFeedback onPress={() => showSet(false)}>
+                        <View style={[{height: boxHeight}, props.itemStyle]} />
+                      </TouchableWithoutFeedback>
+                    );
+                  }
                   return (
                     <TouchableOpacity
                       style={[
@@ -241,9 +299,17 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                       {props.renderItemContent ? (
                         props.renderItemContent(item)
                       ) : (
-                        <CPNText numberOfLines={props.numberOfLines}>
+                        <CPNText
+                          style={{flex: 1}}
+                          numberOfLines={props.numberOfLines}>
                           {item.label || item.value}
                         </CPNText>
+                      )}
+                      {props.checked === item.value && (
+                        <CPNIonicons
+                          name={IONName.Checkmark}
+                          color={themeColor}
+                        />
                       )}
                     </TouchableOpacity>
                   );
