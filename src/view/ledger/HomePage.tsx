@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   CPNIonicons,
   CPNPageView,
@@ -8,7 +8,7 @@ import {
   CPNCell,
 } from '@/components/base';
 import {TouchableOpacity, View} from 'react-native';
-import {dbGetLedger, LedgerItem} from '@/database';
+import {CurrencyItem, dbGetCurrency, dbGetLedger, LedgerItem} from '@/database';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
@@ -19,24 +19,20 @@ import {PieChart} from 'react-native-chart-kit';
 import {StyleGet} from '@/configs/styles';
 import {colorGetBackground} from '@/utils/tools';
 import {CPNNoData} from '@/components/CPNNoData';
+import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLocal();
   const HomePageState = StoreHomePage.useState();
 
+  const [currencyList, currencyListSet] = useState<CurrencyItem[]>([]);
   const [ledgerList, ledgerListSet] = useState<LedgerItem[]>([]);
-  const getDBLedgers = useCallback(async () => {
-    console.log('HomePageState.updateCount:', HomePageState.updateCount);
-
-    const res = await dbGetLedger();
-    // console.log(JSON.stringify(res));
-
-    ledgerListSet(res);
-  }, [HomePageState.updateCount]);
   useEffect(() => {
-    getDBLedgers();
-  }, [getDBLedgers]);
+    console.log('HomePageState.updateCount:', HomePageState.updateCount);
+    dbGetLedger().then(res => ledgerListSet(res));
+    dbGetCurrency().then(res => currencyListSet(res));
+  }, [HomePageState.updateCount]);
 
   const AvailableAssets = useMemo(
     () => ledgerList.filter(item => item.assetType.isAvailableAssets),
@@ -48,28 +44,30 @@ export function HomePage() {
   );
 
   const {width} = useDimensions('window');
-  const ChartData = useMemo(
-    () => [
-      {
-        name: I18n.t('UnavailableAssets'),
-        amountMoney: UnAvailableAssets.reduce(
-          (pre, cur) => pre + cur.amountMoney,
-          0,
-        ),
-        color: Colors.backgroundDisabled,
-        legendFontColor: Colors.backgroundDisabled,
-      },
-      ...AvailableAssets.map(item => ({
-        name: `${item.name}(${item.assetType.name})`,
-        amountMoney: item.amountMoney,
-        color: item.color.value,
-        legendFontColor: item.color.value,
-      })),
-    ],
-    [AvailableAssets, UnAvailableAssets],
-  );
+  const ChartData = useMemo(() => {
+    const data = AvailableAssets.map(item => ({
+      name: `${item.currency.symbol} ${item.name}`,
+      amountMoney: item.amountMoney,
+      color: item.color.value,
+      legendFontColor: item.color.value,
+    }));
+    currencyList.forEach(item => {
+      const amountMoney = UnAvailableAssets.filter(
+        _item => _item.currency.abbreviation === item.abbreviation,
+      ).reduce((pre, cur) => pre + cur.amountMoney, 0);
+      if (amountMoney > 0) {
+        data.push({
+          name: `${item.symbol} ${I18n.t('UnavailableAssets')}`,
+          amountMoney,
+          color: Colors.backgroundBlack,
+          legendFontColor: Colors.backgroundBlack,
+        });
+      }
+    });
+    return data;
+  }, [AvailableAssets, UnAvailableAssets, currencyList]);
   function renderChart() {
-    if (ChartData.length < 2) {
+    if (ChartData.length < 1) {
       return;
     }
 
@@ -91,6 +89,35 @@ export function HomePage() {
       </View>
     );
   }
+
+  const AvailableAssetsTotal = useMemo(
+    () =>
+      currencyList.map(item => {
+        return {
+          ...item,
+          amount: AvailableAssets.filter(
+            _item => _item.currency.abbreviation === item.abbreviation,
+          )
+            .reduce((pre, cur) => pre + cur.amountMoney, 0)
+            .toFixed(2),
+        };
+      }),
+    [AvailableAssets, currencyList],
+  );
+  const UnAvailableAssetsTotal = useMemo(
+    () =>
+      currencyList.map(item => {
+        return {
+          ...item,
+          amount: UnAvailableAssets.filter(
+            _item => _item.currency.abbreviation === item.abbreviation,
+          )
+            .reduce((pre, cur) => pre + cur.amountMoney, 0)
+            .toFixed(2),
+        };
+      }),
+    [UnAvailableAssets, currencyList],
+  );
 
   return (
     <CPNPageView
@@ -119,10 +146,22 @@ export function HomePage() {
             <CPNCellGroup style={{marginBottom: 20}}>
               <CPNCell
                 title={I18n.t('Total')}
-                value={`${AvailableAssets.reduce(
-                  (pre, cur) => pre + cur.amountMoney,
-                  0,
-                ).toFixed(2)}`}
+                value={
+                  <View>
+                    {AvailableAssetsTotal.map(item => {
+                      if (item.amount === '0.00') {
+                        return;
+                      }
+                      return (
+                        <CPNCurrencyView
+                          key={item.abbreviation}
+                          symbol={item.symbol}
+                          amount={item.amount}
+                        />
+                      );
+                    })}
+                  </View>
+                }
               />
               {AvailableAssets.map((item, index) => (
                 <CPNCell
@@ -146,7 +185,12 @@ export function HomePage() {
                       </View>
                     </>
                   }
-                  value={`${item.currency.symbol}${item.amountMoney}`}
+                  value={
+                    <CPNCurrencyView
+                      symbol={item.currency.symbol}
+                      amount={item.amountMoney}
+                    />
+                  }
                   onPress={() => {
                     navigation.navigate('LedgerDetailsPage', item);
                   }}
@@ -164,10 +208,22 @@ export function HomePage() {
             <CPNCellGroup>
               <CPNCell
                 title={I18n.t('Total')}
-                value={`${UnAvailableAssets.reduce(
-                  (pre, cur) => pre + cur.amountMoney,
-                  0,
-                ).toFixed(2)}`}
+                value={
+                  <View>
+                    {UnAvailableAssetsTotal.map(item => {
+                      if (item.amount === '0.00') {
+                        return;
+                      }
+                      return (
+                        <CPNCurrencyView
+                          key={item.abbreviation}
+                          symbol={item.symbol}
+                          amount={item.amount}
+                        />
+                      );
+                    })}
+                  </View>
+                }
               />
               {UnAvailableAssets.map((item, index) => (
                 <CPNCell
@@ -191,7 +247,12 @@ export function HomePage() {
                       </View>
                     </>
                   }
-                  value={`${item.currency.symbol}${item.amountMoney}`}
+                  value={
+                    <CPNCurrencyView
+                      symbol={item.currency.symbol}
+                      amount={item.amountMoney}
+                    />
+                  }
                   onPress={() => {
                     navigation.navigate('LedgerDetailsPage', item);
                   }}

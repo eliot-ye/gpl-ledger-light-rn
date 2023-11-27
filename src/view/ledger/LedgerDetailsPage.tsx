@@ -33,6 +33,7 @@ import {formatDateMonth} from '@/utils/dateFn';
 import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import {useDimensions} from '@/utils/useDimensions';
+import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 
 export function LedgerDetailsPage() {
   const navigation =
@@ -280,9 +281,15 @@ export function LedgerDetailsPage() {
 
         <CPNFormItem
           style={{paddingBottom: 20}}
-          title={`${I18n.t('AmountMoney')}: ${
-            route.params?.currency.symbol || ''
-          }${route.params?.amountMoney || 0}`}
+          title={
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <CPNText>{I18n.t('AmountMoney')}:</CPNText>
+              <CPNCurrencyView
+                symbol={route.params?.currency.symbol || ''}
+                amount={route.params?.amountMoney || 0}
+              />
+            </View>
+          }
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>
           <CPNInput
