@@ -63,8 +63,9 @@ export const StyleGet = {
   },
   cellView() {
     return {
-      height: 46,
+      minHeight: 46,
       paddingHorizontal: 10,
+      paddingVertical: 6,
       borderWidth: 0,
       borderColor: Colors.line,
     } as const;
