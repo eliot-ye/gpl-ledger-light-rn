@@ -45,7 +45,7 @@ export function CPNFormItem(props: CPNFormItemProps) {
         )}>
         <View
           style={{
-            minHeight: StyleGet.cellView().height,
+            minHeight: StyleGet.cellView().minHeight,
             justifyContent: 'center',
           }}>
           {props.children}

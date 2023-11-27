@@ -282,13 +282,13 @@ export function LedgerDetailsPage() {
         <CPNFormItem
           style={{paddingBottom: 20}}
           title={
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <>
               <CPNText>{I18n.t('AmountMoney')}:</CPNText>
               <CPNCurrencyView
                 symbol={route.params?.currency.symbol || ''}
                 amount={route.params?.amountMoney || 0}
               />
-            </View>
+            </>
           }
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>

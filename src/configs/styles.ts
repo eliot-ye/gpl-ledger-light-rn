@@ -23,18 +23,11 @@ type JustifyContent =
   | 'space-around'
   | 'space-evenly';
 
-const windowSize = Dimensions.get('window');
 const screenSize = Dimensions.get('screen');
 
 export const StyleGet = {
   title,
 
-  windowSize() {
-    return {
-      width: windowSize.width,
-      height: windowSize.height,
-    } as const;
-  },
   modalView(justifyContent?: JustifyContent) {
     return {
       width: screenSize.width,
@@ -59,6 +52,8 @@ export const StyleGet = {
   cellTitleView() {
     return {
       height: 24,
+      flexDirection: 'row',
+      alignItems: 'center',
     } as const;
   },
   cellView() {

@@ -18,6 +18,7 @@ import {CPNIonicons, IONName} from './CPNIcon';
 import {I18n} from '@/assets/I18n';
 import {FormItemContext} from './CPNFormItem';
 import {CPNPageViewThemeColor} from './CPNPageView';
+import {useDimensions} from '@/utils/useDimensions';
 
 const Config = {
   borderWidth: 0.5,
@@ -117,6 +118,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
     }, 0);
   }, [activeIndex, boxHeight, isShowBottom, show]);
 
+  const windowSize = useDimensions('window');
+
   return (
     <>
       <TouchableOpacity
@@ -184,7 +187,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         animationType="fade"
         onRequestClose={() => showSet(false)}>
         <TouchableWithoutFeedback onPress={() => showSet(false)}>
-          <View style={StyleGet.windowSize()}>
+          <View style={windowSize}>
             <View
               style={[
                 styles.container,

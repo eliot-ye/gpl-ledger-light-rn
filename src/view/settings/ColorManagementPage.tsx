@@ -119,11 +119,7 @@ export function ColorManagementPage() {
             <CPNFormItem
               style={{paddingBottom: 20}}
               title={
-                <View
-                  style={[
-                    StyleGet.cellTitleView(),
-                    {flexDirection: 'row', alignItems: 'center'},
-                  ]}>
+                <View style={StyleGet.cellTitleView()}>
                   <CPNText
                     style={{color: detailsRef.current.value || Colors.theme}}>
                     {I18n.t('ColorValue')}
