@@ -34,6 +34,7 @@ import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import {useDimensions} from '@/utils/useDimensions';
 import {CPNCurrencyView} from '@/components/CPNCurrencyView';
+import {StyleGet} from '@/configs/styles';
 
 export function LedgerDetailsPage() {
   const navigation =
@@ -156,10 +157,27 @@ export function LedgerDetailsPage() {
       <View style={{padding: 20}}>
         <CPNFormItem
           style={{paddingBottom: 20}}
-          title={I18n.t('AssetName')}
+          title={
+            route.params ? (
+              <>
+                <CPNText style={{color: route.params.color.value}}>
+                  {I18n.t('AssetName')}:{' '}
+                </CPNText>
+                <CPNText>{route.params.name}</CPNText>
+              </>
+            ) : (
+              <CPNText
+                style={{
+                  color: Colors.theme,
+                }}>
+                {I18n.t('AssetName')}
+              </CPNText>
+            )
+          }
           hasError={!!detailsError.name}
           errorText={detailsError.name}>
           <CPNInput
+            placeholder={I18n.t('PlaceholderInput', I18n.t('AssetName'))}
             value={details.name}
             onChangeText={name => {
               detailsSet({...details, name});
@@ -201,22 +219,22 @@ export function LedgerDetailsPage() {
         <CPNFormItem
           style={{paddingBottom: 20}}
           title={
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <CPNText
-                style={{
-                  color: route.params?.color.value || Colors.theme,
-                }}>
-                {I18n.t('Color')}
-              </CPNText>
-              <View
-                style={{
-                  width: 10,
-                  height: 10,
-                  backgroundColor: details.color?.value,
-                  marginLeft: 4,
-                }}
-              />
-            </View>
+            route.params ? (
+              <>
+                <CPNText style={{color: route.params.color.value}}>
+                  {I18n.t('Color')}:{' '}
+                </CPNText>
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    backgroundColor: route.params.color.value,
+                  }}
+                />
+              </>
+            ) : (
+              <CPNText style={{color: Colors.theme}}>{I18n.t('Color')}</CPNText>
+            )
           }
           hasError={!!detailsError.color}
           errorText={detailsError.color}>
@@ -236,11 +254,42 @@ export function LedgerDetailsPage() {
                 {colorsUsedIds.includes(item.value) && (
                   <CPNText
                     style={{color: Colors.fontPlaceholder, fontSize: 12}}>
-                    ({I18n.t('Used')})
+                    (
+                    {route.params?.color.value === item.value
+                      ? I18n.t('InUse')
+                      : I18n.t('Used')}
+                    )
                   </CPNText>
                 )}
               </View>
             )}
+            renderCellContent={item => {
+              if (!item || !item.value) {
+                return (
+                  <CPNText
+                    style={[
+                      StyleGet.title('h4'),
+                      {color: Colors.fontPlaceholder},
+                    ]}>
+                    {I18n.t('PlaceholderSelect', I18n.t('Color'))}
+                  </CPNText>
+                );
+              }
+              return (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      backgroundColor: item.value,
+                      marginLeft: 6,
+                      marginRight: 10,
+                    }}
+                  />
+                  <CPNText>{item.label}</CPNText>
+                </View>
+              );
+            }}
             data={useMemo(
               () => colorsList.map(item => ({...item, label: item.name})),
               [colorsList],
@@ -282,13 +331,21 @@ export function LedgerDetailsPage() {
         <CPNFormItem
           style={{paddingBottom: 20}}
           title={
-            <>
-              <CPNText>{I18n.t('AmountMoney')}:</CPNText>
-              <CPNCurrencyView
-                symbol={route.params?.currency.symbol || ''}
-                amount={route.params?.amountMoney || 0}
-              />
-            </>
+            route.params ? (
+              <>
+                <CPNText style={{color: route.params.color.value}}>
+                  {I18n.t('AmountMoney')}:
+                </CPNText>
+                <CPNCurrencyView
+                  symbol={route.params.currency.symbol}
+                  amount={route.params.amountMoney}
+                />
+              </>
+            ) : (
+              <CPNText style={{color: Colors.theme}}>
+                {I18n.t('AmountMoney')}
+              </CPNText>
+            )
           }
           hasError={!!detailsError.amountMoney}
           errorText={detailsError.amountMoney}>

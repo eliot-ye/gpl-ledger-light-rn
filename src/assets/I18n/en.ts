@@ -14,6 +14,8 @@ export default {
   All: 'All',
   Used: 'Used',
   NotUsed: 'NotUsed',
+  Selected: 'Selected',
+  InUse: 'InUse',
 
   PlaceholderSelect: 'Please select {0}',
   NoMoreOptions: 'No more options',
