@@ -20,7 +20,7 @@ import {CPNPageViewThemeColor} from './CPNPageView';
 import {useDimensions} from '@/utils/useDimensions';
 
 const Config = {
-  borderWidth: 0.5,
+  borderWidth: 1,
   itemShowNum: 5,
   offset: 0,
 } as const;
@@ -87,7 +87,10 @@ export function CPNDropdown<ItemT extends DataConstraint>(
   const [boxHeight, boxHeightSet] = useState(0);
 
   const containerHeight = useMemo(
-    () => boxHeight * (props.itemShowNum || Config.itemShowNum),
+    () =>
+      (boxHeight + Config.borderWidth) *
+        (props.itemShowNum || Config.itemShowNum) -
+      Config.borderWidth,
     [boxHeight, props.itemShowNum],
   );
 
@@ -138,7 +141,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
           {
             backgroundColor: Colors.backgroundPanel,
             borderColor: Colors.line,
-            borderWidth: 1,
+            borderWidth: Config.borderWidth,
           },
           activeItem && {borderColor: themeColor},
           formItem.hasError && {borderColor: Colors.fail},
@@ -198,7 +201,11 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                 {
                   borderColor: themeColor,
                   borderWidth: Config.borderWidth,
-                  top: boxPosition.Y + Config.offset - boxHeight * prevCount,
+                  top:
+                    boxPosition.Y +
+                    Config.offset -
+                    boxHeight * prevCount -
+                    Config.borderWidth,
                   left: boxPosition.X,
                   backgroundColor: Colors.backgroundPanel,
                   width: boxWidth,
@@ -215,23 +222,15 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                   index,
                 })}
                 ItemSeparatorComponent={ev => {
-                  if (ev.leadingItem.value.includes('_prev_id_')) {
-                    if (ev.leadingItem.value === '_prev_id_f_0') {
-                      return (
-                        <View
-                          style={{
-                            height: Config.borderWidth,
-                            backgroundColor: Colors.line,
-                            marginHorizontal: 6,
-                          }}
-                        />
-                      );
-                    }
+                  const _borderWidth = Config.borderWidth / 2;
+                  if (
+                    ev.leadingItem.value.includes('_prev_id_') &&
+                    ev.leadingItem.value !== '_prev_id_f_0'
+                  ) {
                     return (
                       <View
                         style={{
                           height: Config.borderWidth,
-                          backgroundColor: Colors.transparent,
                           marginHorizontal: 6,
                         }}
                       />
@@ -240,8 +239,9 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                   return (
                     <View
                       style={{
-                        height: Config.borderWidth,
-                        backgroundColor: Colors.line,
+                        height: _borderWidth,
+                        borderBottomWidth: _borderWidth,
+                        borderColor: Colors.line,
                         marginHorizontal: 6,
                       }}
                     />
@@ -259,6 +259,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                           <View
                             style={[
                               {
+                                paddingHorizontal: Config.borderWidth,
                                 height: boxHeight,
                                 alignItems: 'center',
                                 justifyContent:
