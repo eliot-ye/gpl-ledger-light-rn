@@ -137,11 +137,11 @@ export function CPNDropdown<ItemT extends DataConstraint>(
           styles.cell,
           {
             backgroundColor: Colors.backgroundPanel,
-            paddingRight: 10,
-            borderBottomColor: Colors.line,
+            borderColor: Colors.line,
+            borderWidth: 1,
           },
-          activeItem && {borderBottomColor: themeColor},
-          formItem.hasError && {borderBottomColor: Colors.fail},
+          activeItem && {borderColor: themeColor},
+          formItem.hasError && {borderColor: Colors.fail},
           props.cellStyle,
         ]}
         onPress={ev => {
