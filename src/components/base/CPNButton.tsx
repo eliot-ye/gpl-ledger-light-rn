@@ -122,12 +122,10 @@ export function CPNButton(props: CPNButtonProps) {
       }}
       style={[
         styles.wrapper,
-        StyleGet.boxShadow(),
+        !disabled && StyleGet.boxShadow(),
         {
           backgroundColor: props.plain
-            ? disabled
-              ? Colors.backgroundDisabled
-              : Colors.backgroundPanel
+            ? Colors.backgroundPanel
             : btnStyle.backgroundColor,
           borderColor: btnStyle.backgroundColor,
           borderWidth: 1,
