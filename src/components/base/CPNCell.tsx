@@ -56,10 +56,12 @@ export function CPNCell(props: CPNCellProps) {
           <CPNTextColorContext.Provider value={StyleGet.title('h4').color}>
             <View
               style={{
-                flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center',
                 paddingVertical: 2.5,
+                minWidth: '20%',
+                maxWidth: '40%',
+                marginRight: 10,
               }}>
               {['string', 'number'].includes(typeof props.title) ? (
                 <CPNText>{props.title}</CPNText>
@@ -71,11 +73,11 @@ export function CPNCell(props: CPNCellProps) {
         </CPNTextFontSizeContext.Provider>
         <View
           style={{
+            flex: 1,
             paddingHorizontal: CPNCellConfig.padding,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'flex-end',
-            maxWidth: '50%',
           }}>
           {props.value && (
             <CPNTextColorContext.Provider value={Colors.fontSubtitle}>
