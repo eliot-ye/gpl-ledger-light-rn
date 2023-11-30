@@ -25,7 +25,7 @@ export default {
   appName: DeviceInfo.getApplicationName(),
   bundleId: DeviceInfo.getBundleId(),
   versionName: DeviceInfo.getVersion(),
-  versionCode: DeviceInfo.getBuildNumber(),
+  versionCode: Number(DeviceInfo.getBuildNumber()),
 
   salt: 'salt',
 

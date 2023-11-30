@@ -35,7 +35,7 @@ import {formatDateTime} from '@/utils/dateFn';
 interface BackupData {
   appId: string;
   versionName: string;
-  versionCode: string;
+  versionCode: number;
   username?: string;
   backupTime: string;
   ledgerCiphertext: string;

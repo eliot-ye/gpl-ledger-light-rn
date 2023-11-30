@@ -54,7 +54,7 @@ export function AboutPage() {
                 );
                 if (
                   versionData &&
-                  versionData.versionCode > Number(envConstant.versionCode)
+                  versionData.versionCode > envConstant.versionCode
                 ) {
                   CPNAlert.open({
                     title: I18n.f(
