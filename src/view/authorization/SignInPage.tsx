@@ -66,7 +66,7 @@ export function SignInPage() {
           data={useInfoListMemo}
           checked={userInfo.value}
           onSelect={data => {
-            userInfoSet(data);
+            userInfoSet({...data});
           }}
         />
       </CPNFormItem>
@@ -202,10 +202,15 @@ export function SignInPage() {
       if (available && userInfo.biometriceToken) {
         const res = await biometrics.getUserFlag(userInfo.biometriceToken);
         availableBiometricsSet(res);
+      } else {
+        availableBiometricsSet(false);
       }
     });
   }, [userInfo.biometriceToken]);
   function renderBiometrics() {
+    if (!availableBiometrics) {
+      return null;
+    }
     return (
       <View
         style={{
@@ -265,7 +270,7 @@ export function SignInPage() {
           {renderUserInfoInput()}
           {renderPasswordInput()}
           {renderSubmitButton()}
-          {availableBiometrics && renderBiometrics()}
+          {renderBiometrics()}
           {renderGoSignUpButton()}
         </View>
         <View>{renderGoLangSettingButton()}</View>
