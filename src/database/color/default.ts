@@ -4,14 +4,16 @@ export function getDefaultColors(): ColorItem[] {
   return [
     {name: '青丹', value: '#80752c'},
     {name: '媚茶', value: '#454926'},
-    {name: '青钝', value: '#4d4f36'},
     {name: '抹茶色', value: '#b7ba6b'},
-    {name: '黄緑', value: '#b2d235'},
-    {name: '赤丹', value: '#d64f44'},
-    {name: '红赤', value: '#d93a49'},
-    {name: '臙脂色', value: '#b3424a'},
-    {name: '草色', value: '#6d8346'},
-    {name: '青蓝', value: '#102b6a'},
-    {name: '青褐', value: '#121a2a'},
+    {name: '淡黄', value: '#f9d423'},
+    {name: '淡紫', value: '#9966cc'},
+    {name: '淡粉', value: '#ff99cc'},
+
+    {name: '支付宝蓝', value: '#1678ff'},
+    {name: '微信绿', value: '#1AAD19'},
+    {name: '中国银行红', value: '#a71e32'},
+    {name: '工商银行红', value: '#c7000b'},
+    {name: '建设银行蓝', value: '#0066b3'},
+    {name: '农业银行绿', value: '#319C8B'},
   ];
 }
