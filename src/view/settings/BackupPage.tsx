@@ -108,7 +108,7 @@ async function backupHandler(basePath: string, backupDataStr: string) {
 }
 
 export async function recoveryFromWebDAV(showSuccess = true) {
-  if (!SessionStorage.WebDAVObject || !SessionStorage.password) {
+  if (!SessionStorage.WebDAVObject) {
     return;
   }
 
@@ -130,7 +130,7 @@ export async function recoveryFromWebDAV(showSuccess = true) {
   }
 }
 
-async function recoveryFromJSON(backupData: BackupData) {
+async function recoveryFromJSON(backupData: BackupData, password?: string) {
   if (backupData.appId !== envConstant.bundleId) {
     CPNAlert.alert('', I18n.t('BackupFileError1'));
     return Promise.reject();
@@ -139,9 +139,20 @@ async function recoveryFromJSON(backupData: BackupData) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
-  const ledgerData = JSON.parse(
-    AESDecrypt(backupData.ledgerCiphertext, SessionStorage.password || ''),
-  );
+
+  let ledgerData: any;
+  try {
+    ledgerData = JSON.parse(
+      AESDecrypt(
+        backupData.ledgerCiphertext,
+        password || SessionStorage.password || '',
+      ),
+    );
+  } catch (error) {
+    CPNAlert.alert('', I18n.t('BackupFileError3'));
+    return Promise.reject();
+  }
+
   if (ledgerData.username !== SessionStorage.username) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();

@@ -117,6 +117,7 @@ export default {
   BackupFileTips2: '备份数据创建时间为：\n{0}\n\n本地数据更新时间为：\n{1}',
   BackupFileError1: '备份文件错误',
   BackupFileError2: '备份文件与登入账号不一致',
+  BackupFileError3: '备份文件解密错误，请检查密码是否正确',
   BackupPlaceholder: '备份与恢复文件路径：{0}',
   BackupPlaceholderIOS: '请在分享页面中存储备份文件',
   BackupSuccess: '备份成功',
