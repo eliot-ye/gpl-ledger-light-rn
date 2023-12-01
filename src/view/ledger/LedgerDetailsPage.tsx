@@ -203,7 +203,7 @@ export function LedgerDetailsPage() {
                 [assetTypeList],
               )}
               checked={details.assetType?.symbol}
-              onSelect={item => {
+              onChange={item => {
                 detailsSet({...details, assetType: item});
                 detailsErrorSet({...detailsError, assetType: ''});
               }}
@@ -290,7 +290,7 @@ export function LedgerDetailsPage() {
               [colorsList],
             )}
             checked={details.color?.value}
-            onSelect={item => {
+            onChange={item => {
               detailsSet({...details, color: item});
               detailsErrorSet({...detailsError, color: ''});
             }}
@@ -315,7 +315,7 @@ export function LedgerDetailsPage() {
                 [currencyList],
               )}
               checked={details.currency?.symbol}
-              onSelect={item => {
+              onChange={item => {
                 detailsSet({...details, currency: item});
                 detailsErrorSet({...detailsError, currency: ''});
               }}

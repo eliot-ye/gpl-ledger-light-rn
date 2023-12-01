@@ -58,14 +58,14 @@ export function SignInPage() {
     return (
       <CPNFormItem style={{paddingBottom: 20}} title={I18n.t('Username')}>
         <CPNDropdown
-          selectPlaceholder={
+          placeholder={
             useInfoListMemo.length > 0
               ? I18n.t('SelectUser')
               : I18n.t('PleaseRegisterUser')
           }
           data={useInfoListMemo}
           checked={userInfo.value}
-          onSelect={data => {
+          onChange={data => {
             userInfoSet({...data});
           }}
         />

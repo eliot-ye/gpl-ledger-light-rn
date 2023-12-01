@@ -61,13 +61,13 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
    * */
   data: ItemT[];
   checked?: ItemT['value'];
-  onSelect?: (item: ItemT) => void;
+  onChange?: (item: ItemT) => void;
   numberOfLines?: number;
   cellStyle?: StyleProp<ViewStyle>;
   renderCellContent?: (item?: ItemT) => React.ReactNode;
   itemStyle?: StyleProp<ViewStyle>;
   renderItemContent?: (item: ItemT) => React.ReactNode;
-  selectPlaceholder?: string;
+  placeholder?: string;
   disabled?: boolean;
 }
 
@@ -170,9 +170,9 @@ export function CPNDropdown<ItemT extends DataConstraint>(
               ]}>
               {activeItem?.label ||
                 activeItem?.value ||
-                (props.selectPlaceholder === undefined
+                (props.placeholder === undefined
                   ? I18n.t('PlaceholderSelect', formItem.title)
-                  : props.selectPlaceholder)}
+                  : props.placeholder)}
             </CPNText>
           )}
         </View>
@@ -294,7 +294,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                         props.itemStyle,
                       ]}
                       onPress={() => {
-                        props.onSelect && props.onSelect(item);
+                        props.onChange && props.onChange(item);
                         showSet(false);
                       }}>
                       {props.renderItemContent ? (
