@@ -8,7 +8,7 @@ import {
   CPNToast,
 } from '@/components/base';
 import {I18n} from '@/assets/I18n';
-import {SessionStorage} from '@/store/sessionStorage';
+import {SessionStorage, useSessionStorage} from '@/store/sessionStorage';
 import React, {useEffect, useState} from 'react';
 import {PermissionsAndroid, Platform, Share, Switch, View} from 'react-native';
 import FS from 'react-native-fs';
@@ -29,7 +29,6 @@ import {PageProps} from '../Router';
 import {LS_UserInfo, LS_WebDAVAutoSync} from '@/store/localStorage';
 import {envConstant} from '@/configs/env';
 import {getWebDAVFileData} from './WebDAVPage';
-import {StoreBackupPage} from '@/store';
 import {formatDateTime} from '@/utils/dateFn';
 
 interface BackupData {
@@ -196,14 +195,14 @@ if (
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
   I18n.useLocal();
-  StoreBackupPage.useState();
+  const sessionStorage = useSessionStorage();
 
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
   useEffect(() => {
     LS_WebDAVAutoSync.get().then(enable => enableWebDAVSyncSet(enable));
   }, []);
 
-  const hasWebDAV = !!SessionStorage.WebDAVObject;
+  const hasWebDAV = !!sessionStorage.WebDAVObject;
 
   return (
     <CPNPageView title={I18n.t('Backup')}>
@@ -211,7 +210,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
             title={I18n.t('WebDAV')}
-            value={SessionStorage.WebDAVObject?.account}
+            value={sessionStorage.WebDAVObject?.account}
             onPress={() => {
               navigation.navigate('WebDAVPage');
             }}

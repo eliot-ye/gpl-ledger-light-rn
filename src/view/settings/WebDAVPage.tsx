@@ -11,7 +11,6 @@ import {
   IONName,
 } from '@/components/base';
 import {WebDAVErrorResponseJson, createWebDAV} from '@/libs/WebDAV';
-import {StoreBackupPage} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {SessionStorage} from '@/store/sessionStorage';
 import {AESEncrypt} from '@/utils/encoding';
@@ -32,9 +31,6 @@ export function getWebDAVFileData() {
 
 export function WebDAVPage() {
   I18n.useLocal();
-
-  const BackupPageState = StoreBackupPage.useState();
-  const BackupPageDispatch = StoreBackupPage.useDispatch();
 
   const [WebDAVDetails, WebDAVDetailsSet] = useState({
     serverPath: SessionStorage.WebDAVObject?.serverPath || '',
@@ -120,10 +116,6 @@ export function WebDAVPage() {
                 account: '',
                 password: '',
               });
-              BackupPageDispatch(
-                'updateCount',
-                BackupPageState.updateCount + 1,
-              );
             }}>
             <CPNIonicons name={IONName.Delete} />
           </TouchableOpacity>
@@ -180,10 +172,6 @@ export function WebDAVPage() {
                 });
               }
 
-              BackupPageDispatch(
-                'updateCount',
-                BackupPageState.updateCount + 1,
-              );
               CPNToast.open({text: I18n.t('WebDAVSuccess')});
             } catch (error: any) {
               CusLog.error('WebDAVSubmit', 'onSubmit', error);

@@ -8,7 +8,7 @@ import {
   CPNPageModal,
 } from '@components/base';
 import {RouterView} from '@/view/RouterView';
-import {StoreRoot, StoreBackupPage} from '@/store';
+import {StoreRoot} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
 import {useColorScheme} from 'react-native';
 import {ThemeCode} from './configs/colors';
@@ -30,11 +30,7 @@ function RootView() {
     });
   }, [RootDispatch]);
 
-  return (
-    <StoreBackupPage.Provider>
-      <RouterView />
-    </StoreBackupPage.Provider>
-  );
+  return <RouterView />;
 }
 
 export default function App() {

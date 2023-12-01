@@ -1,5 +1,6 @@
 import {createReactiveConstant} from '@/libs/ReactiveConstant';
 import {WebDAVObject} from '@/libs/WebDAV';
+import {useEffect, useState} from 'react';
 
 const sessionStorageDefault = {
   userId: undefined as string | undefined,
@@ -15,6 +16,22 @@ type SessionStorageKey = keyof SessionStorageDefault;
 export const SessionStorage = createReactiveConstant({
   default: sessionStorageDefault,
 });
+export function useSessionStorage() {
+  const [sessionStorage, setSessionStorage] = useState(sessionStorageDefault);
+
+  useEffect(() => {
+    const subscribeId = SessionStorage.$subscribe(nValue => {
+      setSessionStorage(oValue => ({...oValue, ...nValue}));
+    });
+    return () => {
+      if (subscribeId) {
+        SessionStorage.$unsubscribe(subscribeId);
+      }
+    };
+  }, []);
+
+  return sessionStorage;
+}
 
 const sessionStorageCopy = JSON.parse(JSON.stringify(sessionStorageDefault));
 export function resetSessionStorage() {
