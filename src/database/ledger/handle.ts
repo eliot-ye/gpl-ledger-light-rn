@@ -2,6 +2,7 @@ import {UpdateMode} from 'realm';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
 import {LedgerItem} from './schema';
+import {useEffect, useState} from 'react';
 
 export async function dbGetLedger(): Promise<Readonly<LedgerItem>[]> {
   const realm = await getRealm();
@@ -9,6 +10,24 @@ export async function dbGetLedger(): Promise<Readonly<LedgerItem>[]> {
   const res = realm.objects<LedgerItem>(SchemaName.Ledger);
 
   return res.toJSON() as any;
+}
+export function useDBGetLedger() {
+  const [data, dataSet] = useState<Readonly<LedgerItem>[]>([]);
+  useEffect(() => {
+    const listener = () => {
+      dbGetLedger().then(dataSet);
+    };
+    listener();
+    getRealm().then(realm => {
+      realm.addListener('change', listener);
+    });
+    return () => {
+      getRealm().then(realm => {
+        realm.removeListener('change', listener);
+      });
+    };
+  }, []);
+  return data;
 }
 
 export async function dbSetLedger(item: Partial<LedgerItem>) {

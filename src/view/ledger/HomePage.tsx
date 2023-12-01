@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {
   CPNIonicons,
   CPNPageView,
@@ -8,11 +8,10 @@ import {
   CPNCell,
 } from '@/components/base';
 import {TouchableOpacity, View} from 'react-native';
-import {CurrencyItem, dbGetCurrency, dbGetLedger, LedgerItem} from '@/database';
+import {useDBGetCurrency, useDBGetLedger} from '@/database';
 import {Colors} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
-import {StoreHomePage} from '@/store';
 import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
@@ -24,15 +23,9 @@ import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLocal();
-  const HomePageState = StoreHomePage.useState();
 
-  const [currencyList, currencyListSet] = useState<CurrencyItem[]>([]);
-  const [ledgerList, ledgerListSet] = useState<LedgerItem[]>([]);
-  useEffect(() => {
-    console.log('HomePageState.updateCount:', HomePageState.updateCount);
-    dbGetLedger().then(res => ledgerListSet(res));
-    dbGetCurrency().then(res => currencyListSet(res));
-  }, [HomePageState.updateCount]);
+  const currencyList = useDBGetCurrency();
+  const ledgerList = useDBGetLedger();
 
   const AvailableAssets = useMemo(
     () => ledgerList.filter(item => item.assetType.isAvailableAssets),

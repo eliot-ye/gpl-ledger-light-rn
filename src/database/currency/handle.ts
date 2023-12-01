@@ -3,6 +3,7 @@ import {LedgerItem} from '../ledger/schema';
 import {getRealm} from '../main';
 import {SchemaName} from '../schemaType';
 import {CurrencyItem} from './schema';
+import {useEffect, useState} from 'react';
 
 export async function dbGetCurrencyUsedIds() {
   const realm = await getRealm();
@@ -30,6 +31,24 @@ export async function dbGetCurrency(
   } else {
     return res.filter(item => !usedIds.includes(item.symbol));
   }
+}
+export function useDBGetCurrency(isUsed?: boolean) {
+  const [data, dataSet] = useState<Readonly<CurrencyItem>[]>([]);
+  useEffect(() => {
+    const listener = () => {
+      dbGetCurrency(isUsed).then(dataSet);
+    };
+    listener();
+    getRealm().then(realm => {
+      realm.addListener('change', listener);
+    });
+    return () => {
+      getRealm().then(realm => {
+        realm.removeListener('change', listener);
+      });
+    };
+  }, [isUsed]);
+  return data;
 }
 
 export async function dbSetCurrency(item: Partial<CurrencyItem>) {

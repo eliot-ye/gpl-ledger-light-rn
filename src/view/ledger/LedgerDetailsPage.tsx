@@ -28,7 +28,6 @@ import {
   dbGetColorsUsedIds,
 } from '@/database';
 import {Colors} from '@/configs/colors';
-import {StoreHomePage} from '@/store';
 import {formatDateMonth} from '@/utils/dateFn';
 import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
@@ -41,9 +40,6 @@ export function LedgerDetailsPage() {
     useNavigation<PageProps<'LedgerDetailsPage'>['navigation']>();
   const route = useRoute<PageProps<'LedgerDetailsPage'>['route']>();
   I18n.useLocal();
-
-  const HomePageDispatch = StoreHomePage.useDispatch();
-  const HomePageState = StoreHomePage.useState();
 
   const [details, detailsSet] = useState<Partial<LedgerItem>>(
     route.params || {},
@@ -145,7 +141,6 @@ export function LedgerDetailsPage() {
               );
               if (route.params?.id) {
                 dbDeleteLedger(route.params?.id);
-                HomePageDispatch('updateCount', HomePageState.updateCount + 1);
                 navigation.goBack();
               }
             }}>
@@ -437,7 +432,6 @@ export function LedgerDetailsPage() {
               route.params?.color.value !== details.color?.value
             ) {
               await dbSetLedger(details);
-              HomePageDispatch('updateCount', HomePageState.updateCount + 1);
             }
             navigation.goBack();
           }}
