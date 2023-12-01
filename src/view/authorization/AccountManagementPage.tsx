@@ -21,6 +21,7 @@ import {formatDateTime} from '@/utils/dateFn';
 import {colorGetBackground} from '@/utils/tools';
 import {AESDecrypt} from '@/utils/encoding';
 import {getRealm} from '@/database/main';
+import {CPNNoData} from '@/components/CPNNoData';
 
 export function AccountManagementPage() {
   const navigation =
@@ -85,8 +86,6 @@ export function AccountManagementPage() {
                               }
                               try {
                                 const realm = await getRealm(item.id, DBKey);
-                                console.log(realm.path);
-
                                 FS.unlink(realm.path);
                                 FS.unlink(realm.path + '.lock');
                                 FS.unlink(realm.path + '.management');
@@ -142,7 +141,10 @@ export function AccountManagementPage() {
           <CPNIonicons name={IONName.Add} />
         </TouchableOpacity>
       }>
-      <View style={{flex: 1, padding: 20}}>{renderInfo()}</View>
+      <View style={{flex: 1, padding: 20}}>
+        {renderInfo()}
+        {useInfoList.length === 0 && <CPNNoData />}
+      </View>
     </CPNPageView>
   );
 }
