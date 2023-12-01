@@ -225,7 +225,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                 ItemSeparatorComponent={ev => {
                   const _borderWidth = Config.borderWidth / 2;
                   if (
-                    ev.leadingItem.value.includes('_prev_id_') &&
+                    String(ev.leadingItem.value).startsWith('_prev_id_') &&
                     ev.leadingItem.value !== '_prev_id_f_0'
                   ) {
                     return (
@@ -249,7 +249,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                   );
                 }}
                 renderItem={({item}) => {
-                  if (item.value.indexOf('_prev_id_') === 0) {
+                  if (String(item.value).startsWith('_prev_id_')) {
                     if (
                       item.value === '_prev_id_f_0' ||
                       item.value === '_prev_id_e_0'
