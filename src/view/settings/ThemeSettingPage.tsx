@@ -5,16 +5,13 @@ import {
   CPNCheckbox,
   CPNPageView,
 } from '@/components/base';
-import {ThemeCode} from '@/configs/colors';
-import {StoreRoot} from '@/store';
+import {ColorsInstance, ThemeCode} from '@/configs/colors';
 import {LS_Theme} from '@/store/localStorage';
 import React, {useEffect, useState} from 'react';
 import {View, useColorScheme} from 'react-native';
 
 export function ThemeSettingPage() {
   I18n.useLocal();
-
-  const RootDispatch = StoreRoot.useDispatch();
 
   const themeList = [
     {label: I18n.t('ThemeSystem'), code: 'system'},
@@ -54,7 +51,9 @@ export function ThemeSettingPage() {
                   await LS_Theme.set(item.code as ThemeCode);
                 }
                 const _val = await LS_Theme.get();
-                RootDispatch('theme', _val || systemTheme || ThemeCode.default);
+                ColorsInstance.setTheme(
+                  _val || systemTheme || ThemeCode.default,
+                );
               }}
               isLast={index === themeList.length - 1}
             />

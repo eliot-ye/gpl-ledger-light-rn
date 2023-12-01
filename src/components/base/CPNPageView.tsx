@@ -7,10 +7,9 @@ import {
   Platform,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/configs/colors';
 import {CPNHeader, type CPNHeaderProps} from './CPNHeader';
 import {useDimensions} from '@/utils/useDimensions';
-import {StoreRoot} from '@/store';
 
 export enum BarTextStyle {
   light = 'light-content',
@@ -39,7 +38,7 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
  * - style 作用于 ScrollView
  */
 export function CPNPageView(props: CPNPageViewProps) {
-  StoreRoot.useState();
+  ColorsInstance.useTheme();
   const headerBackgroundColor = props.headerBackgroundColor || Colors.theme;
 
   const [topNegativeDistance, topNegativeDistanceSet] = useState(0);

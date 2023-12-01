@@ -1,4 +1,4 @@
-import {createReactiveConstant} from '@/libs/ReactiveConstant';
+import {createReactColors} from '@/libs/ReactColors';
 
 const colorsDefault = {
   theme: '#03A850',
@@ -45,8 +45,8 @@ export enum ThemeCode {
   dark = 'dark',
 }
 
-/** 只有组件内使用时才具有反应性 */
-export const Colors = createReactiveConstant({
+export const ColorsInstance = createReactColors({
   [ThemeCode.default]: colorsDefault,
   [ThemeCode.dark]: colorsDark,
 });
+export const {Colors} = ColorsInstance;

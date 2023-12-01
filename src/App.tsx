@@ -11,24 +11,22 @@ import {RouterView} from '@/view/RouterView';
 import {StoreRoot} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
 import {useColorScheme} from 'react-native';
-import {ThemeCode} from './configs/colors';
+import {ColorsInstance, ThemeCode} from './configs/colors';
 import {I18n} from './assets/I18n';
 
 function RootView() {
-  const RootDispatch = StoreRoot.useDispatch();
-
   const systemTheme = useColorScheme() as ThemeCode;
   useEffect(() => {
     LS_Theme.get().then(_code => {
-      RootDispatch('theme', _code || systemTheme || ThemeCode.default);
+      ColorsInstance.setTheme(_code || systemTheme || ThemeCode.default);
     });
-  }, [RootDispatch, systemTheme]);
+  }, [systemTheme]);
 
   useEffect(() => {
     LS_Lang.get().then(_code => {
       I18n.setLangCode(_code);
     });
-  }, [RootDispatch]);
+  }, []);
 
   return <RouterView />;
 }
@@ -37,15 +35,17 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <I18n.Provider>
-        <StoreRoot.Provider>
-          <CPNPageModal.Provider>
-            <RootView />
-          </CPNPageModal.Provider>
-          <CPNActionSheet.Provider />
-          <CPNAlert.Provider />
-          <CPNToast.Provider />
-          <CPNLoading.Provider />
-        </StoreRoot.Provider>
+        <ColorsInstance.Provider>
+          <StoreRoot.Provider>
+            <CPNPageModal.Provider>
+              <RootView />
+            </CPNPageModal.Provider>
+            <CPNActionSheet.Provider />
+            <CPNAlert.Provider />
+            <CPNToast.Provider />
+            <CPNLoading.Provider />
+          </StoreRoot.Provider>
+        </ColorsInstance.Provider>
       </I18n.Provider>
     </SafeAreaProvider>
   );

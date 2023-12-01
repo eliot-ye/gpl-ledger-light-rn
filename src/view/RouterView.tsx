@@ -8,7 +8,7 @@ import {
   TabStack,
 } from './Router';
 import {CPNIonicons, CPNText, IONName} from '@components/base';
-import {Colors} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/configs/colors';
 import {Platform} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
@@ -16,7 +16,6 @@ import {I18n} from '@/assets/I18n';
 import {renderAuthorizationRouterView} from './authorization/routes';
 import {HomePage, renderHomeRouterView} from './ledger/routes';
 import {renderSettingsRouterView, SettingPage} from './settings/routes';
-import {StoreRoot} from '@/store';
 
 export function RouterView() {
   async function navReady() {
@@ -51,7 +50,7 @@ export function RouterView() {
 
 function TabBarView() {
   I18n.useLocal();
-  StoreRoot.useState();
+  ColorsInstance.useTheme();
 
   const tabbarOptionList: TabbarOption[] = [
     {
