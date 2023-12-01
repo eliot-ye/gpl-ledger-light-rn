@@ -47,35 +47,37 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface AlertButton {
+export interface AlertButton<T> {
   text: string;
   textColor?: string;
   backgroundColor?: string;
   keep?: boolean;
-  onPress?: () => void;
+  onPress?: (SVState: [T, React.Dispatch<T>]) => void;
 }
-interface CPNAlertButton extends AlertButton {
+interface CPNAlertButton<T> extends AlertButton<T> {
   id?: string;
 }
 
-interface AlertOption {
+interface AlertOption<T> {
   title?: React.ReactNode;
   message?: React.ReactNode;
+  initSVState?: T;
+  renderSV?: (option: [T, React.Dispatch<T>]) => React.ReactNode;
   /**
    * 指示返回按钮是否关闭弹窗，仅`Android`
    * @default true
    * */
   backButtonClose?: boolean;
   /** ___use memoized value___ */
-  buttons?: AlertButton[];
+  buttons?: AlertButton<T>[];
 }
-interface CPNAlertOption extends AlertOption {
+interface CPNAlertOption extends AlertOption<any> {
   id: string;
-  buttons: CPNAlertButton[];
+  buttons: CPNAlertButton<any>[];
   animatedValue: Animated.Value;
 }
 
-interface CPNAlertBoxProps extends AlertOption {
+interface CPNAlertBoxProps extends AlertOption<any> {
   index: number;
   animatedScale: Animated.Value;
   onClose: () => void;
@@ -93,6 +95,8 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
   );
 
   const isColumnButtons = buttonsList.length >= 3;
+
+  const SVData = useState(props.initSVState);
 
   return (
     <Animated.View
@@ -135,6 +139,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
           ) : (
             <View role="contentinfo">{props.message}</View>
           ))}
+        {props.renderSV && props.renderSV(SVData)}
       </View>
       <View
         style={{
@@ -164,7 +169,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
               <TouchableOpacity
                 onPress={() => {
                   try {
-                    _btn.onPress && _btn.onPress();
+                    _btn.onPress && _btn.onPress(SVData);
                   } catch (error) {
                     console.error(`CPNAlert button [${_btn.text}]:`, error);
                   }
@@ -208,11 +213,11 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
   );
 }
 
-interface CPNAlertViewProps extends AlertOption {
+interface CPNAlertViewProps<T> extends AlertOption<T> {
   show: boolean;
   onClose: () => void;
 }
-export function CPNAlertView(props: CPNAlertViewProps) {
+export function CPNAlertView<T>(props: CPNAlertViewProps<T>) {
   I18n.useLocal();
 
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -360,7 +365,7 @@ export function createCPNAlert() {
      * @param option
      * @returns `Id` 用于 `CPNAlert.close`
      */
-    open(option: AlertOption) {
+    open<T>(option: AlertOption<T>) {
       const id = getOnlyStr(ids);
       eventInstance.publish('show', {
         id,
