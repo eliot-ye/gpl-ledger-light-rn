@@ -8,7 +8,7 @@ import {
   CPNTextFontSizeContext,
   IONName,
 } from '.';
-import {Colors} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/configs/colors';
 
 export const CPNCellGroupContext = createContext(false);
 export const CPNCellConfig = {
@@ -26,6 +26,7 @@ interface CPNCellProps {
 }
 export function CPNCell(props: CPNCellProps) {
   const inCellGroup = useContext(CPNCellGroupContext);
+  ColorsInstance.useTheme();
 
   return (
     <View

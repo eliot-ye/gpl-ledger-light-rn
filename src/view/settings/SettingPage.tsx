@@ -8,10 +8,12 @@ import {envConstant} from '@/configs/env';
 import {biometrics} from '@/utils/biometrics';
 import {SessionStorage} from '@/store/sessionStorage';
 import {CusLog} from '@/utils/tools';
+import {ColorsInstance} from '@/configs/colors';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLocal();
+  ColorsInstance.useTheme();
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   const [enableBiometrics, enableBiometricsSet] = useState(false);

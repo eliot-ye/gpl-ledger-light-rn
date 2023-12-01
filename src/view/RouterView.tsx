@@ -9,7 +9,7 @@ import {
 } from './Router';
 import {CPNIonicons, CPNText, IONName} from '@components/base';
 import {Colors, ColorsInstance} from '@/configs/colors';
-import {Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
 
@@ -74,7 +74,12 @@ function TabBarView() {
           headerShown: false,
           tabBarActiveTintColor: opt?.textActiveColor || Colors.theme,
           tabBarInactiveTintColor: opt?.textColor || Colors.fontSubtitle,
-          tabBarBackground: () => opt?.backgroundColor,
+          tabBarBackground: () =>
+            opt?.backgroundColor || (
+              <View
+                style={{backgroundColor: Colors.backgroundPanel, flex: 1}}
+              />
+            ),
           tabBarLabel: ({color, focused}) => (
             <CPNText style={{color, fontSize: focused ? 12 : 10}}>
               {opt?.label}

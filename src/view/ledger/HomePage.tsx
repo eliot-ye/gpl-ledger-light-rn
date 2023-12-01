@@ -9,7 +9,7 @@ import {
 } from '@/components/base';
 import {TouchableOpacity, View} from 'react-native';
 import {useDBGetCurrency, useDBGetLedger} from '@/database';
-import {Colors} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/configs/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {I18n} from '@/assets/I18n';
@@ -23,6 +23,7 @@ import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLocal();
+  ColorsInstance.useTheme();
 
   const currencyList = useDBGetCurrency();
   const ledgerList = useDBGetLedger();
