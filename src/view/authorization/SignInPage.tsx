@@ -74,6 +74,8 @@ export function SignInPage() {
   }
 
   const getUserInfo = useCallback(async () => {
+    console.log('getUserInfo', useInfoList);
+
     const lastId = await LS_LastUserId.get();
     const info = useInfoList.find(item => item.id === lastId);
     if (info) {
@@ -84,6 +86,8 @@ export function SignInPage() {
         label: useInfoList[0].username,
         value: useInfoList[0].id,
       });
+    } else {
+      userInfoSet({value: ''});
     }
   }, [useInfoList]);
   useEffect(() => {

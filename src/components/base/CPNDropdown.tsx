@@ -107,12 +107,13 @@ export function CPNDropdown<ItemT extends DataConstraint>(
   const [activeItem, activeItemSet] = useState<ItemT>();
   const [activeIndex, activeIndexSet] = useState(0);
   useEffect(() => {
-    dataShow.forEach((_item, _index) => {
+    const _activeItem = dataShow.find((_item, _index) => {
       if (_item.value === props.checked) {
-        activeItemSet(_item);
         activeIndexSet(_index);
       }
+      return _item.value === props.checked;
     });
+    activeItemSet(_activeItem);
   }, [props.checked, dataShow]);
 
   const FLRef = useRef<FlatList>(null);
