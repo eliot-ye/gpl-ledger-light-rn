@@ -153,4 +153,16 @@ export default {
   BiometricsError1: '生物认证加密数据检索失败',
   BiometricsError2: '生物认证失败，请使用密码登入',
   BiometricsSuccess: '生物认证成功',
+
+  AccountManagement: '账户管理',
+  EditAccount: '编辑账户：{0}',
+  AddAccount: '新增账户',
+  AccountName: '账户名称',
+  AccountNameError1: '账户名称不能为空',
+  AccountNameError2: '账户名称已存在',
+  AccountPassword: '账户密码',
+  AccountPasswordError1: '账户密码不能为空',
+  AccountPasswordError2: '账户密码不一致',
+  CreateTime: '创建时间',
+  LastModified: '最后更新时间',
 } as const;

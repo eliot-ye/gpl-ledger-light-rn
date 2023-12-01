@@ -14,9 +14,9 @@ import {
 import {Colors} from '@/configs/colors';
 import {
   LSUserInfo,
-  LS_UserInfo,
   LS_LastUserId,
   LS_WebDAVAutoSync,
+  useLSUserInfoList,
 } from '@/store/localStorage';
 import {AESDecrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
@@ -40,7 +40,7 @@ export function SignInPage() {
   I18n.useLocal();
   const RootDispatch = StoreRoot.useDispatch();
 
-  const [useInfoList, useInfoListSet] = useState<LSUserInfo[]>([]);
+  const useInfoList = useLSUserInfoList();
   const useInfoListMemo = useMemo(
     () =>
       useInfoList.map(item => ({
@@ -74,16 +74,18 @@ export function SignInPage() {
   }
 
   const getUserInfo = useCallback(async () => {
-    const data = await LS_UserInfo.get();
-    useInfoListSet(data);
     const lastId = await LS_LastUserId.get();
-    const info = data.find(item => item.id === lastId);
+    const info = useInfoList.find(item => item.id === lastId);
     if (info) {
       userInfoSet({...info, label: info.username, value: info.id});
-    } else if (data[0]) {
-      userInfoSet({...data[0], label: data[0].username, value: data[0].id});
+    } else if (useInfoList[0]) {
+      userInfoSet({
+        ...useInfoList[0],
+        label: useInfoList[0].username,
+        value: useInfoList[0].id,
+      });
     }
-  }, []);
+  }, [useInfoList]);
   useEffect(() => {
     getUserInfo();
   }, [getUserInfo]);
@@ -177,18 +179,18 @@ export function SignInPage() {
     );
   }
 
-  function renderGoSignUpButton() {
+  function renderGoAccountManagementButton() {
     return (
       <View>
         <CPNDivisionLine style={{marginVertical: 30}} />
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('SignUpPage');
+              navigation.navigate('AccountManagementPage');
             }}>
             <CPNText
               style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-              {I18n.t('RegisteredUsers')}
+              {I18n.t('AccountManagement')}
             </CPNText>
           </TouchableOpacity>
         </View>
@@ -271,7 +273,7 @@ export function SignInPage() {
           {renderPasswordInput()}
           {renderSubmitButton()}
           {renderBiometrics()}
-          {renderGoSignUpButton()}
+          {renderGoAccountManagementButton()}
         </View>
         <View>{renderGoLangSettingButton()}</View>
       </View>

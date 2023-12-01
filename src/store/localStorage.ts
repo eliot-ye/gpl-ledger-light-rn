@@ -6,6 +6,7 @@ import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
 import {envConstant} from '@/configs/env';
+import {useEffect, useState} from 'react';
 
 interface LSItem {
   key: string;
@@ -107,6 +108,28 @@ export const LS_UserInfo = {
     });
   },
 };
+export function useLSUserInfoList() {
+  const [data, setData] = useState<LSUserInfo[]>([]);
+  useEffect(() => {
+    const listener = () => LS_UserInfo.get().then(setData);
+
+    LS_UserInfo.get()
+      .then(setData)
+      .then(() => {
+        if (LSRealm) {
+          LSRealm.addListener('change', listener);
+        }
+      });
+
+    return () => {
+      if (LSRealm) {
+        LSRealm.removeListener('change', listener);
+      }
+    };
+  }, []);
+
+  return data;
+}
 
 export const LSRealmStorage = {
   async get(key: string) {

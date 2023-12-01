@@ -116,7 +116,9 @@ export function SignUpPage() {
             SessionStorage.$setValue('username', formData.username);
             SessionStorage.$setValue('password', formData.password);
             RootDispatch('isSignIn', true);
-            navigation.replace('Tabbar', {screen: 'HomePage'});
+            navigation.reset({
+              routes: [{name: 'Tabbar', params: {screen: 'HomePage'}}],
+            });
           }}
         />
       </View>
