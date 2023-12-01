@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     width: Config.width,
     position: 'absolute',
     borderRadius: Config.borderRadius,
+    borderWidth: 0.5,
   },
   content: {
     paddingVertical: 16,
@@ -105,6 +106,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
         styles.container,
         {
           backgroundColor: Colors.backgroundTheme,
+          borderColor: Colors.line,
           transform: [
             {translateX: props.index * 3},
             {translateY: props.index * 3},
