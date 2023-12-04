@@ -88,10 +88,9 @@ export function createCPNToast() {
               duration: 200,
               toValue: 0,
               useNativeDriver: false,
-            }).start();
-            setTimeout(() => {
+            }).start(() => {
               ev.publish('trigger', {id, opt: undefined});
-            }, 200);
+            });
           }, option.keepTime);
         }
       }
