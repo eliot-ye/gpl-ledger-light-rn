@@ -16,15 +16,12 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
 
   const CodeContext = createContext(RCIDefaultCode);
 
-  type V1 = ExcludedKey<T, `$${string}`>;
-  type V2 = ExcludedKey<V1, `_${string}`>;
-
   return {
     setTheme: RCI.$setCode,
     getTheme: RCI.$getCode,
 
-    /** 只有组件内使用时才具有反应性 */
-    Colors: RCI as V2,
+    /** 注意：只有组件内使用时才具有反应性 */
+    Colors: RCI as T,
 
     useTheme() {
       const code = useContext(CodeContext);
