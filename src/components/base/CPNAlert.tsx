@@ -53,7 +53,7 @@ export interface AlertButton<T> {
   textColor?: string;
   backgroundColor?: string;
   keep?: boolean;
-  onPress?: (SVState: [T, React.Dispatch<T>]) => void;
+  onPress?: (state: [T, React.Dispatch<T>]) => void;
 }
 interface CPNAlertButton<T> extends AlertButton<T> {
   id?: string;
@@ -61,9 +61,10 @@ interface CPNAlertButton<T> extends AlertButton<T> {
 
 interface AlertOption<T> {
   title?: React.ReactNode;
-  message?: React.ReactNode;
-  initSVState?: T;
-  renderSV?: (option: [T, React.Dispatch<T>]) => React.ReactNode;
+  message?:
+    | React.ReactNode
+    | ((option: [T, React.Dispatch<T>]) => React.ReactNode);
+  initState?: T;
   /**
    * 指示返回按钮是否关闭弹窗，仅`Android`
    * @default true
@@ -97,7 +98,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
 
   const isColumnButtons = buttonsList.length >= 3;
 
-  const SVData = useState(props.initSVState);
+  const StateObj = useState(props.initState);
 
   return (
     <Animated.View
@@ -133,15 +134,15 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
           ) : (
             <View role="heading">{props.title}</View>
           ))}
-        {!!props.message &&
-          (['string', 'number'].includes(typeof props.message) ? (
-            <CPNText role="contentinfo" style={[styles.text]}>
-              {props.message}
-            </CPNText>
-          ) : (
-            <View role="contentinfo">{props.message}</View>
-          ))}
-        {props.renderSV && props.renderSV(SVData)}
+        {!!props.message && typeof props.message === 'function' ? (
+          <View role="contentinfo">{props.message(StateObj)}</View>
+        ) : ['string', 'number'].includes(typeof props.message) ? (
+          <CPNText role="contentinfo" style={[styles.text]}>
+            {props.message}
+          </CPNText>
+        ) : (
+          <View role="contentinfo">{props.message}</View>
+        )}
       </View>
       <View
         style={{
@@ -171,7 +172,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
               <TouchableOpacity
                 onPress={() => {
                   try {
-                    _btn.onPress && _btn.onPress(SVData);
+                    _btn.onPress && _btn.onPress(StateObj);
                   } catch (error) {
                     console.error(`CPNAlert button [${_btn.text}]:`, error);
                   }

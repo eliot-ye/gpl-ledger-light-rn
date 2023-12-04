@@ -45,8 +45,8 @@ export function AccountManagementPage() {
                     return new Promise((resolve, reject) => {
                       const alertId = CPNAlert.open({
                         title: I18n.t('DeleteConfirm', item.username),
-                        initSVState: {value: '', hasError: false},
-                        renderSV: ([data, dataSet]) => {
+                        initState: {value: '', hasError: false},
+                        message: ([data, dataSet]) => {
                           return (
                             <CPNFormItem
                               titleColor={Colors.warning}
