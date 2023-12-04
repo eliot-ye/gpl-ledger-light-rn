@@ -27,6 +27,7 @@ interface CPNInputProps extends TextInputProps {
   rightIcon?: React.ReactNode;
   containerStyle?: ViewStyle;
   description?: React.ReactNode;
+  clearButton?: boolean;
 }
 
 export function CPNInput(props: CPNInputProps) {
@@ -51,6 +52,9 @@ export function CPNInput(props: CPNInputProps) {
           },
           focused && {borderColor: themeColor},
           formItem.hasError && {borderColor: Colors.fail},
+          props.editable === false && {
+            backgroundColor: Colors.backgroundDisabled,
+          },
         ]}>
         <TextInput
           pointerEvents={props.editable === false ? 'none' : 'auto'}
@@ -61,6 +65,7 @@ export function CPNInput(props: CPNInputProps) {
           placeholder={I18n.f(I18n.t('PlaceholderInput'), formItem.title)}
           placeholderTextColor={Colors.fontPlaceholder}
           {...props}
+          clearButtonMode="never"
           style={[styles.input, StyleGet.title('h4'), props.style]}
           onFocus={ev => {
             props.onFocus && props.onFocus(ev);
@@ -71,9 +76,24 @@ export function CPNInput(props: CPNInputProps) {
             isFocusSet(false);
           }}
         />
+        {props.clearButton !== false &&
+          props.editable !== false &&
+          !!props.value && (
+            <TouchableOpacity
+              onPress={() => {
+                props.onChangeText && props.onChangeText('');
+              }}>
+              <CPNIonicons
+                name={IONName.CloseCircle}
+                size={16}
+                style={{color: themeColor}}
+              />
+            </TouchableOpacity>
+          )}
         {props.onPressRightIcon && (
           <TouchableOpacity
             accessibilityRole="togglebutton"
+            style={{marginLeft: 6}}
             onPress={props.onPressRightIcon}>
             {props.rightIcon || (
               <CPNIonicons

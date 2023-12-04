@@ -353,7 +353,12 @@ export function LedgerDetailsPage() {
                 : String(details.amountMoney)
             }
             onChangeText={value => {
-              const amountMoney = Number(value);
+              if (!value) {
+                detailsSet({...details, amountMoney: undefined});
+                detailsErrorSet({...detailsError, amountMoney: ''});
+                return;
+              }
+              const amountMoney = parseFloat(value);
               if (Number.isNaN(amountMoney)) {
                 detailsErrorSet({
                   ...detailsError,
@@ -363,17 +368,6 @@ export function LedgerDetailsPage() {
                 detailsSet({...details, amountMoney});
                 detailsErrorSet({...detailsError, amountMoney: ''});
               }
-            }}
-            rightIcon={
-              <CPNIonicons
-                name={IONName.CloseCircle}
-                color={route.params?.color.value || Colors.theme}
-                size={20}
-              />
-            }
-            onPressRightIcon={() => {
-              detailsSet({...details, amountMoney: undefined});
-              detailsErrorSet({...detailsError, amountMoney: ''});
             }}
           />
         </CPNFormItem>
