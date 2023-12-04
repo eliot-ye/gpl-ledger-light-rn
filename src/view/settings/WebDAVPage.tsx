@@ -172,15 +172,15 @@ export function WebDAVPage() {
                 });
               }
 
-              CPNToast.open({text: I18n.t('WebDAVSuccess')});
+              CPNToast.open(I18n.t('WebDAVSuccess'));
             } catch (error: any) {
               CusLog.error('WebDAVSubmit', 'onSubmit', error);
               if (error.message) {
-                CPNToast.open({text: error.message});
+                CPNToast.open(error.message);
               } else if (error.status === 401) {
                 CPNAlert.alert('', I18n.t('WebDAVUnauthorized'));
               } else {
-                CPNToast.open({text: I18n.t('WebDAVFailed')});
+                CPNToast.open(I18n.t('WebDAVFailed'));
               }
             }
             CPNLoading.close();

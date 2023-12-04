@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 });
 
 interface ToastOption {
-  text: string | number;
   /**
    * 显示的毫秒数
    * @default 2000
@@ -39,6 +38,7 @@ interface ToastOption {
   keepTime?: number;
 }
 interface CPNToastOption extends ToastOption {
+  text: string | number;
   keepTime: number;
   animatedValue: Animated.Value;
 }
@@ -57,7 +57,7 @@ export function createCPNToast() {
   let ids: string[] = [];
   let idListCache: string[] = [];
 
-  function CPNToast() {
+  function renderCPNToast() {
     const [optionMap, setOptionMap] = useState<OptionMap>({});
     useEffect(() => {
       const id = ev.subscribe('trigger', ed => {
@@ -133,8 +133,8 @@ export function createCPNToast() {
   }
 
   return {
-    Provider: CPNToast,
-    open(option: ToastOption) {
+    Provider: renderCPNToast,
+    open(message: string | number, option?: ToastOption) {
       const id = getOnlyStr(ids);
 
       ev.publish('trigger', {
@@ -142,6 +142,7 @@ export function createCPNToast() {
         opt: {
           keepTime: 2000,
           animatedValue: new Animated.Value(0.6),
+          text: message,
           ...option,
         },
       });

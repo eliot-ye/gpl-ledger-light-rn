@@ -118,14 +118,10 @@ export async function recoveryFromWebDAV(showSuccess = true) {
     const backupData = JSON.parse(decodeURIComponent(res.responseText));
     await recoveryFromJSON(backupData);
     if (showSuccess) {
-      CPNToast.open({
-        text: I18n.t('WebDAVRecoverySuccess'),
-      });
+      CPNToast.open(I18n.t('WebDAVRecoverySuccess'));
     }
   } else {
-    CPNToast.open({
-      text: I18n.f(I18n.t('WebDAVGetError'), `[${WebDAVFileData.path}]`),
-    });
+    CPNToast.open(I18n.t('WebDAVGetError', `[${WebDAVFileData.path}]`));
   }
 }
 
@@ -261,9 +257,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     );
                     if (status !== PermissionsAndroid.RESULTS.GRANTED) {
-                      CPNToast.open({
-                        text: I18n.t('InsufficientPermissions'),
-                      });
+                      CPNToast.open(I18n.t('InsufficientPermissions'));
                       return;
                     }
                   }
@@ -271,9 +265,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                     backupDirBase || FS.DocumentDirectoryPath,
                     backupDataStr,
                   );
-                  CPNToast.open({
-                    text: I18n.f(I18n.t('BackupSuccessTo'), backupFilePath),
-                  });
+                  CPNToast.open(I18n.t('BackupSuccessTo', backupFilePath));
                 }
 
                 if (Platform.OS === 'ios') {
@@ -283,13 +275,13 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                   );
                   const res = await Share.share({url: backupFilePath});
                   if (res.action === Share.dismissedAction) {
-                    CPNToast.open({text: I18n.t('CanceledSave')});
+                    CPNToast.open(I18n.t('CanceledSave'));
                     return;
                   }
-                  CPNToast.open({text: I18n.t('BackupSuccess')});
+                  CPNToast.open(I18n.t('BackupSuccess'));
                 }
               } catch (error) {
-                CPNToast.open({text: I18n.t('BackupFailed')});
+                CPNToast.open(I18n.t('BackupFailed'));
                 CusLog.error('BackupNow', 'error', error);
               }
             }}
@@ -304,9 +296,9 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 const res = await FS.readFile(backupItem.filePath);
                 const backupData = JSON.parse(res);
                 await recoveryFromJSON(backupData);
-                CPNToast.open({text: I18n.t('RecoverySuccess')});
+                CPNToast.open(I18n.t('RecoverySuccess'));
               } catch (error) {
-                CPNToast.open({text: I18n.t('RecoveryFailed')});
+                CPNToast.open(I18n.t('RecoveryFailed'));
                 CusLog.error('RecoveryNow', 'error', error);
               }
             }}

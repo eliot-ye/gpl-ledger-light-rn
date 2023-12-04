@@ -105,7 +105,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
               {ContentType: 'application/json'},
             );
             if (res.status !== 201 && res.status !== 204) {
-              CPNToast.open({text: res.responseText || res.status});
+              CPNToast.open(res.responseText || res.status);
             }
           }
         }),
