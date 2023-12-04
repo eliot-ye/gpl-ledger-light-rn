@@ -30,7 +30,7 @@ export const StyleGet = {
 
   modalView(justifyContent?: JustifyContent) {
     return {
-      width: screenSize.width,
+      width: '100%',
       height: screenSize.height,
       backgroundColor: Colors.backgroundModal,
       justifyContent: justifyContent || 'center',
