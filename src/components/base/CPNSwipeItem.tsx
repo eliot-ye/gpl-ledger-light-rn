@@ -161,6 +161,7 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
                     if (typeof isDelete === 'function') {
                       translateXAnimated.addListener(ev => {
                         if (ev.value === -Dimensions.get('screen').width) {
+                          translateXAnimated.removeAllListeners();
                           isDelete();
                         }
                       });
