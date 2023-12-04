@@ -21,7 +21,7 @@ export function createBiometrics(option: Option = {}) {
     cancelButtonText = I18n.t('Cancel'),
     authenticationFailedMessage = I18n.t('BiometricsError'),
     dataRetrievalFailedMessage = I18n.t('BiometricsError1'),
-    allowDeviceCredentials = true,
+    allowDeviceCredentials = false,
   } = option;
 
   const rnBiometrics = new ReactNativeBiometrics({
