@@ -51,13 +51,13 @@ export function createCPNToast() {
   const ev = createSubscribeEvents<{
     trigger: {
       id: string;
-      opt: CPNToastOption | undefined;
+      opt?: CPNToastOption;
     };
   }>();
   let ids: string[] = [];
   let idListCache: string[] = [];
 
-  function renderCPNToast() {
+  function ProviderCPNToast() {
     const [optionMap, setOptionMap] = useState<OptionMap>({});
     useEffect(() => {
       const id = ev.subscribe('trigger', ed => {
@@ -133,7 +133,7 @@ export function createCPNToast() {
   }
 
   return {
-    Provider: renderCPNToast,
+    Provider: ProviderCPNToast,
     open(message: string | number, option?: ToastOption) {
       const id = getOnlyStr(ids);
 
@@ -152,7 +152,7 @@ export function createCPNToast() {
       return id;
     },
     close(id: string) {
-      ev.publish('trigger', {id, opt: undefined});
+      ev.publish('trigger', {id});
     },
   } as const;
 }
