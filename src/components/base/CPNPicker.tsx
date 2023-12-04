@@ -81,7 +81,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
 
   const themeColor = useContext(CPNPageViewThemeColor);
 
-  const SVRef = useRef<ScrollView>();
+  const SVRef = useRef<ScrollView>(null);
 
   const [activeIndex, activeIndexSet] = useState(props.initActive || 0);
 
@@ -132,7 +132,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
           {height: itemHeight * itemShowNum},
         ]}>
         <Animated.ScrollView
-          ref={SVRef as any}
+          ref={SVRef}
           style={[{width: '100%', height: '100%'}, props.scrollViewStyle]}
           contentOffset={contentOffset.current}
           showsVerticalScrollIndicator={false}
@@ -159,7 +159,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
           onScrollEndDrag={e => {
             const contentOffsetY = e.nativeEvent.contentOffset.y;
             const index = getActiveIndex(contentOffsetY);
-            console.log('onScrollEndDrag', index, activeIndex);
+            // console.log('onScrollEndDrag', index, activeIndex);
 
             if (index === activeIndex) {
               SVRef.current?.scrollTo({y: index * itemHeight});
@@ -170,7 +170,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
           onMomentumScrollEnd={e => {
             const contentOffsetY = e.nativeEvent.contentOffset.y;
             const index = getActiveIndex(contentOffsetY);
-            console.log('onMomentumScrollEnd', index, activeIndex);
+            // console.log('onMomentumScrollEnd', index, activeIndex);
 
             if (
               Platform.OS === 'android' &&
