@@ -164,13 +164,11 @@ export function WebDAVPage() {
               const WebDAVObject = await onSubmit();
               Store.update('WebDAVObject', WebDAVObject || null);
 
-              if (Store.get('password')) {
+              const password = Store.get('password');
+              if (password) {
                 await LS_UserInfo.update({
                   id: Store.get('userId'),
-                  web_dav: AESEncrypt(
-                    JSON.stringify(WebDAVDetails),
-                    Store.get('password') || '',
-                  ),
+                  web_dav: AESEncrypt(JSON.stringify(WebDAVDetails), password),
                 });
               }
 
