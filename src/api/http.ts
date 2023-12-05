@@ -2,7 +2,7 @@ import {I18n, LangCode, langDefault} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
 import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
-import {useResetStore} from '@/store';
+import {Store} from '@/store';
 import {LS_Lang} from '@/store/localStorage';
 import {CusLog} from '@/utils/tools';
 import {useCallback} from 'react';
@@ -138,8 +138,6 @@ export function useFetch(
   serverName: ApiServerName,
   serverOption: HttpOption = serverOptionDefault,
 ) {
-  const resetStore = useResetStore();
-
   return useCallback(
     /**
      * @param path - 必须以 `/` 开头
@@ -210,7 +208,7 @@ export function useFetch(
             // token 失效
             showExpiredFlag = true;
             // await LSLogout();
-            resetStore();
+            Store.reset();
             CPNAlert.alert('', I18n.t('SessionExpired')).then(() => {
               showExpiredFlag = false;
             });
@@ -240,7 +238,7 @@ export function useFetch(
         return Promise.reject(errorObj.status);
       }
     },
-    [resetStore, serverName, serverOption],
+    [serverName, serverOption],
   );
 }
 

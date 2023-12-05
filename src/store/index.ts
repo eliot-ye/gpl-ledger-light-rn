@@ -1,17 +1,11 @@
-import {useCallback} from 'react';
-import {createStore} from '@/libs/ReactContextStore';
-import {resetSessionStorage} from './sessionStorage';
+import {createReactSubscribeStore} from '@/libs/ReactSubscribeStore';
+import {WebDAVObject} from '@/libs/WebDAV';
 
-import dispatchAggregateRoot from './root/dispatch';
-import initialStateRoot from './root/initialState';
-
-export const StoreRoot = createStore(initialStateRoot, dispatchAggregateRoot);
-
-export function useResetStore() {
-  const RootDispatch = StoreRoot.useDispatch();
-
-  return useCallback(() => {
-    resetSessionStorage();
-    RootDispatch('isSignIn', initialStateRoot.isSignIn);
-  }, [RootDispatch]);
-}
+export const Store = createReactSubscribeStore({
+  isSignIn: false,
+  userId: undefined as string | undefined,
+  username: undefined as string | undefined,
+  password: undefined as string | undefined,
+  biometriceToken: undefined as string | undefined,
+  WebDAVObject: null as WebDAVObject | null,
+});

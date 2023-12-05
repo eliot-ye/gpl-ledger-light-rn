@@ -6,9 +6,9 @@ import {PageProps} from '../Router';
 import {useNavigation} from '@react-navigation/native';
 import {envConstant} from '@/configs/env';
 import {biometrics} from '@/utils/biometrics';
-import {SessionStorage} from '@/store/sessionStorage';
 import {CusLog} from '@/utils/tools';
 import {ColorsInstance} from '@/configs/colors';
+import {Store} from '@/store';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -23,8 +23,9 @@ export function SettingPage() {
       .then(({available}) => {
         availableBiometricsSet(available);
 
-        if (available && SessionStorage.biometriceToken) {
-          return biometrics.getUserFlag(SessionStorage.biometriceToken);
+        const biometriceToken = Store.get('biometriceToken');
+        if (available && biometriceToken) {
+          return biometrics.getUserFlag(biometriceToken);
         }
         return Promise.reject();
       })
@@ -42,21 +43,22 @@ export function SettingPage() {
             <Switch
               value={enableBiometrics}
               onChange={async () => {
-                if (!SessionStorage.userId) {
+                const userId = Store.get('userId');
+                if (!userId) {
                   return;
                 }
                 try {
-                  if (!enableBiometrics && SessionStorage.password) {
+                  const password = Store.get('password');
+                  if (!enableBiometrics && password) {
                     await biometrics.setUser({
-                      userId: SessionStorage.userId,
-                      password: SessionStorage.password,
+                      userId: userId,
+                      password: password,
                     });
                     enableBiometricsSet(true);
                   } else {
-                    if (SessionStorage.biometriceToken) {
-                      await biometrics.deleteUser(
-                        SessionStorage.biometriceToken,
-                      );
+                    const biometriceToken = Store.get('biometriceToken');
+                    if (biometriceToken) {
+                      await biometrics.deleteUser(biometriceToken);
                     }
                     enableBiometricsSet(false);
                   }

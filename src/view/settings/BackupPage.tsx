@@ -8,7 +8,6 @@ import {
   CPNToast,
 } from '@/components/base';
 import {I18n} from '@/assets/I18n';
-import {SessionStorage, useSessionStorage} from '@/store/sessionStorage';
 import React, {useEffect, useState} from 'react';
 import {PermissionsAndroid, Platform, Share, Switch, View} from 'react-native';
 import FS from 'react-native-fs';
@@ -30,6 +29,7 @@ import {LS_UserInfo, LS_WebDAVAutoSync} from '@/store/localStorage';
 import {envConstant} from '@/configs/env';
 import {getWebDAVFileData} from './WebDAVPage';
 import {formatDateTime} from '@/utils/dateFn';
+import {Store} from '@/store';
 
 interface BackupData {
   appId: string;
@@ -52,22 +52,20 @@ export function getBackupDataStr(ledgerData: LedgerData) {
     appId: envConstant.bundleId,
     versionName: envConstant.versionName,
     versionCode: envConstant.versionCode,
-    username: SessionStorage.username,
+    username: Store.get('username'),
     backupTime: String(Date.now()),
     ledgerCiphertext: '',
   };
-  if (SessionStorage.password) {
-    backupData.ledgerCiphertext = AESEncrypt(
-      ledgerStr,
-      SessionStorage.password,
-    );
+  const password = Store.get('password');
+  if (password) {
+    backupData.ledgerCiphertext = AESEncrypt(ledgerStr, password);
   }
   return JSON.stringify(backupData);
 }
 
 async function getLedgerData() {
   return {
-    username: SessionStorage.username,
+    username: Store.get('username'),
     assetType: await dbGetAssetTypes(),
     color: await dbGetColors(),
     currency: await dbGetCurrency(),
@@ -78,7 +76,7 @@ async function getLedgerData() {
 function getBackupPath(basePath: string) {
   const backupDirName = 'backup';
   const backupDirPath = `${basePath}/${backupDirName}`;
-  const backupFileName = `gpl_ledger_${SessionStorage.username}.json`;
+  const backupFileName = `gpl_ledger_${Store.get('username')}.json`;
   const backupFilePath = `${backupDirPath}/${backupFileName}`;
 
   return {
@@ -107,12 +105,13 @@ async function backupHandler(basePath: string, backupDataStr: string) {
 }
 
 export async function recoveryFromWebDAV(showSuccess = true) {
-  if (!SessionStorage.WebDAVObject) {
+  const WebDAVObject = Store.get('WebDAVObject');
+  if (!WebDAVObject) {
     return;
   }
 
   const WebDAVFileData = getWebDAVFileData();
-  const res = await SessionStorage.WebDAVObject.GET(WebDAVFileData.path);
+  const res = await WebDAVObject.GET(WebDAVFileData.path);
 
   if (res.status === 200 || res.status === 204) {
     const backupData = JSON.parse(decodeURIComponent(res.responseText));
@@ -130,7 +129,8 @@ async function recoveryFromJSON(backupData: BackupData, password?: string) {
     CPNAlert.alert('', I18n.t('BackupFileError1'));
     return Promise.reject();
   }
-  if (backupData.username !== SessionStorage.username) {
+  const username = Store.get('username');
+  if (backupData.username !== username) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
@@ -140,7 +140,7 @@ async function recoveryFromJSON(backupData: BackupData, password?: string) {
     ledgerData = JSON.parse(
       AESDecrypt(
         backupData.ledgerCiphertext,
-        password || SessionStorage.password || '',
+        password || Store.get('password') || '',
       ),
     );
   } catch (error) {
@@ -148,13 +148,14 @@ async function recoveryFromJSON(backupData: BackupData, password?: string) {
     return Promise.reject();
   }
 
-  if (ledgerData.username !== SessionStorage.username) {
+  if (ledgerData.username !== username) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
     return Promise.reject();
   }
 
-  if (SessionStorage.userId) {
-    const useInfo = await LS_UserInfo.getById(SessionStorage.userId);
+  const userId = Store.get('userId');
+  if (userId) {
+    const useInfo = await LS_UserInfo.getById(userId);
     if (
       useInfo &&
       useInfo.lastModified &&
@@ -191,14 +192,14 @@ if (
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
   I18n.useLocal();
-  const sessionStorage = useSessionStorage();
+  const WebDAVObject = Store.useState('WebDAVObject');
 
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
   useEffect(() => {
     LS_WebDAVAutoSync.get().then(enable => enableWebDAVSyncSet(enable));
   }, []);
 
-  const hasWebDAV = !!sessionStorage.WebDAVObject;
+  const hasWebDAV = !!WebDAVObject;
 
   return (
     <CPNPageView title={I18n.t('Backup')}>
@@ -206,7 +207,7 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
             title={I18n.t('WebDAV')}
-            value={sessionStorage.WebDAVObject?.account}
+            value={WebDAVObject?.account}
             onPress={() => {
               navigation.navigate('WebDAVPage');
             }}

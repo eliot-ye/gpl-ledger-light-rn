@@ -12,10 +12,10 @@ import {AssetTypeSchema} from './assetType/schema';
 import {getDefaultAssetTypes} from './assetType/default';
 import {HistorySchema, LedgerSchema} from './ledger/schema';
 import {LS_UserInfo, LS_WebDAVAutoSync} from '@/store/localStorage';
-import {SessionStorage} from '@/store/sessionStorage';
 import {getBackupDataStr} from '@/view/settings/BackupPage';
 import {getWebDAVFileData} from '@/view/settings/WebDAVPage';
 import {debounce} from '@/utils/tools';
+import {Store} from '@/store';
 
 let realm: Realm | undefined;
 
@@ -83,23 +83,24 @@ export async function getRealm(path?: string, encryptionKey?: string) {
       realm.addListener(
         'change',
         debounce(async sender => {
-          if (SessionStorage.userId) {
+          if (Store.get('userId')) {
             LS_UserInfo.update({
-              id: SessionStorage.userId,
+              id: Store.get('userId'),
               lastModified: String(Date.now()),
             });
           }
 
           const enabled = await LS_WebDAVAutoSync.get();
-          if (enabled && SessionStorage.WebDAVObject) {
+          const WebDAVObject = Store.get('WebDAVObject');
+          if (enabled && WebDAVObject) {
             const backupDataStr = getBackupDataStr({
-              username: SessionStorage.username,
+              username: Store.get('username'),
               assetType: sender.objects(AssetTypeSchema.name).toJSON(),
               color: sender.objects(ColorSchema.name).toJSON(),
               currency: sender.objects(CurrencySchema.name).toJSON(),
               ledger: sender.objects(LedgerSchema.name).toJSON(),
             });
-            const res = await SessionStorage.WebDAVObject.PUT(
+            const res = await WebDAVObject.PUT(
               getWebDAVFileData().path,
               backupDataStr,
               {ContentType: 'application/json'},

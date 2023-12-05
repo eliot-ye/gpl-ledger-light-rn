@@ -12,12 +12,9 @@ export function createSubscribeState<T extends JSONConstraint>(
   serialNumber++;
   const _mark = mark || `SerialNumber-${serialNumber}`;
 
-  type StateKeys = string & keyof T;
+  type StateKeys = keyof T;
 
   const state = {...initialState};
-  function getCopyState() {
-    return JSON.parse(JSON.stringify(state)) as Readonly<T>;
-  }
 
   type SubscribeId = string;
   const subscribeMap: {
@@ -30,23 +27,19 @@ export function createSubscribeState<T extends JSONConstraint>(
     () => {
       subscribeIds.forEach(_id => {
         const subscribe = subscribeMap[_id];
+        let hasSubscribe = false;
         if (subscribe?.keys) {
-          let hasSubscribe = false;
           for (const _key of effectKeys) {
             if (subscribe.keys.includes(_key)) {
               hasSubscribe = true;
             }
           }
-          if (hasSubscribe) {
-            try {
-              subscribe.fn(getCopyState());
-            } catch (error) {
-              console.error(`${_mark} subscribe (id: ${_id}) error:`, error);
-            }
-          }
-        } else if (subscribe) {
+        } else {
+          hasSubscribe = true;
+        }
+        if (subscribe && hasSubscribe) {
           try {
-            subscribe.fn(getCopyState());
+            subscribe.fn(state);
           } catch (error) {
             console.error(`${_mark} subscribe (id: ${_id}) error:`, error);
           }
@@ -61,28 +54,26 @@ export function createSubscribeState<T extends JSONConstraint>(
     _interfaceType: 'SubscribeState',
     _mark,
 
-    $getStateRaw() {
-      return state;
-    },
-    $getState: getCopyState,
+    $getState: () => state as Readonly<T>,
     /** 获取对应的状态的 Copy 值 */
     $get<K extends StateKeys>(key: K) {
-      return JSON.parse(JSON.stringify(state[key])) as Readonly<T[K]>;
+      return state[key] as Readonly<T[K]>;
     },
     $getFromStringKey(key: string) {
-      return getValueFromStringKey(key, getCopyState());
+      return getValueFromStringKey(key, state);
     },
 
     /**
-     * - $set 内部会进行数据的浅层对比。对比相同的属性，不会更新和触发订阅函数。
+     * - 内部会对`value`进行浅层对比。相同的值，不会触发更新。
      */
     $set<K extends StateKeys>(key: K, value: T[K]) {
       const oldValue = state[key];
-      if (oldValue !== value) {
-        state[key] = value;
-        effectKeys.push(key);
-        effectHandler();
+      if (Object.is(oldValue, value)) {
+        return;
       }
+      state[key] = value;
+      effectKeys.push(key);
+      effectHandler();
     },
     $setFromStringKey(key: string, value: any) {
       const oldValue = getValueFromStringKey(key, state);
@@ -93,6 +84,9 @@ export function createSubscribeState<T extends JSONConstraint>(
           dataPre = dataPre[keyList[i]];
         }
         const preKey = keyList[keyList.length - 1];
+        if (Object.is(dataPre[preKey], value)) {
+          return;
+        }
         dataPre[preKey] = value;
         effectKeys.push(keyList[0]);
         effectHandler();
@@ -110,7 +104,7 @@ export function createSubscribeState<T extends JSONConstraint>(
      */
     $subscribe<K extends StateKeys>(fn: SubscribeFn<Readonly<T>>, keys?: K[]) {
       try {
-        fn(getCopyState());
+        fn(state);
       } catch (error) {
         console.error(`${_mark} subscribe error:`, error);
       }

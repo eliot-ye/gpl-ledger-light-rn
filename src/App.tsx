@@ -8,7 +8,6 @@ import {
   CPNPageModal,
 } from '@components/base';
 import {RouterView} from '@/view/RouterView';
-import {StoreRoot} from '@/store';
 import {LS_Lang, LS_Theme} from '@/store/localStorage';
 import {useColorScheme} from 'react-native';
 import {ColorsInstance, ThemeCode} from './configs/colors';
@@ -36,15 +35,13 @@ export default function App() {
     <SafeAreaProvider>
       <I18n.Provider>
         <ColorsInstance.Provider>
-          <StoreRoot.Provider>
-            <CPNPageModal.Provider>
-              <RootView />
-            </CPNPageModal.Provider>
-            <CPNActionSheet.Provider />
-            <CPNAlert.Provider />
-            <CPNToast.Provider />
-            <CPNLoading.Provider />
-          </StoreRoot.Provider>
+          <CPNPageModal.Provider>
+            <RootView />
+          </CPNPageModal.Provider>
+          <CPNActionSheet.Provider />
+          <CPNAlert.Provider />
+          <CPNToast.Provider />
+          <CPNLoading.Provider />
         </ColorsInstance.Provider>
       </I18n.Provider>
     </SafeAreaProvider>

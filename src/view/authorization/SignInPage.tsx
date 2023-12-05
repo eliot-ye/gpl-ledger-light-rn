@@ -23,11 +23,10 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
-import {StoreRoot} from '@/store';
+import {Store} from '@/store';
 import {getRealm} from '@/database/main';
 import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
-import {SessionStorage} from '@/store/sessionStorage';
 import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 import {createWebDAV} from '@/libs/WebDAV';
 import {CusLog} from '@/utils/tools';
@@ -38,7 +37,6 @@ export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
 
   I18n.useLocal();
-  const RootDispatch = StoreRoot.useDispatch();
 
   const useInfoList = useLSUserInfoList();
   const useInfoListMemo = useMemo(
@@ -122,19 +120,19 @@ export function SignInPage() {
       if (dbKey) {
         await getRealm(userId, dbKey);
 
-        SessionStorage.$setValue('userId', userId);
-        SessionStorage.$setValue('username', userInfo.username);
-        SessionStorage.$setValue('password', pwd);
+        Store.update('userId', userId);
+        Store.update('username', userInfo.username);
+        Store.update('password', pwd);
 
         if (userInfo.biometriceToken) {
-          SessionStorage.$setValue('biometriceToken', userInfo.biometriceToken);
+          Store.update('biometriceToken', userInfo.biometriceToken);
         }
 
         if (userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
-            SessionStorage.$setValue('WebDAVObject', WebDAV);
+            Store.update('WebDAVObject', WebDAV);
             const enabled = await LS_WebDAVAutoSync.get();
             enabled && (await recoveryFromWebDAV(false));
           } catch (error) {
@@ -142,7 +140,7 @@ export function SignInPage() {
           }
         }
 
-        RootDispatch('isSignIn', true);
+        Store.update('isSignIn', true);
         navigation.replace('Tabbar', {screen: 'HomePage'});
       } else {
         return Promise.reject('password');

@@ -7,7 +7,7 @@ import {
   CPNText,
 } from '@/components/base';
 import {getRealm} from '@/database/main';
-import {StoreRoot} from '@/store';
+import {Store} from '@/store';
 import {LS_UserInfo} from '@/store/localStorage';
 import {getRandomStr, getRandomStrMD5} from '@/utils/tools';
 import {AESEncrypt} from '@/utils/encoding';
@@ -15,7 +15,6 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
-import {SessionStorage} from '@/store/sessionStorage';
 import {Colors} from '@/configs/colors';
 import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 
@@ -23,7 +22,6 @@ export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
 
   I18n.useLocal();
-  const RootDispatch = StoreRoot.useDispatch();
 
   interface FormData {
     username: string;
@@ -112,10 +110,10 @@ export function SignUpPage() {
               token: AESEncrypt(dbKey, formData.password),
             });
 
-            SessionStorage.$setValue('userId', id);
-            SessionStorage.$setValue('username', formData.username);
-            SessionStorage.$setValue('password', formData.password);
-            RootDispatch('isSignIn', true);
+            Store.update('userId', id);
+            Store.update('username', formData.username);
+            Store.update('password', formData.password);
+            Store.update('isSignIn', true);
             navigation.reset({
               routes: [{name: 'Tabbar', params: {screen: 'HomePage'}}],
             });
