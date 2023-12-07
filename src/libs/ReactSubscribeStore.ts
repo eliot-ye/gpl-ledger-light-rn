@@ -4,13 +4,15 @@ import {createSubscribeState} from './SubscribeState';
 export function createReactSubscribeStore<T extends JSONConstraint>(
   initialState: T,
 ) {
+  type Key = keyof T;
+
   const _initialState = JSON.parse(JSON.stringify(initialState));
 
   const SSInstance = createSubscribeState(initialState);
 
   return {
     get: SSInstance.$get,
-    useState<K extends keyof T>(key: K) {
+    useState<K extends Key>(key: K) {
       const [state, stateSet] = useState(SSInstance.$get(key));
 
       useEffect(() => {
@@ -32,11 +34,14 @@ export function createReactSubscribeStore<T extends JSONConstraint>(
 
     update: SSInstance.$set,
 
-    reset() {
+    reset(exclusion: Key[] = []) {
       const keys = Object.keys(_initialState);
-      keys.forEach(key => {
-        SSInstance.$set(key, _initialState[key]);
-      });
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        if (!exclusion.includes(key)) {
+          SSInstance.$set(key, _initialState[key]);
+        }
+      }
     },
   };
 }
