@@ -1,10 +1,4 @@
-import React, {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Option, createReactiveConstant} from './ReactiveConstant';
 
 interface I18nOption<C> {
@@ -97,8 +91,6 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
     RCI.$setCode(defaultLang);
   }
 
-  const LangContext = createContext(defaultLang);
-
   function translate<K extends keyof T>(key: K): T[K];
   function translate<K extends keyof T, L extends T[K], V extends Formatted>(
     key: K,
@@ -126,13 +118,6 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
     getLangCode: RCI.$getCode,
 
     useLocal() {
-      const langCode = useContext(LangContext);
-      return {
-        langCode,
-      };
-    },
-
-    Provider(props: PropsWithChildren) {
       const [langCode, langCodeSet] = useState(defaultLang);
 
       useEffect(() => {
@@ -145,11 +130,9 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
         };
       }, []);
 
-      return React.createElement(
-        LangContext.Provider,
-        {value: langCode},
-        props.children,
-      );
+      return {
+        langCode,
+      };
     },
   };
 }

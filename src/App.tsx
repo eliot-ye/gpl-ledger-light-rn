@@ -33,17 +33,13 @@ function RootView() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <I18n.Provider>
-        <ColorsInstance.Provider>
-          <CPNPageModal.Provider>
-            <RootView />
-          </CPNPageModal.Provider>
-          <CPNActionSheet.Provider />
-          <CPNAlert.Provider />
-          <CPNToast.Provider />
-          <CPNLoading.Provider />
-        </ColorsInstance.Provider>
-      </I18n.Provider>
+      <CPNPageModal.Provider>
+        <RootView />
+      </CPNPageModal.Provider>
+      <CPNActionSheet.Provider />
+      <CPNAlert.Provider />
+      <CPNToast.Provider />
+      <CPNLoading.Provider />
     </SafeAreaProvider>
   );
 }

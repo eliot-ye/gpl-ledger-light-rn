@@ -1,10 +1,4 @@
-import React, {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import {useEffect, useState} from 'react';
 import {Option, createReactiveConstant} from './ReactiveConstant';
 
 export function createReactColors<C extends string, T extends JSONConstraint>(
@@ -14,8 +8,6 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
 
   const RCIDefaultCode = RCI.$getCode();
 
-  const CodeContext = createContext(RCIDefaultCode);
-
   return {
     setTheme: RCI.$setCode,
     getTheme: RCI.$getCode,
@@ -24,13 +16,6 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
     Colors: RCI as T,
 
     useTheme() {
-      const code = useContext(CodeContext);
-      return {
-        theme: code,
-      };
-    },
-
-    Provider(props: PropsWithChildren) {
       const [code, codeSet] = useState(RCIDefaultCode);
 
       useEffect(() => {
@@ -43,11 +28,9 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
         };
       }, []);
 
-      return React.createElement(
-        CodeContext.Provider,
-        {value: code},
-        props.children,
-      );
+      return {
+        theme: code,
+      };
     },
   };
 }
