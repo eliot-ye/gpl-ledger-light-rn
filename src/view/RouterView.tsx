@@ -9,7 +9,7 @@ import {
 } from './Router';
 import {CPNIonicons, CPNText, IONName} from '@components/base';
 import {Colors, ColorsInstance} from '@/configs/colors';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
 
@@ -32,7 +32,6 @@ export function RouterView() {
         initialRouteName={'SignInPage'}
         screenOptions={{
           headerShown: false,
-          gestureEnabled: Platform.OS === 'ios',
           ...TransitionPresets.SlideFromRightIOS,
         }}>
         {renderAuthorizationRouterView}

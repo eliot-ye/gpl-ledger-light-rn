@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android --variant devDebug",
+    "android": "react-native run-android --mode=devDebug",
     "ios": "react-native run-ios",
     "build:apk": "cd ./android && ./gradlew assembleProdRelease",
     "build:aab": "cd ./android && ./gradlew bundleProdRelease",
