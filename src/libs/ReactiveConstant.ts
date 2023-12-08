@@ -115,7 +115,7 @@ export function createReactiveConstant<
         );
         return;
       }
-      if (oldValue === value) {
+      if (Object.is(oldValue, value)) {
         return;
       }
 

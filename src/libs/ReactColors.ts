@@ -12,7 +12,7 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
     setTheme: RCI.$setCode,
     getTheme: RCI.$getCode,
 
-    /** 注意：只有组件内使用时才具有反应性 */
+    /** 注意：只有搭配`useTheme`并在组件内使用才能获得反应性 */
     Colors: RCI as T,
 
     useTheme() {

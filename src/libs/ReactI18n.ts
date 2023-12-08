@@ -111,6 +111,7 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
   }
 
   return {
+    /** 注意：只有搭配`useLocal`并在组件内使用才能获得反应性 */
     t: translate,
     f: formatReactNode,
 
