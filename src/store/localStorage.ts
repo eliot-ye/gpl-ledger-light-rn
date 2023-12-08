@@ -1,4 +1,4 @@
-import {MD5, stringToUint8Array} from '@/utils/encoding';
+import {MD5, StringToUint8Array} from '@/utils/encoding';
 import {LangCode, langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
@@ -50,7 +50,7 @@ async function getLSRealm() {
     LSRealm = await Realm.open({
       schema: [LSSchema, LSUserInfoSchema],
       schemaVersion: 1,
-      encryptionKey: stringToUint8Array(
+      encryptionKey: StringToUint8Array(
         MD5(envConstant.bundleId) + MD5(envConstant.salt),
       ),
     });

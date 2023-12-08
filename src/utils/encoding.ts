@@ -13,7 +13,7 @@ export function AESDecrypt(message: string, key: string) {
   return AES.decrypt(message, key).toString(enc.Utf8);
 }
 
-export function stringToUint8Array(str: string) {
+export function StringToUint8Array(str: string) {
   const ab = new Uint8Array(str.length);
   for (let i = 0; i < str.length; i++) {
     ab[i] = str.charCodeAt(i);
@@ -21,6 +21,9 @@ export function stringToUint8Array(str: string) {
   return ab;
 }
 
-export function utf8ToBase64(str: string) {
+export function Utf8ToBase64(str: string) {
   return Base64.stringify(enc.Utf8.parse(str));
+}
+export function Base64ToUtf8(str: string) {
+  return Base64.parse(str).toString(enc.Utf8);
 }

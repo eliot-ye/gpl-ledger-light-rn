@@ -1,4 +1,4 @@
-import {utf8ToBase64} from '@/utils/encoding';
+import {Utf8ToBase64} from '@/utils/encoding';
 import {XMLParser} from 'fast-xml-parser';
 import utf8ByteLength from 'utf8-byte-length';
 
@@ -37,7 +37,7 @@ async function fromatWebDAVResponse(response: Response) {
 }
 
 export function createWebDAV(option: WebDAVOption) {
-  const _utf8ToBase64 = option.utf8ToBase64 || utf8ToBase64;
+  const _utf8ToBase64 = option.utf8ToBase64 || Utf8ToBase64;
   const token = _utf8ToBase64(`${option.account}:${option.password}`);
   const Authorization = `Basic ${token}`;
 
