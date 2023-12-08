@@ -85,12 +85,14 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
 ) {
   const RCI = createReactiveConstant(langStrings);
 
-  const RCIDefaultLang = RCI.$getCode();
-  const defaultLang = option?.defaultLang || RCIDefaultLang;
-  if (RCIDefaultLang !== defaultLang) {
-    RCI.$setCode(defaultLang);
+  if (
+    option?.defaultLang &&
+    Object.keys(langStrings).includes(option.defaultLang)
+  ) {
+    RCI.$setCode(option.defaultLang);
   }
 
+  /** 注意：只有搭配`useLocal`并在组件内使用才能获得反应性 */
   function translate<K extends keyof T>(key: K): T[K];
   function translate<K extends keyof T, L extends T[K], V extends Formatted>(
     key: K,
@@ -111,7 +113,6 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
   }
 
   return {
-    /** 注意：只有搭配`useLocal`并在组件内使用才能获得反应性 */
     t: translate,
     f: formatReactNode,
 
@@ -119,7 +120,7 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
     getLangCode: RCI.$getCode,
 
     useLocal() {
-      const [langCode, langCodeSet] = useState(defaultLang);
+      const [langCode, langCodeSet] = useState(RCI.$getCode());
 
       useEffect(() => {
         const _id = RCI.$addListenerCode(_lang => {

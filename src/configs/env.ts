@@ -11,7 +11,7 @@ interface EnvListItem {
   code: EnvCode;
   bundleId: string[];
 }
-enum EnvCode {
+export enum EnvCode {
   DEV = 'DEV',
   PROD = 'PROD',
 }
@@ -20,15 +20,16 @@ const envList: EnvListItem[] = [
   {code: EnvCode.PROD, bundleId: ['com.gpl.ledger.light.rn']},
 ];
 
-export const envConstant = createReactiveConstant({
+const _envConstant = createReactiveConstant({
   [EnvCode.DEV]: {...envDefault},
   [EnvCode.PROD]: {...envDefault, ...envProd},
 });
+export const envConstant = _envConstant as EnvVariable;
 
 const bundleId = DeviceInfo.getBundleId();
 envList.forEach(_envItem => {
   if (_envItem.bundleId.includes(bundleId)) {
-    envConstant.$setCode(_envItem.code);
+    _envConstant.$setCode(_envItem.code);
   }
 });
 
@@ -39,7 +40,7 @@ export function setAppEnv(envValue: CEnvVariable) {
     if (_key.indexOf('CE_') === 0) {
       const _value = envValue[_key];
       if (_value !== undefined) {
-        envConstant.$setValue(_key, _value);
+        _envConstant.$setValue(_key, _value);
       }
     }
   });
@@ -47,10 +48,10 @@ export function setAppEnv(envValue: CEnvVariable) {
 
 export function getFetchUrl(serverName: ApiServerName, path: string) {
   let domain = '';
-  let serverPath = envConstant.apiServerMap[serverName];
+  let serverPath = _envConstant.apiServerMap[serverName];
 
-  envConstant.apiServerList
-    .concat(envConstant.CE_ApiServerList)
+  _envConstant.apiServerList
+    .concat(_envConstant.CE_ApiServerList)
     .forEach(item => {
       if (
         !item.ServerEnable ||

@@ -120,7 +120,7 @@ export async function injectControlJSON() {
       });
     }
 
-    const buttons: AlertButton[] = [
+    const buttons: AlertButton<any>[] = [
       {
         text: confirmText || I18n.t('Confirm'),
         textColor: Colors.theme,

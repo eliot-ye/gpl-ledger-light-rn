@@ -6,8 +6,6 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
 ) {
   const RCI = createReactiveConstant(langStrings);
 
-  const RCIDefaultCode = RCI.$getCode();
-
   return {
     setTheme: RCI.$setCode,
     getTheme: RCI.$getCode,
@@ -16,7 +14,7 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
     Colors: RCI as T,
 
     useTheme() {
-      const [code, codeSet] = useState(RCIDefaultCode);
+      const [code, codeSet] = useState(RCI.$getCode());
 
       useEffect(() => {
         const _id = RCI.$addListenerCode(_code => {
