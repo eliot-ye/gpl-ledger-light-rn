@@ -16,9 +16,18 @@ import {I18n} from '@/assets/I18n';
 import {renderAuthorizationRouterView} from './authorization/routes';
 import {HomePage, renderHomeRouterView} from './ledger/routes';
 import {renderSettingsRouterView, SettingPage} from './settings/routes';
+import {injectControlJSON} from '@/configs/envControl';
+import {envConstant} from '@/configs/env';
+import {CusLog} from '@/utils/tools';
 
 export function RouterView() {
   async function navReady() {
+    try {
+      await injectControlJSON();
+    } catch (error) {
+      CusLog.error('RouterView onReady', 'injectControlJSON', error);
+    }
+
     const infoList = await LS_UserInfo.get();
 
     if (infoList.length === 0) {
@@ -27,7 +36,22 @@ export function RouterView() {
   }
 
   return (
-    <NavigationContainer ref={navigationRef} onReady={navReady}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={navReady}
+      onStateChange={async () => {
+        if (envConstant.CE_OnChangeRoute) {
+          try {
+            await injectControlJSON();
+          } catch (error) {
+            CusLog.error(
+              'RouterView onStateChange',
+              'injectControlJSON',
+              error,
+            );
+          }
+        }
+      }}>
       <RootStack.Navigator
         initialRouteName={'SignInPage'}
         screenOptions={{
