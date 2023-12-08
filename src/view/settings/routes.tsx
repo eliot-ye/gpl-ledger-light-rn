@@ -26,7 +26,7 @@ export type SettingsStackParamList = {
   VersionLogPage: undefined;
 };
 
-export const renderSettingsRouterView = (
+export const RTVSettings = (
   <>
     <RootStack.Screen
       name="ColorManagementPage"

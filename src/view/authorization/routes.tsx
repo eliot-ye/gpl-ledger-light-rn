@@ -16,7 +16,7 @@ export type AuthorizationStackParamList = {
   AccountInfoPage: LSUserInfo;
 };
 
-export const renderAuthorizationRouterView = (
+export const RTVAuthorization = (
   <>
     <RootStack.Screen name="SignInPage" component={SignInPage} />
     <RootStack.Screen name="SignUpPage" component={SignUpPage} />

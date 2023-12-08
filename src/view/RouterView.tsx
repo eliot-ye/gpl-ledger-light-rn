@@ -12,13 +12,13 @@ import {Colors, ColorsInstance} from '@/configs/colors';
 import {View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
-
-import {renderAuthorizationRouterView} from './authorization/routes';
-import {HomePage, renderHomeRouterView} from './ledger/routes';
-import {renderSettingsRouterView, SettingPage} from './settings/routes';
 import {injectControlJSON} from '@/configs/envControl';
 import {envConstant} from '@/configs/env';
 import {CusLog} from '@/utils/tools';
+
+import {RTVAuthorization} from './authorization/routes';
+import {HomePage, RTVHome} from './ledger/routes';
+import {RTVSettings, SettingPage} from './settings/routes';
 
 export function RouterView() {
   async function navReady() {
@@ -58,14 +58,14 @@ export function RouterView() {
           headerShown: false,
           ...TransitionPresets.SlideFromRightIOS,
         }}>
-        {renderAuthorizationRouterView}
+        {RTVAuthorization}
         <RootStack.Screen
           name="Tabbar"
           component={TabBarView}
           options={{headerShown: false, animationEnabled: false}}
         />
-        {renderHomeRouterView}
-        {renderSettingsRouterView}
+        {RTVHome}
+        {RTVSettings}
       </RootStack.Navigator>
     </NavigationContainer>
   );

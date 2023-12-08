@@ -9,7 +9,7 @@ export type HomeStackParamList = {
   LedgerDetailsPage?: LedgerItem;
 };
 
-export const renderHomeRouterView = (
+export const RTVHome = (
   <>
     <RootStack.Screen name="LedgerDetailsPage" component={LedgerDetailsPage} />
   </>
