@@ -1,6 +1,10 @@
 import 'react-native-get-random-values';
-import {AES, enc} from 'crypto-js';
+import {AES, enc, MD5 as MD5Hash} from 'crypto-js';
 import Base64 from 'crypto-js/enc-base64';
+
+export function MD5(message: string) {
+  return MD5Hash(message).toString();
+}
 
 export function AESEncrypt(message: string, key: string) {
   return AES.encrypt(message, key).toString();

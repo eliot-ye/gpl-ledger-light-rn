@@ -1,5 +1,4 @@
-import 'react-native-get-random-values';
-import {MD5} from 'crypto-js';
+import {MD5} from './encoding';
 import ColorProcessor from 'color';
 
 export function logNameValueBase(
@@ -38,7 +37,7 @@ export function getRandomStr() {
 
 /** 获取 `getRandomStr` 字符串的MD5 */
 export function getRandomStrMD5() {
-  return MD5(getRandomStr()).toString();
+  return MD5(getRandomStr());
 }
 
 /**

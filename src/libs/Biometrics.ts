@@ -1,10 +1,8 @@
 import ReactNativeBiometrics from 'react-native-biometrics';
-import 'react-native-get-random-values';
-import {MD5} from 'crypto-js';
 import {I18n} from '@/assets/I18n';
 import {CusLog, getRandomStrMD5} from '@/utils/tools';
 import {LSRealmStorage} from '@/store/localStorage';
-import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
+import {AESDecrypt, AESEncrypt, MD5} from '@/utils/encoding';
 import {envConstant} from '@/configs/env';
 
 interface Option {
@@ -54,15 +52,12 @@ export function createBiometrics(option: Option = {}) {
 
       const encryptKey = getRandomStrMD5();
       const encryptStr = AESEncrypt(opt.payload, envConstant.salt + encryptKey);
-      const encryptStrMD5 = MD5(encryptStr).toString();
+      const encryptStrMD5 = MD5(encryptStr);
 
       await LSRealmStorage.set(encryptStrMD5, encryptStr);
       await LSRealmStorage.set(
-        MD5(encryptStrMD5).toString(),
-        AESEncrypt(
-          encryptKey,
-          MD5(envConstant.salt + encryptStrMD5).toString(),
-        ),
+        MD5(encryptStrMD5),
+        AESEncrypt(encryptKey, MD5(envConstant.salt + encryptStrMD5)),
       );
 
       return encryptStrMD5;
@@ -82,13 +77,13 @@ export function createBiometrics(option: Option = {}) {
         return Promise.reject(authenticationFailedMessage);
       }
 
-      const encryptStr1 = await LSRealmStorage.get(MD5(opt.token).toString());
+      const encryptStr1 = await LSRealmStorage.get(MD5(opt.token));
       if (!encryptStr1) {
         return Promise.reject(dataRetrievalFailedMessage);
       }
       const encryptKey = AESDecrypt(
         encryptStr1,
-        MD5(envConstant.salt + opt.token).toString(),
+        MD5(envConstant.salt + opt.token),
       );
 
       const encryptStr2 = await LSRealmStorage.get(opt.token);
@@ -121,7 +116,7 @@ export function createBiometrics(option: Option = {}) {
         return Promise.reject(authenticationFailedMessage);
       }
       await LSRealmStorage.remove(opt.token);
-      await LSRealmStorage.remove(MD5(opt.token).toString());
+      await LSRealmStorage.remove(MD5(opt.token));
     },
   } as const;
 
