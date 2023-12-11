@@ -11,6 +11,7 @@ import {
   CPNCell,
   CPNInput,
   CPNFormItem,
+  CPNCellConfig,
 } from '@/components/base';
 import {
   CurrencyItem,
@@ -226,6 +227,7 @@ export function CurrencyManagementPage() {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginRight: CPNCellConfig.padding,
                 },
               ]}
               onPress={() => {

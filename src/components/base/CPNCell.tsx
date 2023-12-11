@@ -1,7 +1,9 @@
 import {StyleGet} from '@/configs/styles';
-import React, {createContext, useContext} from 'react';
+import React, {useContext} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {
+  CPNCellConfig,
+  CPNCellGroupContext,
   CPNIonicons,
   CPNText,
   CPNTextColorContext,
@@ -9,11 +11,6 @@ import {
   IONName,
 } from '.';
 import {Colors, ColorsInstance} from '@/configs/colors';
-
-export const CPNCellGroupContext = createContext(false);
-export const CPNCellConfig = {
-  padding: 10,
-} as const;
 
 interface CPNCellProps {
   title: React.ReactNode;

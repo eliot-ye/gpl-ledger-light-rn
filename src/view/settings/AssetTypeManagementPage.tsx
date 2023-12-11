@@ -12,6 +12,7 @@ import {
   CPNCell,
   CPNInput,
   CPNFormItem,
+  CPNCellConfig,
 } from '@/components/base';
 import {
   AssetTypeItem,
@@ -242,6 +243,7 @@ export function AssetTypeManagementPage() {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginRight: CPNCellConfig.padding,
                 },
               ]}
               onPress={() => {

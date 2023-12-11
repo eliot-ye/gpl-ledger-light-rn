@@ -1,8 +1,13 @@
 import {StyleGet} from '@/configs/styles';
-import React from 'react';
+import React, {createContext} from 'react';
 import {View, ViewProps} from 'react-native';
-import {CPNCellConfig, CPNCellGroupContext} from './CPNCell';
 import {Colors, ColorsInstance} from '@/configs/colors';
+
+export const CPNCellGroupContext = createContext(false);
+
+export const CPNCellConfig = {
+  padding: 10,
+} as const;
 
 interface CPNCellGroupProps extends ViewProps {}
 export function CPNCellGroup(props: CPNCellGroupProps) {

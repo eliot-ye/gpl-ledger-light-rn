@@ -12,6 +12,7 @@ import {
   CPNCell,
   CPNInput,
   CPNFormItem,
+  CPNCellConfig,
 } from '@/components/base';
 import {
   ColorItem,
@@ -236,6 +237,7 @@ export function ColorManagementPage() {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginRight: CPNCellConfig.padding,
                 },
               ]}
               onPress={() => {
