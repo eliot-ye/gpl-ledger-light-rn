@@ -1,21 +1,18 @@
 import DeviceInfo from 'react-native-device-info';
 
 export type ApiServerMap = typeof ServerMap;
-export type ApiServerName = keyof ApiServerMap;
-interface ApiServerItem {
-  /** 必须以 `/` 结尾 */
-  readonly Domain: string;
-  /** 不可以以 `/` 开头和结尾 */
-  readonly ServerMap?: Partial<ApiServerMap>;
-  readonly ServerEnable?: ApiServerName[];
-}
-interface CEApiServerItem extends ApiServerItem {
-  readonly ServerEnable: ApiServerName[];
-}
+export type ApiServerName = NSEnv.ApiServerName<ApiServerMap>;
 
 const ServerMap = {
   giteePublic: 'public/GPL/ledger-light-rn-dev',
 };
+const apiServerList: NSEnv.ApiServerItem<ApiServerMap>[] = [
+  {
+    Domain: 'https://eliot-ye.gitee.io/',
+    ServerEnable: ['giteePublic'],
+  },
+];
+const CE_ApiServerList: NSEnv.CEApiServerItem<ApiServerMap>[] = [];
 
 export default {
   /** @example 'Apple' */
@@ -33,13 +30,6 @@ export default {
   CE_OnChangeRoute: false,
 
   apiServerMap: ServerMap,
-
-  apiServerList: [
-    {
-      Domain: 'https://eliot-ye.gitee.io/',
-      ServerEnable: ['giteePublic'],
-    },
-  ] as ApiServerItem[],
-
-  CE_ApiServerList: [] as CEApiServerItem[],
+  apiServerList,
+  CE_ApiServerList,
 };
