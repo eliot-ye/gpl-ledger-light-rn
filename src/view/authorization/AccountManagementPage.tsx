@@ -1,6 +1,5 @@
 import {
   CPNPageView,
-  CPNCellGroup,
   CPNCell,
   CPNSwipeItem,
   CPNIonicons,
@@ -111,18 +110,15 @@ export function AccountManagementPage() {
                   },
                 },
               ]}>
-              <CPNCellGroup>
-                <CPNCell
-                  isLast
-                  title={item.username}
-                  value={formatDateTime(
-                    Number(item.lastModified || item.id.split(':')[1]),
-                  )}
-                  onPress={() => {
-                    navigation.navigate('AccountInfoPage', item);
-                  }}
-                />
-              </CPNCellGroup>
+              <CPNCell
+                title={item.username}
+                value={formatDateTime(
+                  Number(item.lastModified || item.id.split(':')[1]),
+                )}
+                onPress={() => {
+                  navigation.navigate('AccountInfoPage', item);
+                }}
+              />
             </CPNSwipeItem>
           </View>
         ))}

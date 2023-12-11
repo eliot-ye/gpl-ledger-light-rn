@@ -61,6 +61,8 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
     return {buttons: _buttons, swipeWidth: _swipeWidth + 2};
   }, [buttonSpacing, props.buttons]);
 
+  const [showButtons, showButtonsSet] = useState(false);
+
   const translateXStartRef = useRef(0);
   const translateXRef = useRef(0);
   const translateXAnimated = useRef(new Animated.Value(0)).current;
@@ -75,7 +77,9 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
       Animated.timing(translateXAnimated, {
         toValue: translateXRef.current,
         useNativeDriver: true,
-      }).start();
+      }).start(() => {
+        showButtonsSet(Math.abs(translateXRef.current) > 5);
+      });
     }
 
     return PanResponder.create({
@@ -98,6 +102,7 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
         if (dx <= 0 && Math.abs(dx) <= swipeWidth) {
           translateXRef.current = dx;
           translateXAnimated.setValue(translateXRef.current);
+          showButtonsSet(Math.abs(translateXRef.current) > 5);
         }
       },
       onPanResponderEnd: (_ev, ge) => {
@@ -116,8 +121,6 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
     borderRadius: radius,
   };
 
-  const [hideButtons, hideButtonsSet] = useState(false);
-
   return (
     <View style={containerStyle}>
       <View
@@ -129,7 +132,7 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
             bottom: 1,
             flexDirection: 'row-reverse',
           },
-          hideButtons && {opacity: 0},
+          !showButtons && {opacity: 0},
         ]}>
         {buttons.map((item, index) => {
           return (
@@ -155,7 +158,7 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
                   if (item.onPress) {
                     const isDelete = await item.onPress(props.additional);
                     if (isDelete === true || typeof isDelete === 'function') {
-                      hideButtonsSet(true);
+                      showButtonsSet(false);
                       translateXRef.current = -Dimensions.get('screen').width;
                     }
                     if (typeof isDelete === 'function') {
@@ -188,8 +191,9 @@ export function CPNSwipeItem(props: CPNSwipeItemProps) {
       <Animated.View
         {...props}
         style={[
-          props.style,
           containerStyle,
+          showButtons && {borderTopEndRadius: 0, borderBottomEndRadius: 0},
+          props.style,
           {
             overflow: 'hidden',
             transform: [{translateX: translateXAnimated}],
