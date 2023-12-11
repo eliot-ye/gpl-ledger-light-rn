@@ -179,25 +179,6 @@ export function SignInPage() {
     );
   }
 
-  function renderGoAccountManagementButton() {
-    return (
-      <View>
-        <CPNDivisionLine style={{marginVertical: 30}} />
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AccountManagementPage');
-            }}>
-            <CPNText
-              style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-              {I18n.t('AccountManagement')}
-            </CPNText>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   useEffect(() => {
     biometrics.isSensorAvailable().then(async ({available}) => {
@@ -237,6 +218,25 @@ export function SignInPage() {
           }}>
           <CPNIonicons name={IONName.FingerPrint} color={Colors.theme} />
         </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function renderGoAccountManagementButton() {
+    return (
+      <View>
+        <CPNDivisionLine style={{marginVertical: 30}} />
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AccountManagementPage');
+            }}>
+            <CPNText
+              style={{color: Colors.theme, textDecorationLine: 'underline'}}>
+              {I18n.t('AccountManagement')}
+            </CPNText>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }

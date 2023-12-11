@@ -4,7 +4,7 @@ import {
   CPNPageView,
   CPNFormItem,
   CPNInput,
-  CPNText,
+  CPNImage,
 } from '@/components/base';
 import {getRealm} from '@/database/main';
 import {Store} from '@/store';
@@ -13,10 +13,8 @@ import {getRandomStr, getRandomStrMD5} from '@/utils/tools';
 import {AESEncrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {PageProps} from '../Router';
-import {Colors} from '@/configs/colors';
-import {CPNDivisionLine} from '@/components/CPNDivisionLine';
 
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
@@ -123,51 +121,22 @@ export function SignUpPage() {
     );
   }
 
-  function renderGoImportBackupButton() {
-    return (
-      <View>
-        <CPNDivisionLine style={{marginVertical: 30}} />
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ImportBackupPage');
-            }}>
-            <CPNText
-              style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-              {I18n.t('ImportBackup')}
-            </CPNText>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-
-  function renderGoLangSettingButton() {
-    return (
-      <View style={{alignItems: 'center'}}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('LangSettingPage');
-          }}>
-          <CPNText
-            style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            {I18n.t('LanguageSetting')}
-          </CPNText>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <CPNPageView title={I18n.t('SignUp')}>
+      <View
+        style={{
+          height: 160,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <CPNImage name="logoGreen" size={200} />
+      </View>
       <View style={{flex: 1, padding: 20, justifyContent: 'space-between'}}>
         <View>
           {renderUsernameInput()}
           {renderPasswordInput()}
           {renderSubmitButton()}
-          {renderGoImportBackupButton()}
         </View>
-        <View>{renderGoLangSettingButton()}</View>
       </View>
     </CPNPageView>
   );
