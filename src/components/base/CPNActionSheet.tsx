@@ -106,8 +106,9 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
         useNativeDriver: false,
       }).start();
     } else {
-      Animated.spring(animatedValue, {
+      Animated.timing(animatedValue, {
         toValue: 300,
+        duration: 200,
         useNativeDriver: false,
       }).start(() => {
         showSet(false);
