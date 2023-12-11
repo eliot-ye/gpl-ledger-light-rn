@@ -1,4 +1,4 @@
-import React, {useContext, type PropsWithChildren} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {CPNText} from './CPNText';
 import {Colors} from '@/configs/colors';
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
   },
 });
 
-interface CPNCheckboxProps extends PropsWithChildren {
-  label?: string;
-  labelShow?: boolean;
+interface CPNCheckboxProps {
+  label?: React.ReactNode;
+  showLabel?: boolean;
   description?: React.ReactNode;
   checked: boolean;
   onPress?: () => void;
@@ -52,11 +52,16 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
   const verticalCentering =
     props.verticalCentering !== false && !props.description;
 
+  const ShowLabel = props.showLabel !== false && !!props.label;
+  const label = props.label || formItem.title;
+
   return (
     <TouchableOpacity
       accessible={true}
       accessibilityRole={props.isRadio ? 'radio' : 'checkbox'}
-      accessibilityLabel={props.label || formItem.title}
+      accessibilityLabel={
+        typeof props.label === 'string' ? props.label : formItem.title
+      }
       accessibilityState={{
         disabled: props.disabled,
         checked: props.checked,
@@ -74,7 +79,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
         style={[
           styles.iconWrapper,
           {
-            marginRight: props.labelShow !== false ? 10 : 0,
+            marginRight: ShowLabel ? 10 : 0,
             borderColor: themeColor,
             backgroundColor: colorGetBackground(themeColor),
           },
@@ -110,19 +115,22 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
             />
           ))}
       </View>
-      {props.labelShow !== false &&
-        (props.children || (
-          <View>
-            <CPNText>{props.label || formItem.title}</CPNText>
-            {['number', 'string'].includes(typeof props.description) ? (
-              <CPNText style={{fontSize: 12, opacity: 0.6}}>
-                {props.description}
-              </CPNText>
-            ) : (
-              props.description
-            )}
-          </View>
-        ))}
+      {ShowLabel && (
+        <View style={{flex: 1}}>
+          {['number', 'string'].includes(typeof label) ? (
+            <CPNText>{label}</CPNText>
+          ) : (
+            label
+          )}
+          {['number', 'string'].includes(typeof props.description) ? (
+            <CPNText style={{fontSize: 12, opacity: 0.6}}>
+              {props.description}
+            </CPNText>
+          ) : (
+            props.description
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   );
 }

@@ -37,11 +37,9 @@ export function ThemeSettingPage() {
               key={item.code}
               title={item.label}
               rightIcon={
-                <CPNCheckbox
-                  isRadio
-                  labelShow={false}
-                  checked={themeValue === item.code}
-                />
+                <View pointerEvents="none">
+                  <CPNCheckbox isRadio checked={themeValue === item.code} />
+                </View>
               }
               onPress={async () => {
                 themeValueSet(item.code);

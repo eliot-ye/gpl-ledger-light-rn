@@ -21,11 +21,12 @@ export function LangSettingPage() {
               key={item.code}
               title={item.label}
               rightIcon={
-                <CPNCheckbox
-                  isRadio
-                  labelShow={false}
-                  checked={I18n.getLangCode() === item.code}
-                />
+                <View pointerEvents="none">
+                  <CPNCheckbox
+                    isRadio
+                    checked={I18n.getLangCode() === item.code}
+                  />
+                </View>
               }
               onPress={async () => {
                 await LS_Lang.set(item.code);
