@@ -226,7 +226,6 @@ const stylesModalPicker = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: Colors.backgroundPanel,
   },
   btnText: {
     color: Colors.theme,
@@ -351,7 +350,13 @@ export function CPNModalPicker(props: ModalPickerProps) {
   function renderBtn() {
     return (
       <View
-        style={[stylesModalPicker.btnWrapper, {height: Config.headerHeight}]}>
+        style={[
+          stylesModalPicker.btnWrapper,
+          {
+            height: Config.headerHeight,
+            backgroundColor: Colors.backgroundPanel,
+          },
+        ]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
             {props.cancelText || I18n.t('Cancel')}
@@ -870,7 +875,13 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
   function renderBtn() {
     return (
       <View
-        style={[stylesModalPicker.btnWrapper, {height: Config.headerHeight}]}>
+        style={[
+          stylesModalPicker.btnWrapper,
+          {
+            height: Config.headerHeight,
+            backgroundColor: Colors.backgroundPanel,
+          },
+        ]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
             {props.cancelText || I18n.t('Cancel')}
