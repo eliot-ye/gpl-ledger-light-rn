@@ -17,7 +17,6 @@ import {
   ViewStyle,
   StyleProp,
   TextStyle,
-  Platform,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
@@ -162,7 +161,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
             // console.log('onScrollEndDrag', index, activeIndex);
 
             if (index === activeIndex) {
-              SVRef.current?.scrollTo({y: index * itemHeight});
+              SVRef.current?.scrollTo({y: index * itemHeight, animated: false});
               contentOffsetYMapping.setValue(index * itemHeight);
               props.onChange && props.onChange(index);
             }
@@ -172,11 +171,8 @@ export function CPNPickerSingle(props: PickerSingleProps) {
             const index = getActiveIndex(contentOffsetY);
             // console.log('onMomentumScrollEnd', index, activeIndex);
 
-            if (
-              Platform.OS === 'android' &&
-              contentOffsetY !== index * itemHeight
-            ) {
-              SVRef.current?.scrollTo({y: index * itemHeight});
+            if (contentOffsetY !== index * itemHeight) {
+              SVRef.current?.scrollTo({y: index * itemHeight, animated: false});
               contentOffsetYMapping.setValue(index * itemHeight);
               props.onChange && props.onChange(index);
             }
