@@ -63,7 +63,7 @@ interface AlertOption<T> {
   title?: React.ReactNode;
   message?:
     | React.ReactNode
-    | ((option: [T, React.Dispatch<T>]) => React.ReactNode);
+    | ((option: [T, React.Dispatch<T>]) => React.JSX.Element);
   initState?: T;
   /**
    * 指示返回按钮是否关闭弹窗，仅`Android`
