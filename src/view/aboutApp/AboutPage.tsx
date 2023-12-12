@@ -8,7 +8,7 @@ import {
   CPNRichTextView,
   CPNImage,
 } from '@/components/base';
-import {Colors} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/configs/colors';
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/configs/env';
@@ -20,6 +20,7 @@ import {CusLog} from '@/utils/tools';
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
   I18n.useLocal();
+  ColorsInstance.useTheme();
   const apiGiteePublic = useApiGiteePublic();
 
   function renderVersion(isLast?: boolean) {
@@ -145,18 +146,35 @@ export function AboutPage() {
     <CPNPageView title={I18n.t('About')}>
       <View
         style={{
-          height: 300,
+          height: 200,
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: Colors.backgroundPanel,
         }}>
-        <CPNImage name="logoGreen" size={300} />
+        <CPNImage name="logoGreen" size={200} />
       </View>
       <View style={{padding: 20}}>
+        <CPNCellGroup style={{marginBottom: 20}}>
+          <CPNCell
+            title={I18n.t('LanguageSetting')}
+            onPress={() => {
+              navigation.navigate('LangSettingPage');
+            }}
+          />
+          <CPNCell
+            title={I18n.t('ThemeSetting')}
+            onPress={() => {
+              navigation.navigate('ThemeSettingPage');
+            }}
+            isLast
+          />
+        </CPNCellGroup>
+
         <CPNCellGroup style={{marginBottom: 20}}>
           {renderVersion()}
           {renderCheckUpdates(true)}
         </CPNCellGroup>
+
         <CPNCellGroup style={{marginBottom: 20}}>
           {renderGithub()}
           {renderGitee()}

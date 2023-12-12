@@ -7,7 +7,7 @@ import {AccountManagementPage} from './AccountManagementPage';
 import {AccountInfoPage} from './AccountInfoPage';
 import {LSUserInfo} from '@/store/localStorage';
 
-export type AuthorizationStackParamList = {
+export type StackParamListAuthorization = {
   SignUpPage: undefined;
   SignInPage: undefined;
   AccountManagementPage: undefined;

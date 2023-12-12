@@ -11,15 +11,17 @@ import {
   type BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
 
-import type {AuthorizationStackParamList} from './authorization/routes';
-import type {HomeStackParamList} from './ledger/routes';
-import type {SettingsStackParamList} from './settings/routes';
+import type {StackParamListAuthorization} from './authorization/routes';
+import type {StackParamListHome} from './ledger/routes';
+import type {StackParamListSettings} from './settings/routes';
+import type {StackParamListAboutApp} from './aboutApp/routes';
 
 type RootStackParamList = {
   Tabbar: {screen: keyof TabbarStackParamList};
-} & AuthorizationStackParamList &
-  HomeStackParamList &
-  SettingsStackParamList;
+} & StackParamListAuthorization &
+  StackParamListAboutApp &
+  StackParamListHome &
+  StackParamListSettings;
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 export type PageProps<PageName extends keyof RootStackParamList> =

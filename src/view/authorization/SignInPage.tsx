@@ -241,16 +241,16 @@ export function SignInPage() {
     );
   }
 
-  function renderGoLangSettingButton() {
+  function renderGoAboutButton() {
     return (
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('LangSettingPage');
+            navigation.navigate('AboutPage');
           }}>
           <CPNText
             style={{color: Colors.theme, textDecorationLine: 'underline'}}>
-            {I18n.t('LanguageSetting')}
+            {I18n.t('About')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -275,7 +275,7 @@ export function SignInPage() {
           {renderBiometrics()}
           {renderGoAccountManagementButton()}
         </View>
-        <View>{renderGoLangSettingButton()}</View>
+        <View>{renderGoAboutButton()}</View>
       </View>
     </CPNPageView>
   );

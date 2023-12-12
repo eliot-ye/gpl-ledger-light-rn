@@ -19,6 +19,7 @@ import {CusLog} from '@/utils/tools';
 import {RTVAuthorization} from './authorization/routes';
 import {HomePage, RTVHome} from './ledger/routes';
 import {RTVSettings, SettingPage} from './settings/routes';
+import {RTVAboutApp} from './aboutApp/routes';
 
 export function RouterView() {
   async function navReady() {
@@ -59,6 +60,7 @@ export function RouterView() {
           ...TransitionPresets.SlideFromRightIOS,
         }}>
         {RTVAuthorization}
+        {RTVAboutApp}
         <RootStack.Screen
           name="Tabbar"
           component={TabBarView}

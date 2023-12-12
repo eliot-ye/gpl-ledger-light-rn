@@ -53,7 +53,7 @@ export function VersionLogPage() {
                   borderBottomWidth: 0.5,
                   borderBottomColor: Colors.line,
                 }}>
-                <CPNText>
+                <CPNText style={{fontWeight: '700', color: Colors.theme}}>
                   v{item.versionName}({item.versionCode})
                 </CPNText>
               </View>

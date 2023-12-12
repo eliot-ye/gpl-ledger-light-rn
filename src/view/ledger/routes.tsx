@@ -5,7 +5,7 @@ import {LedgerItem} from '@/database';
 
 export * from './HomePage';
 
-export type HomeStackParamList = {
+export type StackParamListHome = {
   LedgerDetailsPage?: LedgerItem;
 };
 
