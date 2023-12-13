@@ -1,9 +1,8 @@
-import {I18n, LangCode, langDefault} from '@/assets/I18n';
+import {I18n, langDefault} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
 import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
 import {Store} from '@/store';
-import {LS_Lang} from '@/store/localStorage';
 import {CusLog} from '@/utils/tools';
 import {useCallback} from 'react';
 import {Platform} from 'react-native';
@@ -33,7 +32,7 @@ const headersDefault = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
   'User-Agent': `${envConstant.brand}/(${envConstant.model}) ${Platform.OS}/${Platform.Version} ${envConstant.bundleId}/${envConstant.versionName}.${envConstant.versionCode}`,
-  'Content-Language': langDefault as LangCode,
+  'Content-Language': langDefault,
   Authorization: undefined as undefined | string,
 };
 
@@ -41,18 +40,16 @@ const headersDefault = {
  * @param path - 必须以 `/` 开头
  * @param body - 默认自动添加以下字段：``
  */
-export async function getFetchData(
+export function getFetchData(
   serverName: ApiServerName,
   path: string,
   body: any = {},
   option: HttpOption = {},
 ) {
-  const langCode = await LS_Lang.get();
-
   const optionHeaders = option.headers || {};
   const headers = {
     ...headersDefault,
-    'Content-Language': langCode,
+    'Content-Language': I18n.getLangCode(),
     ...optionHeaders,
   };
 
@@ -150,7 +147,7 @@ export function useFetch(
         ...option,
       };
 
-      const fetchData = await getFetchData(serverName, path, body, fetchOption);
+      const fetchData = getFetchData(serverName, path, body, fetchOption);
 
       try {
         const response = await createFetch(
@@ -247,7 +244,7 @@ export function useFetch(
 
 //   return useCallback(
 //     async function () {
-//       const fetchData = await getFetchData('main', '/logout');
+//       const fetchData = getFetchData('main', '/logout');
 
 //       createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
 //         .then(res => {
