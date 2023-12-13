@@ -1,12 +1,20 @@
 import LocalizedStrings from 'react-native-localization';
+import {createReactI18n} from '@/libs/ReactI18n';
+import type {Locale} from 'date-fns';
+
+import {zhCN, enUS} from 'date-fns/locale';
 import zhHansTextCollection from './zhHans';
 import enTextCollection from './en';
-import {createReactI18n} from '@/libs/ReactI18n';
 
 export enum LangCode {
   zhHans = 'zh-Hans',
   en = 'en',
 }
+
+export const localeList: {langCode: LangCode; locale: Locale}[] = [
+  {langCode: LangCode.zhHans, locale: zhCN},
+  {langCode: LangCode.en, locale: enUS},
+];
 
 interface LangItem {
   label: string;
