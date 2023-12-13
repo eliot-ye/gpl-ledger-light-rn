@@ -50,15 +50,20 @@ export function createSubscribeState<T extends JSONConstraint>(
     {wait: 0},
   );
 
+  function $get(): Readonly<T>;
+  function $get<K extends StateKeys>(key: K): Readonly<T[K]>;
+  function $get(key?: string) {
+    if (key) {
+      return state[key];
+    }
+    return state;
+  }
+
   return {
     _interfaceType: 'SubscribeState',
     _mark,
 
-    $getState: () => state as Readonly<T>,
-    /** 获取对应的状态的 Copy 值 */
-    $get<K extends StateKeys>(key: K) {
-      return state[key] as Readonly<T[K]>;
-    },
+    $get,
     $getFromStringKey(key: string) {
       return getValueFromStringKey(key, state);
     },
