@@ -1,29 +1,37 @@
-import type {BaseObjectSchema} from 'realm';
+import type {
+  BaseObjectSchema,
+  PropertySchema as PropertySchemaR,
+  PropertyTypeName,
+} from 'realm';
 
-interface PropertySchema<T> {
+interface PropertySchema<T extends PropertyTypeName> extends PropertySchemaR {
   type: T;
-  objectType: SchemaName;
-  property?: string;
-  optional?: boolean;
-  indexed?: boolean | 'full-text';
-  mapTo?: string;
-  default?: unknown;
+  objectType?: SchemaName;
 }
 
-type BooleanPropertyTypeName = 'bool';
-type NumberPropertyTypeName = 'int' | 'float' | 'double' | 'decimal128';
+type OptionalPropertyTypeName<T extends string> = `${T}?`;
+
 type StringPropertyTypeName = 'string' | 'uuid' | 'objectId';
+type NumberPropertyTypeName = 'int' | 'float' | 'double' | 'decimal128';
+type BooleanPropertyTypeName = 'bool';
 type DatePropertyTypeName = 'date';
+type ArrayPropertyTypeName = 'list';
 type OtherPropertyTypeName =
   | 'object'
-  | 'list'
   | 'data'
   | 'linkingObjects'
   | 'dictionary'
   | 'set'
   | 'mixed';
 
-type GetPropertyTypeName<T> = T extends string
+type GetPropertyTypeName<T> = T extends undefined
+  ? OptionalPropertyTypeName<
+      | StringPropertyTypeName
+      | NumberPropertyTypeName
+      | BooleanPropertyTypeName
+      | DatePropertyTypeName
+    >
+  : T extends string
   ? StringPropertyTypeName | PropertySchema<StringPropertyTypeName>
   : T extends number
   ? NumberPropertyTypeName | PropertySchema<NumberPropertyTypeName>
@@ -31,6 +39,8 @@ type GetPropertyTypeName<T> = T extends string
   ? BooleanPropertyTypeName | PropertySchema<BooleanPropertyTypeName>
   : T extends Date
   ? DatePropertyTypeName | PropertySchema<DatePropertyTypeName>
+  : T extends any[]
+  ? ArrayPropertyTypeName | PropertySchema<ArrayPropertyTypeName>
   : OtherPropertyTypeName | PropertySchema<OtherPropertyTypeName>;
 
 interface Schema<T extends Record<string, any>> {

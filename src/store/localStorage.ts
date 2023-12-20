@@ -29,18 +29,9 @@ const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
     id: 'string',
     username: 'string',
     token: 'string',
-    biometriceToken: {
-      type: 'string',
-      optional: true,
-    },
-    web_dav: {
-      type: 'string',
-      optional: true,
-    },
-    lastModified: {
-      type: 'string',
-      optional: true,
-    },
+    biometriceToken: 'string?',
+    web_dav: 'string?',
+    lastModified: 'string?',
   },
 });
 
