@@ -12,7 +12,7 @@ import {Colors, ColorsInstance} from '@/configs/colors';
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/configs/env';
-import {useApiGiteePublic} from '@/api/http.giteePublic';
+import {useApiGiteePublic} from '@/api/giteePublic.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {CusLog} from '@/utils/tools';
