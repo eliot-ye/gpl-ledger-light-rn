@@ -11,7 +11,7 @@ export interface VersionItem {
   desc: string;
 }
 
-const Schema: JTDSchemaType<VersionItem[]> = {
+const SchemaVersionList: JTDSchemaType<VersionItem[]> = {
   elements: {
     properties: {
       platform: {
@@ -37,5 +37,5 @@ const Schema: JTDSchemaType<VersionItem[]> = {
   },
 };
 export const giteePublic = {
-  validateVersion: ajv.compile(Schema),
+  validateVersion: ajv.compile(SchemaVersionList),
 };
