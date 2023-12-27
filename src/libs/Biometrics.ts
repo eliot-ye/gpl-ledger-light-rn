@@ -1,7 +1,7 @@
 import ReactNativeBiometrics from 'react-native-biometrics';
 import {I18n} from '@/assets/I18n';
 import {CusLog, getRandomStrMD5} from '@/utils/tools';
-import {LSRealmStorage} from '@/store/localStorage';
+import {LocalStorageEngine} from '@/store/localStorage';
 import {AESDecrypt, AESEncrypt, MD5} from '@/utils/encoding';
 import {envConstant} from '@/configs/env';
 
@@ -29,7 +29,7 @@ export function createBiometrics(option: Option = {}) {
   const Biometrics = {
     async isSensorAvailable() {
       const hasAnySensors = await rnBiometrics.isSensorAvailable();
-      CusLog.success('biometrics', 'isSensorAvailable', hasAnySensors);
+      // CusLog.success('biometrics', 'isSensorAvailable', hasAnySensors);
       return {available: hasAnySensors.available};
     },
 
@@ -54,8 +54,8 @@ export function createBiometrics(option: Option = {}) {
       const encryptStr = AESEncrypt(opt.payload, envConstant.salt + encryptKey);
       const encryptStrMD5 = MD5(encryptStr);
 
-      await LSRealmStorage.setItem(encryptStrMD5, encryptStr);
-      await LSRealmStorage.setItem(
+      await LocalStorageEngine.setItem(encryptStrMD5, encryptStr);
+      await LocalStorageEngine.setItem(
         MD5(encryptStrMD5),
         AESEncrypt(encryptKey, MD5(envConstant.salt + encryptStrMD5)),
       );
@@ -77,7 +77,7 @@ export function createBiometrics(option: Option = {}) {
         return Promise.reject(authenticationFailedMessage);
       }
 
-      const encryptStr1 = await LSRealmStorage.getItem(MD5(opt.token));
+      const encryptStr1 = await LocalStorageEngine.getItem(MD5(opt.token));
       if (!encryptStr1) {
         return Promise.reject(dataRetrievalFailedMessage);
       }
@@ -86,7 +86,7 @@ export function createBiometrics(option: Option = {}) {
         MD5(envConstant.salt + opt.token),
       );
 
-      const encryptStr2 = await LSRealmStorage.getItem(opt.token);
+      const encryptStr2 = await LocalStorageEngine.getItem(opt.token);
       if (!encryptStr2) {
         return Promise.reject(dataRetrievalFailedMessage);
       }
@@ -98,7 +98,7 @@ export function createBiometrics(option: Option = {}) {
     },
 
     async getDataFlag(token: string) {
-      const encryptStr = await LSRealmStorage.getItem(token);
+      const encryptStr = await LocalStorageEngine.getItem(token);
       return !!encryptStr;
     },
 
@@ -115,8 +115,8 @@ export function createBiometrics(option: Option = {}) {
         CusLog.error('biometrics', 'deleteData', res.error);
         return Promise.reject(authenticationFailedMessage);
       }
-      await LSRealmStorage.removeItem(opt.token);
-      await LSRealmStorage.removeItem(MD5(opt.token));
+      await LocalStorageEngine.removeItem(opt.token);
+      await LocalStorageEngine.removeItem(MD5(opt.token));
     },
   } as const;
 

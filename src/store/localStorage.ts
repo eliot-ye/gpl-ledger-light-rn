@@ -37,7 +37,7 @@ async function getLSRealm() {
   return LSRealm;
 }
 
-export const LSRealmStorage: StorageEngine = {
+export const LocalStorageEngine: StorageEngine = {
   async getItem(key) {
     const LSR = await getLSRealm();
     const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
@@ -67,7 +67,7 @@ export const LS = createLocalStorage(
     last_user_id: '',
     web_dav_auto_sync: false,
   },
-  LSRealmStorage,
+  LocalStorageEngine,
 );
 
 export interface LSUserInfo {
