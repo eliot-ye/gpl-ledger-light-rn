@@ -3,7 +3,7 @@ import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {AlertButton, CPNAlert, CPNRichTextView} from '@/components/base';
 import {I18n, LangCode} from '@/assets/I18n';
-import {LS_EnvAlertOnceId} from '@/store/localStorage';
+import {LS} from '@/store/localStorage';
 import {Colors} from './colors';
 
 enum Error {
@@ -93,11 +93,11 @@ export async function injectControlJSON() {
     const alert = controlJSON.alert;
 
     if (alert.onceId) {
-      const oldId = await LS_EnvAlertOnceId.get();
+      const oldId = await LS.get('env_alert_onceId');
       if (oldId === alert.onceId) {
         return;
       }
-      LS_EnvAlertOnceId.set(alert.onceId);
+      LS.set('env_alert_onceId', alert.onceId);
     }
 
     let title: React.ReactNode = alert.title;

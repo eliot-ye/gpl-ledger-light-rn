@@ -11,7 +11,7 @@ import {getDefaultCurrency} from './currency/default';
 import {AssetTypeSchema} from './assetType/schema';
 import {getDefaultAssetTypes} from './assetType/default';
 import {HistorySchema, LedgerSchema} from './ledger/schema';
-import {LS_UserInfo, LS_WebDAVAutoSync} from '@/store/localStorage';
+import {LS_UserInfo, LS} from '@/store/localStorage';
 import {getBackupDataStr} from '@/view/settings/BackupPage';
 import {getWebDAVFileData} from '@/view/settings/WebDAVPage';
 import {debounce} from '@/utils/tools';
@@ -90,7 +90,7 @@ export async function getRealm(path?: string, encryptionKey?: string) {
             });
           }
 
-          const enabled = await LS_WebDAVAutoSync.get();
+          const enabled = await LS.get('web_dav_auto_sync');
           const WebDAVObject = Store.get('WebDAVObject');
           if (enabled && WebDAVObject) {
             const backupDataStr = getBackupDataStr({

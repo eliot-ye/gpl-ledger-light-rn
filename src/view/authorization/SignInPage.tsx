@@ -12,12 +12,7 @@ import {
   CPNImage,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
-import {
-  LSUserInfo,
-  LS_LastUserId,
-  LS_WebDAVAutoSync,
-  useLSUserInfoList,
-} from '@/store/localStorage';
+import {LSUserInfo, LS, useLSUserInfoList} from '@/store/localStorage';
 import {AESDecrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
@@ -72,7 +67,7 @@ export function SignInPage() {
   }
 
   const getUserInfo = useCallback(async () => {
-    const lastId = await LS_LastUserId.get();
+    const lastId = await LS.get('last_user_id');
     const info = useInfoList.find(item => item.id === lastId);
     if (info) {
       userInfoSet({...info, label: info.username, value: info.id});
@@ -120,6 +115,7 @@ export function SignInPage() {
       if (dbKey) {
         await getRealm(userId, dbKey);
 
+        LS.set('last_user_id', userId || '');
         Store.update('userId', userId);
         Store.update('username', userInfo.username);
         Store.update('password', pwd);
@@ -133,7 +129,7 @@ export function SignInPage() {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
             Store.update('WebDAVObject', WebDAV);
-            const enabled = await LS_WebDAVAutoSync.get();
+            const enabled = await LS.get('web_dav_auto_sync');
             enabled && (await recoveryFromWebDAV(false));
           } catch (error) {
             CusLog.error('SignIn', 'WebDAV', error);

@@ -6,7 +6,7 @@ import {
   CPNPageView,
 } from '@/components/base';
 import {ColorsInstance, ThemeCode} from '@/configs/colors';
-import {LS_Theme} from '@/store/localStorage';
+import {LS} from '@/store/localStorage';
 import React, {useEffect, useState} from 'react';
 import {View, useColorScheme} from 'react-native';
 
@@ -21,7 +21,7 @@ export function ThemeSettingPage() {
 
   const [themeValue, themeValueSet] = useState('system');
   useEffect(() => {
-    LS_Theme.get().then(_code => {
+    LS.get('theme_code').then(_code => {
       themeValueSet(_code || 'system');
     });
   }, []);
@@ -44,11 +44,11 @@ export function ThemeSettingPage() {
               onPress={async () => {
                 themeValueSet(item.code);
                 if (item.code === 'system') {
-                  await LS_Theme.set(null);
+                  await LS.set('theme_code', null);
                 } else {
-                  await LS_Theme.set(item.code as ThemeCode);
+                  await LS.set('theme_code', item.code as ThemeCode);
                 }
-                const _val = await LS_Theme.get();
+                const _val = await LS.get('theme_code');
                 ColorsInstance.setTheme(
                   _val || systemTheme || ThemeCode.default,
                 );

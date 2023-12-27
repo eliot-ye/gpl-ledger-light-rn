@@ -1,10 +1,11 @@
 import {MD5, StringToUint8Array} from '@/utils/encoding';
-import {LangCode, langDefault} from '@assets/I18n';
+import {langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
 import {envConstant} from '@/configs/env';
 import {useEffect, useState} from 'react';
+import {StorageEngine, createLocalStorage} from '@/libs/LocalStorage';
 
 interface LSItem {
   key: string;
@@ -22,19 +23,6 @@ const LSSchema = createObjectSchema<LSItem>({
   },
 });
 
-const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
-  name: LSSchemaName.LSUserInfo,
-  primaryKey: 'id',
-  properties: {
-    id: 'string',
-    username: 'string',
-    token: 'string',
-    biometriceToken: 'string?',
-    web_dav: 'string?',
-    lastModified: 'string?',
-  },
-});
-
 let LSRealm: undefined | Realm;
 async function getLSRealm() {
   if (!LSRealm) {
@@ -49,6 +37,39 @@ async function getLSRealm() {
   return LSRealm;
 }
 
+export const LSRealmStorage: StorageEngine = {
+  async getItem(key) {
+    const LSR = await getLSRealm();
+    const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
+    return data?.value;
+  },
+  async setItem(key, value) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      LSR.create(LSSchema.name, {key, value}, Realm.UpdateMode.All);
+    });
+  },
+  async removeItem(key) {
+    const LSR = await getLSRealm();
+    LSR.write(() => {
+      const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
+      if (data) {
+        LSR.delete(data);
+      }
+    });
+  },
+};
+export const LS = createLocalStorage(
+  {
+    theme_code: ThemeCode.default as ThemeCode | null,
+    lang_code: langDefault,
+    env_alert_onceId: '',
+    last_user_id: '',
+    web_dav_auto_sync: false,
+  },
+  LSRealmStorage,
+);
+
 export interface LSUserInfo {
   id: string;
   username: string;
@@ -57,6 +78,18 @@ export interface LSUserInfo {
   web_dav?: string;
   lastModified?: string;
 }
+const LSUserInfoSchema = createObjectSchema<LSUserInfo>({
+  name: LSSchemaName.LSUserInfo,
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    username: 'string',
+    token: 'string',
+    biometriceToken: 'string?',
+    web_dav: 'string?',
+    lastModified: 'string?',
+  },
+});
 export const LS_UserInfo = {
   key: 'user_info',
   async get(): Promise<LSUserInfo[]> {
@@ -119,84 +152,3 @@ export function useLSUserInfoList() {
 
   return data;
 }
-
-export const LSRealmStorage = {
-  async get(key: string) {
-    const LSR = await getLSRealm();
-    const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
-    if (data) {
-      return data.value;
-    }
-  },
-  async set(key: string, value: string) {
-    const LSR = await getLSRealm();
-    LSR.write(() => {
-      LSR.create(LSSchema.name, {key, value}, Realm.UpdateMode.All);
-    });
-  },
-  async remove(key: string) {
-    const LSR = await getLSRealm();
-    LSR.write(() => {
-      const data = LSR.objectForPrimaryKey<LSItem>(LSSchema.name, key);
-      if (data) {
-        LSR.delete(data);
-      }
-    });
-  },
-};
-
-export const LS_Theme = {
-  key: 'theme_code',
-  async get() {
-    const data = await LSRealmStorage.get(this.key);
-    if (!data) {
-      return null;
-    }
-    return data as ThemeCode;
-  },
-  set(data: ThemeCode | null) {
-    return LSRealmStorage.set(this.key, data || '');
-  },
-};
-
-export const LS_Lang = {
-  key: 'lang_code',
-  async get() {
-    const data = await LSRealmStorage.get(this.key);
-    return (data || langDefault) as LangCode;
-  },
-  set(data: LangCode) {
-    return LSRealmStorage.set(this.key, data);
-  },
-};
-export const LS_EnvAlertOnceId = {
-  key: 'env_alert_onceId',
-  async get() {
-    const data = await LSRealmStorage.get(this.key);
-    return data;
-  },
-  async set(data: string) {
-    return LSRealmStorage.set(this.key, data);
-  },
-};
-
-export const LS_LastUserId = {
-  key: 'last_user_id',
-  get() {
-    return LSRealmStorage.get(this.key);
-  },
-  set(id: string) {
-    return LSRealmStorage.set(this.key, id);
-  },
-};
-
-export const LS_WebDAVAutoSync = {
-  key: 'web_dav_auto_sync',
-  async get() {
-    const str = await LSRealmStorage.get(this.key);
-    return str !== 'false';
-  },
-  set(data: boolean) {
-    return LSRealmStorage.set(this.key, `${data}`);
-  },
-};

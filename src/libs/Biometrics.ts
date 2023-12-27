@@ -54,8 +54,8 @@ export function createBiometrics(option: Option = {}) {
       const encryptStr = AESEncrypt(opt.payload, envConstant.salt + encryptKey);
       const encryptStrMD5 = MD5(encryptStr);
 
-      await LSRealmStorage.set(encryptStrMD5, encryptStr);
-      await LSRealmStorage.set(
+      await LSRealmStorage.setItem(encryptStrMD5, encryptStr);
+      await LSRealmStorage.setItem(
         MD5(encryptStrMD5),
         AESEncrypt(encryptKey, MD5(envConstant.salt + encryptStrMD5)),
       );
@@ -77,7 +77,7 @@ export function createBiometrics(option: Option = {}) {
         return Promise.reject(authenticationFailedMessage);
       }
 
-      const encryptStr1 = await LSRealmStorage.get(MD5(opt.token));
+      const encryptStr1 = await LSRealmStorage.getItem(MD5(opt.token));
       if (!encryptStr1) {
         return Promise.reject(dataRetrievalFailedMessage);
       }
@@ -86,7 +86,7 @@ export function createBiometrics(option: Option = {}) {
         MD5(envConstant.salt + opt.token),
       );
 
-      const encryptStr2 = await LSRealmStorage.get(opt.token);
+      const encryptStr2 = await LSRealmStorage.getItem(opt.token);
       if (!encryptStr2) {
         return Promise.reject(dataRetrievalFailedMessage);
       }
@@ -98,7 +98,7 @@ export function createBiometrics(option: Option = {}) {
     },
 
     async getDataFlag(token: string) {
-      const encryptStr = await LSRealmStorage.get(token);
+      const encryptStr = await LSRealmStorage.getItem(token);
       return !!encryptStr;
     },
 
@@ -115,8 +115,8 @@ export function createBiometrics(option: Option = {}) {
         CusLog.error('biometrics', 'deleteData', res.error);
         return Promise.reject(authenticationFailedMessage);
       }
-      await LSRealmStorage.remove(opt.token);
-      await LSRealmStorage.remove(MD5(opt.token));
+      await LSRealmStorage.removeItem(opt.token);
+      await LSRealmStorage.removeItem(MD5(opt.token));
     },
   } as const;
 
