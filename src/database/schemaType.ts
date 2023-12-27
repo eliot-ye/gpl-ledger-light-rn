@@ -47,7 +47,7 @@ interface Schema<T extends Record<string, any>> {
   name: LSSchemaName | SchemaName;
   primaryKey?: keyof T;
   properties: {
-    [K in keyof T]: GetPropertyTypeName<T[K]>;
+    [K in keyof T]-?: GetPropertyTypeName<T[K]>;
   };
 }
 
