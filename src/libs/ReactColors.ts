@@ -17,13 +17,7 @@ export function createReactColors<C extends string, T extends JSONConstraint>(
       const [code, codeSet] = useState(RCI.$getCode());
 
       useEffect(() => {
-        const _id = RCI.$addListenerCode(_code => {
-          codeSet(_code);
-        });
-
-        return () => {
-          RCI.$removeListenerCode(_id);
-        };
+        return RCI.$addListener('changeCode', _code => codeSet(_code));
       }, []);
 
       return {

@@ -123,13 +123,7 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
       const [langCode, langCodeSet] = useState(RCI.$getCode());
 
       useEffect(() => {
-        const _id = RCI.$addListenerCode(_lang => {
-          langCodeSet(_lang);
-        });
-
-        return () => {
-          RCI.$removeListenerCode(_id);
-        };
+        return RCI.$addListener('changeCode', _lang => langCodeSet(_lang));
       }, []);
 
       return {

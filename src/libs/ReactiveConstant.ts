@@ -30,6 +30,34 @@ export function createReactiveConstant<
   type ListenerId = string;
   const listenerCodeMap: {[id: ListenerId]: ListenerCodeFn<C> | undefined} = {};
   const listenerCodeIds: ListenerId[] = [];
+
+  /**
+   * @param fn - 监听函数
+   * - 监听函数初始化执行一次
+   * - 监听函数在每次更改 Code 时（执行 $setCode 时）执行
+   * @returns function removeListener
+   */
+  function addListener(
+    eventName: 'changeCode',
+    fn: ListenerCodeFn<C>,
+  ): () => void;
+  function addListener(eventName: string, fn: ListenerCodeFn<C>) {
+    if (eventName === 'changeCode') {
+      try {
+        fn(activeCode);
+      } catch (error) {
+        console.error(`${_mark} $addListener error:`, error);
+      }
+      const id: ListenerId = getOnlyStr(listenerCodeIds);
+      listenerCodeMap[id] = fn;
+      listenerCodeIds.push(id);
+      return () => {
+        listenerCodeMap[id] = undefined;
+        listenerCodeIds.splice(listenerCodeIds.indexOf(id), 1);
+      };
+    }
+  }
+
   function listenerCodeHandle(_activeCode: C) {
     for (let i = 0; i < listenerCodeIds.length; i++) {
       const listener = listenerCodeMap[listenerCodeIds[i]];
@@ -149,7 +177,7 @@ export function createReactiveConstant<
      * @param keys - 订阅属性
      * - 只有订阅的属性发生了更改才触发执行订阅函数。如果不传入该参数，则所有属性更改都会执行。
      * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 SubscribeId
-     * @returns `subscribeId`
+     * @returns function unsubscribe
      */
     $subscribe<K extends Key>(fn: SubscribeFn<T>, keys?: K[]) {
       try {
@@ -168,34 +196,13 @@ export function createReactiveConstant<
         keys,
       };
 
-      return id;
-    },
-    $unsubscribe(subscribeId: SubscribeId) {
-      subscribeMap[subscribeId] = undefined;
-      subscribeIds.splice(subscribeIds.indexOf(subscribeId), 1);
+      return () => {
+        subscribeMap[id] = undefined;
+        subscribeIds.splice(subscribeIds.indexOf(id), 1);
+      };
     },
 
-    /**
-     * @param fn - 监听函数
-     * - 监听函数初始化执行一次
-     * - 监听函数在每次更改 Code 时（执行 $setCode 时）执行
-     * @returns `listenerId`
-     */
-    $addListenerCode(fn: ListenerCodeFn<C>) {
-      try {
-        fn(activeCode);
-      } catch (error) {
-        console.error(`${_mark} $addListener error:`, error);
-      }
-      const id: ListenerId = getOnlyStr(listenerCodeIds);
-      listenerCodeMap[id] = fn;
-      listenerCodeIds.push(id);
-      return id;
-    },
-    $removeListenerCode(listenerId: ListenerId) {
-      listenerCodeMap[listenerId] = undefined;
-      listenerCodeIds.splice(listenerCodeIds.indexOf(listenerId), 1);
-    },
+    $addListener: addListener,
   } as const;
 
   return returnValue;
