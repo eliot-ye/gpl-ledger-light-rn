@@ -16,17 +16,7 @@ export function createReactSubscribeStore<T extends JSONConstraint>(
       const [state, stateSet] = useState(SSInstance.$get(key));
 
       useEffect(() => {
-        const subscribeId = SSInstance.$subscribe(
-          value => {
-            stateSet(value[key]);
-          },
-          [key],
-        );
-        return () => {
-          if (subscribeId) {
-            SSInstance.$unsubscribe(subscribeId);
-          }
-        };
+        return SSInstance.$subscribe(value => stateSet(value[key]), [key]);
       }, [key]);
 
       return state;
