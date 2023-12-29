@@ -60,13 +60,12 @@ export function createCPNToast() {
   function ProviderCPNToast() {
     const [optionMap, setOptionMap] = useState<OptionMap>({});
     useEffect(() => {
-      const id = ev.subscribe('trigger', ed => {
+      return ev.subscribe('trigger', ed => {
         setOptionMap(_data => ({
           ..._data,
           [ed.id]: ed.opt,
         }));
       });
-      return () => ev.unsubscribe('trigger', id);
     }, []);
 
     const idList = useMemo(() => Object.keys(optionMap), [optionMap]);

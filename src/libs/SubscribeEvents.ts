@@ -21,8 +21,14 @@ export function createSubscribeEvents<T extends JSONConstraint>(mark?: string) {
   const ids: string[] = [];
 
   return {
-    mark: _mark,
+    _mark,
 
+    /**
+     *
+     * @param eventName
+     * @param handler
+     * @returns function unsubscribe
+     */
     subscribe<E extends EventName>(eventName: E, handler: Handler<E>) {
       let id = getOnlyStr(ids);
 
@@ -36,15 +42,13 @@ export function createSubscribeEvents<T extends JSONConstraint>(mark?: string) {
       }
 
       ids.push(id);
-      return id;
-    },
 
-    unsubscribe(eventName: EventName, id: string) {
-      const eventHandlerMap = eventMap[eventName];
-      if (eventHandlerMap) {
-        eventHandlerMap[id] = undefined;
-      }
-      ids.splice(ids.indexOf(id), 1);
+      return () => {
+        if (eventHandlerMap) {
+          eventHandlerMap[id] = undefined;
+        }
+        ids.splice(ids.indexOf(id), 1);
+      };
     },
 
     publish<E extends EventName>(eventName: E, eventData: T[E]) {

@@ -281,10 +281,12 @@ export function createCPNAlert() {
       [],
     );
     useEffect(() => {
-      const showId = eventInstance.subscribe('show', opt => {
+      return eventInstance.subscribe('show', opt => {
         setAlertOptionList(_opts => [..._opts, opt]);
       });
-      const closeId = eventInstance.subscribe('close', id => {
+    }, []);
+    useEffect(() => {
+      return eventInstance.subscribe('close', id => {
         setAlertOptionList(_opts => {
           const index = _opts.map(_item => _item.id).indexOf(id);
           if (index > -1) {
@@ -293,11 +295,6 @@ export function createCPNAlert() {
           return [..._opts];
         });
       });
-
-      return () => {
-        eventInstance.unsubscribe('show', showId);
-        eventInstance.unsubscribe('close', closeId);
-      };
     }, []);
 
     const alertOptionListLength = useRef(0);

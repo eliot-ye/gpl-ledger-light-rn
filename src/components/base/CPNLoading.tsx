@@ -10,7 +10,7 @@ export function createCPNLoading() {
   function CPNLoading() {
     const [loadingCount, setLoadingCount] = useState(0);
     useEffect(() => {
-      const id = ev.subscribe('trigger', type =>
+      return ev.subscribe('trigger', type =>
         setLoadingCount(c => {
           if (type === 'show') {
             return c + 1;
@@ -21,7 +21,6 @@ export function createCPNLoading() {
           return c;
         }),
       );
-      return () => ev.unsubscribe('trigger', id);
     }, []);
 
     const [show, showSet] = useState(false);

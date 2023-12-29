@@ -277,8 +277,7 @@ export function createCPNActionSheet() {
   function CPNActionSheet() {
     const [data, dataSet] = useState<undefined | ActionSheetOption<any>>();
     useEffect(() => {
-      const id = ev.subscribe('trigger', ed => dataSet(ed));
-      return () => ev.unsubscribe('trigger', id);
+      return ev.subscribe('trigger', ed => dataSet(ed));
     }, []);
 
     return (
