@@ -1,9 +1,16 @@
 import {AESDecrypt, AESEncrypt, MD5} from '@/utils/encoding';
 
+export enum ErrorMessage {
+  NOT_ENGINE = 'No storage engine',
+}
+
 export interface StorageEngine {
-  setItem: (key: string, value: string) => Promise<void>;
-  getItem: (key: string) => Promise<string | null | undefined>;
-  removeItem: (key: string) => Promise<void>;
+  setItem: (key: string, value: string) => Promise<void> | void;
+  getItem: (
+    key: string,
+  ) => Promise<string | null | undefined> | string | null | undefined;
+  removeItem: (key: string) => Promise<void> | void;
+  onReady?: () => Promise<void>;
 }
 
 interface Option<T> {
@@ -16,10 +23,27 @@ interface Option<T> {
 
 export function createLocalStorage<T extends JSONConstraint>(
   initialData: T,
-  engine: StorageEngine,
+  engines: (StorageEngine | null | (() => StorageEngine | null))[],
   option: Option<T> = {},
 ) {
   type Key = keyof T;
+
+  const _engines = engines.filter(e => e !== null);
+  const _engine =
+    typeof _engines[0] === 'function' ? _engines[0]() : _engines[0];
+
+  let ready = false;
+  const readyCallbacks: (() => void)[] = [];
+  if (_engine) {
+    if (_engine.onReady) {
+      _engine.onReady().then(() => {
+        ready = true;
+        readyCallbacks.forEach(cb => cb());
+      });
+    } else {
+      ready = true;
+    }
+  }
 
   const {
     secretKey,
@@ -38,7 +62,18 @@ export function createLocalStorage<T extends JSONConstraint>(
   }
 
   return {
+    async ready() {
+      if (ready) {
+        return;
+      }
+      return new Promise<void>(resolve => {
+        readyCallbacks.push(resolve);
+      });
+    },
     async set<K extends Key>(key: K, value: T[K]) {
+      if (!_engine) {
+        return Promise.reject(new Error(ErrorMessage.NOT_ENGINE));
+      }
       let _value = value;
       if (increments.includes(key)) {
         _value = {
@@ -50,10 +85,13 @@ export function createLocalStorage<T extends JSONConstraint>(
       if (secretKey) {
         valueStr = EncryptFn(valueStr, secretKey);
       }
-      return engine.setItem(getHashKey(key), valueStr);
+      return _engine.setItem(getHashKey(key), valueStr);
     },
     async get<K extends Key>(key: K): Promise<T[K]> {
-      let str = await engine.getItem(getHashKey(key));
+      if (!_engine) {
+        return Promise.reject(new Error(ErrorMessage.NOT_ENGINE));
+      }
+      let str = await _engine.getItem(getHashKey(key));
       if (str === null || str === undefined) {
         return initialData[key];
       }
@@ -68,7 +106,10 @@ export function createLocalStorage<T extends JSONConstraint>(
       return str as any;
     },
     remove(key: Key) {
-      return engine.removeItem(getHashKey(key));
+      if (!_engine) {
+        return Promise.reject(new Error(ErrorMessage.NOT_ENGINE));
+      }
+      return _engine.removeItem(getHashKey(key));
     },
   };
 }

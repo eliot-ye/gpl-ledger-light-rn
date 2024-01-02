@@ -67,7 +67,7 @@ export const LS = createLocalStorage(
     last_user_id: '',
     web_dav_auto_sync: false,
   },
-  LocalStorageEngine,
+  [LocalStorageEngine],
 );
 
 export interface LSUserInfo {
