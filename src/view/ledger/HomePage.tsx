@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {
   CPNIonicons,
   CPNPageView,
@@ -19,11 +19,19 @@ import {StyleGet} from '@/configs/styles';
 import {colorGetBackground} from '@/utils/tools';
 import {CPNNoData} from '@/components/CPNNoData';
 import {CPNCurrencyView} from '@/components/CPNCurrencyView';
+import {nativePackage} from '@/utils/nativePackage';
 
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLocal();
   ColorsInstance.useTheme();
+
+  useEffect(() => {
+    nativePackage.setFlag(true);
+    return () => {
+      nativePackage.setFlag(false);
+    };
+  }, []);
 
   const currencyList = useDBGetCurrency();
   const ledgerList = useDBGetLedger();
