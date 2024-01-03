@@ -1,57 +1,69 @@
 import type {
+  BSON,
   BaseObjectSchema,
+  Dictionary,
   PropertySchema as PropertySchemaR,
   PropertyTypeName,
 } from 'realm';
 
-interface PropertySchema<T extends PropertyTypeName> extends PropertySchemaR {
-  type: T;
+interface PropertySchema<N extends PropertyTypeName> extends PropertySchemaR {
+  type: N;
   objectType?: SchemaName;
 }
+type PropertySchemaType<N extends PropertyTypeName, T> =
+  | (T extends undefined ? OptionalPropertyTypeName<N> : N)
+  | PropertySchema<N>;
 
-type OptionalPropertyTypeName<T extends string> = `${T}?`;
+type OptionalPropertyTypeName<T extends PropertyTypeName> = `${T}?`;
 
-type StringPropertyTypeName = 'string' | 'uuid' | 'objectId';
+type UUIDPropertyTypeName = 'uuid';
+type ObjectIdPropertyTypeName = 'objectId';
+type StringPropertyTypeName = 'string';
 type NumberPropertyTypeName = 'int' | 'float' | 'double' | 'decimal128';
 type BooleanPropertyTypeName = 'bool';
 type DatePropertyTypeName = 'date';
 type ArrayPropertyTypeName = 'list';
-type OtherPropertyTypeName =
-  | 'object'
-  | 'data'
-  | 'linkingObjects'
-  | 'dictionary'
-  | 'set'
-  | 'mixed';
+type ObjectPropertyTypeName = 'object' | 'linkingObjects';
+type SetPropertyTypeName = 'set';
+type ArrayBufferPropertyTypeName = 'data';
+type DictionaryPropertyTypeName = 'dictionary';
+type OtherPropertyTypeName = 'mixed';
 
-type GetPropertyTypeName<T> = T extends undefined
-  ? OptionalPropertyTypeName<
-      | StringPropertyTypeName
-      | NumberPropertyTypeName
-      | BooleanPropertyTypeName
-      | DatePropertyTypeName
-    >
-  : T extends string
-  ? StringPropertyTypeName | PropertySchema<StringPropertyTypeName>
-  : T extends number
-  ? NumberPropertyTypeName | PropertySchema<NumberPropertyTypeName>
-  : T extends boolean
-  ? BooleanPropertyTypeName | PropertySchema<BooleanPropertyTypeName>
-  : T extends Date
-  ? DatePropertyTypeName | PropertySchema<DatePropertyTypeName>
-  : T extends any[]
-  ? ArrayPropertyTypeName | PropertySchema<ArrayPropertyTypeName>
-  : OtherPropertyTypeName | PropertySchema<OtherPropertyTypeName>;
+type GetPropertySchemaType<T> = T extends undefined | string
+  ? PropertySchemaType<StringPropertyTypeName, T>
+  : T extends undefined | BSON.UUID
+  ? PropertySchemaType<UUIDPropertyTypeName, T>
+  : T extends undefined | BSON.ObjectId
+  ? PropertySchemaType<ObjectIdPropertyTypeName, T>
+  : T extends undefined | string
+  ? PropertySchemaType<StringPropertyTypeName, T>
+  : T extends undefined | number
+  ? PropertySchemaType<NumberPropertyTypeName, T>
+  : T extends undefined | boolean
+  ? PropertySchemaType<BooleanPropertyTypeName, T>
+  : T extends undefined | Date
+  ? PropertySchemaType<DatePropertyTypeName, T>
+  : T extends undefined | Array<any>
+  ? PropertySchemaType<ArrayPropertyTypeName, T>
+  : T extends undefined | JSONConstraint
+  ? PropertySchemaType<ObjectPropertyTypeName, T>
+  : T extends undefined | Set<any>
+  ? PropertySchemaType<SetPropertyTypeName, T>
+  : T extends undefined | Dictionary
+  ? PropertySchemaType<DictionaryPropertyTypeName, T>
+  : T extends undefined | ArrayBuffer
+  ? PropertySchemaType<ArrayBufferPropertyTypeName, T>
+  : PropertySchemaType<OtherPropertyTypeName, T>;
 
-interface Schema<T extends Record<string, any>> {
+interface Schema<T extends JSONConstraint> {
   name: LSSchemaName | SchemaName;
   primaryKey?: keyof T;
   properties: {
-    [K in keyof T]-?: GetPropertyTypeName<T[K]>;
+    [K in keyof T]-?: GetPropertySchemaType<T[K]>;
   };
 }
 
-export function createObjectSchema<T extends Record<string, any>>(
+export function createObjectSchema<T extends JSONConstraint>(
   schema: Schema<T> & BaseObjectSchema,
 ) {
   return schema;
