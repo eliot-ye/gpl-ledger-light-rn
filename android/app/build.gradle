@@ -85,11 +85,11 @@ android {
     productFlavors {
         dev {
             applicationId "com.gpl.ledger.light.rn.dev"
-            resValue 'string', 'app_name', 'DEV轻记账'
+            manifestPlaceholders = [label: "@string/app_name_dev"]
         }
         prod {
             applicationId "com.gpl.ledger.light.rn"
-            resValue 'string', 'app_name', '轻记账'
+            manifestPlaceholders = [label: "@string/app_name"]
         }
     }
     signingConfigs {
