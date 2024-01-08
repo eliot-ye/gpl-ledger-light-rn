@@ -1,5 +1,4 @@
 import {MD5, StringToUint8Array} from '@/utils/encoding';
-import {langDefault} from '@assets/I18n';
 import {ThemeCode} from '@/configs/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
@@ -62,7 +61,6 @@ export const LocalStorageEngine: StorageEngine = {
 export const LS = createLocalStorage(
   {
     theme_code: ThemeCode.default as ThemeCode | null,
-    lang_code: langDefault,
     env_alert_onceId: '',
     last_user_id: '',
     web_dav_auto_sync: false,

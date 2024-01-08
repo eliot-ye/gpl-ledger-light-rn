@@ -5,7 +5,6 @@ import {
   CPNCheckbox,
   CPNPageView,
 } from '@/components/base';
-import {LS} from '@/store/localStorage';
 import React from 'react';
 import {View} from 'react-native';
 
@@ -29,7 +28,6 @@ export function LangSettingPage() {
                 </View>
               }
               onPress={async () => {
-                await LS.set('lang_code', item.code);
                 I18n.setLangCode(item.code);
               }}
               isLast={index === langList.length - 1}

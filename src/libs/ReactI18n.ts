@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {NativeModules, Platform} from 'react-native';
 import {Option, createReactiveConstant} from './ReactiveConstant';
 
-interface I18nOption<C> {
-  defaultLang: C;
+interface I18nOption<C extends string> {
+  defaultLang?: C;
+  langScope: {
+    [key in C]: string[];
+  };
+  langMap?: {
+    [key in C]?: {
+      [OS in typeof Platform.OS]?: string;
+    };
+  };
 }
 
 type InferKeyArray<T> = T extends `${string}{${infer K}}${infer R}`
@@ -81,16 +90,46 @@ export function formatReactNode<L extends string, V extends Formatted>(
 
 export function createReactI18n<C extends string, T extends JSONConstraint>(
   langStrings: Option<C, T>,
-  option?: I18nOption<C>,
+  option: I18nOption<C>,
 ) {
   const RCI = createReactiveConstant(langStrings);
 
+  function setLangCode(code: C) {
+    RCI.$setCode(code);
+    if (NativeModules.LocaleCode && option?.langMap) {
+      const codeMap = option.langMap[code];
+      if (codeMap) {
+        const codeKey = codeMap[Platform.OS];
+        if (codeKey) {
+          NativeModules.LocaleCode.setLanguage(codeKey);
+        }
+      }
+    }
+  }
+
+  let defaultLang = RCI.$getCode();
   if (
     option?.defaultLang &&
     Object.keys(langStrings).includes(option.defaultLang)
   ) {
-    RCI.$setCode(option.defaultLang);
+    defaultLang = option.defaultLang;
+  } else if (NativeModules.LocaleCode) {
+    const nativeLangCode: string = NativeModules.LocaleCode.language;
+    if (Object.keys(langStrings).includes(nativeLangCode)) {
+      defaultLang = nativeLangCode as C;
+    } else if (option?.langScope) {
+      const supportedLangCodes = Object.keys(option.langScope) as C[];
+      for (let i = 0; i < supportedLangCodes.length; i++) {
+        const code = supportedLangCodes[i];
+        option.langScope[code]!.forEach(lang => {
+          if (nativeLangCode.includes(lang)) {
+            defaultLang = code;
+          }
+        });
+      }
+    }
   }
+  RCI.$setCode(defaultLang);
 
   /** 注意：只有搭配`useLocal`并在组件内使用才能获得反应性 */
   function translate<K extends keyof T>(key: K): T[K];
@@ -116,7 +155,7 @@ export function createReactI18n<C extends string, T extends JSONConstraint>(
     t: translate,
     f: formatReactNode,
 
-    setLangCode: RCI.$setCode,
+    setLangCode,
     getLangCode: RCI.$getCode,
 
     useLocal() {
