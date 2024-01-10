@@ -20,10 +20,7 @@ interface LangItem {
   code: LangCode;
 }
 export const langList: ReadonlyArray<Readonly<LangItem>> = [
-  {
-    label: '简体中文',
-    code: LangCode.zhHans,
-  },
+  {label: '简体中文', code: LangCode.zhHans},
   {label: 'English', code: LangCode.en},
 ];
 
@@ -41,9 +38,11 @@ export const I18n = createReactI18n(
     langMap: {
       [LangCode.zhHans]: {
         android: 'zh-CN',
+        ios: 'zh-Hans',
       },
       [LangCode.en]: {
         android: 'en',
+        ios: 'en',
       },
     },
   },
