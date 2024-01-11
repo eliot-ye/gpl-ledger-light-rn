@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "postinstall": "cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install"
+    "pod": "cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
+    "postinstall": ""
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.5.11",
