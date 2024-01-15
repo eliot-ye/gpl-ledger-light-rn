@@ -82,7 +82,7 @@ export function CPNPageView(props: CPNPageViewProps) {
   }
 
   const edgeInsets = useSafeAreaInsets();
-  const screenSize = useDimensions('screen');
+  const windowSize = useDimensions('window');
 
   return (
     <CPNPageViewThemeColor.Provider value={headerBackgroundColor}>
@@ -133,7 +133,7 @@ export function CPNPageView(props: CPNPageViewProps) {
           <View
             style={{
               minHeight:
-                screenSize.height -
+                windowSize.height -
                 headerInfo.height -
                 (props.isTabbarPage ? 46 + edgeInsets.bottom : 0),
               paddingBottom: props.isTabbarPage ? 0 : edgeInsets.bottom,
