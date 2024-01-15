@@ -8,7 +8,7 @@ import {
 } from '@/components/base';
 import {getRealm} from '@/database/main';
 import {Store} from '@/store';
-import {LS_UserInfo} from '@/store/localStorage';
+import {LS, LS_UserInfo} from '@/store/localStorage';
 import {getRandomStr, getRandomStrMD5} from '@/utils/tools';
 import {AESEncrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';
@@ -107,6 +107,8 @@ export function SignUpPage() {
               username: formData.username,
               token: AESEncrypt(dbKey, formData.password),
             });
+
+            await LS.set('last_user_id', id);
 
             Store.update('userId', id);
             Store.update('username', formData.username);

@@ -3950,6 +3950,11 @@ gopd@^1.0.1:
   dependencies:
     get-intrinsic "^1.1.3"
 
+gpl-async-storage@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.npmmirror.com/gpl-async-storage/-/gpl-async-storage-1.3.1.tgz#bafd4deeae0444d3a3223589f971c4f1d0424c36"
+  integrity sha512-jmhv8fW2ba6rIlUrss68EEoieryFilyS70NkkWJLmmNYl9HSbPch/liMYCjlOS3C+lyc+RBEAewwNkNRI8oaJg==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.3, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, graceful-fs@^4.2.9:
   version "4.2.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"

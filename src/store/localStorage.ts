@@ -4,7 +4,7 @@ import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
 import {envConstant} from '@/configs/env';
 import {useEffect, useState} from 'react';
-import {StorageEngine, createLocalStorage} from '@/libs/LocalStorage';
+import {type StorageEngine, createAsyncStorage} from 'gpl-async-storage';
 
 interface LSItem {
   key: string;
@@ -58,7 +58,7 @@ export const LocalStorageEngine: StorageEngine = {
     });
   },
 };
-export const LS = createLocalStorage(
+export const LS = createAsyncStorage(
   {
     theme_code: ThemeCode.default as ThemeCode | null,
     env_alert_onceId: '',
