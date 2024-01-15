@@ -21,7 +21,6 @@ public class CustomPackage implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
 
         modules.add(new FlagSecureModule(reactContext));
-        modules.add(new LocaleCodeModule(reactContext));
 
         return modules;
     }
