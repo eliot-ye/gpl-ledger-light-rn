@@ -16,7 +16,7 @@ function RootView() {
   const systemTheme = useColorScheme() as ThemeCode;
   useEffect(() => {
     LS.get('theme_code').then(_code => {
-      ColorsInstance.setTheme(_code || systemTheme || ThemeCode.default);
+      ColorsInstance.setCode(_code || systemTheme || ThemeCode.default);
     });
   }, [systemTheme]);
 

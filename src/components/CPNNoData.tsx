@@ -10,7 +10,7 @@ interface CPNNoDataProps {
 }
 export function CPNNoData(props: CPNNoDataProps) {
   I18n.useLangCode();
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
 
   const inCellGroup = useContext(CPNCellGroupContext);
 

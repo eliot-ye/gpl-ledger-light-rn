@@ -23,7 +23,7 @@ interface CPNCellProps {
 }
 export function CPNCell(props: CPNCellProps) {
   const inCellGroup = useContext(CPNCellGroupContext);
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
 
   return (
     <View

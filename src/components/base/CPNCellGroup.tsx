@@ -11,7 +11,7 @@ export const CPNCellConfig = {
 
 interface CPNCellGroupProps extends ViewProps {}
 export function CPNCellGroup(props: CPNCellGroupProps) {
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
 
   return (
     <View

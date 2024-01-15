@@ -1,4 +1,4 @@
-import {createReactiveConstant} from '@/libs/ReactiveConstant';
+import {createReactConstant} from '@/libs/ReactConstant';
 import DeviceInfo from 'react-native-device-info';
 import envDefault, {ApiServerName} from './env.default';
 import envProd from './env.prod';
@@ -20,16 +20,16 @@ const envList: EnvListItem[] = [
   {code: EnvCode.PROD, bundleId: ['com.gpl.ledger.light.rn']},
 ];
 
-const _envConstant = createReactiveConstant({
+export const EnvInstance = createReactConstant({
   [EnvCode.DEV]: {...envDefault},
   [EnvCode.PROD]: {...envDefault, ...envProd},
 });
-export const envConstant = _envConstant as EnvVariable;
+export const {Constant: envConstant} = EnvInstance;
 
 const bundleId = DeviceInfo.getBundleId();
 envList.forEach(_envItem => {
   if (_envItem.bundleId.includes(bundleId)) {
-    _envConstant.$setCode(_envItem.code);
+    EnvInstance.setCode(_envItem.code);
   }
 });
 
@@ -40,7 +40,7 @@ export function setAppEnv(envValue: CEnvVariable) {
     if (_key.indexOf('CE_') === 0) {
       const _value = envValue[_key];
       if (_value !== undefined) {
-        _envConstant.$setValue(_key, _value);
+        EnvInstance.setValue(_key, _value);
       }
     }
   });
@@ -48,10 +48,10 @@ export function setAppEnv(envValue: CEnvVariable) {
 
 export function getFetchUrl(serverName: ApiServerName, path: string) {
   let domain = '';
-  let serverPath = _envConstant.apiServerMap[serverName];
+  let serverPath = envConstant.apiServerMap[serverName];
 
-  _envConstant.apiServerList
-    .concat(_envConstant.CE_ApiServerList)
+  envConstant.apiServerList
+    .concat(envConstant.CE_ApiServerList)
     .forEach(item => {
       if (
         !item.ServerEnable ||

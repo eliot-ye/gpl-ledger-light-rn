@@ -1,4 +1,4 @@
-import {createReactColors} from '@/libs/ReactColors';
+import {createReactConstant} from '@/libs/ReactConstant';
 
 const colorsDefault = {
   theme: '#03A850',
@@ -53,8 +53,8 @@ export enum ThemeCode {
   dark = 'dark',
 }
 
-export const ColorsInstance = createReactColors({
+export const ColorsInstance = createReactConstant({
   [ThemeCode.default]: colorsDefault,
   [ThemeCode.dark]: colorsDark,
 });
-export const {Colors} = ColorsInstance;
+export const {Constant: Colors} = ColorsInstance;

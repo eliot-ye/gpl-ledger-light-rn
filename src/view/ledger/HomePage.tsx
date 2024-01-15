@@ -24,7 +24,7 @@ import {nativePackage} from '@/utils/nativePackage';
 export function HomePage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLangCode();
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
 
   useEffect(() => {
     nativePackage.setFlag(true);

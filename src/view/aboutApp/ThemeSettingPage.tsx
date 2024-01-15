@@ -49,7 +49,7 @@ export function ThemeSettingPage() {
                   await LS.set('theme_code', item.code as ThemeCode);
                 }
                 const _val = await LS.get('theme_code');
-                ColorsInstance.setTheme(
+                ColorsInstance.setCode(
                   _val || systemTheme || ThemeCode.default,
                 );
               }}

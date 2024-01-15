@@ -38,7 +38,7 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
  * - style 作用于 ScrollView
  */
 export function CPNPageView(props: CPNPageViewProps) {
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
   const headerBackgroundColor = props.headerBackgroundColor || Colors.theme;
 
   const [topNegativeDistance, topNegativeDistanceSet] = useState(0);

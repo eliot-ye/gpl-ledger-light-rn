@@ -20,7 +20,7 @@ import {CusLog} from '@/utils/tools';
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
   I18n.useLangCode();
-  ColorsInstance.useTheme();
+  ColorsInstance.useCode();
   const apiGiteePublic = useApiGiteePublic();
 
   function renderVersion(isLast?: boolean) {
