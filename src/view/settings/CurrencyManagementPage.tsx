@@ -27,7 +27,7 @@ import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
 
 export function CurrencyManagementPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const [CurrencyList, CurrencyListSet] = useState<CurrencyItem[]>([]);
   const [CurrencyUsedIds, CurrencyUsedIdsSet] = useState<string[]>([]);

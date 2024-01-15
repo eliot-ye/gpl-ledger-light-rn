@@ -76,7 +76,7 @@ interface PickerSingleProps extends CPNPicker {
   onChange?: (index: number) => void;
 }
 export function CPNPickerSingle(props: PickerSingleProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const themeColor = useContext(CPNPageViewThemeColor);
 
@@ -266,7 +266,7 @@ interface ModalPickerProps extends CPNPicker {
   initActiveList?: (number | undefined)[];
 }
 export function CPNModalPicker(props: ModalPickerProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const itemHeight = props.itemHeight || Config.itemHeight;
   const itemShowNum = props.itemShowNum || Config.itemShowNum;
@@ -462,7 +462,7 @@ interface DateTimePickerProps {
   cancelText?: string;
 }
 export function CPNDateTimePicker(props: DateTimePickerProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const {typeString, typeObject} = useMemo(() => {
     let _typeString: DateTimeType[] = [];

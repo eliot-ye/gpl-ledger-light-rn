@@ -14,7 +14,7 @@ interface CPNUsedTabProps {
   onChange: (type: ShowTabType) => void;
 }
 export function CPNUsedTab(props: CPNUsedTabProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const tabButtons: {
     text: string;

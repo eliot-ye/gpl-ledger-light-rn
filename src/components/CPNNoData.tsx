@@ -9,7 +9,7 @@ interface CPNNoDataProps {
   title?: string;
 }
 export function CPNNoData(props: CPNNoDataProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
   ColorsInstance.useTheme();
 
   const inCellGroup = useContext(CPNCellGroupContext);

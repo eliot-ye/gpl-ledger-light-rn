@@ -9,7 +9,7 @@ import React from 'react';
 import {View} from 'react-native';
 
 export function LangSettingPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   return (
     <CPNPageView title={I18n.t('LanguageSetting')}>

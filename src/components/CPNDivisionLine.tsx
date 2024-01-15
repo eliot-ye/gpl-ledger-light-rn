@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 });
 
 export function CPNDivisionLine(props: ViewProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   return (
     <View

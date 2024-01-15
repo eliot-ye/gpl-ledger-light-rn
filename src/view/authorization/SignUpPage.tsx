@@ -19,7 +19,7 @@ import {PageProps} from '../Router';
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();
 
-  I18n.useLocal();
+  I18n.useLangCode();
 
   interface FormData {
     username: string;

@@ -31,7 +31,7 @@ interface CPNInputProps extends TextInputProps {
 }
 
 export function CPNInput(props: CPNInputProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);

@@ -28,7 +28,7 @@ import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
 
 export function AssetTypeManagementPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const [AssetTypeList, AssetTypeListSet] = useState<AssetTypeItem[]>([]);
   const [AssetTypeUsedIds, AssetTypeUsedIdsSet] = useState<string[]>([]);

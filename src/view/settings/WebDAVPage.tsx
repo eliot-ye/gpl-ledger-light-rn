@@ -32,7 +32,7 @@ export function getWebDAVFileData() {
 const StoreWebDAVObject = Store.get('WebDAVObject');
 
 export function WebDAVPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const [WebDAVDetails, WebDAVDetailsSet] = useState({
     serverPath: StoreWebDAVObject?.serverPath || '',

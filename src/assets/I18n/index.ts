@@ -1,4 +1,4 @@
-import {createReactI18n} from '@/libs/ReactI18n';
+import {createReactI18n} from 'rtn-i18n';
 import type {Locale} from 'date-fns';
 
 import {zhCN, enUS} from 'date-fns/locale';
@@ -10,7 +10,11 @@ export enum LangCode {
   en = 'en',
 }
 
-export const localeList: {langCode: LangCode; locale: Locale}[] = [
+interface LocaleItem {
+  langCode: LangCode;
+  locale: Locale;
+}
+export const localeList: ReadonlyArray<Readonly<LocaleItem>> = [
   {langCode: LangCode.zhHans, locale: zhCN},
   {langCode: LangCode.en, locale: enUS},
 ];
@@ -38,11 +42,6 @@ export const I18n = createReactI18n(
     langMap: {
       [LangCode.zhHans]: {
         android: 'zh-CN',
-        ios: 'zh-Hans',
-      },
-      [LangCode.en]: {
-        android: 'en',
-        ios: 'en',
       },
     },
   },

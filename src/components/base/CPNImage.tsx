@@ -12,7 +12,7 @@ interface CPNImageProps extends Partial<ImageProps> {
   autoHeight?: {imageWidth?: number; imageHight?: number; showWidth?: number};
 }
 export function CPNImage(props: CPNImageProps) {
-  const {langCode} = I18n.useLocal();
+  const langCode = I18n.useLangCode();
 
   const _source = useMemo<ImageSourcePropType>(() => {
     if (props.source) {

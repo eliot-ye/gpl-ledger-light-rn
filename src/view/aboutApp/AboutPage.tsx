@@ -19,7 +19,7 @@ import {CusLog} from '@/utils/tools';
 
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
-  I18n.useLocal();
+  I18n.useLangCode();
   ColorsInstance.useTheme();
   const apiGiteePublic = useApiGiteePublic();
 

@@ -84,7 +84,7 @@ interface CPNActionSheetViewProps<ItemB extends ActionSheetButton>
 export function CPNActionSheetView<ItemB extends ActionSheetButton>(
   props: CPNActionSheetViewProps<ItemB>,
 ) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const buttonList = useMemo<CPNActionSheetButton[]>(() => {
     return props.buttons.map(_item => ({id: getRandomStr(), ..._item})) || [];

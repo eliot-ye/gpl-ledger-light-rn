@@ -31,7 +31,7 @@ import {recoveryFromWebDAV} from '../settings/BackupPage';
 export function SignInPage() {
   const navigation = useNavigation<PageProps<'SignInPage'>['navigation']>();
 
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const useInfoList = useLSUserInfoList();
   const useInfoListMemo = useMemo(

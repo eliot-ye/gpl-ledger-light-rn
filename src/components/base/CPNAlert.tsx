@@ -221,7 +221,7 @@ interface CPNAlertViewProps<T> extends AlertOption<T> {
   onClose: () => void;
 }
 export function CPNAlertView<T>(props: CPNAlertViewProps<T>) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const animatedValue = useRef(new Animated.Value(0)).current;
   useEffect(() => {

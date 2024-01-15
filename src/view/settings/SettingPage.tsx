@@ -12,7 +12,7 @@ import {Store} from '@/store';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
-  I18n.useLocal();
+  I18n.useLangCode();
   ColorsInstance.useTheme();
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);

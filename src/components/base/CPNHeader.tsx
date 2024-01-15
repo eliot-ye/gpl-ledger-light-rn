@@ -80,7 +80,7 @@ export interface CPNHeaderProps {
   showShadow?: boolean;
 }
 export function CPNHeader(props: CPNHeaderProps) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const backIcon = useMemo(() => {
     const canGoBack =

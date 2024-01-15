@@ -39,7 +39,7 @@ export function LedgerDetailsPage() {
   const navigation =
     useNavigation<PageProps<'LedgerDetailsPage'>['navigation']>();
   const route = useRoute<PageProps<'LedgerDetailsPage'>['route']>();
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const [details, detailsSet] = useState<Partial<LedgerItem>>(
     route.params || {},

@@ -74,7 +74,7 @@ export function RouterView() {
 }
 
 function TabBarView() {
-  I18n.useLocal();
+  I18n.useLangCode();
   ColorsInstance.useTheme();
 
   const tabbarOptionList: TabbarOption[] = [

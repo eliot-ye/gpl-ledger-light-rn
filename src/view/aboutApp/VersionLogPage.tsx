@@ -14,7 +14,7 @@ import {StyleGet} from '@/configs/styles';
 import {CusLog} from '@/utils/tools';
 
 export function VersionLogPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const apiGiteePublic = useApiGiteePublic();
 

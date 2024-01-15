@@ -74,7 +74,7 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
 export function CPNDropdown<ItemT extends DataConstraint>(
   props: CPNDropdownProps<ItemT>,
 ) {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);

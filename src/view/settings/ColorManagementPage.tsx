@@ -29,7 +29,7 @@ import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
 
 export function ColorManagementPage() {
-  I18n.useLocal();
+  I18n.useLangCode();
 
   const [ColorsList, ColorsListSet] = useState<ColorItem[]>([]);
   const [ColorsUsedIds, ColorsUsedIdsSet] = useState<string[]>([]);

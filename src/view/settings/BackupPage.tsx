@@ -191,7 +191,7 @@ if (
 }
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
-  I18n.useLocal();
+  I18n.useLangCode();
   const WebDAVObject = Store.useState('WebDAVObject');
 
   const [enableWebDAVSync, enableWebDAVSyncSet] = useState(false);
