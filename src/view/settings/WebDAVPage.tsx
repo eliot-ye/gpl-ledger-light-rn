@@ -29,11 +29,10 @@ export function getWebDAVFileData() {
   };
 }
 
-const StoreWebDAVObject = Store.get('WebDAVObject');
-
 export function WebDAVPage() {
   I18n.useLangCode();
 
+  const StoreWebDAVObject = Store.useState('WebDAVObject');
   const [WebDAVDetails, WebDAVDetailsSet] = useState({
     serverPath: StoreWebDAVObject?.serverPath || '',
     account: StoreWebDAVObject?.account || '',
