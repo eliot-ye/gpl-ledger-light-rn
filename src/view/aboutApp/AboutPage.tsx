@@ -67,7 +67,7 @@ export function AboutPage() {
                 ),
                 buttons: [
                   {
-                    text: I18n.t('Confirm'),
+                    text: I18n.t('Update'),
                     textColor: Colors.theme,
                     onPress() {
                       let defaultUpdateLink = '';

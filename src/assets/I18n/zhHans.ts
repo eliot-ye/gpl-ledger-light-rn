@@ -145,6 +145,7 @@ export default {
   Github: 'Github',
   Issues: 'Issues',
   CheckUpdates: '检查更新',
+  Update: '去更新',
   DiscoveringNewVersion: '发现新版本：{0}',
   ViewVersionLog: '查看更新记录',
   VersionLog: '更新记录',
