@@ -1,4 +1,4 @@
-import {I18n, langDefault} from '@/assets/I18n';
+import {I18n} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
 import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
@@ -32,7 +32,7 @@ const headersDefault = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
   'User-Agent': `${envConstant.brand}/(${envConstant.model}) ${Platform.OS}/${Platform.Version} ${envConstant.bundleId}/${envConstant.versionName}.${envConstant.versionCode}`,
-  'Content-Language': langDefault,
+  'Content-Language': I18n.getLangCode(),
   Authorization: undefined as undefined | string,
 };
 
@@ -92,16 +92,34 @@ async function createFetch(
   option: HttpOption = {},
 ) {
   const method = option.method || 'POST';
-  console.log('url', url);
-  console.log('method', method);
-  console.log('headers', option.hideHeader ? undefined : headers);
-  console.log('body', method === 'POST' ? bodyStr : undefined);
 
-  return fetch(url, {
+  const response = await fetch(url, {
     method,
     headers: option.hideHeader ? undefined : headers,
     body: method === 'POST' ? bodyStr : undefined,
   });
+
+  const responseStatus = response.status;
+
+  let responseData: any = '';
+  try {
+    if (option.dataType === DataType.json) {
+      responseData = await response.json();
+    }
+    if (option.dataType === DataType.text) {
+      responseData = await response.text();
+    }
+    if (option.dataType === DataType.blob) {
+      responseData = await response.blob();
+    }
+  } catch (error) {
+    CusLog.error('responseData error', url, error);
+  }
+
+  return {
+    status: responseStatus,
+    data: responseData,
+  };
 }
 
 export enum DataType {
@@ -150,35 +168,14 @@ export function useFetch(
       const fetchData = getFetchData(serverName, path, body, fetchOption);
 
       try {
-        const response = await createFetch(
+        const {status: responseStatus, data: responseData} = await createFetch(
           fetchData.url,
           fetchData.bodyObj.bodyStr,
           fetchData.headers,
           fetchOption,
         );
 
-        const responseStatus = response.status;
-
-        let responseData: any = '';
-        try {
-          if (fetchOption.dataType === DataType.json) {
-            responseData = await response.json();
-          }
-          if (fetchOption.dataType === DataType.text) {
-            responseData = await response.text();
-          }
-          if (fetchOption.dataType === DataType.blob) {
-            responseData = await response.blob();
-          }
-        } catch (error) {
-          CusLog.error('responseData error', fetchData.url, error);
-        }
-
-        if (!__DEV__) {
-          try {
-            fetchData.bodyObj.bodyStr = '';
-          } catch (error) {}
-        } else {
+        if (__DEV__) {
           if (responseStatus === 200) {
             debug({
               path,
@@ -194,28 +191,33 @@ export function useFetch(
               body: fetchData.bodyObj.reqBody,
             });
           }
+        } else {
+          try {
+            fetchData.bodyObj.bodyStr = '';
+          } catch (error) {}
         }
 
         if (responseStatus !== 200) {
-          const showExpiredAlert =
-            fetchOption.showExpiredAlert === undefined
-              ? true
-              : fetchOption.showExpiredAlert;
-          if (responseStatus === 403 && !showExpiredFlag && showExpiredAlert) {
+          if (responseStatus === 403) {
             // token 失效
-            showExpiredFlag = true;
-            // await LSLogout();
             Store.reset();
-            CPNAlert.alert('', I18n.t('SessionExpired')).then(() => {
-              showExpiredFlag = false;
-            });
-          }
-
-          if (responseStatus !== 403 && !showNetworkErrorFlag) {
-            showNetworkErrorFlag = true;
-            CPNAlert.alert('', I18n.t('NetworkError')).then(() => {
-              showNetworkErrorFlag = false;
-            });
+            const showExpiredAlert =
+              fetchOption.showExpiredAlert === undefined
+                ? true
+                : fetchOption.showExpiredAlert;
+            if (!showExpiredFlag && showExpiredAlert) {
+              showExpiredFlag = true;
+              CPNAlert.alert('', I18n.t('SessionExpired')).then(() => {
+                showExpiredFlag = false;
+              });
+            }
+          } else {
+            if (!showNetworkErrorFlag) {
+              showNetworkErrorFlag = true;
+              CPNAlert.alert('', I18n.t('NetworkError')).then(() => {
+                showNetworkErrorFlag = false;
+              });
+            }
           }
 
           return Promise.reject(responseStatus);
@@ -240,25 +242,20 @@ export function useFetch(
 }
 
 // export function useLogout() {
-//   const resetStore = useResetStore();
+//   return useCallback(async function () {
+//     const fetchData = getFetchData('main', '/logout');
 
-//   return useCallback(
-//     async function () {
-//       const fetchData = getFetchData('main', '/logout');
+//     createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
+//       .then(res => {
+//         CusLog.success('res logout:', fetchData.url, res);
+//       })
+//       .catch(error => {
+//         CusLog.error('err logout:', fetchData.url, error);
+//       });
 
-//       createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
-//         .then(res => {
-//           CusLog.success('res logout:', fetchData.url, res);
-//         })
-//         .catch(error => {
-//           CusLog.error('err logout:', fetchData.url, error);
-//         });
-
-//       await LSLogout();
-//       resetStore();
-//     },
-//     [resetStore],
-//   );
+//     await LSLogout();
+//     Store.reset();
+//   }, []);
 // }
 
 export interface HttpRes {
