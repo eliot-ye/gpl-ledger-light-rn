@@ -5,7 +5,7 @@ declare namespace NSEnv {
     /** 必须以 `/` 结尾 */
     readonly Domain: string;
     /** 不可以以 `/` 开头和结尾 */
-    readonly ServerMap?: Partial<ApiServerMap>;
+    readonly ServerMap?: Partial<T>;
     readonly ServerEnable?: ApiServerName<T>[];
   }
   interface CEApiServerItem<T> extends ApiServerItem<T> {
