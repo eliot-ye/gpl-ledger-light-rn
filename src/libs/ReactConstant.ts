@@ -14,7 +14,7 @@ export function createReactConstant<C extends string, T extends JSONConstraint>(
     setValue: RCI.$setValue,
 
     /** 注意：只有搭配`useCode`并在组件内使用才能获得反应性, 或者使用 `useConstant` */
-    Constant: RCI as T,
+    Constant: RCI as Readonly<T>,
 
     useConstant<K extends Key>(key: K) {
       const [state, stateSet] = useState(RCI[key]);
