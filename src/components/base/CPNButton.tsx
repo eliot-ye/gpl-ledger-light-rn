@@ -96,7 +96,7 @@ export function CPNButton(props: CPNButtonProps) {
 
   const disabled = props.disabled || props.isLoading || disabledTimer > 0;
 
-  const btnStyle = useMemo(() => {
+  const btnStyle = useMemo<CPNButtonTypeItem>(() => {
     const _btnStyle = CPNButtonTypeList.find(
       _item => _item.type === (props.type || 'theme'),
     );
@@ -104,11 +104,8 @@ export function CPNButton(props: CPNButtonProps) {
       return _btnStyle;
     }
 
-    return {
-      textColor: Colors.fontTextReverse,
-      backgroundColor: themeColor,
-    };
-  }, [CPNButtonTypeList, props.type, themeColor]);
+    return CPNButtonTypeList[0];
+  }, [CPNButtonTypeList, props.type]);
 
   return (
     <TouchableOpacity
@@ -139,7 +136,7 @@ export function CPNButton(props: CPNButtonProps) {
         value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
         {disabled && props.disabledText ? (
           <CPNText style={[props.textStyle]}>
-            {props.disabledText?.replace('{timer}', String(disabledTimer))}
+            {props.disabledText.replace('{timer}', String(disabledTimer))}
           </CPNText>
         ) : ['string', 'number'].includes(typeof props.children) ? (
           <CPNText style={[props.textStyle]}>{props.children}</CPNText>
