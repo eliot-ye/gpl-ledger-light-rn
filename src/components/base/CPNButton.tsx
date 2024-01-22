@@ -40,13 +40,23 @@ interface CPNButtonProps extends TouchableOpacityProps {
   type?: CPNButtonType;
   shape?: 'square';
   plain?: boolean;
-  /** 点击按钮后的禁用时间。单位：秒 */
-  disabledTimer?: number;
-  /** 禁用时的按钮文本。文本中的 `{timer}` 会被替换为倒计时数字 */
-  disabledText?: string;
-  /** 按钮是否初始禁用 */
-  disabledInit?: boolean;
   isLoading?: boolean;
+  disabledSetting?: {
+    /**
+     * 计时间隔，单位：毫秒
+     * @default 1000
+     * */
+    timeInterval?: number;
+    /** 禁用时间，单位：毫秒 */
+    timer?: number;
+    /**
+     * 禁用时的渲染器
+     * @param timer - 剩余禁用时间，单位：毫秒
+     */
+    render?: (timer: number) => React.ReactNode;
+    /** 按钮是否初始禁用 */
+    initial?: boolean;
+  };
 }
 export function CPNButton(props: CPNButtonProps) {
   const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
@@ -80,21 +90,39 @@ export function CPNButton(props: CPNButtonProps) {
   );
 
   const [disabledTimer, disabledTimerSet] = useState(
-    props.disabledInit && props.disabledTimer ? props.disabledTimer : 0,
+    props.disabledSetting?.initial && props.disabledSetting.timer
+      ? props.disabledSetting.timer
+      : 0,
   );
   useEffect(() => {
-    if (props.disabledTimer !== undefined && disabledTimer) {
+    if (props.disabledSetting?.timer !== undefined && disabledTimer > 0) {
+      const timeInterval = props.disabledSetting?.timeInterval ?? 1000;
       const id = setTimeout(() => {
-        disabledTimerSet(_disabledTimer => _disabledTimer - 1);
-      }, 1000);
+        disabledTimerSet(_disabledTimer => _disabledTimer - timeInterval);
+      }, timeInterval);
 
       return () => {
         clearTimeout(id);
       };
     }
-  }, [props.disabledTimer, disabledTimer]);
+  }, [
+    props.disabledSetting?.timer,
+    disabledTimer,
+    props.disabledSetting?.timeInterval,
+  ]);
 
   const disabled = props.disabled || props.isLoading || disabledTimer > 0;
+
+  function renderDisabled() {
+    if (props.disabledSetting?.render) {
+      const reactNode = props.disabledSetting.render(disabledTimer);
+      return ['string', 'number'].includes(typeof reactNode) ? (
+        <CPNText style={[props.textStyle]}>{reactNode}</CPNText>
+      ) : (
+        reactNode
+      );
+    }
+  }
 
   const btnStyle = useMemo<CPNButtonTypeItem>(() => {
     const _btnStyle = CPNButtonTypeList.find(
@@ -112,8 +140,8 @@ export function CPNButton(props: CPNButtonProps) {
       {...props}
       disabled={disabled}
       onPress={_ev => {
-        if (props.disabledTimer !== undefined) {
-          disabledTimerSet(props.disabledTimer);
+        if (props.disabledSetting?.timer !== undefined) {
+          disabledTimerSet(props.disabledSetting?.timer);
         }
         props.onPress && props.onPress(_ev);
       }}
@@ -131,18 +159,16 @@ export function CPNButton(props: CPNButtonProps) {
         },
         props.style,
       ]}>
-      {props.isLoading && <RenderActivityIndicator />}
       <CPNTextColorContext.Provider
         value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
-        {disabled && props.disabledText ? (
-          <CPNText style={[props.textStyle]}>
-            {props.disabledText.replace('{timer}', String(disabledTimer))}
-          </CPNText>
-        ) : ['string', 'number'].includes(typeof props.children) ? (
-          <CPNText style={[props.textStyle]}>{props.children}</CPNText>
-        ) : (
-          props.children
-        )}
+        {props.isLoading && <RenderActivityIndicator />}
+
+        {(disabled && renderDisabled()) ||
+          (['string', 'number'].includes(typeof props.children) ? (
+            <CPNText style={[props.textStyle]}>{props.children}</CPNText>
+          ) : (
+            props.children
+          ))}
       </CPNTextColorContext.Provider>
     </TouchableOpacity>
   );
