@@ -6,13 +6,19 @@ module.exports = {
       {
         root: ['./src'],
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
-        alias: {
-          '@': './src',
-          '@assets': './src/assets',
-          '@images': './src/assets/images',
-          '@components': './src/components',
-        },
+        alias: getAliasFromTsconfig(),
       },
     ],
   ],
 };
+
+function getAliasFromTsconfig() {
+  const tsconfig = require('./tsconfig.json');
+  const paths = tsconfig.compilerOptions.paths;
+  const alias = {};
+  Object.keys(paths).forEach(key => {
+    const _key = key.replace(/\/\*/g, '');
+    alias[_key] = './' + paths[key][0].replace(/\/\*/g, '');
+  });
+  return alias;
+}
