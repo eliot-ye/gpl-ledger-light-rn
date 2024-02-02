@@ -6,14 +6,17 @@ module.exports = {
       {
         root: ['./src'],
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
-        alias: getAliasFromTsconfig(),
+        alias: aliasFromTsconfig(),
       },
     ],
   ],
 };
 
-function getAliasFromTsconfig() {
-  const tsconfig = require('./tsconfig.json');
+function aliasFromTsconfig() {
+  const content = require('fs').readFileSync('./tsconfig.json', 'utf8');
+  const JSON5 = require('json5');
+  /** @type {import("./tsconfig.json")} */
+  const tsconfig = JSON5.parse(content);
   const paths = tsconfig.compilerOptions.paths;
   const alias = {};
   Object.keys(paths).forEach(key => {

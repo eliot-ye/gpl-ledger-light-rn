@@ -22,14 +22,16 @@ module.exports = {
       {
         root: ['./src'],
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
-        alias: getAliasFromTsconfig(),
+        alias: aliasFromTsconfig(),
       },
     ],
   ],
 };
 
-function getAliasFromTsconfig() {
-  const tsconfig = require('./tsconfig.json');
+function aliasFromTsconfig() {
+  const content = require('fs').readFileSync('./tsconfig.json', 'utf8');
+  const JSON5 = require('json5');
+  const tsconfig = JSON5.parse(content);
   const paths = tsconfig.compilerOptions.paths;
   const alias = {};
   Object.keys(paths).forEach(key => {
@@ -38,13 +40,9 @@ function getAliasFromTsconfig() {
   });
   return alias;
 }
-
 ```
 
 3. 更改 `tsconfig.json` 文件。
-
-**_注意：tsconfig.json 文件中不能有注释。_**
-
 
 ```json
 {
@@ -59,5 +57,4 @@ function getAliasFromTsconfig() {
     }
   }
 }
-
 ```
