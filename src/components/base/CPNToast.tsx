@@ -1,10 +1,11 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Animated, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {Colors} from '@/configs/colors';
 import {StyleGet} from '@/configs/styles';
 import {getOnlyStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
+import {createTaskQueue} from '@/libs/TaskQueue';
 
 const Config = {
   borderRadius: 30,
@@ -43,10 +44,6 @@ interface CPNToastOption extends ToastOption {
   animatedValue: Animated.Value;
 }
 
-interface OptionMap {
-  [id: string]: CPNToastOption | undefined;
-}
-
 export function createCPNToast() {
   const ev = createSubscribeEvents<{
     trigger: {
@@ -55,78 +52,75 @@ export function createCPNToast() {
     };
   }>();
   let ids: string[] = [];
-  let idListCache: string[] = [];
 
   function ProviderCPNToast() {
-    const [optionMap, setOptionMap] = useState<OptionMap>({});
+    const [option, setOption] = useState<CPNToastOption | undefined>();
+    const ToastQueue = useRef(
+      createTaskQueue<{
+        id: string;
+        opt: CPNToastOption;
+      }>(async task => {
+        setOption(task.opt);
+        task.opt.animatedValue.setValue(1);
+
+        return new Promise<void>(resolve => {
+          if (task.opt.keepTime > 0) {
+            setTimeout(() => {
+              Animated.timing(task.opt.animatedValue, {
+                duration: 200,
+                toValue: 0,
+                useNativeDriver: false,
+              }).start(() => {
+                setOption(undefined);
+                resolve();
+              });
+            }, task.opt.keepTime);
+          }
+        });
+      }),
+    ).current;
     useEffect(() => {
       return ev.subscribe('trigger', ed => {
-        setOptionMap(_data => ({
-          ..._data,
-          [ed.id]: ed.opt,
-        }));
+        if (!ed.opt) {
+          if (ed.id !== ToastQueue.getActive()?.id) {
+            ToastQueue.reset(
+              ToastQueue.getQueue().filter(item => item.id !== ed.id),
+            );
+          } else {
+            setOption(undefined);
+            ToastQueue.skipCurrentTask();
+          }
+          return;
+        }
+        ToastQueue.add({id: ed.id, opt: ed.opt});
       });
-    }, []);
-
-    const idList = useMemo(() => Object.keys(optionMap), [optionMap]);
-
-    useEffect(() => {
-      const id = idList[idList.length - 1];
-
-      if (id && !idListCache.includes(id)) {
-        idListCache.push(id);
-
-        const option = optionMap[id];
-        if (option) {
-          option.animatedValue.setValue(1);
-        }
-
-        if (option && option.keepTime > 0) {
-          setTimeout(() => {
-            Animated.timing(option.animatedValue, {
-              duration: 200,
-              toValue: 0,
-              useNativeDriver: false,
-            }).start(() => {
-              ev.publish('trigger', {id, opt: undefined});
-            });
-          }, option.keepTime);
-        }
-      }
-    }, [idList, optionMap]);
+    }, [ToastQueue]);
 
     const windowDimensions = useWindowDimensions();
 
+    if (!option) {
+      return null;
+    }
+
     return (
-      <>
-        {idList.map((id, index) => {
-          const option = optionMap[id];
-          if (!option) {
-            return null;
-          }
-          return (
-            <Animated.View
-              accessibilityRole="alert"
-              pointerEvents="none"
-              key={id}
-              style={[
-                styles.container,
-                {
-                  backgroundColor: Colors.backgroundPanel,
-                  maxWidth: windowDimensions.width * 0.6,
-                  elevation: 5 + index,
-                  opacity: option.animatedValue,
-                },
-              ]}>
-              <View style={styles.content}>
-                <CPNText style={[styles.text, {color: Colors.fontText}]}>
-                  {option.text}
-                </CPNText>
-              </View>
-            </Animated.View>
-          );
-        })}
-      </>
+      <Animated.View
+        accessibilityRole="alert"
+        pointerEvents="none"
+        style={[
+          styles.container,
+          {
+            backgroundColor: Colors.backgroundPanel,
+            maxWidth: windowDimensions.width * 0.6,
+            elevation: 5,
+            opacity: option.animatedValue,
+          },
+        ]}>
+        <View style={styles.content}>
+          <CPNText style={[styles.text, {color: Colors.fontText}]}>
+            {option.text}
+          </CPNText>
+        </View>
+      </Animated.View>
     );
   }
 
