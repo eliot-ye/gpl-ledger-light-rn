@@ -85,8 +85,8 @@ export function debounce<T extends Array<any>>(
      * */
     wait?: number;
     /**
-     * - immediate=true 调用函数体时，callback 被立即调用，并锁定不能再调用。函数体会从上一次被调用后，倒计时 wait 毫秒后解锁可调用 callback。
-     * - immediate=false 函数体会从上一次被调用后，延迟 wait 毫秒后调用 callback；
+     * - immediate=true 多次间隔不超过 wait 时长调用函数体时，第一次调用函数体立即调用 callback 并锁定至最后一次调用函数体 wait 时长；
+     * - immediate=false 多次间隔不超过 wait 时长调用函数体时，最后一次调用函数体 wait 时长后调用 callback
      * @default false
      * */
     immediate?: boolean;
