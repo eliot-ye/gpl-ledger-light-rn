@@ -19,7 +19,7 @@ export function useApiGiteePublic() {
       async nowVersion(): Promise<VersionItem[]> {
         const res = await apiGet('/now_version.json');
         if (!giteePublic.validateVersion(res)) {
-          return Promise.reject(new Error('获取最新版本失败'));
+          return Promise.reject(new Error('数据校验失败'));
         }
         return res;
       },
@@ -27,7 +27,7 @@ export function useApiGiteePublic() {
       async versionLog(): Promise<VersionItem[]> {
         const res = await apiGet('/change_log.json');
         if (!giteePublic.validateVersion(res)) {
-          return Promise.reject(new Error('获取版本更新记录失败'));
+          return Promise.reject(new Error('数据校验失败'));
         }
         return res;
       },
