@@ -1219,7 +1219,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - rtn-i18n (0.0.2):
+  - rtn-i18n (0.0.5):
     - hermes-engine
     - RCT-Folly (= 2021.07.22.00)
     - RCTRequired
@@ -1514,7 +1514,7 @@ SPEC CHECKSUMS:
   RNScreens: 8e44ede8be80fbd17005680b7c86722a42d8dc73
   RNSVG: 854ab5ccc2d96c22305d105abf576e8fc251df10
   RNVectorIcons: 1d4a04db1a8a3235480866b61ca8923c9e331870
-  rtn-i18n: 74e4d26698666481bb6b4d23fe2dc596a625afab
+  rtn-i18n: 5314f3b564e786e2e2b1e43f096a91450de60360
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 4c3aa327e4a6a23eeacd71f61c81df1bcdf677d5
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

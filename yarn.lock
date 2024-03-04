@@ -6412,10 +6412,10 @@ rimraf@~2.6.2:
   dependencies:
     glob "^7.1.3"
 
-rtn-i18n@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.npmmirror.com/rtn-i18n/-/rtn-i18n-0.0.2.tgz#3f93809ebc031165aef33df11822c6dcf2612cf4"
-  integrity sha512-H+AYRL7cz70eWv44SRzzHK7C+sdWUaqhQUpwr1xsIpZMGfEnRjlQ5muIfhvL2oF+9qfE800GFDyXvzFY3vxLiw==
+rtn-i18n@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/rtn-i18n/-/rtn-i18n-0.0.5.tgz#6d11f731d283768af06aa51946a213e56ee872fc"
+  integrity sha512-6uwJC8xmyPHZED8cWhVsnqpHG2wj5LwyQ9wKNHmapoVKAbzl3XOAFYQBJ3OfwyHNmrVyxvToK5D2d59AFRYtpg==
 
 run-parallel@^1.1.9:
   version "1.2.0"
