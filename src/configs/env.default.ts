@@ -24,6 +24,8 @@ export default {
   versionName: DeviceInfo.getVersion(),
   versionCode: Number(DeviceInfo.getBuildNumber()),
 
+  iosAppStoreId: '',
+
   salt: 'salt',
 
   envControlPath: '',

@@ -3,9 +3,15 @@ import Ajv, {JTDSchemaType} from 'ajv/dist/jtd';
 
 const ajv = new Ajv();
 
+export interface UpdateLinkItem {
+  updateLink: string;
+  platform: typeof Platform.OS;
+}
+
 export interface VersionItem {
   platform: (typeof Platform.OS)[];
   updateLink?: string;
+  updateLinks?: UpdateLinkItem[];
   versionName: string;
   versionCode: number;
   desc: string;
@@ -32,6 +38,18 @@ const SchemaVersionList: JTDSchemaType<VersionItem[]> = {
     optionalProperties: {
       updateLink: {
         type: 'string',
+      },
+      updateLinks: {
+        elements: {
+          properties: {
+            updateLink: {
+              type: 'string',
+            },
+            platform: {
+              enum: ['android', 'ios'],
+            },
+          },
+        },
       },
     },
   },

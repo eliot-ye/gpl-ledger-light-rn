@@ -74,10 +74,16 @@ export function AboutPage() {
                       if (Platform.OS === 'android') {
                         defaultUpdateLink = `market://details?id=${envConstant.bundleId}`;
                       }
+                      if (Platform.OS === 'ios' && envConstant.iosAppStoreId) {
+                        defaultUpdateLink = `itms-apps://itunes.apple.com/us/app/id${envConstant.iosAppStoreId}?mt=8`;
+                      }
 
-                      Linking.openURL(
-                        versionData.updateLink || defaultUpdateLink,
-                      );
+                      const updateLink =
+                        versionData.updateLinks?.find(
+                          item => item.platform === Platform.OS,
+                        )?.updateLink || versionData.updateLink;
+
+                      Linking.openURL(updateLink || defaultUpdateLink);
                     },
                   },
                   {
