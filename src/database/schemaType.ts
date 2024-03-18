@@ -29,29 +29,36 @@ type ArrayBufferPropertyTypeName = 'data';
 type DictionaryPropertyTypeName = 'dictionary';
 type OtherPropertyTypeName = 'mixed';
 
-type GetPropertySchemaType<T> = T extends undefined | string
-  ? PropertySchemaType<StringPropertyTypeName, T>
-  : T extends undefined | BSON.UUID
+type GetPropertySchemaType<T> = T extends undefined
+  ? OptionalPropertyTypeName<
+      | StringPropertyTypeName
+      | NumberPropertyTypeName
+      | BooleanPropertyTypeName
+      | DatePropertyTypeName
+      | ObjectPropertyTypeName
+      | DictionaryPropertyTypeName
+    >
+  : T extends BSON.UUID
   ? PropertySchemaType<UUIDPropertyTypeName, T>
-  : T extends undefined | BSON.ObjectId
+  : T extends BSON.ObjectId
   ? PropertySchemaType<ObjectIdPropertyTypeName, T>
-  : T extends undefined | string
+  : T extends string
   ? PropertySchemaType<StringPropertyTypeName, T>
-  : T extends undefined | number
+  : T extends number
   ? PropertySchemaType<NumberPropertyTypeName, T>
-  : T extends undefined | boolean
+  : T extends boolean
   ? PropertySchemaType<BooleanPropertyTypeName, T>
-  : T extends undefined | Date
+  : T extends Date
   ? PropertySchemaType<DatePropertyTypeName, T>
-  : T extends undefined | Array<any>
+  : T extends Array<any>
   ? PropertySchemaType<ArrayPropertyTypeName, T>
-  : T extends undefined | JSONConstraint
+  : T extends JSONConstraint
   ? PropertySchemaType<ObjectPropertyTypeName, T>
-  : T extends undefined | Set<any>
+  : T extends Set<any>
   ? PropertySchemaType<SetPropertyTypeName, T>
-  : T extends undefined | Dictionary
+  : T extends Dictionary
   ? PropertySchemaType<DictionaryPropertyTypeName, T>
-  : T extends undefined | ArrayBuffer
+  : T extends ArrayBuffer
   ? PropertySchemaType<ArrayBufferPropertyTypeName, T>
   : PropertySchemaType<OtherPropertyTypeName, T>;
 
