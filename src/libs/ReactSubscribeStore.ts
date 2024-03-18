@@ -11,25 +11,25 @@ export function createReactSubscribeStore<T extends JSONConstraint>(
   const SSInstance = createSubscribeState(initialState);
 
   return {
-    get: SSInstance.$get,
+    get: SSInstance.get,
     useState<K extends Key>(key: K) {
-      const [state, stateSet] = useState(SSInstance.$get(key));
+      const [state, stateSet] = useState(SSInstance.get(key));
 
       useEffect(() => {
-        return SSInstance.$subscribe(value => stateSet(value[key]), [key]);
+        return SSInstance.subscribe(value => stateSet(value[key]), [key]);
       }, [key]);
 
       return state;
     },
 
-    update: SSInstance.$set,
+    update: SSInstance.set,
 
     reset(exclusion: Key[] = []) {
       const keys = Object.keys(_initialState);
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         if (!exclusion.includes(key)) {
-          SSInstance.$set(key, _initialState[key]);
+          SSInstance.set(key, _initialState[key]);
         }
       }
     },

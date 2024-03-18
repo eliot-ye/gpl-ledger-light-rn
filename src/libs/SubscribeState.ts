@@ -50,9 +50,9 @@ export function createSubscribeState<T extends JSONConstraint>(
     {wait: 0},
   );
 
-  function $get(): Readonly<T>;
-  function $get<K extends StateKeys>(key: K): Readonly<T[K]>;
-  function $get(key?: string) {
+  function get(): Readonly<T>;
+  function get<K extends StateKeys>(key: K): Readonly<T[K]>;
+  function get(key?: string) {
     if (key) {
       return state[key];
     }
@@ -63,15 +63,15 @@ export function createSubscribeState<T extends JSONConstraint>(
     _interfaceType: 'SubscribeState',
     _mark,
 
-    $get,
-    $getFromStringKey(key: string) {
+    get,
+    getFromStringKey(key: string) {
       return getValueFromStringKey(key, state);
     },
 
     /**
      * - 内部会对`value`进行浅层对比。相同的值，不会触发更新。
      */
-    $set<K extends StateKeys>(key: K, value: T[K]) {
+    set<K extends StateKeys>(key: K, value: T[K]) {
       const oldValue = state[key];
       if (Object.is(oldValue, value)) {
         return;
@@ -80,7 +80,7 @@ export function createSubscribeState<T extends JSONConstraint>(
       effectKeys.push(key);
       effectHandler();
     },
-    $setFromStringKey(key: string, value: any) {
+    setFromStringKey(key: string, value: any) {
       const oldValue = getValueFromStringKey(key, state);
       if (oldValue !== value) {
         const keyList = key.split('.');
@@ -101,14 +101,14 @@ export function createSubscribeState<T extends JSONConstraint>(
     /**
      * @param fn - 订阅函数
      * - 初始化时会执行一次
-     * - 使用 $set 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
-     * - 短时间内多次使用 $set 时，会触发防抖处理，订阅函数只执行一次。
+     * - 使用 `set` 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
+     * - 短时间内多次使用 `set` 时，会触发防抖处理，订阅函数只执行一次。
      * @param keys - 订阅属性
      * - 只有订阅的属性发生了更改才触发执行订阅函数。如果不传入该参数，则所有属性更改都会执行。
-     * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 subscribeId
-     * @returns function unsubscribe
+     * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 `unsubscribe`
+     * @returns function `unsubscribe`
      */
-    $subscribe<K extends StateKeys>(fn: SubscribeFn<Readonly<T>>, keys?: K[]) {
+    subscribe<K extends StateKeys>(fn: SubscribeFn<Readonly<T>>, keys?: K[]) {
       try {
         fn(state);
       } catch (error) {
