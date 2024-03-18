@@ -23,7 +23,7 @@ export function createReactiveConstant<
 
   const defaultActiveCode = Object.keys(opt)[0] as C;
   let activeCode = defaultActiveCode;
-  const defaultValue = opt[defaultActiveCode] as T;
+  const curValue = opt[defaultActiveCode] as T;
 
   type Key = keyof T;
 
@@ -34,7 +34,7 @@ export function createReactiveConstant<
   /**
    * @param fn - 监听函数
    * - 监听函数初始化执行一次
-   * - 监听函数在每次更改 Code 时（执行 $setCode 时）执行
+   * - 监听函数在每次更改 Code 时（执行 setCode 时）执行
    * @returns function removeListener
    */
   function addListener(
@@ -46,7 +46,7 @@ export function createReactiveConstant<
       try {
         fn(activeCode);
       } catch (error) {
-        console.error(`${_mark} $addListener error:`, error);
+        console.error(`${_mark} addListener error:`, error);
       }
       const id: ListenerId = getOnlyStr(listenerCodeIds);
       listenerCodeMap[id] = fn;
@@ -110,7 +110,7 @@ export function createReactiveConstant<
   );
 
   const returnValue = {
-    ...defaultValue,
+    value: curValue as Readonly<T>,
 
     _interfaceType: 'ReactiveConstant',
     _mark,
@@ -119,27 +119,25 @@ export function createReactiveConstant<
      * - setValue 内部会进行数据的浅层对比。对比相同的属性，不会更新和触发订阅函数。
      * @param value - 不能是`undefined`和是函数
      */
-    $setValue<K extends Key>(key: K, value: T[K]) {
+    setValue<K extends Key>(key: K, value: T[K]) {
       if (value === undefined) {
         console.error(
-          `${_mark} $setValue error: "${String(
-            key,
-          )}" value cannot be undefined`,
+          `${_mark} setValue error: "${String(key)}" value cannot be undefined`,
         );
         return;
       }
       if (typeof value === 'function') {
         console.error(
-          `${_mark} $setValue error: "${String(
+          `${_mark} setValue error: "${String(
             key,
           )}" value cannot be a function`,
         );
         return;
       }
-      const oldValue = returnValue[key];
+      const oldValue = curValue[key];
       if (typeof oldValue === 'function') {
         console.error(
-          `${_mark} $setValue error: "${String(key)}" is a read-only function`,
+          `${_mark} setValue error: "${String(key)}" is a read-only function`,
         );
         return;
       }
@@ -147,43 +145,43 @@ export function createReactiveConstant<
         return;
       }
 
-      returnValue[key] = value;
+      curValue[key] = value;
       effectKeys.push(key);
-      effectHandler(returnValue);
+      effectHandler(curValue);
     },
-    $setCode(code: C) {
+    setCode(code: C) {
       if (activeCode !== code) {
         activeCode = code;
 
         const valueMap: T = opt[activeCode];
         if (!valueMap) {
-          console.error(`${_mark} $setCode error: "${activeCode}" not found`);
+          console.error(`${_mark} setCode error: "${activeCode}" not found`);
           return;
         }
 
         Object.keys(valueMap).forEach(_key => {
-          returnValue.$setValue(_key, valueMap[_key]);
+          curValue.setValue(_key, valueMap[_key]);
         });
         listenerCodeHandle(activeCode);
       }
     },
-    $getCode: () => activeCode,
+    getCode: () => activeCode,
 
     /**
      * @param fn - 订阅函数
      * - 初始化时会执行一次
-     * - 使用 $setValue 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
-     * - 短时间内多次使用 $setValue 时，会触发防抖处理，订阅函数只执行一次。
+     * - 使用 setValue 时，内部在更新数据后才触发函数预计算，订阅函数获取的数据是最新的。
+     * - 短时间内多次使用 setValue 时，会触发防抖处理，订阅函数只执行一次。
      * @param keys - 订阅属性
      * - 只有订阅的属性发生了更改才触发执行订阅函数。如果不传入该参数，则所有属性更改都会执行。
      * - 如果传入空数组，则订阅函数只执行一次，并且不会返回 SubscribeId
      * @returns function unsubscribe
      */
-    $subscribe<K extends Key>(fn: SubscribeFn<T>, keys?: K[]) {
+    subscribe<K extends Key>(fn: SubscribeFn<T>, keys?: K[]) {
       try {
-        fn(returnValue);
+        fn(curValue);
       } catch (error) {
-        console.error(`${_mark} $subscribe error:`, error);
+        console.error(`${_mark} subscribe error:`, error);
       }
 
       if (keys?.length === 0) {
@@ -202,7 +200,7 @@ export function createReactiveConstant<
       };
     },
 
-    $addListener: addListener,
+    addListener,
   } as const;
 
   return returnValue;
