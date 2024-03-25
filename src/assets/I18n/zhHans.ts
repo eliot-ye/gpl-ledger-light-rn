@@ -13,8 +13,12 @@ export default {
   Refresh: '刷新',
   Submit: '提交',
   OR: '或',
-  NoData: '暂无数据',
   Total: '总计',
+  Loading: '加载中...',
+  LoadingMore: '加载更多...',
+  NoMoreData: '没有更多数据',
+  NoDataTip: '暂无数据',
+  NoDataTip2: '暂无相关数据，请稍后重试',
 
   SignIn: '登入',
   SignUp: '注册',

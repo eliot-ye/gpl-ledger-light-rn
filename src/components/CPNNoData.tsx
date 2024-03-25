@@ -7,6 +7,7 @@ import {StyleGet} from '@/configs/styles';
 
 interface CPNNoDataProps {
   title?: string;
+  isLoading?: boolean;
 }
 export function CPNNoData(props: CPNNoDataProps) {
   I18n.useLangCode();
@@ -34,7 +35,8 @@ export function CPNNoData(props: CPNNoDataProps) {
       ]}>
       <CPNImage name="NoDataAvailable" size={200} />
       <CPNText style={{color: Colors.fontSubtitle}}>
-        {props.title || I18n.t('NoData')}
+        {props.title ||
+          (props.isLoading ? I18n.t('Loading') : I18n.t('NoDataTip'))}
       </CPNText>
     </View>
   );
