@@ -13,7 +13,7 @@ export default {
 
   All: 'All',
   Used: 'Used',
-  NotUsed: 'NotUsed',
+  Unused: 'Unused',
   Selected: 'Selected',
   InUse: 'InUse',
 

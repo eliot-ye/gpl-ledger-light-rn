@@ -2,11 +2,11 @@ import {I18n} from '@/assets/I18n';
 import React from 'react';
 import {CPNButtonGroup} from './base';
 
-// export type ShowTabType = 'All' | 'Used' | 'NotUsed';
+// export type ShowTabType = 'All' | 'Used' | 'Unused';
 export enum ShowTabType {
   All = 'All',
   Used = 'Used',
-  NotUsed = 'NotUsed',
+  Unused = 'Unused',
 }
 
 interface CPNUsedTabProps {
@@ -22,7 +22,7 @@ export function CPNUsedTab(props: CPNUsedTabProps) {
   }[] = [
     {text: I18n.t('All'), value: ShowTabType.All},
     {text: I18n.t('Used'), value: ShowTabType.Used},
-    {text: I18n.t('NotUsed'), value: ShowTabType.NotUsed},
+    {text: I18n.t('Unused'), value: ShowTabType.Unused},
   ];
 
   return (

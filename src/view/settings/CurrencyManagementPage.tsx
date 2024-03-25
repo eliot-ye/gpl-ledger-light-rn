@@ -51,7 +51,7 @@ export function CurrencyManagementPage() {
   }
 
   const dataShowMemo = useMemo(() => {
-    if (tabActive === ShowTabType.NotUsed) {
+    if (tabActive === ShowTabType.Unused) {
       return CurrencyList.filter(
         item => !CurrencyUsedIds.includes(item.abbreviation),
       );

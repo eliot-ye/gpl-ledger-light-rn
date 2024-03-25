@@ -52,7 +52,7 @@ export function AssetTypeManagementPage() {
   }
 
   const dataShowMemo = useMemo(() => {
-    if (tabActive === ShowTabType.NotUsed) {
+    if (tabActive === ShowTabType.Unused) {
       return AssetTypeList.filter(
         item => !AssetTypeUsedIds.includes(item.symbol),
       );

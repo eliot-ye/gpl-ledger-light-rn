@@ -25,7 +25,7 @@ export default {
 
   All: '所有',
   Used: '已使用',
-  NotUsed: '未使用',
+  Unused: '未使用',
   Selected: '已选择',
   InUse: '正在使用',
 

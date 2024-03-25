@@ -53,7 +53,7 @@ export function ColorManagementPage() {
   }
 
   const dataShowMemo = useMemo(() => {
-    if (tabActive === ShowTabType.NotUsed) {
+    if (tabActive === ShowTabType.Unused) {
       return ColorsList.filter(item => !ColorsUsedIds.includes(item.value));
     }
     if (tabActive === ShowTabType.Used) {
