@@ -1,15 +1,25 @@
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
-import {AlertButton, CPNAlert, CPNRichTextView} from '@/components/base';
+import {
+  AlertButton,
+  CPNAlert,
+  CPNRichTextView,
+  CPNText,
+} from '@/components/base';
 import {I18n, LangCode} from '@/assets/I18n';
 import {LS} from '@/store/localStorage';
 import {Colors} from './colors';
 
-enum Error {
+export enum Error {
+  NETWORK_ERROR = 'NETWORK_ERROR',
   NO_CONTROL_PATH = 'NO_CONTROL_PATH',
   NO_CONTROL_JSON = 'NO_CONTROL_JSON',
   IS_NOT_JSON = 'IS_NOT_JSON',
+}
+export interface ErrorItem {
+  code: Error;
+  message?: string;
 }
 
 interface ControlJSON extends CEnvVariable {
@@ -18,13 +28,20 @@ interface ControlJSON extends CEnvVariable {
   alert?: ControlJSONAlert;
 }
 
-interface ControlJSONAlert {
-  /** 如果有值，则相同ID的弹窗只显示一次 */
-  onceId?: string;
+interface ControlJSONAlertText {
   title?: string;
   message?: string;
   /** 富文本 `message` 字符串。如果有值，则覆盖 `message` */
   richTextMessage?: string;
+  confirmText?: string;
+  cancelText?: string;
+}
+interface ControlJSONAlertI18nItem extends ControlJSONAlertText {
+  langCode: LangCode;
+}
+interface ControlJSONAlert extends ControlJSONAlertText {
+  /** 如果有值，则相同ID的弹窗只显示一次 */
+  onceId?: string;
   /** 点击确认按钮退出 app */
   confirmExitApp?: boolean;
   /** 点击取消按钮退出 app */
@@ -35,22 +52,13 @@ interface ControlJSONAlert {
   cancelOpenURL?: string;
   /** 点击确认按钮关闭弹窗 */
   confirmClose?: boolean;
-  confirmText?: string;
-  cancelText?: string;
   showCancel?: boolean;
   i18n?: ControlJSONAlertI18nItem[];
-}
-interface ControlJSONAlertI18nItem {
-  langCode: LangCode;
-  title?: string;
-  message?: string;
-  confirmText?: string;
-  cancelText?: string;
 }
 
 export async function getControlJSON() {
   if (!envConstant.envControlPath) {
-    return Promise.reject(Error.NO_CONTROL_PATH);
+    return Promise.reject({code: Error.NO_CONTROL_PATH} as ErrorItem);
   }
   try {
     const res = await fetch(envConstant.envControlPath);
@@ -63,15 +71,18 @@ export async function getControlJSON() {
           _item.versionName === envConstant.versionName,
       );
       if (!controlJSON) {
-        return Promise.reject(Error.NO_CONTROL_JSON);
+        return Promise.reject({code: Error.NO_CONTROL_JSON} as ErrorItem);
       }
       return controlJSON;
     } catch (error) {
-      return Promise.reject(Error.IS_NOT_JSON);
+      return Promise.reject({code: Error.IS_NOT_JSON} as ErrorItem);
     }
   } catch (error) {
     console.error(error);
-    return Promise.reject(I18n.t('NetworkError'));
+    return Promise.reject({
+      code: Error.NETWORK_ERROR,
+      message: I18n.t('NetworkError'),
+    } as ErrorItem);
   }
 }
 
@@ -80,11 +91,11 @@ export async function injectControlJSON() {
   try {
     controlJSON = await getControlJSON();
   } catch (error) {
-    return error;
+    return error as ErrorItem;
   }
 
   if (!controlJSON) {
-    return Error.NO_CONTROL_JSON;
+    return {code: Error.NO_CONTROL_JSON} as ErrorItem;
   }
 
   setAppEnv(controlJSON);
@@ -100,8 +111,9 @@ export async function injectControlJSON() {
       LS.set('env_alert_onceId', alert.onceId);
     }
 
-    let title: React.ReactNode = alert.title;
-    let message: React.ReactNode = alert.message;
+    let title = alert.title;
+    let rMessage = alert.message;
+    let richTextMessage = alert.richTextMessage;
     let confirmText = alert.confirmText;
     let cancelText = alert.cancelText;
 
@@ -109,20 +121,23 @@ export async function injectControlJSON() {
       const _i18nItem = alert.i18n.find(
         _item => _item.langCode === I18n.getLangCode(),
       );
-      title = _i18nItem?.title || title;
-      message = _i18nItem?.message || message;
-      confirmText = _i18nItem?.confirmText || confirmText;
-      cancelText = _i18nItem?.cancelText || cancelText;
+      title = _i18nItem?.title ?? title;
+      rMessage = _i18nItem?.message ?? rMessage;
+      richTextMessage = _i18nItem?.richTextMessage ?? richTextMessage;
+      confirmText = _i18nItem?.confirmText ?? confirmText;
+      cancelText = _i18nItem?.cancelText ?? cancelText;
     }
-    if (alert.richTextMessage) {
+
+    let message: React.ReactNode = React.createElement(CPNText, {}, rMessage);
+    if (richTextMessage) {
       message = React.createElement(CPNRichTextView, {
-        richText: `<div style="font-size: 16px">${alert.richTextMessage}<div>`,
+        richText: `<div style="font-size: 16px">${richTextMessage}<div>`,
       });
     }
 
     const buttons: AlertButton<any>[] = [
       {
-        text: confirmText || I18n.t('Confirm'),
+        text: confirmText ?? I18n.t('Confirm'),
         textColor: Colors.theme,
         keep: !alert.confirmClose,
         async onPress() {
@@ -135,7 +150,7 @@ export async function injectControlJSON() {
 
     if (alert.showCancel) {
       buttons.push({
-        text: cancelText || I18n.t('Cancel'),
+        text: cancelText ?? I18n.t('Cancel'),
         async onPress() {
           if (alert.cancelOpenURL) {
             await Linking.openURL(alert.cancelOpenURL);
