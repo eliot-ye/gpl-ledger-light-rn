@@ -1,5 +1,7 @@
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
+import {parser} from '@exodus/schemasafe';
+import SControlJSON from '../../JSONSchema/public/SControlJSON.json';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {
   AlertButton,
@@ -11,10 +13,13 @@ import {I18n, LangCode} from '../assets/I18n';
 import {LS} from '@/store/localStorage';
 import {Colors} from './colors';
 
+const parseControlJSON = parser(SControlJSON);
+
 export enum ControlJSONError {
   NETWORK_ERROR = 'NETWORK_ERROR',
   NO_CONTROL_PATH = 'NO_CONTROL_PATH',
   NO_CONTROL_JSON = 'NO_CONTROL_JSON',
+  IS_NOT_CONTROL_JSON = 'IS_NOT_CONTROL_JSON',
   IS_NOT_JSON = 'IS_NOT_JSON',
 }
 export interface ControlJSONErrorItem {
@@ -65,8 +70,9 @@ export async function getControlJSON() {
   try {
     const res = await fetch(envConstant.envControlPath);
     const _text = await res.text();
-    try {
-      const jsonList = JSON.parse(_text) as ControlItem[];
+    const parseResult = parseControlJSON(_text);
+    if (parseResult.valid) {
+      const jsonList = parseResult.value as unknown as ControlItem[];
       const controlJSON = jsonList.find(
         _item =>
           _item.platform.includes(Platform.OS) &&
@@ -78,9 +84,10 @@ export async function getControlJSON() {
         } as ControlJSONErrorItem);
       }
       return controlJSON;
-    } catch (error) {
+    } else {
       return Promise.reject({
-        code: ControlJSONError.IS_NOT_JSON,
+        code: ControlJSONError.IS_NOT_CONTROL_JSON,
+        message: parseResult.error,
       } as ControlJSONErrorItem);
     }
   } catch (error) {
