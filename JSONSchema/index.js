@@ -23,7 +23,7 @@ const schemaList = ['SControlJSON', 'SVersionList'];
 schemaList.forEach(schemaName => {
   const schema = TJS.generateSchema(program, schemaName, settings);
   fs.writeFileSync(
-    resolve(`public/${schemaName}.json`),
+    resolve(`../public/${schemaName}.json`),
     JSON.stringify(schema),
   );
 });
