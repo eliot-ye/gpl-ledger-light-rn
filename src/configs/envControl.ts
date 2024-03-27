@@ -22,7 +22,7 @@ export interface ControlJSONErrorItem {
   message?: string;
 }
 
-export interface ControlJSON extends CEnvVariable {
+export interface ControlItem extends CEnvVariable {
   versionName: string;
   platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
@@ -66,7 +66,7 @@ export async function getControlJSON() {
     const res = await fetch(envConstant.envControlPath);
     const _text = await res.text();
     try {
-      const jsonList = JSON.parse(_text) as ControlJSON[];
+      const jsonList = JSON.parse(_text) as ControlItem[];
       const controlJSON = jsonList.find(
         _item =>
           _item.platform.includes(Platform.OS) &&
@@ -93,7 +93,7 @@ export async function getControlJSON() {
 }
 
 export async function injectControlJSON() {
-  let controlJSON: ControlJSON | undefined;
+  let controlJSON: ControlItem | undefined;
   try {
     controlJSON = await getControlJSON();
   } catch (error) {
