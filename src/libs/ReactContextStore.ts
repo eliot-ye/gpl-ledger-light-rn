@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useReducer,
 } from 'react';
+import {ExtractValues, JSONConstraint} from 'types/global';
 
 type DispatchAggregate<InitialState, DispatchPayload> = {
   [K in keyof DispatchPayload]: (
@@ -29,7 +30,7 @@ export function createStore<
   name?: string,
 ) {
   storeCount++;
-  const storeName = name || `Store-${storeCount}`;
+  const storeName = name ?? `Store-${storeCount}`;
 
   type DispatchKey = keyof DispatchPayload;
 

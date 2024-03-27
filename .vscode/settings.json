@@ -4,6 +4,5 @@
     "MKCOL",
     "ogzone",
     "udid"
-  ],
-  "java.compile.nullAnalysis.mode": "automatic"
+  ]
 }

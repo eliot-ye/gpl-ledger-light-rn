@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {createSubscribeState} from './SubscribeState';
+import {JSONConstraint} from 'types/global';
 
 export function createReactSubscribeStore<T extends JSONConstraint>(
   initialState: T,
@@ -13,10 +14,10 @@ export function createReactSubscribeStore<T extends JSONConstraint>(
   return {
     get: SSInstance.get,
     useState<K extends Key>(key: K) {
-      const [state, stateSet] = useState(SSInstance.get(key));
+      const [state, setState] = useState(SSInstance.get(key));
 
       useEffect(() => {
-        return SSInstance.subscribe(value => stateSet(value[key]), [key]);
+        return SSInstance.subscribe(value => setState(value[key]), [key]);
       }, [key]);
 
       return state;

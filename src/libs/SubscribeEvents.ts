@@ -1,15 +1,14 @@
 import {getOnlyStr} from '@/utils/tools';
+import {JSONConstraint} from 'types/global';
 
 let serialNumber = 0;
 
 export function createSubscribeEvents<T extends JSONConstraint>(mark?: string) {
   serialNumber++;
-  const _mark = mark || `SerialNumber-${serialNumber}`;
+  const _mark = mark ?? `SerialNumber-${serialNumber}`;
 
   type EventName = keyof T;
-  interface Handler<E extends EventName> {
-    (eventData: T[E]): void;
-  }
+  type Handler<E extends EventName> = (eventData: T[E]) => void;
   interface HandlerMap<E extends EventName> {
     [id: string]: Handler<E> | undefined;
   }

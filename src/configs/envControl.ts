@@ -7,22 +7,22 @@ import {
   CPNRichTextView,
   CPNText,
 } from '@/components/base';
-import {I18n, LangCode} from '@/assets/I18n';
+import {I18n, LangCode} from '../assets/I18n';
 import {LS} from '@/store/localStorage';
 import {Colors} from './colors';
 
-export enum Error {
+export enum ControlJSONError {
   NETWORK_ERROR = 'NETWORK_ERROR',
   NO_CONTROL_PATH = 'NO_CONTROL_PATH',
   NO_CONTROL_JSON = 'NO_CONTROL_JSON',
   IS_NOT_JSON = 'IS_NOT_JSON',
 }
-export interface ErrorItem {
-  code: Error;
+export interface ControlJSONErrorItem {
+  code: ControlJSONError;
   message?: string;
 }
 
-interface ControlJSON extends CEnvVariable {
+export interface ControlJSON extends CEnvVariable {
   versionName: string;
   platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
@@ -58,7 +58,9 @@ interface ControlJSONAlert extends ControlJSONAlertText {
 
 export async function getControlJSON() {
   if (!envConstant.envControlPath) {
-    return Promise.reject({code: Error.NO_CONTROL_PATH} as ErrorItem);
+    return Promise.reject({
+      code: ControlJSONError.NO_CONTROL_PATH,
+    } as ControlJSONErrorItem);
   }
   try {
     const res = await fetch(envConstant.envControlPath);
@@ -71,18 +73,22 @@ export async function getControlJSON() {
           _item.versionName === envConstant.versionName,
       );
       if (!controlJSON) {
-        return Promise.reject({code: Error.NO_CONTROL_JSON} as ErrorItem);
+        return Promise.reject({
+          code: ControlJSONError.NO_CONTROL_JSON,
+        } as ControlJSONErrorItem);
       }
       return controlJSON;
     } catch (error) {
-      return Promise.reject({code: Error.IS_NOT_JSON} as ErrorItem);
+      return Promise.reject({
+        code: ControlJSONError.IS_NOT_JSON,
+      } as ControlJSONErrorItem);
     }
   } catch (error) {
     console.error(error);
     return Promise.reject({
-      code: Error.NETWORK_ERROR,
+      code: ControlJSONError.NETWORK_ERROR,
       message: I18n.t('NetworkError'),
-    } as ErrorItem);
+    } as ControlJSONErrorItem);
   }
 }
 
@@ -91,11 +97,11 @@ export async function injectControlJSON() {
   try {
     controlJSON = await getControlJSON();
   } catch (error) {
-    return error as ErrorItem;
+    return error as ControlJSONErrorItem;
   }
 
   if (!controlJSON) {
-    return {code: Error.NO_CONTROL_JSON} as ErrorItem;
+    return {code: ControlJSONError.NO_CONTROL_JSON} as ControlJSONErrorItem;
   }
 
   setAppEnv(controlJSON);

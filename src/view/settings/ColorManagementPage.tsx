@@ -27,6 +27,7 @@ import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
+import {ErrorItem} from 'types/global';
 
 export function ColorManagementPage() {
   I18n.useLangCode();

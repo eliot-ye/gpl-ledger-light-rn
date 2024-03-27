@@ -2,6 +2,7 @@ import {createReactConstant} from '@/libs/ReactConstant';
 import DeviceInfo from 'react-native-device-info';
 import envDefault, {ApiServerName} from './env.default';
 import envProd from './env.prod';
+import {Include} from '../../types/global';
 
 export type EnvVariable = typeof envDefault;
 export type CEnvKey = Include<keyof EnvVariable, `CE_${string}`>;

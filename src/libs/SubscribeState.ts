@@ -1,8 +1,7 @@
-import {debounce, getOnlyStr, getValueFromStringKey} from '@/utils/tools';
+import {debounce, getOnlyStr} from '@/utils/tools';
+import {JSONConstraint} from 'types/global';
 
-interface SubscribeFn<T> {
-  (state: T): void;
-}
+type SubscribeFn<T> = (state: T) => void;
 let serialNumber = 0;
 
 export function createSubscribeState<T extends JSONConstraint>(
@@ -10,17 +9,16 @@ export function createSubscribeState<T extends JSONConstraint>(
   mark?: string,
 ) {
   serialNumber++;
-  const _mark = mark || `SerialNumber-${serialNumber}`;
+  const _mark = mark ?? `SerialNumber-${serialNumber}`;
 
   type StateKeys = keyof T;
 
   const state = {...initialState};
 
-  type SubscribeId = string;
   const subscribeMap: {
-    [id: SubscribeId]: {fn: SubscribeFn<T>; keys?: StateKeys[]} | undefined;
+    [id: string]: {fn: SubscribeFn<T>; keys?: StateKeys[]} | undefined;
   } = {};
-  const subscribeIds: SubscribeId[] = [];
+  const subscribeIds: string[] = [];
 
   let effectKeys: StateKeys[] = [];
   const effectHandler = debounce(
@@ -59,44 +57,58 @@ export function createSubscribeState<T extends JSONConstraint>(
     return state;
   }
 
+  /**
+   * - 内部会对`value`进行浅层对比。相同的值，不会触发更新。
+   */
+  function set<K extends StateKeys>(key: K, value: T[K]): void;
+  function set<K extends StateKeys>(
+    key: K,
+    value: (oldValue: T[K]) => T[K],
+  ): void;
+  function set<K extends StateKeys>(
+    key: K,
+    value: T[K] | ((oldValue: T[K]) => T[K]),
+  ): void {
+    const oldValue = state[key];
+    let _value = value as T[K];
+    if (typeof _value === 'function') {
+      _value = _value(oldValue);
+    }
+    if (Object.is(oldValue, value)) {
+      return;
+    }
+    state[key] = _value;
+    effectKeys.push(key);
+    effectHandler();
+  }
+
   return {
     _interfaceType: 'SubscribeState',
     _mark,
 
     get,
-    getFromStringKey(key: string) {
-      return getValueFromStringKey(key, state);
-    },
+    // getFromStringKey(key: string) {
+    //   return getValueFromStringKey(key, state);
+    // },
 
-    /**
-     * - 内部会对`value`进行浅层对比。相同的值，不会触发更新。
-     */
-    set<K extends StateKeys>(key: K, value: T[K]) {
-      const oldValue = state[key];
-      if (Object.is(oldValue, value)) {
-        return;
-      }
-      state[key] = value;
-      effectKeys.push(key);
-      effectHandler();
-    },
-    setFromStringKey(key: string, value: any) {
-      const oldValue = getValueFromStringKey(key, state);
-      if (oldValue !== value) {
-        const keyList = key.split('.');
-        let dataPre: any = state;
-        for (let i = 0; i < keyList.length - 1; i++) {
-          dataPre = dataPre[keyList[i]];
-        }
-        const preKey = keyList[keyList.length - 1];
-        if (Object.is(dataPre[preKey], value)) {
-          return;
-        }
-        dataPre[preKey] = value;
-        effectKeys.push(keyList[0]);
-        effectHandler();
-      }
-    },
+    set,
+    // setFromStringKey(key: string, value: any) {
+    //   const oldValue = getValueFromStringKey(key, state);
+    //   if (oldValue !== value) {
+    //     const keyList = key.split('.');
+    //     let dataPre: any = state;
+    //     for (let i = 0; i < keyList.length - 1; i++) {
+    //       dataPre = dataPre[keyList[i]];
+    //     }
+    //     const preKey = keyList[keyList.length - 1];
+    //     if (Object.is(dataPre[preKey], value)) {
+    //       return;
+    //     }
+    //     dataPre[preKey] = value;
+    //     effectKeys.push(keyList[0]);
+    //     effectHandler();
+    //   }
+    // },
 
     /**
      * @param fn - 订阅函数
@@ -118,7 +130,7 @@ export function createSubscribeState<T extends JSONConstraint>(
       if (keys?.length === 0) {
         return;
       }
-      const id: SubscribeId = getOnlyStr(subscribeIds);
+      const id: string = getOnlyStr(subscribeIds);
       subscribeIds.push(id);
       subscribeMap[id] = {
         fn,

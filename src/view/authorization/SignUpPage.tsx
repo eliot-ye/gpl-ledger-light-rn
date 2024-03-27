@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {PageProps} from '../Router';
+import {ErrorItem} from 'types/global';
 
 export function SignUpPage() {
   const navigation = useNavigation<PageProps<'SignUpPage'>['navigation']>();

@@ -5,6 +5,7 @@ import type {
   PropertySchema as PropertySchemaR,
   PropertyTypeName,
 } from 'realm';
+import {JSONConstraint} from 'types/global';
 
 interface PropertySchema<N extends PropertyTypeName> extends PropertySchemaR {
   type: N;

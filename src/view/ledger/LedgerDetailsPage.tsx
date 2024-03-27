@@ -34,6 +34,7 @@ import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
 import {useDimensions} from '@/utils/useDimensions';
 import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 import {StyleGet} from '@/configs/styles';
+import {ErrorItem} from 'types/global';
 
 export function LedgerDetailsPage() {
   const navigation =

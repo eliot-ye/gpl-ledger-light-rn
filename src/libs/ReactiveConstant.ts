@@ -1,16 +1,13 @@
 import {debounce, getOnlyStr} from '@/utils/tools';
+import {JSONConstraint} from 'types/global';
 
 export type Option<C extends string, T extends JSONConstraint> = {
   [code in C]: T;
 };
 
-interface ListenerCodeFn<C> {
-  (code: C): void;
-}
+type ListenerCodeFn<C> = (code: C) => void;
 
-interface SubscribeFn<T> {
-  (value: T): void;
-}
+type SubscribeFn<T> = (value: T) => void;
 
 let serialNumber = 0;
 
@@ -19,17 +16,16 @@ export function createReactiveConstant<
   T extends JSONConstraint,
 >(opt: Option<C, T>, mark?: string) {
   serialNumber++;
-  const _mark = mark || `SerialNumber-${serialNumber}`;
+  const _mark = mark ?? `SerialNumber-${serialNumber}`;
 
   const defaultActiveCode = Object.keys(opt)[0] as C;
   let activeCode = defaultActiveCode;
-  const curValue = opt[defaultActiveCode] as T;
+  const curValue = {...opt[defaultActiveCode]} as T;
 
   type Key = keyof T;
 
-  type ListenerId = string;
-  const listenerCodeMap: {[id: ListenerId]: ListenerCodeFn<C> | undefined} = {};
-  const listenerCodeIds: ListenerId[] = [];
+  const listenerCodeMap: {[id: string]: ListenerCodeFn<C> | undefined} = {};
+  const listenerCodeIds: string[] = [];
 
   /**
    * @param fn - 监听函数
@@ -48,7 +44,7 @@ export function createReactiveConstant<
       } catch (error) {
         console.error(`${_mark} addListener error:`, error);
       }
-      const id: ListenerId = getOnlyStr(listenerCodeIds);
+      const id: string = getOnlyStr(listenerCodeIds);
       listenerCodeMap[id] = fn;
       listenerCodeIds.push(id);
       return () => {
@@ -72,11 +68,10 @@ export function createReactiveConstant<
     }
   }
 
-  type SubscribeId = string;
   const subscribeMap: {
-    [id: SubscribeId]: {fn: SubscribeFn<T>; keys?: Key[]} | undefined;
+    [id: string]: {fn: SubscribeFn<T>; keys?: Key[]} | undefined;
   } = {};
-  const subscribeIds: SubscribeId[] = [];
+  const subscribeIds: string[] = [];
   let effectKeys: Key[] = [];
   const effectHandler = debounce(
     (_value: T) => {
@@ -160,7 +155,7 @@ export function createReactiveConstant<
         }
 
         Object.keys(valueMap).forEach(_key => {
-          curValue.setValue(_key, valueMap[_key]);
+          returnValue.setValue(_key, valueMap[_key]);
         });
         listenerCodeHandle(activeCode);
       }
@@ -187,7 +182,7 @@ export function createReactiveConstant<
       if (keys?.length === 0) {
         return;
       }
-      const id: SubscribeId = getOnlyStr(subscribeIds);
+      const id: string = getOnlyStr(subscribeIds);
       subscribeIds.push(id);
       subscribeMap[id] = {
         fn,

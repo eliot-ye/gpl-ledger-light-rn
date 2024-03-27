@@ -26,6 +26,7 @@ import {StyleGet} from '@/configs/styles';
 import {Colors} from '@/configs/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
+import {ErrorItem} from 'types/global';
 
 export function AssetTypeManagementPage() {
   I18n.useLangCode();
