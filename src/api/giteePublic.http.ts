@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {useFetch} from './http';
 import {Platform} from 'react-native';
 import {validator} from '@exodus/schemasafe';
-import SVersionList from '../../JSONSchema/public/SVersionList.json';
+import SVersionList from '../../public/SVersionList.json';
 
 const validateVersion = validator(SVersionList);
 

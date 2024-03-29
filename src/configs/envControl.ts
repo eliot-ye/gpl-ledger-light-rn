@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import {parser} from '@exodus/schemasafe';
-import SControlJSON from '../../JSONSchema/public/SControlJSON.json';
+import SControlJSON from '../../public/SControlJSON.json';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {
   AlertButton,
@@ -68,7 +68,15 @@ export async function getControlJSON() {
     } as ControlJSONErrorItem);
   }
   try {
-    const res = await fetch(envConstant.envControlPath);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 10000);
+    const res = await fetch(envConstant.envControlPath, {
+      headers: {'Cache-Control': 'no-cache'},
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
     const _text = await res.text();
     const parseResult = parseControlJSON(_text);
     if (parseResult.valid) {
