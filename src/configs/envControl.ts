@@ -1,5 +1,6 @@
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
+import ExitApp from 'react-native-exit-app';
 import {parser} from '@exodus/schemasafe';
 import SControlJSON from '../../public/SControlJSON.json';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
@@ -165,6 +166,9 @@ export async function injectControlJSON() {
           if (alert.confirmOpenURL) {
             await Linking.openURL(alert.confirmOpenURL);
           }
+          if (alert.confirmExitApp) {
+            ExitApp.exitApp();
+          }
         },
       },
     ];
@@ -175,6 +179,9 @@ export async function injectControlJSON() {
         async onPress() {
           if (alert.cancelOpenURL) {
             await Linking.openURL(alert.cancelOpenURL);
+          }
+          if (alert.cancelExitApp) {
+            ExitApp.exitApp();
           }
         },
       });
