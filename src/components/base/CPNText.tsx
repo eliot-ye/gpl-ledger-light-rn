@@ -2,16 +2,16 @@ import React, {createContext, useContext} from 'react';
 import {Linking, Text, TextProps} from 'react-native';
 import {Colors} from '@/configs/colors';
 
-export const CPNTextColorContext = createContext('');
-export const CPNTextFontSizeContext = createContext(16);
+export const FontColorContext = createContext('');
+export const FontSizeContext = createContext(16);
 
 interface CPNTextProps extends TextProps {
   link?: string;
 }
-export function CPNText(props: CPNTextProps) {
-  const colorDefault = useContext(CPNTextColorContext) || Colors.fontText;
+export function CPNText(props: Readonly<CPNTextProps>) {
+  const colorDefault = useContext(FontColorContext) || Colors.fontText;
 
-  const fontSizeDefault = useContext(CPNTextFontSizeContext);
+  const fontSizeDefault = useContext(FontSizeContext);
 
   return (
     <Text

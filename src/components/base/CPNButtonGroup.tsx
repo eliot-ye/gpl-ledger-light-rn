@@ -32,11 +32,12 @@ interface CPNButtonGroupProps<T> {
   onPress?: (type: T) => void;
 }
 export function CPNButtonGroup<T extends string | number>(
-  props: CPNButtonGroupProps<T>,
+  props: Readonly<CPNButtonGroupProps<T>>,
 ) {
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
-  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
+  const themeColor =
+    (formItem.themeColor ?? pageViewThemeColor) || Colors.theme;
 
   return (
     <View

@@ -44,10 +44,11 @@ interface CPNCheckboxProps {
    * */
   verticalMarginTop?: number;
 }
-export function CPNCheckbox(props: CPNCheckboxProps) {
+export function CPNCheckbox(props: Readonly<CPNCheckboxProps>) {
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
-  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
+  const themeColor =
+    (formItem.themeColor ?? pageViewThemeColor) || Colors.theme;
 
   const verticalCentering =
     props.verticalCentering !== false && !props.description;
@@ -84,10 +85,7 @@ export function CPNCheckbox(props: CPNCheckboxProps) {
             backgroundColor: colorGetBackground(themeColor),
           },
           !verticalCentering && {
-            marginTop:
-              props.verticalMarginTop === undefined
-                ? 4
-                : props.verticalMarginTop,
+            marginTop: props.verticalMarginTop ?? 4,
           },
           props.isRadio && {borderRadius: Config.size * 0.5},
           props.checked && !props.isRadio && {backgroundColor: themeColor},

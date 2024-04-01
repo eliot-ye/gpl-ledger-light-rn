@@ -30,19 +30,20 @@ interface CPNInputProps extends TextInputProps {
   clearButton?: boolean;
 }
 
-export function CPNInput(props: CPNInputProps) {
+export function CPNInput(props: Readonly<CPNInputProps>) {
   I18n.useLangCode();
 
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
-  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
+  const themeColor =
+    (formItem.themeColor ?? pageViewThemeColor) || Colors.theme;
 
-  const [isFocus, isFocusSet] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
   const focused = isFocus || !!props.value || !!props.defaultValue;
 
   return (
-    <View>
+    <View style={[props.containerStyle]}>
       <View
         style={[
           styles.inputContainer,
@@ -69,11 +70,11 @@ export function CPNInput(props: CPNInputProps) {
           style={[styles.input, StyleGet.title('h4'), props.style]}
           onFocus={ev => {
             props.onFocus && props.onFocus(ev);
-            isFocusSet(true);
+            setIsFocus(true);
           }}
           onBlur={ev => {
             props.onBlur && props.onBlur(ev);
-            isFocusSet(false);
+            setIsFocus(false);
           }}
         />
         {props.clearButton !== false &&

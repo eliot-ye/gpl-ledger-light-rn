@@ -37,15 +37,15 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
 /**
  * - style 作用于 ScrollView
  */
-export function CPNPageView(props: CPNPageViewProps) {
+export function CPNPageView(props: Readonly<CPNPageViewProps>) {
   ColorsInstance.useCode();
-  const headerBackgroundColor = props.headerBackgroundColor || Colors.theme;
+  const headerBackgroundColor = props.headerBackgroundColor ?? Colors.theme;
 
-  const [topNegativeDistance, topNegativeDistanceSet] = useState(0);
+  const [topNegativeDistance, setTopNegativeDistance] = useState(0);
 
   const topDistanceAnimated = useRef(new Animated.Value(0)).current;
 
-  const [headerInfo, headerInfoSet] = useState({width: 0, height: 0});
+  const [headerInfo, setHeaderInfo] = useState({width: 0, height: 0});
   const scrollDistanceAnimated = useRef(new Animated.Value(0)).current;
   function renderHeader() {
     if (props.showHeader === false) {
@@ -61,7 +61,7 @@ export function CPNPageView(props: CPNPageViewProps) {
         backgroundColor={
           props.fixedTop
             ? scrollDistanceAnimated.interpolate<string>({
-                inputRange: [0, props.transparentScrollRange || 200],
+                inputRange: [0, props.transparentScrollRange ?? 200],
                 outputRange: [Colors.transparent, headerBackgroundColor],
                 extrapolate: 'clamp',
               })
@@ -72,7 +72,7 @@ export function CPNPageView(props: CPNPageViewProps) {
           props.titleStyle,
         ]}
         onLayout={ev =>
-          headerInfoSet({
+          setHeaderInfo({
             width: ev.nativeEvent.layout.width,
             height: ev.nativeEvent.layout.height,
           })
@@ -92,7 +92,7 @@ export function CPNPageView(props: CPNPageViewProps) {
           backgroundColor: Colors.backgroundTheme,
         }}>
         <StatusBar
-          barStyle={props.barStyle || BarTextStyle.light}
+          barStyle={props.barStyle ?? BarTextStyle.light}
           backgroundColor={Colors.transparent}
           translucent
         />
@@ -118,7 +118,7 @@ export function CPNPageView(props: CPNPageViewProps) {
                     Platform.OS === 'ios' &&
                     props.renderIOSTopNegativeDistanceView
                   ) {
-                    topNegativeDistanceSet(
+                    setTopNegativeDistance(
                       contentOffsetY < 0 ? -contentOffsetY : 0,
                     );
                     topDistanceAnimated.setValue(

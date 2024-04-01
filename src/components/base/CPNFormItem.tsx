@@ -18,9 +18,9 @@ interface CPNFormItemProps extends ViewProps {
   errorText?: string;
   description?: React.ReactNode;
 }
-export function CPNFormItem(props: CPNFormItemProps) {
+export function CPNFormItem(props: Readonly<CPNFormItemProps>) {
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
-  const themeColor = props.titleColor || pageViewThemeColor || Colors.theme;
+  const themeColor = (props.titleColor ?? pageViewThemeColor) || Colors.theme;
 
   return (
     <View {...props}>

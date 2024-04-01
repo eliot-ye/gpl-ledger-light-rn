@@ -38,7 +38,7 @@ envList.forEach(_envItem => {
 export function setAppEnv(envValue: CEnvVariable) {
   const keyList = Object.keys(envValue) as CEnvKey[];
   keyList.forEach(_key => {
-    if (_key.indexOf('CE_') === 0) {
+    if (_key.startsWith('CE_')) {
       const _value = envValue[_key];
       if (_value !== undefined) {
         EnvInstance.setValue(_key, _value);
@@ -59,8 +59,7 @@ export function getFetchUrl(serverName: ApiServerName, path: string) {
         (item.ServerEnable && item.ServerEnable.includes(serverName))
       ) {
         domain = item.Domain || domain;
-        serverPath =
-          (item.ServerMap && item.ServerMap[serverName]) || serverPath;
+        serverPath = item.ServerMap?.[serverName] ?? serverPath;
       }
     });
 

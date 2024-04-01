@@ -23,21 +23,21 @@ export function createCPNLoading() {
       );
     }, []);
 
-    const [show, showSet] = useState(false);
+    const [show, setShow] = useState(false);
     const animatedValue = useRef(new Animated.Value(0)).current;
     useEffect(() => {
       if (loadingCount > 0) {
-        showSet(true);
+        setShow(true);
         Animated.timing(animatedValue, {
           toValue: 1,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }).start();
       } else {
         Animated.timing(animatedValue, {
           toValue: 0,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }).start(() => {
-          showSet(false);
+          setShow(false);
         });
       }
     }, [animatedValue, loadingCount]);

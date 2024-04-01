@@ -11,7 +11,7 @@ interface CPNImageProps extends Partial<ImageProps> {
   /** 根据图片比例和显示宽度自动计算高度，和`size`冲突时失效 */
   autoHeight?: {imageWidth?: number; imageHight?: number; showWidth?: number};
 }
-export function CPNImage(props: CPNImageProps) {
+export function CPNImage(props: Readonly<CPNImageProps>) {
   const langCode = I18n.useLangCode();
 
   const _source = useMemo<ImageSourcePropType>(() => {
@@ -36,8 +36,8 @@ export function CPNImage(props: CPNImageProps) {
     return _imageNameDefaultMap[props.name];
   }, [props.name, props.source, langCode]);
 
-  const [imageWidth, imageWidthSet] = useState(props.autoHeight?.imageWidth);
-  const [imageHight, imageHightSet] = useState(props.autoHeight?.imageHight);
+  const [imageWidth, setImageWidth] = useState(props.autoHeight?.imageWidth);
+  const [imageHight, setImageHight] = useState(props.autoHeight?.imageHight);
   useEffect(() => {
     if (
       props.size === undefined &&
@@ -48,15 +48,15 @@ export function CPNImage(props: CPNImageProps) {
       props.source?.uri
     ) {
       Image.getSize(props.source?.uri, (_imgWidth, _imgHeight) => {
-        imageWidthSet(_imgWidth);
-        imageHightSet(_imgHeight);
+        setImageWidth(_imgWidth);
+        setImageHight(_imgHeight);
       });
     }
   }, [props.autoHeight?.showWidth, props.size, props.source]);
   const autoHeightStyles = useMemo(() => {
     if (imageHight && imageWidth) {
       const showWidth =
-        props.autoHeight?.showWidth || Dimensions.get('window').width;
+        props.autoHeight?.showWidth ?? Dimensions.get('window').width;
       const showHeight = (imageHight / imageWidth) * showWidth;
 
       return {width: showWidth, height: showHeight};

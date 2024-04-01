@@ -6,8 +6,8 @@ import {
   CPNCellGroupContext,
   CPNIonicons,
   CPNText,
-  CPNTextColorContext,
-  CPNTextFontSizeContext,
+  FontColorContext,
+  FontSizeContext,
   IONName,
 } from '.';
 import {Colors, ColorsInstance} from '@/configs/colors';
@@ -21,7 +21,7 @@ interface CPNCellProps {
   showChevron?: boolean;
   rightIcon?: React.ReactElement;
 }
-export function CPNCell(props: CPNCellProps) {
+export function CPNCell(props: Readonly<CPNCellProps>) {
   const inCellGroup = useContext(CPNCellGroupContext);
   ColorsInstance.useCode();
 
@@ -50,8 +50,8 @@ export function CPNCell(props: CPNCellProps) {
         }}
         disabled={!props.onPress}
         onPress={props.onPress}>
-        <CPNTextFontSizeContext.Provider value={StyleGet.title('h4').fontSize}>
-          <CPNTextColorContext.Provider value={StyleGet.title('h4').color}>
+        <FontSizeContext.Provider value={StyleGet.title('h4').fontSize}>
+          <FontColorContext.Provider value={StyleGet.title('h4').color}>
             <View
               style={{
                 flexDirection: 'row',
@@ -67,8 +67,8 @@ export function CPNCell(props: CPNCellProps) {
                 props.title
               )}
             </View>
-          </CPNTextColorContext.Provider>
-        </CPNTextFontSizeContext.Provider>
+          </FontColorContext.Provider>
+        </FontSizeContext.Provider>
         <View
           style={{
             flex: 1,
@@ -78,13 +78,13 @@ export function CPNCell(props: CPNCellProps) {
             justifyContent: 'flex-end',
           }}>
           {props.value && (
-            <CPNTextColorContext.Provider value={Colors.fontSubtitle}>
+            <FontColorContext.Provider value={Colors.fontSubtitle}>
               {['string', 'number'].includes(typeof props.value) ? (
                 <CPNText>{props.value}</CPNText>
               ) : (
                 props.value
               )}
-            </CPNTextColorContext.Provider>
+            </FontColorContext.Provider>
           )}
           {props.rightIcon ||
             (props.showChevron !== false && props.onPress && (

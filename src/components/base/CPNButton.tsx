@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import {CPNText, CPNTextColorContext} from './CPNText';
+import {CPNText, FontColorContext} from './CPNText';
 import {Colors} from '@/configs/colors';
 import {StyleGet} from '@/configs/styles';
 import {CPNPageViewThemeColor} from './CPNPageView';
@@ -58,7 +58,7 @@ interface CPNButtonProps extends TouchableOpacityProps {
     initial?: boolean;
   };
 }
-export function CPNButton(props: CPNButtonProps) {
+export function CPNButton(props: Readonly<CPNButtonProps>) {
   const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
 
   const CPNButtonTypeList = useMemo<CPNButtonTypeItem[]>(
@@ -89,7 +89,7 @@ export function CPNButton(props: CPNButtonProps) {
     ],
   );
 
-  const [disabledTimer, disabledTimerSet] = useState(
+  const [disabledTimer, setDisabledTimer] = useState(
     props.disabledSetting?.initial && props.disabledSetting.timer
       ? props.disabledSetting.timer
       : 0,
@@ -98,7 +98,7 @@ export function CPNButton(props: CPNButtonProps) {
     if (props.disabledSetting?.timer !== undefined && disabledTimer > 0) {
       const timeInterval = props.disabledSetting?.timeInterval ?? 1000;
       const id = setTimeout(() => {
-        disabledTimerSet(_disabledTimer => _disabledTimer - timeInterval);
+        setDisabledTimer(_disabledTimer => _disabledTimer - timeInterval);
       }, timeInterval);
 
       return () => {
@@ -126,7 +126,7 @@ export function CPNButton(props: CPNButtonProps) {
 
   const btnStyle = useMemo<CPNButtonTypeItem>(() => {
     const _btnStyle = CPNButtonTypeList.find(
-      _item => _item.type === (props.type || 'theme'),
+      _item => _item.type === (props.type ?? 'theme'),
     );
     if (_btnStyle) {
       return _btnStyle;
@@ -141,7 +141,7 @@ export function CPNButton(props: CPNButtonProps) {
       disabled={disabled}
       onPress={_ev => {
         if (props.disabledSetting?.timer !== undefined) {
-          disabledTimerSet(props.disabledSetting?.timer);
+          setDisabledTimer(props.disabledSetting?.timer);
         }
         props.onPress && props.onPress(_ev);
       }}
@@ -159,7 +159,7 @@ export function CPNButton(props: CPNButtonProps) {
         },
         props.style,
       ]}>
-      <CPNTextColorContext.Provider
+      <FontColorContext.Provider
         value={props.plain ? btnStyle.backgroundColor : btnStyle.textColor}>
         {props.isLoading && <RenderActivityIndicator />}
 
@@ -169,13 +169,13 @@ export function CPNButton(props: CPNButtonProps) {
           ) : (
             props.children
           ))}
-      </CPNTextColorContext.Provider>
+      </FontColorContext.Provider>
     </TouchableOpacity>
   );
 }
 
 function RenderActivityIndicator() {
-  const color = useContext(CPNTextColorContext);
+  const color = useContext(FontColorContext);
   return (
     <ActivityIndicator size="small" color={color} style={{marginRight: 10}} />
   );

@@ -75,19 +75,19 @@ interface PickerSingleProps extends CPNPicker {
   initActive?: number;
   onChange?: (index: number) => void;
 }
-export function CPNPickerSingle(props: PickerSingleProps) {
+export function CPNPickerSingle(props: Readonly<PickerSingleProps>) {
   I18n.useLangCode();
 
   const themeColor = useContext(CPNPageViewThemeColor);
 
   const SVRef = useRef<ScrollView>(null);
 
-  const [activeIndex, activeIndexSet] = useState(props.initActive || 0);
+  const [activeIndex, setActiveIndex] = useState(props.initActive ?? 0);
 
   const contentOffsetYMapping = useRef(new Animated.Value(0)).current;
 
-  const itemHeight = props.itemHeight || Config.itemHeight;
-  const itemShowNum = props.itemShowNum || Config.itemShowNum;
+  const itemHeight = props.itemHeight ?? Config.itemHeight;
+  const itemShowNum = props.itemShowNum ?? Config.itemShowNum;
 
   const fillHeight = useMemo(
     () => itemHeight * Math.floor(itemShowNum / 2),
@@ -116,8 +116,8 @@ export function CPNPickerSingle(props: PickerSingleProps) {
 
   useEffect(() => {
     if (SVRef.current) {
-      activeIndexSet(props.initActive || 0);
-      SVRef.current.scrollTo({y: itemHeight * (props.initActive || 0)});
+      setActiveIndex(props.initActive ?? 0);
+      SVRef.current.scrollTo({y: itemHeight * (props.initActive ?? 0)});
     }
   }, [itemHeight, props.initActive]);
 
@@ -151,7 +151,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
               listener: e => {
                 const contentOffsetY = e.nativeEvent.contentOffset.y;
                 const index = getActiveIndex(contentOffsetY);
-                activeIndexSet(index);
+                setActiveIndex(index);
               },
             },
           )}
@@ -192,7 +192,7 @@ export function CPNPickerSingle(props: PickerSingleProps) {
                       fontSize: Config.selectTextSize,
                     },
                   ]}>
-                  {item.label || item.value}
+                  {item.label ?? item.value}
                 </CPNText>
               </Animated.View>
             );
@@ -265,25 +265,25 @@ interface ModalPickerProps extends CPNPicker {
   cancelText?: string;
   initActiveList?: (number | undefined)[];
 }
-export function CPNModalPicker(props: ModalPickerProps) {
+export function CPNModalPicker(props: Readonly<ModalPickerProps>) {
   I18n.useLangCode();
 
-  const itemHeight = props.itemHeight || Config.itemHeight;
-  const itemShowNum = props.itemShowNum || Config.itemShowNum;
+  const itemHeight = props.itemHeight ?? Config.itemHeight;
+  const itemShowNum = props.itemShowNum ?? Config.itemShowNum;
 
-  const [activeList, activeListSet] = useState<(number | undefined)[]>(
+  const [activeList, setActiveList] = useState<(number | undefined)[]>(
     props.initActiveList || [],
   );
 
-  const [dataList, dataListSet] = useState<{id: string; data: ItemT[]}[]>([]);
+  const [dataList, setDataList] = useState<{id: string; data: ItemT[]}[]>([]);
   useEffect(() => {
     let _dataList = [];
     let _data: ItemT[] = props.data;
     for (let i = 0; i < props.dataHierarchy; ++i) {
       _dataList.push({id: String(i), data: _data});
-      _data = _data[activeList[i] || 0]?.children || [];
+      _data = _data[activeList[i] ?? 0]?.children || [];
     }
-    dataListSet(_dataList);
+    setDataList(_dataList);
   }, [activeList, props.data, props.dataHierarchy]);
 
   function renderPicker() {
@@ -327,7 +327,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
                     }
                   }
 
-                  activeListSet([...activeList]);
+                  setActiveList([...activeList]);
                 }}
               />
             </View>
@@ -355,7 +355,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
         ]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.cancelText || I18n.t('Cancel')}
+            {props.cancelText ?? I18n.t('Cancel')}
           </CPNText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -365,7 +365,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
             let _indexList: (number | undefined)[] = [];
             let _itemList: (ItemT | undefined)[] = [];
             for (let i = 0; i < props.dataHierarchy; i++) {
-              const _index = activeList[i] || 0;
+              const _index = activeList[i] ?? 0;
               const _item = dataList[i]?.data[_index];
               if (_item) {
                 const _itemCopy = {..._item, children: undefined};
@@ -381,7 +381,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
             props.onConfirm && props.onConfirm(_itemList, _indexList);
           }}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.confirmText || I18n.t('Confirm')}
+            {props.confirmText ?? I18n.t('Confirm')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -396,7 +396,7 @@ export function CPNModalPicker(props: ModalPickerProps) {
   useEffect(() => {
     if (props.show) {
       if (props.initActiveList) {
-        activeListSet(props.initActiveList);
+        setActiveList(props.initActiveList);
       }
       Animated.timing(animatedValue, {
         toValue: 0,
@@ -461,7 +461,7 @@ interface DateTimePickerProps {
   confirmText?: string;
   cancelText?: string;
 }
-export function CPNDateTimePicker(props: DateTimePickerProps) {
+export function CPNDateTimePicker(props: Readonly<DateTimePickerProps>) {
   I18n.useLangCode();
 
   const {typeString, typeObject} = useMemo(() => {
@@ -481,7 +481,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
     return {typeString: _typeString, typeObject: _typeObject};
   }, [props.type]);
 
-  const [activeDateObj, activeDateObjSet] = useState(new Date());
+  const [activeDateObj, setActiveDateObj] = useState(new Date());
   const {
     activeYear,
     activeMonth,
@@ -778,7 +778,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                     !!_typeObject.color && {color: _typeObject.color},
                     !!_typeObject.fontSize && {fontSize: _typeObject.fontSize},
                   ]}>
-                  {_typeObject.text || toTitleCase(_typeObject.type)}
+                  {_typeObject.text ?? toTitleCase(_typeObject.type)}
                 </CPNText>
               </View>
               <View style={{width: 54}}>
@@ -787,7 +787,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                   initActive={active}
                   onChange={_index2 => {
                     if (_typeObject.type === 'year') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           yearList[_index2],
                           activeMonth,
@@ -799,7 +799,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                       );
                     }
                     if (_typeObject.type === 'month') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           activeYear,
                           monthList[_index2] - 1,
@@ -811,7 +811,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                       );
                     }
                     if (_typeObject.type === 'date') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           activeYear,
                           activeMonth,
@@ -823,7 +823,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                       );
                     }
                     if (_typeObject.type === 'hour') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           activeYear,
                           activeMonth,
@@ -835,7 +835,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                       );
                     }
                     if (_typeObject.type === 'minute') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           activeYear,
                           activeMonth,
@@ -847,7 +847,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
                       );
                     }
                     if (_typeObject.type === 'second') {
-                      activeDateObjSet(
+                      setActiveDateObj(
                         new Date(
                           activeYear,
                           activeMonth,
@@ -880,7 +880,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
         ]}>
         <TouchableOpacity onPress={props.onClose}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.cancelText || I18n.t('Cancel')}
+            {props.cancelText ?? I18n.t('Cancel')}
           </CPNText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -897,7 +897,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
               });
           }}>
           <CPNText style={stylesModalPicker.btnText}>
-            {props.confirmText || I18n.t('Confirm')}
+            {props.confirmText ?? I18n.t('Confirm')}
           </CPNText>
         </TouchableOpacity>
       </View>
@@ -920,7 +920,7 @@ export function CPNDateTimePicker(props: DateTimePickerProps) {
   useEffect(() => {
     if (props.show) {
       if (props.initActive) {
-        activeDateObjSet(props.initActive);
+        setActiveDateObj(props.initActive);
       }
       Animated.timing(animatedValue, {
         toValue: 0,

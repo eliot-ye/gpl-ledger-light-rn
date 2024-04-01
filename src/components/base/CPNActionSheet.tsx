@@ -82,7 +82,7 @@ interface CPNActionSheetViewProps<ItemB extends ActionSheetButton>
   onClose: () => void;
 }
 export function CPNActionSheetView<ItemB extends ActionSheetButton>(
-  props: CPNActionSheetViewProps<ItemB>,
+  props: Readonly<CPNActionSheetViewProps<ItemB>>,
 ) {
   I18n.useLangCode();
 
@@ -97,21 +97,21 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
   );
 
   const animatedValue = useRef(new Animated.Value(300)).current;
-  const [show, showSet] = useState(false);
+  const [show, setShow] = useState(false);
   useEffect(() => {
     if (props.show) {
-      showSet(true);
+      setShow(true);
       Animated.spring(animatedValue, {
         toValue: 0,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start();
     } else {
       Animated.timing(animatedValue, {
         toValue: 300,
         duration: 200,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start(() => {
-        showSet(false);
+        setShow(false);
       });
     }
   }, [animatedValue, props.show]);
@@ -258,7 +258,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
                     styles.buttonText,
                     {color: Colors.warning, fontWeight: '600'},
                   ]}>
-                  {props.cancelText || I18n.t('Cancel')}
+                  {props.cancelText ?? I18n.t('Cancel')}
                 </CPNText>
               </TouchableOpacity>
             )}
@@ -275,9 +275,9 @@ export function createCPNActionSheet() {
   }>();
 
   function CPNActionSheet() {
-    const [data, dataSet] = useState<undefined | ActionSheetOption<any>>();
+    const [data, setData] = useState<undefined | ActionSheetOption<any>>();
     useEffect(() => {
-      return ev.subscribe('trigger', ed => dataSet(ed));
+      return ev.subscribe('trigger', ed => setData(ed));
     }, []);
 
     return (
@@ -285,7 +285,7 @@ export function createCPNActionSheet() {
         {...data}
         buttons={useMemo(() => data?.buttons || [], [data?.buttons])}
         show={!!data}
-        onClose={() => dataSet(undefined)}
+        onClose={() => setData(undefined)}
       />
     );
   }

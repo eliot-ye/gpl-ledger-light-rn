@@ -90,10 +90,10 @@ export function createCPNPageModal() {
         () => edgeInsets.top || Config.offset,
         [edgeInsets.top],
       );
-      const {height: windowHeight} = useDimensions('screen');
+      const screenHeight = useDimensions('screen').height;
       const boxHeight = useMemo(
-        () => windowHeight - statusBarHeight - Config.offset,
-        [statusBarHeight, windowHeight],
+        () => screenHeight - statusBarHeight - Config.offset,
+        [statusBarHeight, screenHeight],
       );
 
       useEffect(() => {
@@ -152,10 +152,10 @@ export function createCPNPageModal() {
           onRequestClose={props.onClose}>
           <Animated.View
             style={{
-              height: windowHeight,
+              flex: 1,
               paddingTop: statusBarHeight + Config.offset,
               backgroundColor: translateY.interpolate({
-                inputRange: [0, closeThreshold],
+                inputRange: [-60, closeThreshold],
                 outputRange: [Colors.backgroundModal, Colors.transparent],
                 extrapolate: 'clamp',
               }),

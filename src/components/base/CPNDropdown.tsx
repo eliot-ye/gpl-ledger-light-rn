@@ -72,29 +72,30 @@ interface CPNDropdownProps<ItemT extends DataConstraint>
 }
 
 export function CPNDropdown<ItemT extends DataConstraint>(
-  props: CPNDropdownProps<ItemT>,
+  props: Readonly<CPNDropdownProps<ItemT>>,
 ) {
   I18n.useLangCode();
 
   const formItem = useContext(FormItemContext);
   const pageViewThemeColor = useContext(CPNPageViewThemeColor);
-  const themeColor = formItem.themeColor || pageViewThemeColor || Colors.theme;
+  const themeColor =
+    (formItem.themeColor ?? pageViewThemeColor) || Colors.theme;
 
-  const [show, showSet] = useState(false);
+  const [show, setShow] = useState(false);
 
-  const [boxPosition, boxPositionSet] = useState({Y: 0, X: 0});
-  const [boxWidth, boxWidthSet] = useState(0);
-  const [boxHeight, boxHeightSet] = useState(0);
+  const [boxPosition, setBoxPosition] = useState({Y: 0, X: 0});
+  const [boxWidth, setBoxWidth] = useState(0);
+  const [boxHeight, setBoxHeight] = useState(0);
 
   const containerHeight = useMemo(
     () =>
       (boxHeight + Config.borderWidth) *
-        (props.itemShowNum || Config.itemShowNum) -
+        (props.itemShowNum ?? Config.itemShowNum) -
       Config.borderWidth,
     [boxHeight, props.itemShowNum],
   );
 
-  const prevCount = Math.floor((props.itemShowNum || Config.itemShowNum) / 2);
+  const prevCount = Math.floor((props.itemShowNum ?? Config.itemShowNum) / 2);
   const dataShow = useMemo(() => {
     const _data = [...props.data];
     for (let i = 0; i < prevCount; i++) {
@@ -104,16 +105,16 @@ export function CPNDropdown<ItemT extends DataConstraint>(
     return _data;
   }, [prevCount, props.data]);
 
-  const [activeItem, activeItemSet] = useState<ItemT>();
-  const [activeIndex, activeIndexSet] = useState(0);
+  const [activeItem, setActiveItem] = useState<ItemT>();
+  const [activeIndex, setActiveIndex] = useState(0);
   useEffect(() => {
     const _activeItem = dataShow.find((_item, _index) => {
       if (_item.value === props.checked) {
-        activeIndexSet(_index);
+        setActiveIndex(_index);
       }
       return _item.value === props.checked;
     });
-    activeItemSet(_activeItem);
+    setActiveItem(_activeItem);
   }, [props.checked, dataShow]);
 
   const FLRef = useRef<FlatList>(null);
@@ -134,8 +135,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         accessible
         disabled={props.disabled || props.data.length === 0}
         onLayout={ev => {
-          boxWidthSet(ev.nativeEvent.layout.width);
-          boxHeightSet(ev.nativeEvent.layout.height);
+          setBoxWidth(ev.nativeEvent.layout.width);
+          setBoxHeight(ev.nativeEvent.layout.height);
         }}
         style={[
           styles.cell,
@@ -149,12 +150,12 @@ export function CPNDropdown<ItemT extends DataConstraint>(
           props.cellStyle,
         ]}
         onPress={ev => {
-          boxPositionSet({
+          setBoxPosition({
             Y: ev.nativeEvent.pageY - ev.nativeEvent.locationY,
             X: ev.nativeEvent.pageX - ev.nativeEvent.locationX + Config.offset,
           });
           if (props.data.length > 0) {
-            showSet(true);
+            setShow(true);
           }
         }}>
         <View pointerEvents="none" style={{flex: 1}}>
@@ -169,11 +170,9 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                 activeItem && {color: Colors.fontText},
                 props.disabled && {color: Colors.backgroundDisabled},
               ]}>
-              {activeItem?.label ||
-                activeItem?.value ||
-                (props.placeholder === undefined
-                  ? I18n.t('PlaceholderSelect', formItem.title)
-                  : props.placeholder)}
+              {(activeItem?.label ?? activeItem?.value) ||
+                (props.placeholder ??
+                  I18n.t('PlaceholderSelect', formItem.title))}
             </CPNText>
           )}
         </View>
@@ -193,8 +192,8 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         transparent
         statusBarTranslucent
         animationType="fade"
-        onRequestClose={() => showSet(false)}>
-        <TouchableWithoutFeedback onPress={() => showSet(false)}>
+        onRequestClose={() => setShow(false)}>
+        <TouchableWithoutFeedback onPress={() => setShow(false)}>
           <View style={windowSize}>
             <View
               style={[
@@ -256,7 +255,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                     ) {
                       return (
                         <TouchableWithoutFeedback
-                          onPress={() => showSet(false)}>
+                          onPress={() => setShow(false)}>
                           <View
                             style={[
                               {
@@ -282,7 +281,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                       );
                     }
                     return (
-                      <TouchableWithoutFeedback onPress={() => showSet(false)}>
+                      <TouchableWithoutFeedback onPress={() => setShow(false)}>
                         <View style={[{height: boxHeight}, props.itemStyle]} />
                       </TouchableWithoutFeedback>
                     );
@@ -296,7 +295,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                       ]}
                       onPress={() => {
                         props.onChange && props.onChange(item);
-                        showSet(false);
+                        setShow(false);
                       }}>
                       {props.renderItemContent ? (
                         props.renderItemContent(item)
@@ -304,7 +303,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
                         <CPNText
                           style={{flex: 1}}
                           numberOfLines={props.numberOfLines}>
-                          {item.label || item.value}
+                          {item.label ?? item.value}
                         </CPNText>
                       )}
                       {props.checked === item.value && (

@@ -4,7 +4,7 @@ import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
 import {Store} from '@/store';
 import {CusLog} from '@/utils/tools';
-import {useCallback} from 'react';
+import {useCallback, useEffect, useRef} from 'react';
 import {Platform} from 'react-native';
 
 interface LogData {
@@ -53,7 +53,7 @@ export function getFetchData(
     ...optionHeaders,
   };
 
-  const autoFill = option.autoFill === undefined ? true : option.autoFill;
+  const autoFill = option.autoFill ?? true;
   const reqBody = autoFill
     ? {
         ...body,
@@ -79,7 +79,7 @@ export function getFetchData(
   const urlData = getFetchUrl(serverName, path);
 
   return {
-    url: `${option.domain || urlData.domain}${urlData.path}`,
+    url: `${option.domain ?? urlData.domain}${urlData.path}`,
     headers: option.hideHeader ? undefined : headers,
     bodyObj,
   };
@@ -91,12 +91,13 @@ async function createFetch(
   headers?: RequestHeaders,
   option: HttpOption = {},
 ) {
-  const method = option.method || 'POST';
+  const method = option.method ?? 'POST';
 
   const response = await fetch(url, {
     method,
     headers: option.hideHeader ? undefined : headers,
     body: method === 'POST' ? bodyStr : undefined,
+    signal: option.signal,
   });
 
   const responseStatus = response.status;
@@ -137,13 +138,15 @@ interface HttpOption {
   autoFill?: boolean;
   /** @default true */
   showExpiredAlert?: boolean;
+  /** @default true */
+  showNetworkErrorAlert?: boolean;
   /** @default 'POST' */
   method?: FetchMethod;
   dataType?: DataType;
+  signal?: AbortSignal;
 }
 
-let showExpiredFlag = false;
-let showNetworkErrorFlag = false;
+const showAlertFlags: string[] = [];
 
 const serverOptionDefault = {};
 /**
@@ -153,6 +156,11 @@ export function useFetch(
   serverName: ApiServerName,
   serverOption: HttpOption = serverOptionDefault,
 ) {
+  const controller = useRef(new AbortController()).current;
+  useEffect(() => {
+    return () => controller.abort();
+  }, [controller]);
+
   return useCallback(
     /**
      * @param path - 必须以 `/` 开头
@@ -160,6 +168,7 @@ export function useFetch(
      */
     async function (path: string, body?: any, option: HttpOption = {}) {
       const fetchOption: HttpOption = {
+        signal: controller.signal,
         dataType: DataType.json,
         ...serverOption,
         ...option,
@@ -198,26 +207,22 @@ export function useFetch(
         }
 
         if (responseStatus !== 200) {
+          let errorCode = '';
+
           if (responseStatus === 403) {
             // token 失效
             Store.reset();
-            const showExpiredAlert =
-              fetchOption.showExpiredAlert === undefined
-                ? true
-                : fetchOption.showExpiredAlert;
-            if (!showExpiredFlag && showExpiredAlert) {
-              showExpiredFlag = true;
-              CPNAlert.alert('', I18n.t('SessionExpired')).then(() => {
-                showExpiredFlag = false;
-              });
+            if (fetchOption.showExpiredAlert ?? true) {
+              errorCode = 'SessionExpired';
             }
-          } else {
-            if (!showNetworkErrorFlag) {
-              showNetworkErrorFlag = true;
-              CPNAlert.alert('', I18n.t('NetworkError')).then(() => {
-                showNetworkErrorFlag = false;
-              });
-            }
+          } else if (fetchOption.showNetworkErrorAlert ?? true) {
+            errorCode = 'NetworkError';
+          }
+          if (errorCode && !showAlertFlags.includes(errorCode)) {
+            showAlertFlags.push(errorCode);
+            CPNAlert.alert('', I18n.t(errorCode as any)).then(() => {
+              showAlertFlags.splice(showAlertFlags.indexOf(errorCode), 1);
+            });
           }
 
           return Promise.reject(responseStatus);
@@ -237,7 +242,7 @@ export function useFetch(
         return Promise.reject(errorObj.status);
       }
     },
-    [serverName, serverOption],
+    [controller.signal, serverName, serverOption],
   );
 }
 

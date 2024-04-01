@@ -60,6 +60,7 @@ export const LocalStorageEngine: StorageEngine = {
 };
 export const LS = createAsyncStorage(
   {
+    app_uuid: '',
     theme_code: ThemeCode.default as ThemeCode | null,
     env_alert_onceId: '',
     last_user_id: '',

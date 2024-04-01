@@ -11,6 +11,18 @@ import {RouterView} from '@/view/RouterView';
 import {LS} from '@/store/localStorage';
 import {useColorScheme} from 'react-native';
 import {ColorsInstance, ThemeCode} from './configs/colors';
+import {generateUUID} from './utils/tools';
+import {Store} from './store';
+
+LS.get('app_uuid').then(app_uuid => {
+  if (app_uuid) {
+    Store.update('app_uuid', app_uuid);
+  } else {
+    const uuid = generateUUID();
+    Store.update('app_uuid', uuid);
+    LS.set('app_uuid', uuid);
+  }
+});
 
 function RootView() {
   const systemTheme = useColorScheme() as ThemeCode;

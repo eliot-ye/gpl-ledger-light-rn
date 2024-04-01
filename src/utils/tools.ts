@@ -53,6 +53,24 @@ export function getOnlyStr(comparative: string[], length = 8): string {
   return str;
 }
 
+export function generateUUID(comparative?: string[]) {
+  let d = new Date().getTime();
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    function (c) {
+      // eslint-disable-next-line no-bitwise
+      const r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      // eslint-disable-next-line no-bitwise
+      return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+    },
+  );
+  if (comparative && comparative.includes(uuid)) {
+    return generateUUID(comparative);
+  }
+  return uuid;
+}
+
 /** 获取 [n,m] 范围内的随机整数 */
 export function getRandomInteger(n: number, m: number) {
   return Math.floor(Math.random() * (m - n + 1)) + n;
@@ -67,8 +85,9 @@ export function getUrlQuery(url: string, key: string) {
   if (!url.includes('?')) {
     return undefined;
   }
-  const reg = new RegExp(`(^|&)${key}=([^&]*)(&|$)`, 'i');
-  const resultList = url.split('?')[1].match(reg);
+  const resultList = RegExp(`(^|&)${key}=([^&]*)(&|$)`, 'i').exec(
+    url.split('?')[1],
+  );
   return resultList ? decodeURIComponent(resultList[2]) : undefined;
 }
 
@@ -85,14 +104,14 @@ export function debounce<T extends Array<any>>(
      * */
     wait?: number;
     /**
-     * - immediate=true 多次间隔不超过 wait 时长调用函数体时，第一次调用函数体立即调用 callback 并锁定至最后一次调用函数体 wait 时长；
-     * - immediate=false 多次间隔不超过 wait 时长调用函数体时，最后一次调用函数体 wait 时长后调用 callback
+     * - immediate=true 调用函数体时，callback 被立即调用，并锁定不能再调用。函数体会从上一次被调用后，倒计时 wait 毫秒后解锁可调用 callback。
+     * - immediate=false 函数体会从上一次被调用后，延迟 wait 毫秒后调用 callback；
      * @default false
      * */
     immediate?: boolean;
   } = {},
 ): (...args: T) => void {
-  let timer: NodeJS.Timeout | null = null;
+  let timer: any = null;
   const {wait = 500, immediate = false} = option;
   return (...args: T) => {
     if (timer) {
@@ -157,6 +176,72 @@ export function toEachTitleUpperCase(str: string) {
   }
   return newStr.join(' ');
 }
+
+export const dateFns = {
+  isInvalidDate(date: Date) {
+    return isNaN(date.getTime());
+  },
+
+  /**
+   * 格式化日期
+   * @param format - 格式化字符串
+   * - 默认格式： `yyyy-MM-dd HH:mm:ss`
+   */
+  format(dateTime: string | number | Date, format = 'yyyy-MM-dd HH:mm:ss') {
+    let date = new Date(dateTime);
+    if (dateFns.isInvalidDate(date)) {
+      if (typeof dateTime === 'string') {
+        date = new Date(dateTime.replace(/-/g, '/'));
+        if (dateFns.isInvalidDate(date)) {
+          throw new Error('dateTime is invalid');
+        }
+      }
+    }
+
+    const formatConfigs: Record<string, string> = {
+      yyyy: date.getFullYear().toString(),
+      MM: (date.getMonth() + 1).toString().padStart(2, '0'),
+      dd: date.getDate().toString().padStart(2, '0'),
+      HH: date.getHours().toString().padStart(2, '0'),
+      mm: date.getMinutes().toString().padStart(2, '0'),
+      ss: date.getSeconds().toString().padStart(2, '0'),
+    };
+
+    return format.replace(/(yyyy|MM|dd|HH|mm|ss)/g, function (matched: string) {
+      return formatConfigs[matched] ?? matched;
+    });
+  },
+};
+
+export const numberFns = {
+  /**
+   * 格式化数字，每千位添加逗号
+   */
+  format(num: number | string): string {
+    return String(num).replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+  },
+  /**
+   * 将字符串转为数字
+   */
+  recover(numStr: string): number {
+    return Number(numStr.replace(/,/g, ''));
+  },
+};
+
+export const cardNumberFns = {
+  /**
+   * 格式化数字，每千位添加逗号
+   */
+  format(cardNumber: number | string): string {
+    return String(cardNumber).replace(/(\w{4})(?=\w)/g, '$1 - ');
+  },
+  /**
+   * 将字符串转为数字
+   */
+  recover(cardNumberStr: string): number {
+    return Number(cardNumberStr.replace(/ - /g, ''));
+  },
+};
 
 export function colorGetBackground(colorStr: string, ratio = 0.2) {
   return ColorProcessor(colorStr).alpha(ratio).toString();

@@ -22,13 +22,13 @@ interface RichTextViewProps extends Partial<RenderHTMLProps> {
 }
 
 /** 使用 `react-native-render-html` 自定義的富文本渲染器 */
-export function CPNRichTextView(props: RichTextViewProps) {
+export function CPNRichTextView(props: Readonly<RichTextViewProps>) {
   const systemFonts = useMemo(() => [...defaultSystemFonts], []);
 
   const baseStyle = useMemo<MixedStyleDeclaration>(
     () => ({
-      color: props.color || Colors.fontText,
-      fontSize: props.fontSize || 14,
+      color: props.color ?? Colors.fontText,
+      fontSize: props.fontSize ?? 14,
       fontWeight: '400',
     }),
     [props.color, props.fontSize],
@@ -98,7 +98,7 @@ export function CPNRichTextView(props: RichTextViewProps) {
 
   return (
     <RenderHtml
-      contentWidth={props.width || windowWidth}
+      contentWidth={props.width ?? windowWidth}
       systemFonts={systemFonts}
       baseStyle={baseStyle}
       ignoredDomTags={ignoredDomTags}

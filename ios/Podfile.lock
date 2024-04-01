@@ -1119,6 +1119,14 @@ PODS:
     - React
   - RNDeviceInfo (10.12.0):
     - React-Core
+  - RNExitApp (2.0.0):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-RCTFabric
+    - ReactCommon/turbomodule/core
   - RNFS (2.20.0):
     - React-Core
   - RNGestureHandler (2.14.0):
@@ -1313,6 +1321,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RealmJS (from `../node_modules/realm`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1434,6 +1443,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/realm"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -1509,6 +1520,7 @@ SPEC CHECKSUMS:
   ReactCommon: 5f704096ccf7733b390f59043b6fa9cc180ee4f6
   RealmJS: 578e16cf7c0b32c13a23b2df667b021bb3c36f1c
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
+  RNExitApp: 6b17eb08453ae2f8071741bfa39a1e3f3d8d090d
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 3279120c38e72d5b71d1ac02c2fc0450721c188d
   RNScreens: 8e44ede8be80fbd17005680b7c86722a42d8dc73

@@ -1,15 +1,7 @@
 import {Colors} from '@/configs/colors';
 import React from 'react';
+import {IconProps} from 'react-native-vector-icons/Icon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TextProps} from 'react-native/types';
-
-interface CPNIconProps extends TextProps {
-  /** @default 26 */
-  size?: number;
-  /** @default Colors.fontTitleReverse */
-  color?: string;
-  pointerEvents?: 'box-none' | 'none' | 'box-only' | 'auto';
-}
 
 /**
  * Ionicons name
@@ -46,10 +38,12 @@ export enum IONName {
   Home = 'home',
   Settings = 'settings',
 }
-interface IoniconsProps extends CPNIconProps {
+
+type IoniconsProps = IconProps & {
+  pointerEvents?: 'auto' | 'box-none' | 'none' | 'box-only';
   name?: IONName;
-}
-export function CPNIonicons(props: IoniconsProps) {
+};
+export function CPNIonicons(props: Readonly<IoniconsProps>) {
   return (
     <Ionicons
       size={26}

@@ -37,7 +37,6 @@ export const I18n = createReactI18n(
   {
     langScope: {
       [LangCode.zhHans]: ['zh-Hans', 'zh-CN', 'zh-SG', 'zh-MO'],
-      [LangCode.en]: ['en'],
     },
     langMap: {
       [LangCode.zhHans]: {

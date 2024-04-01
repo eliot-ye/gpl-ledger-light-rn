@@ -84,7 +84,7 @@ interface CPNAlertBoxProps extends AlertOption<any> {
   animatedScale: Animated.Value;
   onClose: () => void;
 }
-function CPNAlertBox(props: CPNAlertBoxProps) {
+function CPNAlertBox(props: Readonly<CPNAlertBoxProps>) {
   const buttonsList = useMemo(
     () =>
       props.buttons
@@ -98,7 +98,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
 
   const isColumnButtons = buttonsList.length >= 3;
 
-  const StateObj = useState(props.initState);
+  const StateObj = useState(props.initState); // NOSONAR
 
   return (
     <Animated.View
@@ -203,7 +203,7 @@ function CPNAlertBox(props: CPNAlertBoxProps) {
                   style={{
                     fontWeight: '500',
                     fontSize: Config.fontSize,
-                    color: _btn.textColor || Colors.fontText,
+                    color: _btn.textColor ?? Colors.fontText,
                   }}>
                   {_btn.text}
                 </CPNText>
@@ -220,7 +220,7 @@ interface CPNAlertViewProps<T> extends AlertOption<T> {
   show: boolean;
   onClose: () => void;
 }
-export function CPNAlertView<T>(props: CPNAlertViewProps<T>) {
+export function CPNAlertView<T>(props: Readonly<CPNAlertViewProps<T>>) {
   I18n.useLangCode();
 
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -228,12 +228,12 @@ export function CPNAlertView<T>(props: CPNAlertViewProps<T>) {
     if (props.show) {
       Animated.spring(animatedValue, {
         toValue: 1,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start();
     } else {
       Animated.spring(animatedValue, {
         toValue: 0,
-        useNativeDriver: false,
+        useNativeDriver: true,
       }).start();
     }
   }, [animatedValue, props.show]);
@@ -305,7 +305,7 @@ export function createCPNAlert() {
           {
             toValue: 1,
             speed: Config.animatedSpeed,
-            useNativeDriver: false,
+            useNativeDriver: true,
           },
         ).start();
       }
@@ -339,7 +339,7 @@ export function createCPNAlert() {
                   Animated.spring(_item.animatedValue, {
                     toValue: 0,
                     speed: Config.animatedSpeed,
-                    useNativeDriver: false,
+                    useNativeDriver: true,
                   }).start(() => {
                     if (_index > 0) {
                       eventInstance.publish('close', _item.id);

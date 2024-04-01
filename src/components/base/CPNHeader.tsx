@@ -23,6 +23,10 @@ export const headerIconStyles = StyleSheet.create({
   },
 });
 
+export const HeaderConfigs = {
+  paddingHorizontal: 20,
+} as const;
+
 const styles = StyleSheet.create({
   fixedTop: {
     position: 'absolute',
@@ -48,13 +52,13 @@ const styles = StyleSheet.create({
   },
   leftBtnWrapper: {
     position: 'absolute',
-    left: 20,
+    left: 0,
     top: 0,
     bottom: 0,
   },
   rightBtnWrapper: {
     position: 'absolute',
-    right: 20,
+    right: 0,
     top: 0,
     bottom: 0,
   },
@@ -72,14 +76,14 @@ export interface CPNHeaderProps {
   onPressLeftIcon?: () => void;
   title?: React.ReactNode;
   titleStyle?: StyleProp<TextStyle>;
-  rightIcon?: boolean | React.ReactNode | React.ReactNode[];
+  rightIcon?: boolean | React.ReactNode | React.ReactNode[]; // NOSONAR
   hideBack?: boolean;
   backIconStyle?: StyleProp<TextStyle>;
   safeArea?: boolean;
   onLayout?: (event: LayoutChangeEvent) => void;
   showShadow?: boolean;
 }
-export function CPNHeader(props: CPNHeaderProps) {
+export function CPNHeader(props: Readonly<CPNHeaderProps>) {
   I18n.useLangCode();
 
   const backIcon = useMemo(() => {
@@ -94,6 +98,7 @@ export function CPNHeader(props: CPNHeaderProps) {
       <TouchableOpacity
         accessible
         accessibilityLabel={I18n.t('GoBack')}
+        style={{paddingLeft: HeaderConfigs.paddingHorizontal}}
         onPress={
           props.onPressLeftIcon ||
           (canGoBack && navigationRef.goBack) ||
