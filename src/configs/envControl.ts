@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import ExitApp from 'react-native-exit-app';
-import {parser} from '@exodus/schemasafe';
+import {validator} from '@exodus/schemasafe';
 import SControlJSON from '../../public/SControlJSON.json';
 import {CEnvVariable, envConstant, setAppEnv} from './env';
 import {
@@ -14,7 +14,7 @@ import {I18n, LangCode} from '../assets/I18n';
 import {LS} from '@/store/localStorage';
 import {Colors} from './colors';
 
-const parseControlJSON = parser(SControlJSON);
+const validateControlJSON = validator(SControlJSON);
 
 export enum ControlJSONError {
   NETWORK_ERROR = 'NETWORK_ERROR',
@@ -79,28 +79,29 @@ export async function getControlJSON() {
     });
     clearTimeout(timeoutId);
     const _text = await res.text();
-    const parseResult = parseControlJSON(_text);
-    if (parseResult.valid) {
-      const jsonList = parseResult.value as unknown as ControlItem[];
-      const controlJSON = jsonList.find(
-        _item =>
-          _item.platform.includes(Platform.OS) &&
-          _item.versionName === envConstant.versionName,
-      );
-      if (!controlJSON) {
-        return Promise.reject({
-          code: ControlJSONError.NO_CONTROL_JSON,
-        } as ControlJSONErrorItem);
-      }
-      return controlJSON;
-    } else {
+    const jsonList = JSON.parse(_text) as ControlItem[];
+
+    const isValid = validateControlJSON(jsonList as any);
+    if (!isValid) {
       return Promise.reject({
         code: ControlJSONError.IS_NOT_CONTROL_JSON,
-        message: parseResult.error,
+        message: 'JSON is not a valid control json',
       } as ControlJSONErrorItem);
     }
+
+    const controlJSON = jsonList.find(
+      _item =>
+        _item.platform.includes(Platform.OS) &&
+        _item.versionName === envConstant.versionName,
+    );
+    if (!controlJSON) {
+      return Promise.reject({
+        code: ControlJSONError.NO_CONTROL_JSON,
+      } as ControlJSONErrorItem);
+    }
+    return controlJSON;
   } catch (error) {
-    console.error(error);
+    console.error('getControlJSON', error);
     return Promise.reject({
       code: ControlJSONError.NETWORK_ERROR,
       message: I18n.t('NetworkError'),
