@@ -182,8 +182,13 @@ export const dateFns = {
     return isNaN(date.getTime());
   },
 
+  ERROR: {
+    INVALID_DATE: 'dateTime is invalid',
+  } as const,
+
   /**
    * 格式化日期
+   * @param dateTime - 日期时间，参数需要满足 new Date() 传入参数要求
    * @param format - 格式化字符串
    * - 默认格式： `yyyy-MM-dd HH:mm:ss`
    */
@@ -193,7 +198,7 @@ export const dateFns = {
       if (typeof dateTime === 'string') {
         date = new Date(dateTime.replace(/-/g, '/'));
         if (dateFns.isInvalidDate(date)) {
-          throw new Error('dateTime is invalid');
+          throw new Error(dateFns.ERROR.INVALID_DATE);
         }
       }
     }
@@ -230,16 +235,16 @@ export const numberFns = {
 
 export const cardNumberFns = {
   /**
-   * 格式化数字，每千位添加逗号
+   * 格式化卡号，每四位加 -
    */
   format(cardNumber: number | string): string {
     return String(cardNumber).replace(/(\w{4})(?=\w)/g, '$1 - ');
   },
   /**
-   * 将字符串转为数字
+   * 恢复为卡号
    */
-  recover(cardNumberStr: string): number {
-    return Number(cardNumberStr.replace(/ - /g, ''));
+  recover(cardNumberStr: string) {
+    return cardNumberStr.replace(/ - /g, '');
   },
 };
 
