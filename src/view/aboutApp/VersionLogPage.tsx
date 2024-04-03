@@ -8,8 +8,7 @@ import {
 import {Colors} from '@/configs/colors';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
-import {useApiGiteePublic} from '@/api/giteePublic.http';
-import {VersionItem} from '@/api/giteePublic.schema';
+import {VersionItem, useApiGiteePublic} from '@/api/giteePublic.http';
 import {StyleGet} from '@/configs/styles';
 import {CusLog} from '@/utils/tools';
 
