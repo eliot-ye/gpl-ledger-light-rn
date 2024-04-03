@@ -34,7 +34,7 @@ export function AccountManagementPage() {
         {useInfoList.map(item => (
           <View key={item.id} style={{marginBottom: 10}}>
             <CPNSwipeItem
-              buttons={[
+              rightButtons={[
                 {
                   text: (
                     <CPNIonicons name={IONName.Delete} color={Colors.fail} />
