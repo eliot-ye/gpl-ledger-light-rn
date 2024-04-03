@@ -16,6 +16,7 @@ import {injectControlJSON} from '@/configs/envControl';
 import {envConstant} from '@/configs/env';
 import {CusLog} from '@/utils/tools';
 
+import {RTVWelcome} from './welcome/routes';
 import {RTVAuthorization} from './authorization/routes';
 import {HomePage, RTVHome} from './ledger/routes';
 import {RTVSettings, SettingPage} from './settings/routes';
@@ -33,6 +34,8 @@ export function RouterView() {
 
     if (infoList.length === 0) {
       navigationRef.dispatch(StackActions.replace('SignUpPage'));
+    } else {
+      navigationRef.dispatch(StackActions.replace('SignInPage'));
     }
   }
 
@@ -54,11 +57,12 @@ export function RouterView() {
         }
       }}>
       <RootStack.Navigator
-        initialRouteName={'SignInPage'}
+        initialRouteName={'SplashPage'}
         screenOptions={{
           headerShown: false,
           ...TransitionPresets.SlideFromRightIOS,
         }}>
+        {RTVWelcome}
         {RTVAuthorization}
         {RTVAboutApp}
         <RootStack.Screen
@@ -112,7 +116,7 @@ function TabBarView() {
           ),
           tabBarIcon: ({color, focused}) => (
             <CPNIonicons
-              name={opt?.icon}
+              name={opt?.icon as IONName}
               color={color}
               size={focused ? 24 : 20}
             />

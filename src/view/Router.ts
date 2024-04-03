@@ -11,6 +11,7 @@ import {
   type BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
 
+import type {StackParamListWelcome} from './welcome/routes';
 import type {StackParamListAuthorization} from './authorization/routes';
 import type {StackParamListHome} from './ledger/routes';
 import type {StackParamListSettings} from './settings/routes';
@@ -18,7 +19,8 @@ import type {StackParamListAboutApp} from './aboutApp/routes';
 
 type RootStackParamList = {
   Tabbar: {screen: keyof TabbarStackParamList};
-} & StackParamListAuthorization &
+} & StackParamListWelcome &
+  StackParamListAuthorization &
   StackParamListAboutApp &
   StackParamListHome &
   StackParamListSettings;
