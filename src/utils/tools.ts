@@ -203,6 +203,8 @@ export const dateFns = {
       }
     }
 
+    const TZO = date.getTimezoneOffset() / 60;
+
     const formatConfigs: Record<string, string> = {
       yyyy: date.getFullYear().toString(),
       MM: (date.getMonth() + 1).toString().padStart(2, '0'),
@@ -210,11 +212,13 @@ export const dateFns = {
       HH: date.getHours().toString().padStart(2, '0'),
       mm: date.getMinutes().toString().padStart(2, '0'),
       ss: date.getSeconds().toString().padStart(2, '0'),
+      TZ: TZO > 0 ? '-' + TZO : '+' + -TZO,
     };
 
-    return format.replace(/(yyyy|MM|dd|HH|mm|ss)/g, function (matched: string) {
-      return formatConfigs[matched] ?? matched;
-    });
+    return format.replace(
+      new RegExp(Object.keys(formatConfigs).join('|'), 'g'),
+      (matched: string) => formatConfigs[matched] ?? matched,
+    );
   },
 };
 
