@@ -43,7 +43,8 @@ export default {
 
   salt: 'salt',
 
-  envControlPath: '',
+  envControlPath:
+    'https://eliot-ye.gitee.io/public/GPL/ledger-light-rn-dev/control.json',
   CE_OnChangeRoute: false,
 
   apiServerMap: ServerMap,
