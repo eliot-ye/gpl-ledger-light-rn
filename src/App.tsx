@@ -9,8 +9,8 @@ import {
 } from '@components/base';
 import {RouterView} from '@/view/RouterView';
 import {LS} from '@/store/localStorage';
-import {useColorScheme} from 'react-native';
-import {ColorsInstance, ThemeCode} from './configs/colors';
+import {StatusBar, useColorScheme} from 'react-native';
+import {Colors, ColorsInstance, ThemeCode} from './configs/colors';
 import {generateUUID} from './utils/tools';
 import {Store} from './store';
 
@@ -38,6 +38,7 @@ function RootView() {
 export default function App() {
   return (
     <SafeAreaProvider>
+      <StatusBar backgroundColor={Colors.transparent} translucent />
       <CPNPageModal.Provider>
         <RootView />
       </CPNPageModal.Provider>
