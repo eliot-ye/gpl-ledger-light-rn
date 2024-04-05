@@ -50,6 +50,7 @@ export function createCPNToast() {
       id: string;
       opt?: CPNToastOption;
     };
+    clearAll: {};
   }>();
   let ids: string[] = [];
 
@@ -93,6 +94,14 @@ export function createCPNToast() {
           return;
         }
         ToastQueue.add({id: ed.id, opt: ed.opt});
+      });
+    }, [ToastQueue]);
+
+    useEffect(() => {
+      return ev.subscribe('clearAll', () => {
+        setOption(undefined);
+        ToastQueue.clear();
+        ToastQueue.skipCurrentTask();
       });
     }, [ToastQueue]);
 
@@ -145,6 +154,9 @@ export function createCPNToast() {
     },
     close(id: string) {
       ev.publish('trigger', {id});
+    },
+    clearAll() {
+      ev.publish('clearAll', {});
     },
   } as const;
 }
