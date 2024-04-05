@@ -1,13 +1,15 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Animated} from 'react-native';
+import {ActivityIndicator, Animated, ViewProps} from 'react-native';
 import {Colors} from '@/configs/colors';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {useDimensions} from '@/utils/useDimensions';
 
+interface CPNLoadingProps extends ViewProps {}
+
 export function createCPNLoading() {
   const ev = createSubscribeEvents<{trigger: 'show' | 'close'}>();
 
-  function CPNLoading() {
+  function CPNLoading(props: Readonly<CPNLoadingProps>) {
     const [loadingCount, setLoadingCount] = useState(0);
     useEffect(() => {
       return ev.subscribe('trigger', type =>
@@ -48,17 +50,21 @@ export function createCPNLoading() {
       <>
         {show ? (
           <Animated.View
-            style={{
-              width: screenSize.width,
-              height: screenSize.height,
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              backgroundColor: Colors.backgroundModal,
-              justifyContent: 'center',
-              alignItems: 'center',
-              opacity: animatedValue,
-            }}>
+            {...props}
+            style={[
+              {
+                width: screenSize.width,
+                height: screenSize.height,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                backgroundColor: Colors.backgroundModal,
+                justifyContent: 'center',
+                alignItems: 'center',
+                opacity: animatedValue,
+              },
+              props.style,
+            ]}>
             <ActivityIndicator size="large" color={Colors.backgroundTheme} />
           </Animated.View>
         ) : null}
