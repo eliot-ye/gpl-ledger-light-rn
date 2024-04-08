@@ -1,5 +1,5 @@
 import {getOnlyStr} from '@/utils/tools';
-import {JSONConstraint} from 'types/global';
+import type {ExtractValues, JSONConstraint} from 'types/global';
 
 let serialNumber = 0;
 
@@ -18,6 +18,29 @@ export function createSubscribeEvents<T extends JSONConstraint>(mark?: string) {
 
   const eventMap: EventMap = {};
   const ids: string[] = [];
+
+  function publish<E extends keyof ExtractValues<T, undefined>>(
+    eventName: E,
+  ): void;
+  function publish<E extends keyof T>(eventName: E, eventData: T[E]): void;
+  function publish<E extends keyof T>(eventName: E, eventData?: T[E]) {
+    const eventHandlerMap = eventMap[eventName];
+    if (!eventHandlerMap) {
+      console.error(`${_mark} publish event: ${String(eventName)} not found`);
+      return;
+    }
+    for (const id in eventHandlerMap) {
+      try {
+        const handler = eventHandlerMap[id];
+        handler && handler(eventData as T[E]);
+      } catch (error) {
+        console.error(
+          `${_mark} publish (event: ${String(eventName)}) (id: ${id}) error:`,
+          error,
+        );
+      }
+    }
+  }
 
   return {
     _mark,
@@ -50,23 +73,6 @@ export function createSubscribeEvents<T extends JSONConstraint>(mark?: string) {
       };
     },
 
-    publish<E extends EventName>(eventName: E, eventData: T[E]) {
-      const eventHandlerMap = eventMap[eventName];
-      if (!eventHandlerMap) {
-        console.error(`${_mark} publish event: ${String(eventName)} not found`);
-        return;
-      }
-      for (const id in eventHandlerMap) {
-        try {
-          const handler = eventHandlerMap[id];
-          handler && handler(eventData);
-        } catch (error) {
-          console.error(
-            `${_mark} publish (event: ${String(eventName)}) (id: ${id}) error:`,
-            error,
-          );
-        }
-      }
-    },
+    publish,
   } as const;
 }

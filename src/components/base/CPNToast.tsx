@@ -50,7 +50,7 @@ export function createCPNToast() {
       id: string;
       opt?: CPNToastOption;
     };
-    clearAll: {};
+    clearAll: undefined;
   }>();
   let ids: string[] = [];
 
@@ -156,7 +156,7 @@ export function createCPNToast() {
       ev.publish('trigger', {id});
     },
     clearAll() {
-      ev.publish('clearAll', {});
+      ev.publish('clearAll');
     },
   } as const;
 }
