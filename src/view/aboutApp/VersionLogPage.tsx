@@ -8,26 +8,26 @@ import {
 import {Colors} from '@/configs/colors';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
-import {VersionItem, useApiGiteePublic} from '@/api/giteePublic.http';
+import {VersionItem, useApiPublic} from '@/api/public.http';
 import {StyleGet} from '@/configs/styles';
 import {CusLog} from '@/utils/tools';
 
 export function VersionLogPage() {
   I18n.useLangCode();
 
-  const apiGiteePublic = useApiGiteePublic();
+  const apiPublic = useApiPublic();
 
   const [logList, logListSet] = useState<VersionItem[]>([]);
   const apiGetLogData = useCallback(async () => {
     CPNLoading.open();
     try {
-      const res = await apiGiteePublic.versionLog();
+      const res = await apiPublic.versionLog();
       logListSet(res.filter(item => item.platform.includes(Platform.OS)));
     } catch (error) {
       CusLog.error('VersionLogPage', 'apiGetLogData', error);
     }
     CPNLoading.close();
-  }, [apiGiteePublic]);
+  }, [apiPublic]);
   useEffect(() => {
     apiGetLogData();
   }, [apiGetLogData]);

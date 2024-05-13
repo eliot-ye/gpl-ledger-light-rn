@@ -19,12 +19,12 @@ export type ApiServerMap = typeof ServerMap;
 export type ApiServerName = NSEnv.ApiServerName<ApiServerMap>;
 
 const ServerMap = {
-  giteePublic: 'public/GPL/ledger-light-rn-dev',
+  public: 'public/GPL/ledger-light-rn-dev',
 };
 const apiServerList: NSEnv.ApiServerItem<ApiServerMap>[] = [
   {
-    Domain: 'https://eliot-ye.gitee.io/',
-    ServerEnable: ['giteePublic'],
+    Domain: 'https://eliot-ye.github.io/',
+    ServerEnable: ['public'],
   },
 ];
 const CE_ApiServerList: NSEnv.CEApiServerItem<ApiServerMap>[] = [];
@@ -44,7 +44,7 @@ export default {
   salt: 'salt',
 
   envControlPath:
-    'https://eliot-ye.gitee.io/public/GPL/ledger-light-rn-dev/control.json',
+    'https://eliot-ye.github.io/public/GPL/ledger-light-rn-dev/control.json',
   CE_OnChangeRoute: false,
 
   apiServerMap: ServerMap,

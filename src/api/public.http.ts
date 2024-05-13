@@ -6,9 +6,9 @@ import SVersionList from '../../public/SVersionList.json';
 
 const validateVersion = validator(SVersionList);
 
-export function useApiGiteePublic() {
+export function useApiPublic() {
   const apiGet = useFetch(
-    'giteePublic',
+    'public',
     useMemo(
       () => ({
         method: 'GET',

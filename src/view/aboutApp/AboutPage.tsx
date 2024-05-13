@@ -12,7 +12,7 @@ import {Colors, ColorsInstance} from '@/configs/colors';
 import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/configs/env';
-import {useApiGiteePublic} from '@/api/giteePublic.http';
+import {useApiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {CusLog} from '@/utils/tools';
@@ -21,7 +21,7 @@ export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
   I18n.useLangCode();
   ColorsInstance.useCode();
-  const apiGiteePublic = useApiGiteePublic();
+  const apiPublic = useApiPublic();
 
   function renderVersion(isLast?: boolean) {
     return (
@@ -44,7 +44,7 @@ export function AboutPage() {
         onPress={async () => {
           CPNLoading.open();
           try {
-            const res = await apiGiteePublic.nowVersion();
+            const res = await apiPublic.nowVersion();
             const versionData = res.find(item =>
               item.platform.includes(Platform.OS),
             );
