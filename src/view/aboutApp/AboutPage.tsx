@@ -9,13 +9,21 @@ import {
   CPNImage,
 } from '@/components/base';
 import {Colors, ColorsInstance} from '@/configs/colors';
-import React from 'react';
-import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
+import React, {useRef} from 'react';
+import {
+  Dimensions,
+  Linking,
+  Platform,
+  ScrollView,
+  Switch,
+  View,
+} from 'react-native';
 import {envConstant} from '@/configs/env';
 import {useApiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {CusLog} from '@/utils/tools';
+import {Store} from '@/store';
 
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
@@ -23,6 +31,7 @@ export function AboutPage() {
   ColorsInstance.useCode();
   const apiPublic = useApiPublic();
 
+  const clickVersionCount = useRef(0);
   function renderVersion(isLast?: boolean) {
     return (
       <CPNCell
@@ -30,8 +39,29 @@ export function AboutPage() {
         value={`v${envConstant.versionName} (${envConstant.versionCode})`}
         showChevron={false}
         onPress={() => {
-          // todo some thing
+          clickVersionCount.current++;
+          if (clickVersionCount.current >= 5) {
+            Store.update('isDebug', true);
+          }
         }}
+        isLast={isLast}
+      />
+    );
+  }
+
+  const isDebug = Store.useState('isDebug');
+  function renderDebug(isLast?: boolean) {
+    return (
+      <CPNCell
+        title={I18n.t('Debug')}
+        value={
+          <Switch
+            value={isDebug}
+            onValueChange={_value => {
+              Store.update('isDebug', _value);
+            }}
+          />
+        }
         isLast={isLast}
       />
     );
@@ -102,46 +132,12 @@ export function AboutPage() {
               navigation.navigate('VersionLogPage');
             }
           } catch (error) {
+            if (isDebug) {
+              CPNAlert.alert('error', error as string);
+            }
             CusLog.error('About', 'nowVersion', error);
           }
           CPNLoading.close();
-        }}
-        isLast={isLast}
-      />
-    );
-  }
-
-  function renderGithub(isLast?: boolean) {
-    const url = 'https://github.com/eliot-ye/gpl-ledger-light-rn';
-    return (
-      <CPNCell
-        title={I18n.t('Github')}
-        onPress={() => {
-          Linking.openURL(url);
-        }}
-        isLast={isLast}
-      />
-    );
-  }
-  function renderGitee(isLast?: boolean) {
-    const url = 'https://gitee.com/eliot-ye/gpl-ledger-light-rn';
-    return (
-      <CPNCell
-        title={I18n.t('Gitee')}
-        onPress={() => {
-          Linking.openURL(url);
-        }}
-        isLast={isLast}
-      />
-    );
-  }
-  function renderIssues(isLast?: boolean) {
-    const url = 'https://gitee.com/eliot-ye/gpl-ledger-light-rn/issues';
-    return (
-      <CPNCell
-        title={I18n.t('Issues')}
-        onPress={() => {
-          Linking.openURL(url);
         }}
         isLast={isLast}
       />
@@ -178,15 +174,43 @@ export function AboutPage() {
 
         <CPNCellGroup style={{marginBottom: 20}}>
           {renderVersion()}
+          {isDebug && renderDebug()}
           {renderCheckUpdates(true)}
         </CPNCellGroup>
 
         <CPNCellGroup style={{marginBottom: 20}}>
-          {renderGithub()}
-          {renderGitee()}
-          {renderIssues(true)}
+          <OpenUrlCell
+            title={I18n.t('Github')}
+            url="https://github.com/eliot-ye/gpl-ledger-light-rn"
+          />
+          <OpenUrlCell
+            title={I18n.t('Gitee')}
+            url="https://gitee.com/eliot-ye/gpl-ledger-light-rn"
+          />
+          <OpenUrlCell
+            title={I18n.t('Issues')}
+            url="https://gitee.com/eliot-ye/gpl-ledger-light-rn/issues"
+            isLast
+          />
         </CPNCellGroup>
       </View>
     </CPNPageView>
+  );
+}
+
+interface OpenUrlCellProps {
+  title: string;
+  url: string;
+  isLast?: boolean;
+}
+function OpenUrlCell(props: Readonly<OpenUrlCellProps>) {
+  return (
+    <CPNCell
+      title={props.title}
+      onPress={() => {
+        Linking.openURL(props.url);
+      }}
+      isLast={props.isLast}
+    />
   );
 }

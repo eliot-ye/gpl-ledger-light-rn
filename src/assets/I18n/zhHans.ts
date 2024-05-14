@@ -19,6 +19,7 @@ export default {
   NoMoreData: '没有更多数据',
   NoDataTip: '暂无数据',
   NoDataTip2: '暂无相关数据，请稍后重试',
+  Debug: '调试模式',
 
   SignIn: '登入',
   SignUp: '注册',

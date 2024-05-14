@@ -3,6 +3,7 @@ import {WebDAVObject} from '@/libs/WebDAV';
 
 export const Store = createReactSubscribeStore({
   app_uuid: undefined as string | undefined,
+  isDebug: false,
   isSignIn: false,
   userId: undefined as string | undefined,
   username: undefined as string | undefined,
