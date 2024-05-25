@@ -2,7 +2,7 @@ import type {EnvVariable} from './env';
 
 const env: Partial<EnvVariable> = {
   envControlPath:
-    'https://eliot-ye.gitee.io/public/GPL/ledger-light-rn/control.json',
+    'https://eliot-ye.github.io/public/GPL/ledger-light-rn/control.json',
 
   apiServerMap: {
     public: 'public/GPL/ledger-light-rn',
@@ -10,7 +10,7 @@ const env: Partial<EnvVariable> = {
 
   apiServerList: [
     {
-      Domain: 'https://eliot-ye.gitee.io/',
+      Domain: 'https://eliot-ye.github.io/',
       ServerEnable: ['public'],
     },
   ],
