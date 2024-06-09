@@ -13,6 +13,7 @@ import {
   CPNInput,
   CPNFormItem,
   CPNCellConfig,
+  HeaderConfigs,
 } from '@/components/base';
 import {
   AssetTypeItem,
@@ -92,6 +93,7 @@ export function AssetTypeManagementPage() {
           rightIcon={
             !!detailsRef.current.symbol && (
               <TouchableOpacity
+                style={{paddingRight: HeaderConfigs.paddingHorizontal}}
                 onPress={async () => {
                   await CPNAlert.confirm(
                     '',

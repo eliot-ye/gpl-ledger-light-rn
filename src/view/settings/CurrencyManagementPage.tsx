@@ -12,6 +12,7 @@ import {
   CPNInput,
   CPNFormItem,
   CPNCellConfig,
+  HeaderConfigs,
 } from '@/components/base';
 import {
   CurrencyItem,
@@ -89,6 +90,7 @@ export function CurrencyManagementPage() {
           rightIcon={
             !!detailsRef.current.abbreviation && (
               <TouchableOpacity
+                style={{paddingRight: HeaderConfigs.paddingHorizontal}}
                 onPress={async () => {
                   await CPNAlert.confirm(
                     '',

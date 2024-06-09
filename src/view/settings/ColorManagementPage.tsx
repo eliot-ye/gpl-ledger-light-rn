@@ -13,6 +13,7 @@ import {
   CPNInput,
   CPNFormItem,
   CPNCellConfig,
+  HeaderConfigs,
 } from '@/components/base';
 import {
   ColorItem,
@@ -88,6 +89,7 @@ export function ColorManagementPage() {
           rightIcon={
             !!detailsRef.current.value && (
               <TouchableOpacity
+                style={{paddingRight: HeaderConfigs.paddingHorizontal}}
                 onPress={async () => {
                   await CPNAlert.confirm(
                     '',
