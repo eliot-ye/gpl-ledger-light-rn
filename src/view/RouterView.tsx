@@ -1,5 +1,9 @@
-import React from 'react';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {
+  NavigationContainer,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import {TransitionPresets} from '@react-navigation/stack';
 import {
   navigationRef,
@@ -7,9 +11,9 @@ import {
   TabbarStackParamList,
   TabStack,
 } from './Router';
-import {CPNIonicons, CPNText, IONName} from '@components/base';
+import {CPNIonicons, CPNText, CPNToast, IONName} from '@components/base';
 import {Colors, ColorsInstance} from '@/configs/colors';
-import {View} from 'react-native';
+import {BackHandler, View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
 import {injectControlJSON} from '@/configs/envControl';
@@ -78,8 +82,37 @@ export function RouterView() {
 }
 
 function TabBarView() {
+  const navigation = useNavigation();
   I18n.useLangCode();
   ColorsInstance.useCode();
+
+  useEffect(() => {
+    let canExitApp = false;
+    function onBackPress() {
+      if (canExitApp) {
+        BackHandler.exitApp();
+      } else {
+        const id = CPNToast.open(I18n.t('PressAgainToExit'));
+        canExitApp = true;
+        setTimeout(() => {
+          CPNToast.close(id);
+          canExitApp = false;
+        }, 2000);
+      }
+    }
+    function handleBackButton() {
+      const isFocused = navigation.isFocused();
+      if (isFocused) {
+        onBackPress();
+      }
+      return isFocused;
+    }
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [navigation]);
 
   const tabbarOptionList: TabbarOption[] = [
     {

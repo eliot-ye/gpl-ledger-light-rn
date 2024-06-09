@@ -20,6 +20,7 @@ export default {
   NoDataTip: '暂无数据',
   NoDataTip2: '暂无相关数据，请稍后重试',
   Debug: '调试模式',
+  PressAgainToExit: '再按一次退出',
 
   SignIn: '登入',
   SignUp: '注册',
