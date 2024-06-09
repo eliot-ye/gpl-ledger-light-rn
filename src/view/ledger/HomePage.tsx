@@ -6,6 +6,7 @@ import {
   IONName,
   CPNCellGroup,
   CPNCell,
+  HeaderConfigs,
 } from '@/components/base';
 import {TouchableOpacity, View} from 'react-native';
 import {useDBGetCurrency, useDBGetLedger} from '@/database';
@@ -128,6 +129,7 @@ export function HomePage() {
       alwaysBounceVertical={false}
       rightIcon={
         <TouchableOpacity
+          style={{paddingRight: HeaderConfigs.paddingHorizontal}}
           onPress={async () => {
             navigation.navigate('LedgerDetailsPage');
           }}>

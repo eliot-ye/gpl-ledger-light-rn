@@ -7,6 +7,7 @@ import {
   CPNAlert,
   CPNInput,
   CPNFormItem,
+  HeaderConfigs,
 } from '@/components/base';
 import {Colors} from '@/configs/colors';
 import {LS_UserInfo, useLSUserInfoList} from '@/store/localStorage';
@@ -135,6 +136,7 @@ export function AccountManagementPage() {
       title={I18n.t('AccountManagement')}
       rightIcon={
         <TouchableOpacity
+          style={{paddingRight: HeaderConfigs.paddingHorizontal}}
           onPress={async () => {
             navigation.navigate('SignUpPage');
           }}>

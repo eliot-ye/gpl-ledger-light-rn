@@ -8,6 +8,7 @@ import {
   CPNLoading,
   CPNPageView,
   CPNToast,
+  HeaderConfigs,
   IONName,
 } from '@/components/base';
 import {WebDAVErrorResponseJson, createWebDAV} from '@/libs/WebDAV';
@@ -102,6 +103,7 @@ export function WebDAVPage() {
       rightIcon={
         !!Store.get('WebDAVObject') && (
           <TouchableOpacity
+            style={{paddingRight: HeaderConfigs.paddingHorizontal}}
             onPress={async () => {
               await CPNAlert.confirm(
                 '',

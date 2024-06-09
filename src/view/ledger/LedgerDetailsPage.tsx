@@ -10,6 +10,7 @@ import {
   CPNText,
   CPNFormItem,
   CPNInput,
+  HeaderConfigs,
 } from '@/components/base';
 import {getRandomStrMD5} from '@/utils/tools';
 import {View, TouchableOpacity} from 'react-native';
@@ -135,6 +136,7 @@ export function LedgerDetailsPage() {
       rightIcon={
         !!route.params?.id && (
           <TouchableOpacity
+            style={{paddingRight: HeaderConfigs.paddingHorizontal}}
             onPress={async () => {
               await CPNAlert.confirm(
                 '',
