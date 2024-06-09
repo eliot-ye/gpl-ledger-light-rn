@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
 interface CPNCheckboxProps {
   label?: React.ReactNode;
   showLabel?: boolean;
+  /** 注意：当 description 有值时，文本区域使用了 `flex:1`, 计算文本区域的大小 */
   description?: React.ReactNode;
   checked: boolean;
   onPress?: () => void;
@@ -114,7 +115,7 @@ export function CPNCheckbox(props: Readonly<CPNCheckboxProps>) {
           ))}
       </View>
       {ShowLabel && (
-        <View style={{flex: 1}}>
+        <View style={{flex: props.description ? 1 : undefined}}>
           {['number', 'string'].includes(typeof label) ? (
             <CPNText>{label}</CPNText>
           ) : (
