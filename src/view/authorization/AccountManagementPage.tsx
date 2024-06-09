@@ -54,6 +54,10 @@ export function AccountManagementPage() {
                               style={{marginTop: 10}}>
                               <CPNInput
                                 secureTextEntry={true}
+                                placeholder={I18n.t(
+                                  'PlaceholderInput',
+                                  I18n.t('Password'),
+                                )}
                                 value={data.value}
                                 onChangeText={value =>
                                   dataSet({value, hasError: false})
