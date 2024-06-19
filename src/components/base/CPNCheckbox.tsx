@@ -30,6 +30,8 @@ interface CPNCheckboxProps {
   showLabel?: boolean;
   /** 注意：当 description 有值时，文本区域使用了 `flex:1`, 计算文本区域的大小 */
   description?: React.ReactNode;
+  /** 是否在文本区域使用`flex:1`计算 */
+  flexTextArea?: boolean;
   checked: boolean;
   onPress?: () => void;
   isRadio?: boolean;
@@ -54,8 +56,9 @@ export function CPNCheckbox(props: Readonly<CPNCheckboxProps>) {
   const verticalCentering =
     props.verticalCentering !== false && !props.description;
 
-  const ShowLabel = props.showLabel !== false && !!props.label;
+  const showLabel = props.showLabel !== false && !!props.label;
   const label = props.label || formItem.title;
+  const flexTextArea = props.flexTextArea ?? !!props.description;
 
   return (
     <TouchableOpacity
@@ -81,7 +84,7 @@ export function CPNCheckbox(props: Readonly<CPNCheckboxProps>) {
         style={[
           styles.iconWrapper,
           {
-            marginRight: ShowLabel ? 10 : 0,
+            marginRight: showLabel ? 10 : 0,
             borderColor: themeColor,
             backgroundColor: colorGetBackground(themeColor),
           },
@@ -114,8 +117,8 @@ export function CPNCheckbox(props: Readonly<CPNCheckboxProps>) {
             />
           ))}
       </View>
-      {ShowLabel && (
-        <View style={{flex: props.description ? 1 : undefined}}>
+      {showLabel && (
+        <View style={{flex: flexTextArea ? 1 : undefined}}>
           {['number', 'string'].includes(typeof label) ? (
             <CPNText>{label}</CPNText>
           ) : (
