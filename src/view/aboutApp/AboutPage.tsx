@@ -100,20 +100,17 @@ export function AboutPage() {
                     text: I18n.t('Update'),
                     textColor: Colors.theme,
                     onPress() {
-                      let defaultUpdateLink = '';
-                      if (Platform.OS === 'android') {
-                        defaultUpdateLink = `market://details?id=${envConstant.bundleId}`;
-                      }
-                      if (Platform.OS === 'ios' && envConstant.iosAppStoreId) {
-                        defaultUpdateLink = `itms-apps://itunes.apple.com/us/app/id${envConstant.iosAppStoreId}?mt=8`;
-                      }
+                      const defaultUpdateLink = Platform.select({
+                        android: `market://details?id=${envConstant.bundleId}`,
+                        ios: `itms-apps://itunes.apple.com/us/app/id${envConstant.iosAppStoreId}?mt=8`,
+                      });
 
                       const updateLink =
                         versionData.updateLinks?.find(
                           item => item.platform === Platform.OS,
                         )?.updateLink || versionData.updateLink;
 
-                      Linking.openURL(updateLink || defaultUpdateLink);
+                      Linking.openURL(updateLink || defaultUpdateLink!);
                     },
                   },
                   {
