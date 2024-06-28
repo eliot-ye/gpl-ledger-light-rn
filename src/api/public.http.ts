@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {useFetch} from './http';
+import {useHttp} from './http';
 import {Platform} from 'react-native';
 import {validator} from '@exodus/schemasafe';
 import SVersionList from '../../public/SVersionList.json';
@@ -7,7 +7,7 @@ import SVersionList from '../../public/SVersionList.json';
 const validateVersion = validator(SVersionList);
 
 export function useApiPublic() {
-  const apiGet = useFetch(
+  const apiGet = useHttp(
     'public',
     useMemo(
       () => ({
