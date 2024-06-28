@@ -52,8 +52,8 @@ export interface AlertButton<T> {
   text: string;
   textColor?: string;
   backgroundColor?: string;
-  keep?: boolean;
-  onPress?: (state: [T, React.Dispatch<T>]) => void;
+  /** 如果返回一个 `Promise.reject()` 则弹窗不会关闭 */
+  onPress?: (state: [T, React.Dispatch<T>]) => void | Promise<void>;
 }
 interface CPNAlertButton<T> extends AlertButton<T> {
   id?: string;
@@ -170,15 +170,11 @@ function CPNAlertBox(props: Readonly<CPNAlertBoxProps>) {
                   },
               ]}>
               <TouchableOpacity
-                onPress={() => {
-                  try {
-                    _btn.onPress && _btn.onPress(StateObj);
-                  } catch (error) {
-                    console.error(`CPNAlert button [${_btn.text}]:`, error);
+                onPress={async () => {
+                  if (_btn.onPress) {
+                    await _btn.onPress(StateObj);
                   }
-                  if (!_btn.keep) {
-                    props.onClose();
-                  }
+                  props.onClose();
                 }}
                 style={[
                   styles.btn,
@@ -320,7 +316,7 @@ export function createCPNAlert() {
         animationType="fade"
         onRequestClose={() => {
           const alertOption = alertOptionList[alertOptionList.length - 1];
-          if (alertOption && alertOption.backButtonClose) {
+          if (alertOption?.backButtonClose) {
             eventInstance.publish(
               'close',
               alertOptionList[alertOptionList.length - 1].id,

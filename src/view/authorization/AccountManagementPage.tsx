@@ -43,7 +43,7 @@ export function AccountManagementPage() {
                   backgroundColor: colorGetBackground(Colors.fail),
                   async onPress() {
                     return new Promise((resolve, reject) => {
-                      const alertId = CPNAlert.open({
+                      CPNAlert.open({
                         title: I18n.t('DeleteConfirm', item.username),
                         initState: {value: '', hasError: false},
                         message: ([data, dataSet]) => {
@@ -71,22 +71,21 @@ export function AccountManagementPage() {
                           {
                             text: I18n.t('Confirm'),
                             textColor: Colors.warning,
-                            keep: true,
                             onPress: async ([data, dataSet]) => {
                               if (!data.value) {
                                 dataSet({...data, hasError: true});
-                                return;
+                                return Promise.reject();
                               }
                               let DBKey = '';
                               try {
                                 DBKey = AESDecrypt(item.token, data.value);
                               } catch (error) {
                                 dataSet({...data, hasError: true});
-                                return;
+                                return Promise.reject();
                               }
                               if (!DBKey) {
                                 dataSet({...data, hasError: true});
-                                return;
+                                return Promise.reject();
                               }
                               try {
                                 const realm = await getRealm(item.id, DBKey);
@@ -96,7 +95,6 @@ export function AccountManagementPage() {
                               } catch (error) {
                                 console.log(error);
                               }
-                              CPNAlert.close(alertId);
                               resolve(() => {
                                 LS_UserInfo.remove(item.id);
                               });
