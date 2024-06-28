@@ -83,7 +83,10 @@ export async function getControlJSON() {
       controller.abort();
     }, 10000);
     const res = await fetch(envConstant.envControlPath, {
-      headers: {'Cache-Control': 'no-cache'},
+      headers: {
+        'Cache-Control': 'no-cache',
+        'User-Agent': `${envConstant.brand}/(${envConstant.model}) ${Platform.OS}/${Platform.Version} ${envConstant.bundleId}/${envConstant.versionName}.${envConstant.versionCode}`,
+      },
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
