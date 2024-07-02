@@ -41,6 +41,7 @@ export function AboutPage() {
         onPress={() => {
           clickVersionCount.current++;
           if (clickVersionCount.current >= 5) {
+            clickVersionCount.current = 0;
             Store.update('isDebug', true);
           }
         }}
@@ -50,20 +51,22 @@ export function AboutPage() {
   }
 
   const isDebug = Store.useState('isDebug');
-  function renderDebug(isLast?: boolean) {
+  function renderDebug() {
     return (
-      <CPNCell
-        title={I18n.t('Debug')}
-        value={
-          <Switch
-            value={isDebug}
-            onValueChange={_value => {
-              Store.update('isDebug', _value);
-            }}
-          />
-        }
-        isLast={isLast}
-      />
+      <CPNCellGroup style={{marginBottom: 20}}>
+        <CPNCell
+          title={I18n.t('Debug')}
+          value={
+            <Switch
+              value={isDebug}
+              onValueChange={_value => {
+                Store.update('isDebug', _value);
+              }}
+            />
+          }
+        />
+        <CPNCell title="SDK API Version" value={Platform.Version} isLast />
+      </CPNCellGroup>
     );
   }
 
@@ -174,9 +177,9 @@ export function AboutPage() {
 
         <CPNCellGroup style={{marginBottom: 20}}>
           {renderVersion()}
-          {isDebug && renderDebug()}
           {renderCheckUpdates(true)}
         </CPNCellGroup>
+        {isDebug && renderDebug()}
 
         <CPNCellGroup style={{marginBottom: 20}}>
           <OpenUrlCell
