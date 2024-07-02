@@ -4,7 +4,7 @@ import {envConstant, getFetchUrl} from '@/configs/env';
 import {ApiServerName} from '@/configs/env.default';
 import {Store} from '@/store';
 import {CusLog} from '@/utils/tools';
-import {useCallback, useEffect, useRef} from 'react';
+import {useEffect, useMemo, useRef} from 'react';
 import {Platform} from 'react-native';
 
 interface LogData {
@@ -146,124 +146,120 @@ interface HttpOption {
   signal?: AbortSignal;
 }
 
-const showAlertFlags: string[] = [];
+const alertFlags: string[] = [];
 
-const serverOptionDefault = {};
+export function createHttp(
+  serverName: ApiServerName,
+  serverOption: HttpOption = {},
+) {
+  /**
+   * @param path - 必须以 `/` 开头
+   * @param body - 默认自动添加以下字段：``
+   */
+  return async function (path: string, body?: any, option: HttpOption = {}) {
+    const fetchOption: HttpOption = {
+      dataType: DataType.json,
+      ...serverOption,
+      ...option,
+    };
+
+    const fetchData = getFetchData(serverName, path, body, fetchOption);
+
+    try {
+      const {status: responseStatus, data: responseData} = await createFetch(
+        fetchData.url,
+        fetchData.bodyObj.bodyStr,
+        fetchData.headers,
+        fetchOption,
+      );
+
+      if (__DEV__) {
+        if (responseStatus === 200) {
+          debug({
+            path,
+            response: responseData,
+            ...fetchData,
+            body: fetchData.bodyObj.reqBody,
+          });
+        } else {
+          logError({
+            path,
+            response: responseData,
+            ...fetchData,
+            body: fetchData.bodyObj.reqBody,
+          });
+        }
+      } else {
+        try {
+          fetchData.bodyObj.bodyStr = '';
+        } catch (error) {}
+      }
+
+      if (responseStatus !== 200) {
+        let errorCode = '';
+
+        if (responseStatus === 403) {
+          // token 失效
+          // await LSLogout();
+          Store.reset();
+          if (fetchOption.showExpiredAlert ?? true) {
+            errorCode = 'SessionExpired';
+          }
+        } else if (fetchOption.showNetworkErrorAlert ?? true) {
+          errorCode = 'NetworkError';
+        }
+
+        showAlert(errorCode);
+
+        return Promise.reject(responseStatus);
+      }
+
+      return responseData;
+    } catch (error) {
+      const errorObj = error as any;
+
+      logError({
+        path,
+        response: errorObj,
+        ...fetchData,
+        body: fetchData.bodyObj.reqBody,
+      });
+
+      if (fetchOption.showNetworkErrorAlert ?? true) {
+        showAlert('NetworkError');
+      }
+
+      return Promise.reject(errorObj.status);
+    }
+  };
+}
+
+function showAlert(alertFlag: string) {
+  if (alertFlag && !alertFlags.includes(alertFlag)) {
+    alertFlags.push(alertFlag);
+    CPNAlert.alert('', I18n.t(alertFlag as any) || alertFlag).then(() => {
+      alertFlags.splice(alertFlags.indexOf(alertFlag), 1);
+    });
+  }
+}
+
 /**
  * @param serverOption - ___use memoized value___
  */
-export function useFetch(
-  serverName: ApiServerName,
-  serverOption: HttpOption = serverOptionDefault,
-) {
+export function useHttp(serverName: ApiServerName, serverOption?: HttpOption) {
   const controller = useRef(new AbortController()).current;
-  useEffect(() => {
-    return () => controller.abort();
-  }, [controller]);
+  useEffect(() => () => controller.abort(), []);
 
-  return useCallback(
-    /**
-     * @param path - 必须以 `/` 开头
-     * @param body - 默认自动添加以下字段：``
-     */
-    async function (path: string, body?: any, option: HttpOption = {}) {
-      const fetchOption: HttpOption = {
-        signal: controller.signal,
-        dataType: DataType.json,
-        ...serverOption,
-        ...option,
-      };
-
-      const fetchData = getFetchData(serverName, path, body, fetchOption);
-
-      try {
-        const {status: responseStatus, data: responseData} = await createFetch(
-          fetchData.url,
-          fetchData.bodyObj.bodyStr,
-          fetchData.headers,
-          fetchOption,
-        );
-
-        if (__DEV__) {
-          if (responseStatus === 200) {
-            debug({
-              path,
-              response: responseData,
-              ...fetchData,
-              body: fetchData.bodyObj.reqBody,
-            });
-          } else {
-            logError({
-              path,
-              response: responseData,
-              ...fetchData,
-              body: fetchData.bodyObj.reqBody,
-            });
-          }
-        } else {
-          try {
-            fetchData.bodyObj.bodyStr = '';
-          } catch (error) {}
-        }
-
-        if (responseStatus !== 200) {
-          let errorCode = '';
-
-          if (responseStatus === 403) {
-            // token 失效
-            Store.reset();
-            if (fetchOption.showExpiredAlert ?? true) {
-              errorCode = 'SessionExpired';
-            }
-          } else if (fetchOption.showNetworkErrorAlert ?? true) {
-            errorCode = 'NetworkError';
-          }
-          if (errorCode && !showAlertFlags.includes(errorCode)) {
-            showAlertFlags.push(errorCode);
-            CPNAlert.alert('', I18n.t(errorCode as any)).then(() => {
-              showAlertFlags.splice(showAlertFlags.indexOf(errorCode), 1);
-            });
-          }
-
-          return Promise.reject(responseStatus);
-        }
-
-        return responseData;
-      } catch (error) {
-        const errorObj = error as any;
-
-        logError({
-          path,
-          response: errorObj,
-          ...fetchData,
-          body: fetchData.bodyObj.reqBody,
-        });
-
-        return Promise.reject(errorObj.status);
-      }
-    },
-    [controller.signal, serverName, serverOption],
-  );
+  return useMemo(() => {
+    return createHttp(serverName, {
+      signal: controller.signal,
+      ...serverOption,
+    });
+  }, [serverName, serverOption]);
 }
 
-// export function useLogout() {
-//   return useCallback(async function () {
-//     const fetchData = getFetchData('main', '/logout');
-
-//     createFetch(fetchData.url, fetchData.bodyObj.bodyStr, fetchData.headers)
-//       .then(res => {
-//         CusLog.success('res logout:', fetchData.url, res);
-//       })
-//       .catch(error => {
-//         CusLog.error('err logout:', fetchData.url, error);
-//       });
-
-//     await LSLogout();
-//     Store.reset();
-//   }, []);
-// }
-
-export interface HttpRes {
+export interface HttpRes<T> {
   code: number;
   msg: string;
+  data: T;
 }

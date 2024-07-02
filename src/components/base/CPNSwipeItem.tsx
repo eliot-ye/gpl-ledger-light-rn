@@ -17,15 +17,10 @@ const Config = {
   buttonPadding: 8,
 } as const;
 
-/**
- * - 如果返回 `true` 将触发删除动画，动画时间为 500ms
- * - 如果返回 Callback 将触发删除动画，动画时间为 500ms，并在动画结束后调用 Callback
- * */
+type SwipeItemEventReturn = (() => void) | boolean | void;
 type SwipeItemEvent = () =>
-  | Promise<(() => void) | boolean | void>
-  | boolean
-  | void
-  | (() => void);
+  | Promise<SwipeItemEventReturn>
+  | SwipeItemEventReturn;
 interface CPNSwipeButton {
   text: React.ReactNode;
   /**

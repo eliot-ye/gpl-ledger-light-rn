@@ -48,15 +48,24 @@ interface ControlJSONAlertI18nItem extends ControlJSONAlertText {
 interface ControlJSONAlert extends ControlJSONAlertText {
   /** 如果有值，则相同ID的弹窗只显示一次 */
   onceId?: string;
-  /** 点击确认按钮退出 app */
+  /**
+   * 点击确认按钮退出 app
+   * @default false
+   * */
   confirmExitApp?: boolean;
-  /** 点击取消按钮退出 app */
+  /**
+   * 点击取消按钮退出 app
+   * @default false
+   * */
   cancelExitApp?: boolean;
   /** 点击确认按钮打开链接 */
   confirmOpenURL?: string;
   /** 点击取消按钮打开链接 */
   cancelOpenURL?: string;
-  /** 点击确认按钮关闭弹窗 */
+  /**
+   * 点击确认按钮关闭弹窗
+   * @default true
+   * */
   confirmClose?: boolean;
   showCancel?: boolean;
   i18n?: ControlJSONAlertI18nItem[];
@@ -165,13 +174,17 @@ export async function injectControlJSON() {
       {
         text: confirmText ?? I18n.t('Confirm'),
         textColor: Colors.theme,
-        keep: !alert.confirmClose,
         async onPress() {
-          if (alert.confirmOpenURL) {
-            await Linking.openURL(alert.confirmOpenURL);
-          }
-          if (alert.confirmExitApp) {
-            ExitApp.exitApp();
+          try {
+            if (alert.confirmOpenURL) {
+              await Linking.openURL(alert.confirmOpenURL);
+            }
+            if (alert.confirmExitApp) {
+              ExitApp.exitApp();
+            }
+          } catch (error) {}
+          if (alert.confirmClose === false) {
+            return Promise.reject();
           }
         },
       },
@@ -181,12 +194,14 @@ export async function injectControlJSON() {
       buttons.push({
         text: cancelText ?? I18n.t('Cancel'),
         async onPress() {
-          if (alert.cancelOpenURL) {
-            await Linking.openURL(alert.cancelOpenURL);
-          }
-          if (alert.cancelExitApp) {
-            ExitApp.exitApp();
-          }
+          try {
+            if (alert.cancelOpenURL) {
+              await Linking.openURL(alert.cancelOpenURL);
+            }
+            if (alert.cancelExitApp) {
+              ExitApp.exitApp();
+            }
+          } catch (error) {}
         },
       });
     }
