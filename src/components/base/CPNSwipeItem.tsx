@@ -137,7 +137,7 @@ export function CPNSwipeItem(props: Readonly<CPNSwipeItemProps>) {
   const translateXAnimated = useRef(new Animated.Value(0)).current;
 
   const onDelete = useCallback(
-    (isDelete: boolean | void | (() => void)) => {
+    (isDelete: SwipeItemEventReturn) => {
       setDeleting(true);
       const deleteSwipe =
         translateXRef.current < 0
