@@ -142,8 +142,8 @@ function TabBarView() {
                 style={{backgroundColor: Colors.backgroundPanel, flex: 1}}
               />
             ),
-          tabBarLabel: ({color, focused}) => (
-            <CPNText style={{color, fontSize: focused ? 12 : 10}}>
+          tabBarLabel: ({color}) => (
+            <CPNText style={{color, fontSize: 12, marginHorizontal: 16}}>
               {opt?.label}
             </CPNText>
           ),
