@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {CPNText} from './CPNText';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {CPNPageViewThemeColor} from './CPNPageView';
 import {FormItemContext} from './CPNFormItem';

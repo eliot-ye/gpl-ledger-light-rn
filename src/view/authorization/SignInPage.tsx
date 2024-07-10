@@ -11,7 +11,7 @@ import {
   CPNAlert,
   CPNImage,
 } from '@/components/base';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {LSUserInfo, LS, useLSUserInfoList} from '@/store/localStorage';
 import {AESDecrypt} from '@/utils/encoding';
 import {useNavigation} from '@react-navigation/native';

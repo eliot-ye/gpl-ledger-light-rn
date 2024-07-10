@@ -2,17 +2,17 @@ import React from 'react';
 import {Dimensions, Linking, Platform, ScrollView} from 'react-native';
 import ExitApp from 'react-native-exit-app';
 import {validator} from '@exodus/schemasafe';
-import SControlJSON from '../../public/SControlJSON.json';
-import {CEnvVariable, envConstant, setAppEnv} from './env';
+import SControlJSON from '../../../public/SControlJSON.json';
+import {CEnvVariable, envConstant, setAppEnv} from '.';
 import {
   AlertButton,
   CPNAlert,
   CPNRichTextView,
   CPNText,
 } from '@/components/base';
-import {I18n, LangCode} from '../assets/I18n';
+import {I18n, LangCode} from '../I18n';
 import {LS} from '@/store/localStorage';
-import {Colors} from './colors';
+import {Colors} from '../colors';
 
 const validateControlJSON = validator(SControlJSON);
 

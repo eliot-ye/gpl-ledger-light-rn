@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {CPNCellConfig, CPNCellGroupContext, CPNImage, CPNText} from './base';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 import {I18n} from '@/assets/I18n';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 
 interface CPNNoDataProps {
   title?: string;

@@ -24,8 +24,8 @@ import {
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
 import {getRandomStrMD5} from '@/utils/tools';
-import {StyleGet} from '@/configs/styles';
-import {Colors} from '@/configs/colors';
+import {StyleGet} from '@/assets/styles';
+import {Colors} from '@/assets/colors';
 import {ShowTabType, CPNUsedTab} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
 import {ErrorItem} from 'types/global';

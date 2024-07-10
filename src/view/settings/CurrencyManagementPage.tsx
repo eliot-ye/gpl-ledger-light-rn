@@ -22,8 +22,8 @@ import {
   dbSetCurrency,
 } from '@/database';
 import {TouchableOpacity, View} from 'react-native';
-import {StyleGet} from '@/configs/styles';
-import {Colors} from '@/configs/colors';
+import {StyleGet} from '@/assets/styles';
+import {Colors} from '@/assets/colors';
 import {CPNUsedTab, ShowTabType} from '@/components/CPNUsedTab';
 import {CPNNoData} from '@/components/CPNNoData';
 import {ErrorItem} from 'types/global';

@@ -1,4 +1,4 @@
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React, {useMemo} from 'react';
 import {useWindowDimensions, View} from 'react-native';
 import RenderHtml, {

@@ -1,4 +1,4 @@
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {CPNIonicons, CPNPageViewThemeColor, CPNText, IONName} from '.';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import {FormItemContext} from './CPNFormItem';
 import {I18n} from '@/assets/I18n';
 

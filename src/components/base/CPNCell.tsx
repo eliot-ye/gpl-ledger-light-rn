@@ -1,4 +1,4 @@
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import React, {useContext} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {
@@ -10,7 +10,7 @@ import {
   FontSizeContext,
   IONName,
 } from '.';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 
 interface CPNCellProps {
   title: React.ReactNode;

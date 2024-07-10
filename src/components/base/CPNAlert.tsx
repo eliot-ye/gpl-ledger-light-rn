@@ -7,11 +7,12 @@ import {
   View,
 } from 'react-native';
 import {I18n} from '@assets/I18n';
-import {Colors} from '@/configs/colors';
-import {StyleGet} from '@/configs/styles';
+import {Colors} from '@/assets/colors';
+import {StyleGet} from '@/assets/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
+import {useDimensions} from '@/utils/useDimensions';
 
 const Config = {
   width: '80%',
@@ -234,6 +235,8 @@ export function CPNAlertView<T>(props: Readonly<CPNAlertViewProps<T>>) {
     }
   }, [animatedValue, props.show]);
 
+  const screenSize = useDimensions('screen');
+
   return (
     <Modal
       visible={props.show}
@@ -245,7 +248,7 @@ export function CPNAlertView<T>(props: Readonly<CPNAlertViewProps<T>>) {
           props.onClose();
         }
       }}>
-      <View style={StyleGet.modalView()}>
+      <View style={StyleGet.modalView(screenSize.height)}>
         {
           <CPNAlertBox
             {...props}
@@ -308,6 +311,8 @@ export function createCPNAlert() {
       alertOptionListLength.current = alertOptionList.length;
     }, [alertOptionList]);
 
+    const screenSize = useDimensions('screen');
+
     return (
       <Modal
         visible={alertOptionList.length > 0}
@@ -323,7 +328,7 @@ export function createCPNAlert() {
             );
           }
         }}>
-        <View style={StyleGet.modalView()}>
+        <View style={StyleGet.modalView(screenSize.height)}>
           {alertOptionList.map((_item, _index) => {
             return (
               <CPNAlertBox

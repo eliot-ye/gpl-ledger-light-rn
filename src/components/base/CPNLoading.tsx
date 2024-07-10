@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Animated, ViewProps} from 'react-native';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {useDimensions} from '@/utils/useDimensions';
 

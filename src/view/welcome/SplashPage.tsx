@@ -1,7 +1,7 @@
 import React from 'react';
 import {CPNImage} from '@/components/base';
 import {View, useWindowDimensions} from 'react-native';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 
 export function SplashPage() {
   const {width} = useWindowDimensions();

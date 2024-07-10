@@ -9,7 +9,7 @@ import {
   CPNFormItem,
   HeaderConfigs,
 } from '@/components/base';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {LS_UserInfo, useLSUserInfoList} from '@/store/localStorage';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';

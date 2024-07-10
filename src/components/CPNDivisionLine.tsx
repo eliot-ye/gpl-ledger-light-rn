@@ -1,4 +1,4 @@
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React from 'react';
 import {StyleSheet, View, ViewProps} from 'react-native';
 import {CPNText} from './base';

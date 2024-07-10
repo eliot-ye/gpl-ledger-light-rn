@@ -1,6 +1,6 @@
 import React, {createContext, useContext} from 'react';
 import {Linking, Text, TextProps} from 'react-native';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 
 export const FontColorContext = createContext('');
 export const FontSizeContext = createContext(16);

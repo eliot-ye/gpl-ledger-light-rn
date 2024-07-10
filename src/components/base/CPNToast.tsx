@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Animated, StyleSheet, useWindowDimensions, View} from 'react-native';
-import {Colors} from '@/configs/colors';
-import {StyleGet} from '@/configs/styles';
+import {Colors} from '@/assets/colors';
+import {StyleGet} from '@/assets/styles';
 import {getOnlyStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';

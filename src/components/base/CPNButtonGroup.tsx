@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {CPNPageViewThemeColor, CPNText, FormItemContext} from '.';
-import {Colors} from '@/configs/colors';
-import {StyleGet} from '@/configs/styles';
+import {Colors} from '@/assets/colors';
+import {StyleGet} from '@/assets/styles';
 
 const styles = StyleSheet.create({
   groupContainer: {

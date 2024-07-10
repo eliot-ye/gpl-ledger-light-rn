@@ -1,4 +1,4 @@
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React from 'react';
 import {IconProps} from 'react-native-vector-icons/Icon';
 import Ionicons from 'react-native-vector-icons/Ionicons';

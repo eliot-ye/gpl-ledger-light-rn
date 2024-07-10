@@ -8,8 +8,8 @@ import {
   TouchableOpacityProps,
 } from 'react-native';
 import {CPNText, FontColorContext} from './CPNText';
-import {Colors} from '@/configs/colors';
-import {StyleGet} from '@/configs/styles';
+import {Colors} from '@/assets/colors';
+import {StyleGet} from '@/assets/styles';
 import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {

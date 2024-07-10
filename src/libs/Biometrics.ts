@@ -3,7 +3,7 @@ import {I18n} from '@/assets/I18n';
 import {CusLog, getRandomStrMD5} from '@/utils/tools';
 import {LocalStorageEngine} from '@/store/localStorage';
 import {AESDecrypt, AESEncrypt, MD5} from '@/utils/encoding';
-import {envConstant} from '@/configs/env';
+import {envConstant} from '@/assets/environment';
 
 interface Option {
   promptMessage?: string;

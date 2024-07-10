@@ -4,10 +4,10 @@ import React, {useEffect, useState} from 'react';
 import {Switch, View} from 'react-native';
 import {PageProps} from '../Router';
 import {useNavigation} from '@react-navigation/native';
-import {envConstant} from '@/configs/env';
+import {envConstant} from '@/assets/environment';
 import {biometrics} from '@/utils/biometrics';
 import {CusLog} from '@/utils/tools';
-import {ColorsInstance} from '@/configs/colors';
+import {ColorsInstance} from '@/assets/colors';
 import {Store} from '@/store';
 
 export function SettingPage() {

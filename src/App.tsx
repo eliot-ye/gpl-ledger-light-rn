@@ -10,7 +10,7 @@ import {
 import {RouterView} from '@/view/RouterView';
 import {LS} from '@/store/localStorage';
 import {StatusBar, useColorScheme} from 'react-native';
-import {Colors, ColorsInstance, ThemeCode} from './configs/colors';
+import {Colors, ColorsInstance, ThemeCode} from './assets/colors';
 import {generateUUID} from './utils/tools';
 import {Store} from './store';
 

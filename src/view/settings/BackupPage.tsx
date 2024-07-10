@@ -23,10 +23,10 @@ import {
 } from '@/database';
 import {AESDecrypt, AESEncrypt} from '@/utils/encoding';
 import {CusLog} from '@/utils/tools';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {PageProps} from '../Router';
 import {LS_UserInfo, LS} from '@/store/localStorage';
-import {envConstant} from '@/configs/env';
+import {envConstant} from '@/assets/environment';
 import {getWebDAVFileData} from './WebDAVPage';
 import {formatDateTime} from '@/utils/dateFn';
 import {Store} from '@/store';

@@ -10,13 +10,13 @@ import {
 } from '@/components/base';
 import {TouchableOpacity, View} from 'react-native';
 import {useDBGetCurrency, useDBGetLedger} from '@/database';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {I18n} from '@/assets/I18n';
 import {useDimensions} from '@/utils/useDimensions';
 import {PieChart} from 'react-native-chart-kit';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import {colorGetBackground} from '@/utils/tools';
 import {CPNNoData} from '@/components/CPNNoData';
 import {CPNCurrencyView} from '@/components/CPNCurrencyView';

@@ -1,8 +1,8 @@
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React, {PropsWithChildren, useEffect, useMemo} from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Animated, Modal, PanResponder, View} from 'react-native';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import {CPNActionSheet} from './CPNActionSheet';
 import {CPNAlert} from './CPNAlert';
 import {CPNLoading} from './CPNLoading';

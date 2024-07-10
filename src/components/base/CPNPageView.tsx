@@ -7,7 +7,7 @@ import {
   Platform,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 import {CPNHeader, type CPNHeaderProps} from './CPNHeader';
 import {useDimensions} from '@/utils/useDimensions';
 

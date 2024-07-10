@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native';
+import {FlexStyle} from 'react-native';
 import {Colors} from './colors';
 
 const titleMap = {
@@ -15,25 +15,21 @@ function title<T extends TitleType>(type: T, isReverse?: boolean) {
   } as const;
 }
 
-type JustifyContent =
-  | 'flex-start'
-  | 'flex-end'
-  | 'center'
-  | 'space-between'
-  | 'space-around'
-  | 'space-evenly';
-
-const screenSize = Dimensions.get('screen');
-
 export const StyleGet = {
   title,
 
-  modalView(justifyContent?: JustifyContent) {
+  /**
+   * @param height - useDimensions('screen').height
+   */
+  modalView(
+    height: number,
+    justifyContent: FlexStyle['justifyContent'] = 'center',
+  ) {
     return {
       width: '100%',
-      height: screenSize.height,
+      height,
       backgroundColor: Colors.backgroundModal,
-      justifyContent: justifyContent || 'center',
+      justifyContent: justifyContent,
       alignItems: 'center',
       overflow: 'hidden',
     } as const;

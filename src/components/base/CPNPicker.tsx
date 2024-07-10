@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {colorGetBackground, toTitleCase} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {DataConstraint} from './CPNDropdown';

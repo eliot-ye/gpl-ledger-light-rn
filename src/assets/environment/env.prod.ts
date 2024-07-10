@@ -1,4 +1,4 @@
-import type {EnvVariable} from './env';
+import type {EnvVariable} from '.';
 
 const env: Partial<EnvVariable> = {
   envControlPath:

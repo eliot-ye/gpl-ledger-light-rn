@@ -8,7 +8,7 @@ import {
   CPNRichTextView,
   CPNImage,
 } from '@/components/base';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 import React, {useRef} from 'react';
 import {
   Dimensions,
@@ -18,7 +18,7 @@ import {
   Switch,
   View,
 } from 'react-native';
-import {envConstant} from '@/configs/env';
+import {envConstant} from '@/assets/environment';
 import {useApiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';

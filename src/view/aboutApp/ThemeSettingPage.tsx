@@ -5,7 +5,7 @@ import {
   CPNCheckbox,
   CPNPageView,
 } from '@/components/base';
-import {ColorsInstance, ThemeCode} from '@/configs/colors';
+import {ColorsInstance, ThemeCode} from '@/assets/colors';
 import {LS} from '@/store/localStorage';
 import React, {useEffect, useState} from 'react';
 import {View, useColorScheme} from 'react-native';

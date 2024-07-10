@@ -12,12 +12,12 @@ import {
   TabStack,
 } from './Router';
 import {CPNIonicons, CPNText, CPNToast, IONName} from '@components/base';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 import {BackHandler, View} from 'react-native';
 import {LS_UserInfo} from '@/store/localStorage';
 import {I18n} from '@/assets/I18n';
-import {injectControlJSON} from '@/configs/envControl';
-import {envConstant} from '@/configs/env';
+import {injectControlJSON} from '@/assets/environment/envControl';
+import {envConstant} from '@/assets/environment';
 import {CusLog} from '@/utils/tools';
 
 import {RTVWelcome} from './welcome/routes';

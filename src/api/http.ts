@@ -1,7 +1,7 @@
 import {I18n} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
-import {envConstant, getFetchUrl} from '@/configs/env';
-import {ApiServerName} from '@/configs/env.default';
+import {envConstant, getFetchUrl} from '@/assets/environment';
+import {ApiServerName} from '@/assets/environment/env.default';
 import {Store} from '@/store';
 import {CusLog} from '@/utils/tools';
 import {useEffect, useMemo, useRef} from 'react';

@@ -11,11 +11,12 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
+import {useDimensions} from '@/utils/useDimensions';
 
 const Config = {
   borderRadius: 14,
@@ -103,18 +104,20 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
       setShow(true);
       Animated.spring(animatedValue, {
         toValue: 0,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(animatedValue, {
         toValue: 300,
         duration: 200,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start(() => {
         setShow(false);
       });
     }
   }, [animatedValue, props.show]);
+
+  const screenSize = useDimensions('screen');
 
   return (
     <Modal
@@ -136,7 +139,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
         }}>
         <View
           style={[
-            StyleGet.modalView('flex-end'),
+            StyleGet.modalView(screenSize.height, 'flex-end'),
             {alignItems: 'stretch', paddingHorizontal: 8},
           ]}>
           <Animated.View

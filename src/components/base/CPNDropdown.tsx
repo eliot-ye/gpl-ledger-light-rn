@@ -10,9 +10,9 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import {CPNText} from './CPNText';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {I18n} from '@/assets/I18n';
 import {FormItemContext} from './CPNFormItem';

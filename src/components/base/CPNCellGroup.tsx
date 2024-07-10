@@ -1,7 +1,7 @@
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import React, {createContext} from 'react';
 import {View, ViewProps} from 'react-native';
-import {Colors, ColorsInstance} from '@/configs/colors';
+import {Colors, ColorsInstance} from '@/assets/colors';
 
 export const CPNCellGroupContext = createContext(false);
 

@@ -2,7 +2,7 @@ import {createReactConstant} from '@/libs/ReactConstant';
 import DeviceInfo from 'react-native-device-info';
 import envDefault, {ApiServerName} from './env.default';
 import envProd from './env.prod';
-import {Include} from '../../types/global';
+import {Include} from '../../../types/global';
 
 export type EnvVariable = typeof envDefault;
 export type CEnvKey = Include<keyof EnvVariable, `CE_${string}`>;
@@ -22,7 +22,7 @@ const envList: EnvListItem[] = [
 ];
 
 export const EnvInstance = createReactConstant({
-  [EnvCode.DEV]: {...envDefault},
+  [EnvCode.DEV]: envDefault,
   [EnvCode.PROD]: {...envDefault, ...envProd},
 });
 export const {Constant: envConstant} = EnvInstance;

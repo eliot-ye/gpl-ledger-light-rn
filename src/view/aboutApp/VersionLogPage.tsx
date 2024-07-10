@@ -5,11 +5,11 @@ import {
   CPNRichTextView,
   CPNText,
 } from '@/components/base';
-import {Colors} from '@/configs/colors';
+import {Colors} from '@/assets/colors';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Platform, View} from 'react-native';
 import {VersionItem, useApiPublic} from '@/api/public.http';
-import {StyleGet} from '@/configs/styles';
+import {StyleGet} from '@/assets/styles';
 import {CusLog} from '@/utils/tools';
 
 export function VersionLogPage() {

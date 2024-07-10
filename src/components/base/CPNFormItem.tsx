@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useMemo} from 'react';
-import {StyleGet} from '@/configs/styles';
-import {Colors} from '@/configs/colors';
+import {StyleGet} from '@/assets/styles';
+import {Colors} from '@/assets/colors';
 import {View, ViewProps} from 'react-native';
 import {CPNPageViewThemeColor, CPNText} from '.';
 

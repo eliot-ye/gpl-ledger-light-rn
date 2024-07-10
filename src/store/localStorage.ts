@@ -1,8 +1,8 @@
 import {MD5, StringToUint8Array} from '@/utils/encoding';
-import {ThemeCode} from '@/configs/colors';
+import {ThemeCode} from '@/assets/colors';
 import Realm from 'realm';
 import {LSSchemaName, createObjectSchema} from '@/database/schemaType';
-import {envConstant} from '@/configs/env';
+import {envConstant} from '@/assets/environment';
 import {useEffect, useState} from 'react';
 import {type StorageEngine, createAsyncStorage} from 'gpl-async-storage';
 
