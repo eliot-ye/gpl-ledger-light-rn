@@ -1,11 +1,11 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {Dimensions, Image, ImageProps, ImageSourcePropType} from 'react-native';
-import {ImageData, ImageNameMapType} from '@/configs/ImageData';
+import {ImageGet, ImageNameType} from '@assets/images';
 import {I18n} from '@/assets/I18n';
 
 interface CPNImageProps extends Partial<ImageProps> {
   /** 本地图片定义的名称，和`source`冲突时无效 */
-  name?: keyof ImageNameMapType;
+  name?: ImageNameType;
   /** 如果设置了`size`则默认图片宽高都为`size` */
   size?: number;
   /** 根据图片比例和显示宽度自动计算高度，和`size`冲突时失效 */
@@ -23,17 +23,7 @@ export function CPNImage(props: Readonly<CPNImageProps>) {
       return {};
     }
 
-    const _imageNameDefaultMap = ImageData.default;
-
-    if (langCode) {
-      const _imageNameMap = ImageData[langCode];
-      if (!_imageNameMap) {
-        return _imageNameDefaultMap[props.name];
-      }
-      return _imageNameMap[props.name] || _imageNameDefaultMap[props.name];
-    }
-
-    return _imageNameDefaultMap[props.name];
+    return ImageGet(props.name, langCode);
   }, [props.name, props.source, langCode]);
 
   const [imageWidth, setImageWidth] = useState(props.autoHeight?.imageWidth);
