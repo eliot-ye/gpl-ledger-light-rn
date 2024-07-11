@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {Linking, Text, TextProps, TextStyle} from 'react-native';
+import {Linking, StyleProp, Text, TextProps, TextStyle} from 'react-native';
 import {Colors} from '@/assets/colors';
 import {I18n, LangCode} from '@/assets/I18n';
 
@@ -16,13 +16,13 @@ const fontFamilyMap: FontFamilyMap = {
   },
 };
 
-interface CTextStyle extends TextStyle {
+export interface CTextStyle extends TextStyle {
   fontFamily?: FontFamilyName;
 }
 
 interface CPNTextProps extends TextProps {
   link?: string;
-  style?: CTextStyle | CTextStyle[];
+  style?: StyleProp<CTextStyle>;
 }
 export function CPNText(props: Readonly<CPNTextProps>) {
   const colorDefault = useContext(FontColorContext) || Colors.fontText;
@@ -69,19 +69,21 @@ type FontFamilyStyleMap = {
   italic?: FontFamilyWeightItem[];
 };
 interface FontFamilyWeightItem {
-  fontWeight: TextStyle['fontWeight'][];
+  fontWeight: CTextStyle['fontWeight'][];
   fontFamily: string;
 }
 
 function getFontFamily(
   langCode: LangCode,
-  propsStyle: CTextStyle | CTextStyle[] | undefined,
+  propsStyle: StyleProp<CTextStyle>,
 ): string | undefined {
   let style = propsStyle as CTextStyle;
   if (Array.isArray(propsStyle)) {
     let _style = {};
     for (const el of propsStyle) {
-      _style = {..._style, ...el};
+      if (typeof el === 'object') {
+        _style = {..._style, ...el};
+      }
     }
     style = _style;
   }

@@ -16,13 +16,12 @@ import {
   TouchableOpacity,
   ViewStyle,
   StyleProp,
-  TextStyle,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
 import {Colors} from '@/assets/colors';
 import {colorGetBackground, toTitleCase} from '@/utils/tools';
-import {CPNText} from './CPNText';
+import {CPNText, CTextStyle} from './CPNText';
 import {DataConstraint} from './CPNDropdown';
 import {CPNPageViewThemeColor} from './CPNPageView';
 
@@ -252,7 +251,7 @@ interface ModalPickerProps extends CPNPicker {
         scrollViewStyle?: StyleProp<ViewStyle>;
         title?: string;
         titleContainerStyle?: StyleProp<ViewStyle>;
-        titleTextStyle?: StyleProp<TextStyle>;
+        titleTextStyle?: StyleProp<CTextStyle>;
       }
     | undefined
     | null

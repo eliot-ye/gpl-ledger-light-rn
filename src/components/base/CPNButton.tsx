@@ -1,13 +1,11 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
-  StyleProp,
   StyleSheet,
-  TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import {CPNText, FontColorContext} from './CPNText';
+import {CPNText, CTextStyle, FontColorContext} from './CPNText';
 import {Colors} from '@/assets/colors';
 import {StyleGet} from '@/assets/styles';
 import {CPNPageViewThemeColor} from './CPNPageView';
@@ -35,7 +33,7 @@ interface CPNButtonTypeItem {
 }
 
 interface CPNButtonProps extends TouchableOpacityProps {
-  textStyle?: StyleProp<TextStyle>;
+  textStyle?: CTextStyle | CTextStyle[];
   /** @default 'theme' */
   type?: CPNButtonType;
   shape?: 'square';
@@ -117,7 +115,7 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
     if (props.disabledSetting?.render) {
       const reactNode = props.disabledSetting.render(disabledTimer);
       return ['string', 'number'].includes(typeof reactNode) ? (
-        <CPNText style={[props.textStyle]}>{reactNode}</CPNText>
+        <CPNText style={props.textStyle}>{reactNode}</CPNText>
       ) : (
         reactNode
       );
@@ -149,6 +147,8 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
         styles.wrapper,
         !disabled && StyleGet.boxShadow(),
         {
+          paddingVertical: 4,
+          paddingHorizontal: 10,
           backgroundColor: props.plain
             ? Colors.backgroundPanel
             : btnStyle.backgroundColor,
@@ -165,7 +165,7 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
 
         {(disabled && renderDisabled()) ||
           (['string', 'number'].includes(typeof props.children) ? (
-            <CPNText style={[props.textStyle]}>{props.children}</CPNText>
+            <CPNText style={props.textStyle}>{props.children}</CPNText>
           ) : (
             props.children
           ))}

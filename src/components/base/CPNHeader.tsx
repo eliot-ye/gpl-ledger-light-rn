@@ -4,13 +4,12 @@ import {
   LayoutChangeEvent,
   StyleProp,
   StyleSheet,
-  TextStyle,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '@/assets/colors';
-import {CPNText} from './CPNText';
+import {CPNText, CTextStyle} from './CPNText';
 import {I18n} from '@/assets/I18n';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {StyleGet} from '@/assets/styles';
@@ -75,10 +74,10 @@ export interface CPNHeaderProps {
   /** ___use memoized value___ */
   onPressLeftIcon?: () => void;
   title?: React.ReactNode;
-  titleStyle?: StyleProp<TextStyle>;
+  titleStyle?: StyleProp<CTextStyle>;
   rightIcon?: boolean | React.ReactNode | React.ReactNode[]; // NOSONAR
   hideBack?: boolean;
-  backIconStyle?: StyleProp<TextStyle>;
+  backIconStyle?: StyleProp<CTextStyle>;
   safeArea?: boolean;
   onLayout?: (event: LayoutChangeEvent) => void;
   showShadow?: boolean;
