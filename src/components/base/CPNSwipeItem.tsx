@@ -303,9 +303,6 @@ export function CPNSwipeItem(props: Readonly<CPNSwipeItemProps>) {
             {leftButtons.map(item => renderButton(item))}
           </Animated.View>
         )}
-        <Animated.View
-          style={{width: width, transform: [{translateX: translateXAnimated}]}}
-        />
         {!deleting && (
           <Animated.View
             style={[
