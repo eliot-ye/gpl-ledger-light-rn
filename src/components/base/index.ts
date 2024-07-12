@@ -17,5 +17,6 @@ export * from './CPNPageView';
 export * from './CPNPicker';
 export * from './CPNRichTextView';
 export * from './CPNSwipeItem';
+export * from './CPNSwitch';
 export * from './CPNText';
 export * from './CPNToast';

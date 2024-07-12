@@ -4,12 +4,13 @@ import {
   CPNCellGroup,
   CPNLoading,
   CPNPageView,
+  CPNSwitch,
   CPNText,
   CPNToast,
 } from '@/components/base';
 import {I18n} from '@/assets/I18n';
 import React, {useEffect, useState} from 'react';
-import {PermissionsAndroid, Platform, Share, Switch, View} from 'react-native';
+import {PermissionsAndroid, Platform, Share, View} from 'react-native';
 import FS from 'react-native-fs';
 import {
   dbGetAssetTypes,
@@ -218,11 +219,11 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
               <CPNCell
                 title={I18n.t('WebDAVSync')}
                 value={
-                  <Switch
+                  <CPNSwitch
                     value={enableWebDAVSync}
-                    onChange={async () => {
-                      await LS.set('web_dav_auto_sync', !enableWebDAVSync);
-                      enableWebDAVSyncSet(!enableWebDAVSync);
+                    onChange={async _value => {
+                      await LS.set('web_dav_auto_sync', _value);
+                      enableWebDAVSyncSet(_value);
                     }}
                   />
                 }

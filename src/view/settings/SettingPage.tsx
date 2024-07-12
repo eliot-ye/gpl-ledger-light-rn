@@ -1,7 +1,13 @@
 import {I18n} from '@/assets/I18n';
-import {CPNPageView, CPNCell, CPNCellGroup, CPNAlert} from '@/components/base';
+import {
+  CPNPageView,
+  CPNCell,
+  CPNCellGroup,
+  CPNAlert,
+  CPNSwitch,
+} from '@/components/base';
 import React, {useEffect, useState} from 'react';
-import {Switch, View} from 'react-native';
+import {View} from 'react-native';
 import {PageProps} from '../Router';
 import {useNavigation} from '@react-navigation/native';
 import {envConstant} from '@/assets/environment';
@@ -40,16 +46,16 @@ export function SettingPage() {
         <CPNCell
           title={I18n.t('BiometricsEnable')}
           rightIcon={
-            <Switch
+            <CPNSwitch
               value={enableBiometrics}
-              onChange={async () => {
+              onChange={async _value => {
                 const userId = Store.get('userId');
                 if (!userId) {
                   return;
                 }
                 try {
                   const password = Store.get('password');
-                  if (!enableBiometrics && password) {
+                  if (_value && password) {
                     await biometrics.setUser({
                       userId: userId,
                       password: password,

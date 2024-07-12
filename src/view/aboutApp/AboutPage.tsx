@@ -7,17 +7,11 @@ import {
   CPNAlert,
   CPNRichTextView,
   CPNImage,
+  CPNSwitch,
 } from '@/components/base';
 import {Colors, ColorsInstance} from '@/assets/colors';
 import React, {useRef} from 'react';
-import {
-  Dimensions,
-  Linking,
-  Platform,
-  ScrollView,
-  Switch,
-  View,
-} from 'react-native';
+import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/assets/environment';
 import {useApiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
@@ -57,9 +51,9 @@ export function AboutPage() {
         <CPNCell
           title={I18n.t('Debug')}
           value={
-            <Switch
+            <CPNSwitch
               value={isDebug}
-              onValueChange={_value => {
+              onChange={_value => {
                 Store.update('isDebug', _value);
               }}
             />
