@@ -9,6 +9,6 @@ export enum ThemeCode {
 
 export const ColorsInstance = createReactConstant({
   [ThemeCode.default]: colorsDefault,
-  [ThemeCode.dark]: colorsDark,
+  [ThemeCode.dark]: {...colorsDefault, ...colorsDark},
 });
 export const {Constant: Colors} = ColorsInstance;

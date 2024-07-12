@@ -1,7 +1,4 @@
-import {colorsDefault} from './default';
-
 export const colorsDark = {
-  ...colorsDefault,
   theme: '#0E639C',
   backgroundTheme: '#252526',
   backgroundPanel: '#333333',
@@ -12,6 +9,7 @@ export const colorsDark = {
   line: '#414141',
 
   fontTitle: '#CCCCCC',
+  fontTitleReverse: '#000',
   fontSubtitle: '#989898',
   fontText: '#C6C6C6',
 } as const;

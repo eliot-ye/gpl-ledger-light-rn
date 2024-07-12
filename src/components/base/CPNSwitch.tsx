@@ -2,6 +2,7 @@ import {Colors, ColorsInstance} from '@/assets/colors';
 import {StyleGet} from '@/assets/styles';
 import {useEffect, useMemo, useRef} from 'react';
 import {Animated, PanResponder} from 'react-native';
+import {CPNIonicons, IONName} from '.';
 
 const cellView = StyleGet.cellView();
 const Config = {
@@ -18,13 +19,11 @@ interface CPNSwitchProps {
   activeBackgroundColor?: string;
 }
 export function CPNSwitch(props: Readonly<CPNSwitchProps>) {
-  const _thumbColor = ColorsInstance.useConstant('backgroundPanel');
-  const thumbColor = props.thumbColor ?? _thumbColor;
-  const _backgroundColor = ColorsInstance.useConstant('fontPlaceholder');
-  const backgroundColor = props.backgroundColor ?? _backgroundColor;
-  const _activeBackgroundColor = ColorsInstance.useConstant('theme');
-  const activeBackgroundColor =
-    props.activeBackgroundColor ?? _activeBackgroundColor;
+  ColorsInstance.useCode();
+
+  const thumbColor = props.thumbColor ?? Colors.backgroundPanel;
+  const backgroundColor = props.backgroundColor ?? Colors.fontPlaceholder;
+  const activeBackgroundColor = props.activeBackgroundColor ?? Colors.theme;
 
   const width = (Config.height / 3) * 5;
   const thumbSize = Config.height - Config.borderWidth * 2;
@@ -109,6 +108,7 @@ export function CPNSwitch(props: Readonly<CPNSwitchProps>) {
     <Animated.View
       {...panResponder.panHandlers}
       accessibilityRole={'switch'}
+      accessibilityState={{checked: props.value}}
       style={{
         backgroundColor: bgColor,
         borderColor: bgColor,
@@ -129,9 +129,16 @@ export function CPNSwitch(props: Readonly<CPNSwitchProps>) {
               ? Colors.backgroundDisabled
               : thumbColor,
             transform: [{translateX: thumbTranslateAnimated}],
+            justifyContent: 'center',
+            alignItems: 'center',
           },
-        ]}
-      />
+        ]}>
+        <CPNIonicons
+          name={props.value ? IONName.RemoveOutline : IONName.EllipseOutline}
+          size={10}
+          color={Colors.fontTitle}
+        />
+      </Animated.View>
     </Animated.View>
   );
 }

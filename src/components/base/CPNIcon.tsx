@@ -1,4 +1,4 @@
-import {Colors} from '@/assets/colors';
+import {ColorsInstance} from '@/assets/colors';
 import React from 'react';
 import {IconProps} from 'react-native-vector-icons/Icon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -37,6 +37,9 @@ export enum IONName {
 
   Home = 'home',
   Settings = 'settings',
+
+  RemoveOutline = 'remove-outline',
+  EllipseOutline = 'ellipse-outline',
 }
 
 type IoniconsProps = IconProps & {
@@ -44,10 +47,11 @@ type IoniconsProps = IconProps & {
   name?: IONName;
 };
 export function CPNIonicons(props: Readonly<IoniconsProps>) {
+  const color = ColorsInstance.useConstant('fontTitleReverse');
   return (
     <Ionicons
       size={26}
-      color={Colors.fontTitleReverse}
+      color={color}
       accessibilityLabel={props.name}
       {...props}
     />
