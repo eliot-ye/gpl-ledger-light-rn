@@ -1,6 +1,6 @@
 import {Colors, ColorsInstance} from '@/assets/colors';
 import {StyleGet} from '@/assets/styles';
-import {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {Animated, PanResponder} from 'react-native';
 import {CPNIonicons, IONName} from '.';
 
@@ -37,7 +37,7 @@ export function CPNSwitch(props: Readonly<CPNSwitchProps>) {
       toValue: props.value ? thumbTranslateToValue : 0,
       useNativeDriver: false,
     }).start();
-  }, [props.value]);
+  }, [props.value, thumbTranslateAnimated, thumbTranslateToValue]);
 
   const thumbSizeToValue = (thumbSize / 4) * 5;
   const thumbTranslateOnPassToValue =
@@ -102,7 +102,14 @@ export function CPNSwitch(props: Readonly<CPNSwitchProps>) {
         onTouchEnd(false);
       },
     });
-  }, [props.value, props.disabled]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    props.value,
+    props.disabled,
+    thumbSize,
+    thumbTranslateToValue,
+    thumbTranslateOnPassToValue,
+  ]);
 
   return (
     <Animated.View
