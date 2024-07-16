@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '@/assets/colors';
-import {CPNText, CTextStyle} from './CPNText';
+import {CPNText, CTextStyle, FontColorContext} from './CPNText';
 import {I18n} from '@/assets/I18n';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {StyleGet} from '@/assets/styles';
@@ -69,6 +69,7 @@ export interface CPNHeaderProps {
     | string
     | Animated.Value
     | Animated.AnimatedInterpolation<string>;
+  textColor?: string;
   leftIcon?: React.ReactNode | React.ReactNode[];
   leftIconType?: 'close';
   /** ___use memoized value___ */
@@ -107,13 +108,11 @@ export function CPNHeader(props: Readonly<CPNHeaderProps>) {
           <CPNIonicons
             name={props.showShadow ? IONName.Close : IONName.CloseCircle}
             size={props.showShadow ? 26 : 30}
-            color={Colors.fontTitleReverse}
           />
         ) : (
           <CPNIonicons
             name={props.showShadow ? IONName.Back : IONName.BackCircle}
             size={props.showShadow ? 26 : 30}
-            color={Colors.fontTitleReverse}
           />
         )}
       </TouchableOpacity>
@@ -131,9 +130,7 @@ export function CPNHeader(props: Readonly<CPNHeaderProps>) {
 
   function renderTitle() {
     return ['string', 'number'].includes(typeof props.title) ? (
-      <CPNText
-        role="heading"
-        style={[StyleGet.title('h2', true), props.titleStyle]}>
+      <CPNText role="heading" style={[{fontSize: 20}, props.titleStyle]}>
         {props.title}
       </CPNText>
     ) : (
@@ -156,13 +153,16 @@ export function CPNHeader(props: Readonly<CPNHeaderProps>) {
         },
       ]}>
       <View style={styles.container}>
-        <View style={[styles.box, styles.titleWrapper]}>{renderTitle()}</View>
-        <View style={[styles.box, styles.leftBtnWrapper]}>
-          {renderLeftIcon()}
-        </View>
-        <View style={[styles.box, styles.rightBtnWrapper]}>
-          {props.rightIcon}
-        </View>
+        <FontColorContext.Provider
+          value={props.textColor ?? Colors.fontTitleReverse}>
+          <View style={[styles.box, styles.titleWrapper]}>{renderTitle()}</View>
+          <View style={[styles.box, styles.leftBtnWrapper]}>
+            {renderLeftIcon()}
+          </View>
+          <View style={[styles.box, styles.rightBtnWrapper]}>
+            {props.rightIcon}
+          </View>
+        </FontColorContext.Provider>
       </View>
     </Animated.View>
   );

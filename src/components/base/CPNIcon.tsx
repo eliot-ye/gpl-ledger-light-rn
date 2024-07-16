@@ -1,7 +1,8 @@
 import {ColorsInstance} from '@/assets/colors';
-import React from 'react';
+import React, {useContext} from 'react';
 import {IconProps} from 'react-native-vector-icons/Icon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {FontColorContext} from './CPNText';
 
 /**
  * Ionicons name
@@ -47,11 +48,13 @@ type IoniconsProps = IconProps & {
   name?: IONName;
 };
 export function CPNIonicons(props: Readonly<IoniconsProps>) {
-  const color = ColorsInstance.useConstant('fontTitleReverse');
+  const fontTextColor = ColorsInstance.useConstant('fontText');
+  const colorDefault = useContext(FontColorContext) || fontTextColor;
+
   return (
     <Ionicons
       size={26}
-      color={color}
+      color={colorDefault}
       accessibilityLabel={props.name}
       {...props}
     />
