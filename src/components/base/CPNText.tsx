@@ -8,13 +8,13 @@ export const FontSizeContext = createContext(16);
 
 type FontFamilyName = 'Serif';
 const defaultFontFamily: FontFamilyName = 'Serif';
-const fontFamilyMap: FontFamilyMap = {
-  Serif: {
-    default: {
-      normal: [],
-    },
+const fontFamilyList: FontFamilyItem[] = [
+  {
+    fontFamily: 'Serif',
+    fontWeight: ['normal', '400'],
+    fontFamilyRaw: 'Serif',
   },
-};
+];
 
 export interface CTextStyle extends TextStyle {
   fontFamily?: FontFamilyName;
@@ -59,25 +59,15 @@ export function CPNText(props: Readonly<CPNTextProps>) {
   );
 }
 
-type FontFamilyMap = {
-  [fontFamilyName in FontFamilyName]?: FontFamilyLangMap;
-};
-type FontFamilyLangMap = {default: FontFamilyStyleMap} & {
-  [langCode in LangCode]?: FontFamilyStyleMap;
-};
-type FontFamilyStyleMap = {
-  normal: FontFamilyWeightItem[];
-  italic?: FontFamilyWeightItem[];
-};
-interface FontFamilyWeightItem {
+interface FontFamilyItem {
+  fontFamily: FontFamilyName;
   fontWeight: CTextStyle['fontWeight'][];
-  fontFamily: string;
+  fontStyle?: CTextStyle['fontStyle'];
+  fontFamilyRaw: string;
+  langCode?: LangCode[];
 }
 
-function getFontFamily(
-  langCode: LangCode,
-  propsStyle: StyleProp<CTextStyle>,
-): string | undefined {
+function getFontFamily(langCode: LangCode, propsStyle: StyleProp<CTextStyle>) {
   let style = propsStyle as CTextStyle;
   if (Array.isArray(propsStyle)) {
     let _style = {};
@@ -90,19 +80,21 @@ function getFontFamily(
   }
 
   const fontFamilyName = style?.fontFamily ?? defaultFontFamily;
-
-  const fontFamilyLangMap = fontFamilyMap[fontFamilyName];
-  if (!fontFamilyLangMap) {
-    return undefined;
-  }
-  const fontFamilyStyleMap =
-    fontFamilyLangMap[langCode] ?? fontFamilyLangMap.default;
-  let fontFamilyWeightList = fontFamilyStyleMap.normal;
-  if (style?.fontStyle === 'italic' && fontFamilyStyleMap.italic) {
-    fontFamilyWeightList = fontFamilyStyleMap.italic;
-  }
-
-  return fontFamilyWeightList.find(item =>
-    item.fontWeight.includes(style?.fontWeight),
-  )?.fontFamily;
+  const fontWeight = style?.fontWeight ?? 'normal';
+  const fontStyle = style?.fontStyle;
+  return fontFamilyList.find(item => {
+    if (item.fontFamily !== fontFamilyName) {
+      return false;
+    }
+    if (!item.fontWeight.includes(fontWeight)) {
+      return false;
+    }
+    if (item.langCode && !item.langCode.includes(langCode)) {
+      return false;
+    }
+    if (item.fontStyle && fontStyle !== item.fontStyle) {
+      return false;
+    }
+    return true;
+  })?.fontFamilyRaw;
 }
