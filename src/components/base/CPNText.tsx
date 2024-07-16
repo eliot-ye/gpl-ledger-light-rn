@@ -1,6 +1,6 @@
 import React, {createContext, useContext} from 'react';
 import {Linking, StyleProp, Text, TextProps, TextStyle} from 'react-native';
-import {Colors} from '@/assets/colors';
+import {ColorsInstance} from '@/assets/colors';
 import {I18n, LangCode} from '@/assets/I18n';
 
 export const FontColorContext = createContext('');
@@ -25,7 +25,8 @@ interface CPNTextProps extends TextProps {
   style?: StyleProp<CTextStyle>;
 }
 export function CPNText(props: Readonly<CPNTextProps>) {
-  const colorDefault = useContext(FontColorContext) || Colors.fontText;
+  const fontTextColor = ColorsInstance.useConstant('fontText');
+  const colorDefault = useContext(FontColorContext) || fontTextColor;
 
   const fontSizeDefault = useContext(FontSizeContext);
 
