@@ -11,31 +11,34 @@ import {StyleGet} from '@/assets/styles';
 import {CPNPageViewThemeColor} from './CPNPageView';
 
 const Config = {
-  height: 60,
   borderRadius: 30,
 } as const;
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: Config.height,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: StyleGet.cellView().paddingHorizontal,
+    paddingVertical: 4,
   },
 });
 
 export type CPNButtonType = 'theme' | 'warning' | 'success';
 
-interface CPNButtonTypeItem {
-  type: CPNButtonType;
+interface CPNButtonTypeItem<T> {
+  type: CPNButtonType | T;
   textColor: string;
   backgroundColor: string;
 }
 
-interface CPNButtonProps extends TouchableOpacityProps {
+interface CPNButtonProps<T> extends TouchableOpacityProps {
   textStyle?: CTextStyle | CTextStyle[];
   /** @default 'theme' */
-  type?: CPNButtonType;
+  type?: CPNButtonType | T;
+  size?: 'small' | 'large';
+  /** ___use memoized value___ */
+  customTypes?: CPNButtonTypeItem<T>[];
   shape?: 'square';
   plain?: boolean;
   isLoading?: boolean;
@@ -56,10 +59,12 @@ interface CPNButtonProps extends TouchableOpacityProps {
     initial?: boolean;
   };
 }
-export function CPNButton(props: Readonly<CPNButtonProps>) {
+export function CPNButton<T>(props: Readonly<CPNButtonProps<T>>) {
   const themeColor = useContext(CPNPageViewThemeColor) || Colors.theme;
 
-  const CPNButtonTypeList = useMemo<CPNButtonTypeItem[]>(
+  const size = props.size ?? 'large';
+
+  const CPNButtonTypeList = useMemo<CPNButtonTypeItem<T>[]>(
     () => [
       {
         type: 'theme',
@@ -76,6 +81,7 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
         textColor: Colors.fontTextReverse,
         backgroundColor: Colors.success,
       },
+      ...(props.customTypes ?? []),
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -84,6 +90,7 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
       Colors.fontTextReverse,
       Colors.warning,
       Colors.success,
+      props.customTypes,
     ],
   );
 
@@ -122,7 +129,7 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
     }
   }
 
-  const btnStyle = useMemo<CPNButtonTypeItem>(() => {
+  const btnStyle = useMemo<CPNButtonTypeItem<T>>(() => {
     const _btnStyle = CPNButtonTypeList.find(
       _item => _item.type === (props.type ?? 'theme'),
     );
@@ -147,8 +154,8 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
         styles.wrapper,
         !disabled && StyleGet.boxShadow(),
         {
-          paddingVertical: 4,
-          paddingHorizontal: 10,
+          maxWidth: StyleGet.maxWidth,
+          alignSelf: 'center',
           backgroundColor: props.plain
             ? Colors.backgroundPanel
             : btnStyle.backgroundColor,
@@ -156,6 +163,11 @@ export function CPNButton(props: Readonly<CPNButtonProps>) {
           borderWidth: 1,
           borderRadius: props.shape === 'square' ? 0 : Config.borderRadius,
           opacity: disabled ? 0.4 : undefined,
+        },
+        size === 'large' && {
+          width: '100%',
+          paddingHorizontal: 15,
+          paddingVertical: 15,
         },
         props.style,
       ]}>

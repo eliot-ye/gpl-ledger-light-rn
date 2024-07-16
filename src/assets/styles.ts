@@ -18,6 +18,8 @@ function title<T extends TitleType>(type: T, isReverse?: boolean) {
 export const StyleGet = {
   title,
 
+  maxWidth: 448,
+
   /**
    * @param height - useDimensions('screen').height
    */
