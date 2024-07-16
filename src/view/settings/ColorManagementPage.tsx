@@ -81,7 +81,6 @@ export function ColorManagementPage() {
               ? I18n.f(I18n.t('EditColor'), detailsRef.current.name || '')
               : I18n.t('AddColor')
           }
-          scrollEnabled={false}
           headerBackgroundColor={detailsRef.current.value}
           safeArea={false}
           leftIconType="close"

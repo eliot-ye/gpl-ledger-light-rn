@@ -191,6 +191,7 @@ export function CPNDropdown<ItemT extends DataConstraint>(
         visible={show}
         transparent
         statusBarTranslucent
+        supportedOrientations={['portrait', 'landscape']}
         animationType="fade"
         onRequestClose={() => setShow(false)}>
         <TouchableWithoutFeedback onPress={() => setShow(false)}>

@@ -124,6 +124,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
       visible={show}
       transparent
       statusBarTranslucent
+      supportedOrientations={['portrait', 'landscape']}
       animationType="fade"
       onRequestClose={() => {
         if (props.backButtonClose !== false) {

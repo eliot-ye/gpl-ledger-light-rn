@@ -86,7 +86,6 @@ export function AssetTypeManagementPage() {
               ? I18n.f(I18n.t('EditAssetType'), detailsRef.current.name || '')
               : I18n.t('AddAssetType')
           }
-          scrollEnabled={false}
           safeArea={false}
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}

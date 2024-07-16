@@ -83,7 +83,6 @@ export function CurrencyManagementPage() {
               ? I18n.f(I18n.t('EditCurrency'), detailsRef.current.name || '')
               : I18n.t('AddCurrency')
           }
-          scrollEnabled={false}
           safeArea={false}
           leftIconType="close"
           onPressLeftIcon={() => showDetailsModalSet(false)}

@@ -147,6 +147,7 @@ export function createCPNPageModal() {
         <Modal
           transparent
           statusBarTranslucent
+          supportedOrientations={['portrait', 'landscape']}
           animationType="slide"
           visible={props.show}
           onRequestClose={props.onClose}>

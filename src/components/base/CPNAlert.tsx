@@ -73,6 +73,8 @@ interface AlertOption<T> {
   backButtonClose?: boolean;
   /** ___use memoized value___ */
   buttons?: AlertButton<T>[];
+  /** 弹窗关闭时调用 */
+  onClose?: () => void;
 }
 interface CPNAlertOption extends AlertOption<any> {
   id: string;
@@ -242,6 +244,7 @@ export function CPNAlertView<T>(props: Readonly<CPNAlertViewProps<T>>) {
       visible={props.show}
       transparent
       statusBarTranslucent
+      supportedOrientations={['portrait', 'landscape']}
       animationType="fade"
       onRequestClose={() => {
         if (props.backButtonClose !== false) {
@@ -289,7 +292,8 @@ export function createCPNAlert() {
         setAlertOptionList(_opts => {
           const index = _opts.map(_item => _item.id).indexOf(id);
           if (index > -1) {
-            _opts.splice(index, 1);
+            const opt = _opts.splice(index, 1);
+            opt[0].onClose?.();
           }
           return [..._opts];
         });
@@ -318,6 +322,7 @@ export function createCPNAlert() {
         visible={alertOptionList.length > 0}
         transparent
         statusBarTranslucent
+        supportedOrientations={['portrait', 'landscape']}
         animationType="fade"
         onRequestClose={() => {
           const alertOption = alertOptionList[alertOptionList.length - 1];
@@ -390,6 +395,7 @@ export function createCPNAlert() {
           animatedValue: new Animated.Value(0),
           title,
           message,
+          onClose: () => resolve(),
           buttons: [
             {
               text: I18n.t('Confirm'),
@@ -409,6 +415,7 @@ export function createCPNAlert() {
           animatedValue: new Animated.Value(0),
           title,
           message,
+          onClose: () => reject(),
           buttons: [
             {
               text: I18n.t('Confirm'),

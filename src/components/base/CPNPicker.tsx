@@ -415,6 +415,7 @@ export function CPNModalPicker(props: Readonly<ModalPickerProps>) {
       visible={props.show}
       transparent
       statusBarTranslucent
+      supportedOrientations={['portrait', 'landscape']}
       animationType="fade"
       onRequestClose={props.onClose}>
       <View style={stylesModalPicker.modal}>
@@ -939,6 +940,7 @@ export function CPNDateTimePicker(props: Readonly<DateTimePickerProps>) {
       visible={props.show}
       transparent
       statusBarTranslucent
+      supportedOrientations={['portrait', 'landscape']}
       animationType="fade"
       onRequestClose={props.onClose}>
       <View style={stylesModalPicker.modal}>
