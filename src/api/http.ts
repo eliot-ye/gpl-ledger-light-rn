@@ -2,10 +2,9 @@ import {I18n} from '@/assets/I18n';
 import {CPNAlert} from '@/components/base';
 import {envConstant, getFetchUrl} from '@/assets/environment';
 import {ApiServerName} from '@/assets/environment/env.default';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 import {CusLog} from '@/utils/tools';
 import {useEffect, useMemo, useRef} from 'react';
-import {Platform} from 'react-native';
 
 interface LogData {
   response: any;
@@ -31,8 +30,8 @@ function logError({url, response, path, body, headers}: LogData) {
 const headersDefault = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  'User-Agent': `${envConstant.brand}/(${envConstant.model}) ${Platform.OS}/${Platform.Version} ${envConstant.bundleId}/${envConstant.versionName}.${envConstant.versionCode}`,
   'Content-Language': I18n.getLangCode(),
+  'User-Agent': envConstant.UserAgent,
   Authorization: undefined as undefined | string,
 };
 
@@ -201,7 +200,7 @@ export function createHttp(
         if (responseStatus === 403) {
           // token 失效
           // await LSLogout();
-          Store.reset();
+          SessionStorage.reset();
           if (fetchOption.showExpiredAlert ?? true) {
             errorCode = 'SessionExpired';
           }
@@ -248,14 +247,14 @@ function showAlert(alertFlag: string) {
  */
 export function useHttp(serverName: ApiServerName, serverOption?: HttpOption) {
   const controller = useRef(new AbortController()).current;
-  useEffect(() => () => controller.abort(), []);
+  useEffect(() => () => controller.abort(), [controller]);
 
   return useMemo(() => {
     return createHttp(serverName, {
       signal: controller.signal,
       ...serverOption,
     });
-  }, [serverName, serverOption]);
+  }, [controller.signal, serverName, serverOption]);
 }
 
 export interface HttpRes<T> {

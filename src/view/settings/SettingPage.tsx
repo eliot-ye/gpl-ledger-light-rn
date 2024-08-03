@@ -14,7 +14,7 @@ import {envConstant} from '@/assets/environment';
 import {biometrics} from '@/utils/biometrics';
 import {CusLog} from '@/utils/tools';
 import {ColorsInstance} from '@/assets/colors';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
@@ -29,7 +29,7 @@ export function SettingPage() {
       .then(({available}) => {
         availableBiometricsSet(available);
 
-        const biometriceToken = Store.get('biometriceToken');
+        const biometriceToken = SessionStorage.get('biometriceToken');
         if (available && biometriceToken) {
           return biometrics.getUserFlag(biometriceToken);
         }
@@ -49,12 +49,12 @@ export function SettingPage() {
             <CPNSwitch
               value={enableBiometrics}
               onChange={async _value => {
-                const userId = Store.get('userId');
+                const userId = SessionStorage.get('userId');
                 if (!userId) {
                   return;
                 }
                 try {
-                  const password = Store.get('password');
+                  const password = SessionStorage.get('password');
                   if (_value && password) {
                     await biometrics.setUser({
                       userId: userId,
@@ -62,7 +62,8 @@ export function SettingPage() {
                     });
                     enableBiometricsSet(true);
                   } else {
-                    const biometriceToken = Store.get('biometriceToken');
+                    const biometriceToken =
+                      SessionStorage.get('biometriceToken');
                     if (biometriceToken) {
                       await biometrics.deleteUser(biometriceToken);
                     }

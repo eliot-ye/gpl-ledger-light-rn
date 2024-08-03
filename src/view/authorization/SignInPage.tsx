@@ -18,7 +18,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {PageProps} from '../Router';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 import {getRealm} from '@/database/main';
 import {I18n} from '@/assets/I18n';
 import {biometrics} from '@/utils/biometrics';
@@ -116,19 +116,19 @@ export function SignInPage() {
         await getRealm(userId, dbKey);
 
         LS.set('last_user_id', userId || '');
-        Store.update('userId', userId);
-        Store.update('username', userInfo.username);
-        Store.update('password', pwd);
+        SessionStorage.update('userId', userId);
+        SessionStorage.update('username', userInfo.username);
+        SessionStorage.update('password', pwd);
 
         if (userInfo.biometriceToken) {
-          Store.update('biometriceToken', userInfo.biometriceToken);
+          SessionStorage.update('biometriceToken', userInfo.biometriceToken);
         }
 
         if (userInfo.web_dav) {
           try {
             const WebDAVDetails = JSON.parse(AESDecrypt(userInfo.web_dav, pwd));
             const WebDAV = createWebDAV(WebDAVDetails);
-            Store.update('WebDAVObject', WebDAV);
+            SessionStorage.update('WebDAVObject', WebDAV);
             const enabled = await LS.get('web_dav_auto_sync');
             enabled && (await recoveryFromWebDAV(false));
           } catch (error) {
@@ -136,7 +136,7 @@ export function SignInPage() {
           }
         }
 
-        Store.update('isSignIn', true);
+        SessionStorage.update('isSignIn', true);
         navigation.replace('Tabbar', {screen: 'HomePage'});
       } else {
         return Promise.reject('password');

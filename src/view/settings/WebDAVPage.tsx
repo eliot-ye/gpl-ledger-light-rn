@@ -12,7 +12,7 @@ import {
   IONName,
 } from '@/components/base';
 import {WebDAVErrorResponseJson, createWebDAV} from '@/libs/WebDAV';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 import {LS_UserInfo} from '@/store/localStorage';
 import {AESEncrypt} from '@/utils/encoding';
 import {CusLog} from '@/utils/tools';
@@ -22,7 +22,9 @@ import {TouchableOpacity, View} from 'react-native';
 const WebDAVDirName = 'gpl_ledger';
 const WebDAVFileNamePre = 'backup_';
 export function getWebDAVFileData() {
-  const WebDAVFileName = `${WebDAVFileNamePre}${Store.get('username')}.json`;
+  const WebDAVFileName = `${WebDAVFileNamePre}${SessionStorage.get(
+    'username',
+  )}.json`;
   const WebDAVFilePath = `/${WebDAVDirName}/${WebDAVFileName}`;
   return {
     name: WebDAVFileName,
@@ -33,7 +35,7 @@ export function getWebDAVFileData() {
 export function WebDAVPage() {
   I18n.useLangCode();
 
-  const StoreWebDAVObject = Store.useState('WebDAVObject');
+  const StoreWebDAVObject = SessionStorage.useState('WebDAVObject');
   const [WebDAVDetails, WebDAVDetailsSet] = useState({
     serverPath: StoreWebDAVObject?.serverPath || '',
     account: StoreWebDAVObject?.account || '',
@@ -101,7 +103,7 @@ export function WebDAVPage() {
     <CPNPageView
       title={I18n.t('WebDAV')}
       rightIcon={
-        !!Store.get('WebDAVObject') && (
+        !!SessionStorage.get('WebDAVObject') && (
           <TouchableOpacity
             style={{paddingRight: HeaderConfigs.paddingHorizontal}}
             onPress={async () => {
@@ -110,10 +112,10 @@ export function WebDAVPage() {
                 I18n.f(I18n.t('DeleteConfirm'), ` ${I18n.t('WebDAV')}`),
               );
               await LS_UserInfo.update({
-                id: Store.get('userId'),
+                id: SessionStorage.get('userId'),
                 web_dav: '',
               });
-              Store.update('WebDAVObject', null);
+              SessionStorage.update('WebDAVObject', null);
               WebDAVDetailsSet({
                 serverPath: '',
                 account: '',
@@ -163,12 +165,12 @@ export function WebDAVPage() {
             CPNLoading.open();
             try {
               const WebDAVObject = await onSubmit();
-              Store.update('WebDAVObject', WebDAVObject || null);
+              SessionStorage.update('WebDAVObject', WebDAVObject || null);
 
-              const password = Store.get('password');
+              const password = SessionStorage.get('password');
               if (password) {
                 await LS_UserInfo.update({
-                  id: Store.get('userId'),
+                  id: SessionStorage.get('userId'),
                   web_dav: AESEncrypt(JSON.stringify(WebDAVDetails), password),
                 });
               }

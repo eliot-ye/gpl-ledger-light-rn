@@ -17,7 +17,7 @@ import {useApiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {CusLog} from '@/utils/tools';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 
 export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
@@ -36,7 +36,7 @@ export function AboutPage() {
           clickVersionCount.current++;
           if (clickVersionCount.current >= 5) {
             clickVersionCount.current = 0;
-            Store.update('isDebug', true);
+            SessionStorage.update('isDebug', true);
           }
         }}
         isLast={isLast}
@@ -44,7 +44,7 @@ export function AboutPage() {
     );
   }
 
-  const isDebug = Store.useState('isDebug');
+  const isDebug = SessionStorage.useState('isDebug');
   function renderDebug() {
     return (
       <CPNCellGroup style={{marginBottom: 20}}>
@@ -54,7 +54,7 @@ export function AboutPage() {
             <CPNSwitch
               value={isDebug}
               onChange={_value => {
-                Store.update('isDebug', _value);
+                SessionStorage.update('isDebug', _value);
               }}
             />
           }

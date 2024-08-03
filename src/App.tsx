@@ -12,14 +12,14 @@ import {LS} from '@/store/localStorage';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors, ColorsInstance, ThemeCode} from './assets/colors';
 import {generateUUID} from './utils/tools';
-import {Store} from './store';
+import {SessionStorage} from './store/sessionStorage';
 
 LS.get('app_uuid').then(app_uuid => {
   if (app_uuid) {
-    Store.update('app_uuid', app_uuid);
+    SessionStorage.update('app_uuid', app_uuid);
   } else {
     const uuid = generateUUID();
-    Store.update('app_uuid', uuid);
+    SessionStorage.update('app_uuid', uuid);
     LS.set('app_uuid', uuid);
   }
 });

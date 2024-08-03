@@ -7,7 +7,7 @@ import {
   CPNImage,
 } from '@/components/base';
 import {getRealm} from '@/database/main';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 import {LS, LS_UserInfo} from '@/store/localStorage';
 import {getRandomStr, getRandomStrMD5} from '@/utils/tools';
 import {AESEncrypt} from '@/utils/encoding';
@@ -111,10 +111,10 @@ export function SignUpPage() {
 
             await LS.set('last_user_id', id);
 
-            Store.update('userId', id);
-            Store.update('username', formData.username);
-            Store.update('password', formData.password);
-            Store.update('isSignIn', true);
+            SessionStorage.update('userId', id);
+            SessionStorage.update('username', formData.username);
+            SessionStorage.update('password', formData.password);
+            SessionStorage.update('isSignIn', true);
             navigation.reset({
               routes: [{name: 'Tabbar', params: {screen: 'HomePage'}}],
             });

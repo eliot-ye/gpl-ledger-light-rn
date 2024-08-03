@@ -15,7 +15,7 @@ import {LS_UserInfo, LS} from '@/store/localStorage';
 import {getBackupDataStr} from '@/view/settings/BackupPage';
 import {getWebDAVFileData} from '@/view/settings/WebDAVPage';
 import {debounce} from '@/utils/tools';
-import {Store} from '@/store';
+import {SessionStorage} from '@/store/sessionStorage';
 
 let realm: Realm | undefined;
 
@@ -83,18 +83,18 @@ export async function getRealm(path?: string, encryptionKey?: string) {
       realm.addListener(
         'change',
         debounce(async sender => {
-          if (Store.get('userId')) {
+          if (SessionStorage.get('userId')) {
             LS_UserInfo.update({
-              id: Store.get('userId'),
+              id: SessionStorage.get('userId'),
               lastModified: String(Date.now()),
             });
           }
 
           const enabled = await LS.get('web_dav_auto_sync');
-          const WebDAVObject = Store.get('WebDAVObject');
+          const WebDAVObject = SessionStorage.get('WebDAVObject');
           if (enabled && WebDAVObject) {
             const backupDataStr = getBackupDataStr({
-              username: Store.get('username'),
+              username: SessionStorage.get('username'),
               assetType: sender.objects(AssetTypeSchema.name).toJSON(),
               color: sender.objects(ColorSchema.name).toJSON(),
               currency: sender.objects(CurrencySchema.name).toJSON(),

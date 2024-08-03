@@ -38,6 +38,7 @@ export default {
   bundleId: DeviceInfo.getBundleId(),
   versionName: DeviceInfo.getVersion(),
   versionCode: Number(DeviceInfo.getBuildNumber()),
+  UserAgent: DeviceInfo.getUserAgentSync(),
 
   iosAppStoreId: '',
 
