@@ -1,13 +1,9 @@
-import {memo, useContext, useMemo} from 'react';
+import React, {memo, useContext, useMemo} from 'react';
 import {DimensionValue, View, ViewProps} from 'react-native';
 import {RowContext} from './Row';
 import {CPNText} from '..';
 import {Colors} from '@/assets/colors';
-
-const breakpointWidth = {
-  md: 520,
-  lg: 840,
-} as const;
+import {breakpointWidth} from '@/utils/dimensions';
 
 const BASE_SPAN_WIDTH = 100 / 24;
 
