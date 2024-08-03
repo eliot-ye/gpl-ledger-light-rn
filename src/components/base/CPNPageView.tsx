@@ -1,15 +1,24 @@
-import React, {createContext, useRef, useState} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   type ScrollViewProps,
   View,
   Animated,
   StatusBar,
   Platform,
+  Keyboard,
+  type ScrollView,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors, ColorsInstance} from '@/assets/colors';
 import {CPNHeader, type CPNHeaderProps} from './CPNHeader';
 import {useDimensions} from '@/utils/useDimensions';
+import {CPNLoadingView} from '.';
 
 export enum BarTextStyle {
   light = 'light-content',
@@ -17,6 +26,9 @@ export enum BarTextStyle {
 }
 
 export const CPNPageViewThemeColor = createContext('');
+export const CPNPageViewScrollViewCtx = createContext<ScrollView | null>(null);
+export const CPNPageViewContentOffsetYCtx = createContext(0);
+export const CPNPageViewBottomInsetCtx = createContext(0);
 
 interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
   /** @default true */
@@ -32,15 +44,19 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
   renderIOSTopNegativeDistanceView?: (
     scrollDistance: number,
   ) => React.ReactNode;
-  isTabbarPage?: boolean;
+  loading?: boolean;
 }
 /**
  * - style 作用于 ScrollView
  */
 export function CPNPageView(props: Readonly<CPNPageViewProps>) {
   ColorsInstance.useCode();
-  const headerBackgroundColor = props.headerBackgroundColor ?? Colors.theme;
+  const headerBackgroundColor =
+    props.headerBackgroundColor ?? Colors.backgroundPanel;
 
+  const bottomInset = useContext(CPNPageViewBottomInsetCtx);
+
+  const [contentOffsetY, setContentOffsetY] = useState(0);
   const [topNegativeDistance, setTopNegativeDistance] = useState(0);
 
   const topDistanceAnimated = useRef(new Animated.Value(0)).current;
@@ -55,9 +71,9 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
       <CPNHeader
         safeArea
         {...props}
-        hideBack={props.hideBack || props.isTabbarPage}
         fixedTop
         showShadow={!props.fixedTop}
+        textColor={Colors.fontTitle}
         backgroundColor={
           props.fixedTop
             ? scrollDistanceAnimated.interpolate<string>({
@@ -83,9 +99,10 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
 
   const edgeInsets = useSafeAreaInsets();
   const windowSize = useDimensions('window');
+  const ScrollViewRef = useRef<ScrollView>(null);
 
   return (
-    <CPNPageViewThemeColor.Provider value={headerBackgroundColor}>
+    <CPNPageViewThemeColor.Provider value={Colors.theme}>
       <View
         style={{
           flex: 1,
@@ -96,12 +113,10 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
           backgroundColor={Colors.transparent}
           translucent
         />
-
-        {!props.fixedTop && <View style={{height: headerInfo.height}} />}
-
         <Animated.ScrollView
           keyboardShouldPersistTaps="handled"
           {...props}
+          ref={ScrollViewRef}
           style={[
             {
               flex: 1,
@@ -110,35 +125,35 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
             },
             props.style,
           ]}
-          onScroll={
-            props.fixedTop
-              ? ev => {
-                  const contentOffsetY = ev.nativeEvent.contentOffset.y;
-                  if (
-                    Platform.OS === 'ios' &&
-                    props.renderIOSTopNegativeDistanceView
-                  ) {
-                    setTopNegativeDistance(
-                      contentOffsetY < 0 ? -contentOffsetY : 0,
-                    );
-                    topDistanceAnimated.setValue(
-                      contentOffsetY > 0 ? -contentOffsetY : 0,
-                    );
-                  }
-                  scrollDistanceAnimated.setValue(contentOffsetY);
-                  props.onScroll && props.onScroll(ev);
-                }
-              : props.onScroll
-          }>
+          onScroll={ev => {
+            const _contentOffsetY = ev.nativeEvent.contentOffset.y;
+            setContentOffsetY(_contentOffsetY);
+            scrollDistanceAnimated.setValue(_contentOffsetY);
+            if (
+              Platform.OS === 'ios' &&
+              props.renderIOSTopNegativeDistanceView
+            ) {
+              setTopNegativeDistance(
+                _contentOffsetY < 0 ? -_contentOffsetY : 0,
+              );
+              topDistanceAnimated.setValue(
+                _contentOffsetY > 0 ? -_contentOffsetY : 0,
+              );
+            }
+            props.onScroll && props.onScroll(ev);
+          }}>
           <View
             style={{
-              minHeight:
-                windowSize.height -
-                headerInfo.height -
-                (props.isTabbarPage ? 46 + edgeInsets.bottom : 0),
-              paddingBottom: props.isTabbarPage ? 0 : edgeInsets.bottom,
+              minHeight: windowSize.height,
+              paddingBottom: bottomInset || edgeInsets.bottom,
             }}>
-            {props.children}
+            {!props.fixedTop && <View style={{height: headerInfo.height}} />}
+            <CPNPageViewScrollViewCtx.Provider value={ScrollViewRef.current}>
+              <CPNPageViewContentOffsetYCtx.Provider value={contentOffsetY}>
+                {props.children}
+              </CPNPageViewContentOffsetYCtx.Provider>
+            </CPNPageViewScrollViewCtx.Provider>
+            <KeyboardAvoidingView />
           </View>
         </Animated.ScrollView>
 
@@ -155,7 +170,26 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
         ) : null}
 
         {renderHeader()}
+        <CPNLoadingView show={props.loading ?? false} />
       </View>
     </CPNPageViewThemeColor.Provider>
   );
+}
+function KeyboardAvoidingView() {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const emitter1 = Keyboard.addListener('keyboardWillShow', ev => {
+      setKeyboardHeight(ev.endCoordinates.height);
+    });
+    const emitter2 = Keyboard.addListener('keyboardWillHide', () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      emitter1.remove();
+      emitter2.remove();
+    };
+  }, []);
+
+  return <View style={{height: keyboardHeight}} />;
 }

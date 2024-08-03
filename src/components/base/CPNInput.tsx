@@ -1,14 +1,23 @@
 import {Colors} from '@/assets/colors';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
+  Keyboard,
   StyleSheet,
   TextInput,
   TextInputProps,
   TouchableOpacity,
   View,
   ViewStyle,
+  useWindowDimensions,
 } from 'react-native';
-import {CPNIonicons, CPNPageViewThemeColor, CPNText, IONName} from '.';
+import {
+  CPNIonicons,
+  CPNPageViewContentOffsetYCtx,
+  CPNPageViewScrollViewCtx,
+  CPNPageViewThemeColor,
+  CPNText,
+  IONName,
+} from '.';
 import {StyleGet} from '@/assets/styles';
 import {FormItemContext} from './CPNFormItem';
 import {I18n} from '@/assets/I18n';
@@ -42,8 +51,37 @@ export function CPNInput(props: Readonly<CPNInputProps>) {
 
   const focused = isFocus || !!props.value || !!props.defaultValue;
 
+  const ref = useRef<View>(null);
+  const CPNPageViewScrollView = useContext(CPNPageViewScrollViewCtx);
+  const CPNPageViewontentOffsetY = useContext(CPNPageViewContentOffsetYCtx);
+  const windowSize = useWindowDimensions();
+  useEffect(() => {
+    if (!isFocus) {
+      return;
+    }
+    const emitter = Keyboard.addListener('keyboardDidShow', ev => {
+      const KeyboardHeight = ev.endCoordinates.height;
+      ref.current?.measure((x, y, width, height, pageX, pageY) => {
+        const positionY = windowSize.height - pageY - height - KeyboardHeight;
+        if (positionY < 0) {
+          CPNPageViewScrollView?.scrollTo({
+            y: CPNPageViewontentOffsetY - positionY,
+          });
+        }
+      });
+    });
+    return () => {
+      emitter.remove();
+    };
+  }, [
+    isFocus,
+    windowSize.height,
+    CPNPageViewontentOffsetY,
+    CPNPageViewScrollView,
+  ]);
+
   return (
-    <View style={[props.containerStyle]}>
+    <View style={[props.containerStyle]} ref={ref}>
       <View
         style={[
           styles.inputContainer,
@@ -59,9 +97,11 @@ export function CPNInput(props: Readonly<CPNInputProps>) {
         ]}>
         <TextInput
           pointerEvents={props.editable === false ? 'none' : 'auto'}
+          blurOnSubmit
           autoCorrect={false}
           allowFontScaling={false}
           autoCapitalize={'none'}
+          autoComplete="off"
           multiline={!props.secureTextEntry && props.editable === false}
           placeholder={I18n.f(I18n.t('PlaceholderInput'), formItem.title)}
           placeholderTextColor={Colors.fontPlaceholder}
