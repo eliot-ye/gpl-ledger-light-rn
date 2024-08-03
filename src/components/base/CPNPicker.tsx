@@ -21,9 +21,10 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {I18n} from '@assets/I18n';
 import {Colors} from '@/assets/colors';
 import {colorGetBackground, toTitleCase} from '@/utils/tools';
-import {CPNText, CTextStyle} from './CPNText';
+import {CPNText} from './CPNText';
 import {DataConstraint} from './CPNDropdown';
 import {CPNPageViewThemeColor} from './CPNPageView';
+import {CTextStyle} from '@/assets/fontStyles';
 
 const Config = {
   itemHeight: 40,

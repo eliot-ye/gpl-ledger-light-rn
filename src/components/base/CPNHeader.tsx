@@ -9,11 +9,12 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from '@/assets/colors';
-import {CPNText, CTextStyle, FontColorContext} from './CPNText';
+import {CPNText, FontColorContext} from './CPNText';
 import {I18n} from '@/assets/I18n';
 import {CPNIonicons, IONName} from './CPNIcon';
 import {StyleGet} from '@/assets/styles';
 import {navigationRef} from '@/view/Router';
+import {CTextStyle} from '@/assets/fontStyles';
 
 export const headerIconStyles = StyleSheet.create({
   font: {

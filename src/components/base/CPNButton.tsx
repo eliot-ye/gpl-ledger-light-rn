@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-import {CPNText, CTextStyle, FontColorContext} from './CPNText';
+import {CPNText, FontColorContext} from './CPNText';
 import {Colors} from '@/assets/colors';
 import {StyleGet} from '@/assets/styles';
 import {CPNPageViewThemeColor} from './CPNPageView';
+import {CTextStyle} from '@/assets/fontStyles';
 
 const Config = {
   borderRadius: 30,
