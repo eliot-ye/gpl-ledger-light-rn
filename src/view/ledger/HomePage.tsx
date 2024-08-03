@@ -14,7 +14,7 @@ import {Colors, ColorsInstance} from '@/assets/colors';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {I18n} from '@/assets/I18n';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 import {PieChart} from 'react-native-chart-kit';
 import {StyleGet} from '@/assets/styles';
 import {colorGetBackground} from '@/utils/tools';

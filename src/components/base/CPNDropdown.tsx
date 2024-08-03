@@ -17,7 +17,7 @@ import {CPNIonicons, IONName} from './CPNIcon';
 import {I18n} from '@/assets/I18n';
 import {FormItemContext} from './CPNFormItem';
 import {CPNPageViewThemeColor} from './CPNPageView';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 
 const Config = {
   borderWidth: 1,

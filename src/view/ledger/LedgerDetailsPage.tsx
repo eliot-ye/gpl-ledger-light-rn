@@ -32,7 +32,7 @@ import {Colors} from '@/assets/colors';
 import {formatDateMonth} from '@/utils/dateFn';
 import {LineChart} from 'react-native-chart-kit';
 import {LineChartData} from 'react-native-chart-kit/dist/line-chart/LineChart';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 import {CPNCurrencyView} from '@/components/CPNCurrencyView';
 import {StyleGet} from '@/assets/styles';
 import {ErrorItem} from 'types/global';

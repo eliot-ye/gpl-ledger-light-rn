@@ -12,7 +12,7 @@ import {StyleGet} from '@/assets/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 
 const Config = {
   width: '80%',

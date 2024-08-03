@@ -7,7 +7,7 @@ import {CPNActionSheet} from './CPNActionSheet';
 import {CPNAlert} from './CPNAlert';
 import {CPNLoading} from './CPNLoading';
 import {CPNToast} from './CPNToast';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 
 const Config = {
   offset: 10,

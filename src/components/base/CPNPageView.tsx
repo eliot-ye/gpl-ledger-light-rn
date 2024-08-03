@@ -17,7 +17,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors, ColorsInstance} from '@/assets/colors';
 import {CPNHeader, type CPNHeaderProps} from './CPNHeader';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 import {CPNLoadingView} from '.';
 
 export enum BarTextStyle {

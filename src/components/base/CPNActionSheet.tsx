@@ -16,7 +16,7 @@ import {getRandomStr} from '@/utils/tools';
 import {CPNText} from './CPNText';
 import {createSubscribeEvents} from '@/libs/SubscribeEvents';
 import {StyleGet} from '@/assets/styles';
-import {useDimensions} from '@/utils/useDimensions';
+import {useDimensions} from '@/utils/dimensions';
 
 const Config = {
   borderRadius: 14,
