@@ -20,3 +20,4 @@ export * from './CPNSwipeItem';
 export * from './CPNSwitch';
 export * from './CPNText';
 export * from './CPNToast';
+export * from './Grid';
