@@ -83,7 +83,7 @@ export function SettingPage() {
   }
 
   return (
-    <CPNPageView title={I18n.t('Settings')} isTabbarPage>
+    <CPNPageView title={I18n.t('Settings')}>
       <View style={{padding: 20}}>
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell

@@ -14,11 +14,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PageProps, TabbarStackParamList, TabStack} from './Router';
 import {HomePage} from './ledger/routes';
 import {SettingPage} from './settings/routes';
+import {breakpointWidth, useDimensions} from '@/utils/dimensions';
 
 export function TabBarView({navigation}: PageProps<'Tabbar'>) {
   I18n.useLangCode();
   ColorsInstance.useCode();
 
+  const windowSize = useDimensions('window');
+  const isMd = windowSize.width > breakpointWidth.md;
   const edgeInsets = useSafeAreaInsets();
   const defHeight = 50 + edgeInsets.bottom;
   const [height, setHeight] = useState(defHeight);
@@ -90,7 +93,6 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
           <TabStack.Screen name="SettingPage" component={SettingPage} />
         </TabStack.Navigator>
         <View
-          accessibilityRole="tabbar"
           style={{
             position: 'absolute',
             bottom: 0,
@@ -99,26 +101,54 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
             paddingLeft: edgeInsets.left,
             paddingRight: edgeInsets.right,
             width: '100%',
-            flexDirection: 'row',
+            alignItems: 'center',
           }}
           onLayout={ev => setHeight(ev.nativeEvent.layout.height)}>
-          {tabbarOptionList.map(item => (
-            <FontColorContext.Provider
-              value={
-                item.name === activeScreen ? Colors.theme : Colors.fontTitle
-              }>
-              <TouchableOpacity
-                accessibilityRole="tab"
-                key={item.name}
-                onPress={() => {
-                  navigation.navigate('Tabbar', {screen: item.name});
-                }}
-                style={{flex: 1, alignItems: 'center', paddingVertical: 10}}>
-                <CPNIonicons name={item.icon} />
-                <CPNText>{item.label}</CPNText>
-              </TouchableOpacity>
-            </FontColorContext.Provider>
-          ))}
+          <View
+            accessibilityRole="tablist"
+            style={{
+              width: '100%',
+              maxWidth: 300,
+              height: '100%',
+              flexDirection: 'row',
+            }}>
+            {tabbarOptionList.map(item => (
+              <FontColorContext.Provider
+                value={
+                  item.name === activeScreen ? Colors.theme : Colors.fontTitle
+                }>
+                <TouchableOpacity
+                  accessibilityRole="tab"
+                  key={item.name}
+                  onPress={() => {
+                    navigation.navigate('Tabbar', {screen: item.name});
+                  }}
+                  style={[
+                    {
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      paddingVertical: 10,
+                      flexDirection: 'column',
+                    },
+                    isMd && {
+                      flexDirection: 'row',
+                    },
+                  ]}>
+                  <CPNIonicons
+                    name={item.icon}
+                    style={[
+                      {marginBottom: 5},
+                      isMd && {marginRight: 5, marginBottom: 0},
+                    ]}
+                  />
+                  <CPNText style={{fontSize: isMd ? 16 : 12}}>
+                    {item.label}
+                  </CPNText>
+                </TouchableOpacity>
+              </FontColorContext.Provider>
+            ))}
+          </View>
         </View>
       </View>
     </CPNPageViewBottomInsetCtx.Provider>

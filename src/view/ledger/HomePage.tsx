@@ -125,7 +125,6 @@ export function HomePage() {
   return (
     <CPNPageView
       title={I18n.t('Ledger')}
-      isTabbarPage
       alwaysBounceVertical={false}
       rightIcon={
         <TouchableOpacity
