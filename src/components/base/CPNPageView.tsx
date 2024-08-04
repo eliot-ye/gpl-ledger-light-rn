@@ -51,8 +51,7 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
  */
 export function CPNPageView(props: Readonly<CPNPageViewProps>) {
   ColorsInstance.useCode();
-  const headerBackgroundColor =
-    props.headerBackgroundColor ?? Colors.backgroundPanel;
+  const headerBackgroundColor = props.headerBackgroundColor ?? Colors.theme;
 
   const bottomInset = useContext(CPNPageViewBottomInsetCtx);
 
@@ -73,7 +72,7 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
         {...props}
         fixedTop
         showShadow={!props.fixedTop}
-        textColor={Colors.fontTitle}
+        textColor={Colors.fontTitleReverse}
         backgroundColor={
           props.fixedTop
             ? scrollDistanceAnimated.interpolate<string>({
