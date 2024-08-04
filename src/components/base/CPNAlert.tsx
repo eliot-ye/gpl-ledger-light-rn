@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   container: {
     ...StyleGet.boxShadow(),
     width: Config.width,
+    maxWidth: 400,
     position: 'absolute',
     borderRadius: Config.borderRadius,
     borderWidth: 0.5,
