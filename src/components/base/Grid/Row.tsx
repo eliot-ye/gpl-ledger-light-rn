@@ -1,5 +1,5 @@
-import {createContext, memo, useMemo, useState} from 'react';
-import {Dimensions, View, ViewProps, useWindowDimensions} from 'react-native';
+import React, {createContext, memo, useMemo, useState} from 'react';
+import {Dimensions, View, ViewProps} from 'react-native';
 
 export const RowContext = createContext({
   isInRow: false,
