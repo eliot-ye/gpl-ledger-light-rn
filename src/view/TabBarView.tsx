@@ -12,16 +12,18 @@ import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, BackHandler} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PageProps, TabbarStackParamList, TabStack} from './Router';
+import {WindowSize} from '@/utils/dimensions';
+
 import {HomePage} from './ledger/routes';
 import {SettingPage} from './settings/routes';
-import {breakpointWidth, useDimensions} from '@/utils/dimensions';
 
 export function TabBarView({navigation}: PageProps<'Tabbar'>) {
   I18n.useLangCode();
   ColorsInstance.useCode();
 
-  const windowSize = useDimensions('window');
-  const isMd = windowSize.width > breakpointWidth.md;
+  const windowSize = WindowSize.useDimensions('window');
+  const maxWidth = WindowSize.breakpointWidth.sm;
+
   const edgeInsets = useSafeAreaInsets();
   const defHeight = 50 + edgeInsets.bottom;
   const [height, setHeight] = useState(defHeight);
@@ -45,6 +47,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
     let canExitApp = false;
     function onBackPress() {
       if (canExitApp) {
+        // TODO: exitApp
         BackHandler.exitApp();
       } else {
         const id = CPNToast.open(I18n.t('PressAgainToExit'));
@@ -73,12 +76,14 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
     {
       name: 'HomePage',
       label: I18n.t('Ledger'),
-      icon: IONName.Home,
+      icon: <CPNIonicons name={IONName.Home} size={20} />,
+      iconActive: <CPNIonicons name={IONName.Home} />,
     },
     {
       name: 'SettingPage',
-      label: I18n.t('Settings'),
-      icon: IONName.Settings,
+      label: I18n.t('About'),
+      icon: <CPNIonicons name={IONName.Settings} size={20} />,
+      iconActive: <CPNIonicons name={IONName.Settings} />,
     },
   ];
 
@@ -87,7 +92,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
       <View style={{flex: 1}}>
         <TabStack.Navigator
           tabBar={() => null}
-          initialRouteName={activeScreen}
+          initialRouteName={'HomePage'}
           screenOptions={{headerShown: false}}>
           <TabStack.Screen name="HomePage" component={HomePage} />
           <TabStack.Screen name="SettingPage" component={SettingPage} />
@@ -97,7 +102,6 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
             position: 'absolute',
             bottom: 0,
             backgroundColor: Colors.backgroundPanel,
-            height: defHeight,
             paddingLeft: edgeInsets.left,
             paddingRight: edgeInsets.right,
             width: '100%',
@@ -105,11 +109,11 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
           }}
           onLayout={ev => setHeight(ev.nativeEvent.layout.height)}>
           <View
-            accessibilityRole="tablist"
+            accessibilityRole="toolbar"
             style={{
               width: '100%',
-              maxWidth: 300,
-              height: '100%',
+              maxWidth: maxWidth,
+              height: defHeight,
               flexDirection: 'row',
             }}>
             {tabbarOptionList.map(item => (
@@ -119,32 +123,31 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
                 }>
                 <TouchableOpacity
                   accessibilityRole="tab"
+                  activeOpacity={item.name === activeScreen ? 1 : 0.3}
                   key={item.name}
                   onPress={() => {
-                    navigation.navigate('Tabbar', {screen: item.name});
+                    if (item.name !== activeScreen) {
+                      navigation.navigate(item.name as any);
+                    }
                   }}
                   style={[
                     {
                       flex: 1,
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      paddingVertical: 10,
-                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
+                      padding: 5,
+                      paddingBottom: edgeInsets.bottom || 5,
                     },
-                    isMd && {
+                    windowSize.width >= maxWidth && {
                       flexDirection: 'row',
+                      justifyContent: 'center',
                     },
                   ]}>
-                  <CPNIonicons
-                    name={item.icon}
-                    style={[
-                      {marginBottom: 5},
-                      isMd && {marginRight: 5, marginBottom: 0},
-                    ]}
-                  />
-                  <CPNText style={{fontSize: isMd ? 16 : 12}}>
-                    {item.label}
-                  </CPNText>
+                  {item.name === activeScreen
+                    ? item.iconActive ?? item.icon
+                    : item.icon}
+                  <View style={{width: 5, height: 5}} />
+                  <CPNText style={{fontSize: 12}}>{item.label}</CPNText>
                 </TouchableOpacity>
               </FontColorContext.Provider>
             ))}
@@ -158,5 +161,6 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
 interface TabbarOption {
   name: keyof TabbarStackParamList;
   label: string;
-  icon: IONName;
+  icon: React.ReactNode;
+  iconActive?: React.ReactNode;
 }

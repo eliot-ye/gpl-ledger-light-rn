@@ -4,10 +4,6 @@ import {IconProps} from 'react-native-vector-icons/Icon';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {FontColorContext} from './CPNText';
 
-/**
- * Ionicons name
- * @see https://ionic.io/ionicons/
- * */
 export enum IONName {
   Back = 'chevron-back',
   BackCircle = 'chevron-back-circle',
@@ -45,7 +41,13 @@ export enum IONName {
 
 type IoniconsProps = IconProps & {
   pointerEvents?: 'auto' | 'box-none' | 'none' | 'box-only';
+  /**
+   * - Ionicons name
+   * @see https://ionic.io/ionicons/
+   * */
   name?: IONName;
+  /** @default 26 */
+  size?: number;
 };
 export function CPNIonicons(props: Readonly<IoniconsProps>) {
   const fontTextColor = ColorsInstance.useConstant('fontText');
