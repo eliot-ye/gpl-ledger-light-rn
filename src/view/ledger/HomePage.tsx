@@ -126,6 +126,7 @@ export function HomePage() {
     <CPNPageView
       title={I18n.t('Ledger')}
       alwaysBounceVertical={false}
+      leftIcon={<View />}
       rightIcon={
         <TouchableOpacity
           style={{paddingRight: HeaderConfigs.paddingHorizontal}}
