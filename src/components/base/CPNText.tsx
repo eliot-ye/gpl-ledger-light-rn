@@ -40,7 +40,7 @@ export function CPNText(props: Readonly<CPNTextProps>) {
       {...props}
       style={[
         {
-          includeFontPadding: false,
+          includeFontPadding: true,
           textAlignVertical: 'center',
           color: colorDefault,
         },

@@ -127,7 +127,7 @@ export function LedgerDetailsPage() {
   return (
     <CPNPageView
       alwaysBounceVertical={false}
-      headerBackgroundColor={route.params?.color.value}
+      theme={route.params?.color.value}
       title={
         route.params?.id
           ? I18n.f(I18n.t('EditAsset'), route.params.name || '')

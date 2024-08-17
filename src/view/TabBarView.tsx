@@ -118,6 +118,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
             }}>
             {tabbarOptionList.map(item => (
               <FontColorContext.Provider
+                key={item.name}
                 value={
                   item.name === activeScreen ? Colors.theme : Colors.fontTitle
                 }>
@@ -146,7 +147,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
                   {item.name === activeScreen
                     ? item.iconActive ?? item.icon
                     : item.icon}
-                  <View style={{width: 5, height: 5}} />
+                  <View style={{width: 5, height: 1}} />
                   <CPNText style={{fontSize: 12}}>{item.label}</CPNText>
                 </TouchableOpacity>
               </FontColorContext.Provider>

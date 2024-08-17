@@ -31,6 +31,7 @@ export const CPNPageViewContentOffsetYCtx = createContext(0);
 export const CPNPageViewBottomInsetCtx = createContext(0);
 
 interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
+  theme?: string;
   /** @default true */
   showHeader?: boolean;
   headerBackgroundColor?: string;
@@ -51,7 +52,8 @@ interface CPNPageViewProps extends ScrollViewProps, CPNHeaderProps {
  */
 export function CPNPageView(props: Readonly<CPNPageViewProps>) {
   ColorsInstance.useCode();
-  const headerBackgroundColor = props.headerBackgroundColor ?? Colors.theme;
+  const themeColor = props.theme ?? Colors.theme;
+  const headerBackgroundColor = props.headerBackgroundColor ?? themeColor;
 
   const bottomInset = useContext(CPNPageViewBottomInsetCtx);
 
@@ -101,7 +103,7 @@ export function CPNPageView(props: Readonly<CPNPageViewProps>) {
   const ScrollViewRef = useRef<ScrollView>(null);
 
   return (
-    <CPNPageViewThemeColor.Provider value={Colors.theme}>
+    <CPNPageViewThemeColor.Provider value={themeColor}>
       <View
         style={{
           flex: 1,
