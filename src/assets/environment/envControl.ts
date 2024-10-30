@@ -29,7 +29,7 @@ export interface ControlJSONErrorItem {
 }
 
 export interface ControlItem extends CEnvVariable {
-  versionName: string;
+  versionName: string[];
   platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
 }
@@ -104,7 +104,7 @@ export async function getControlJSON() {
     const controlJSON = jsonList.find(
       _item =>
         _item.platform.includes(Platform.OS) &&
-        _item.versionName === envConstant.versionName,
+        _item.versionName.includes(envConstant.versionName),
     );
     if (!controlJSON) {
       return Promise.reject({
