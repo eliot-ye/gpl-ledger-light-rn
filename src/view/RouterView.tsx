@@ -3,7 +3,10 @@ import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {TransitionPresets} from '@react-navigation/stack';
 import {navigationRef, RootStack} from './Router';
 import {LS_UserInfo} from '@/store/localStorage';
-import {injectControlJSON} from '@/assets/environment/envControl';
+import {
+  ControlJSONError,
+  injectControlJSON,
+} from '@/assets/environment/envControl';
 import {envConstant} from '@/assets/environment';
 import {CusLog} from '@/utils/tools';
 
@@ -17,7 +20,13 @@ import {TabBarView} from './TabBarView';
 export function RouterView() {
   async function navReady() {
     try {
-      await injectControlJSON();
+      const res = await Promise.allSettled([injectControlJSON()]);
+      if (
+        res[0].status === 'rejected' &&
+        res[0].reason === ControlJSONError.IS_BLOCK
+      ) {
+        return;
+      }
     } catch (error) {
       CusLog.error('RouterView onReady', 'injectControlJSON', error);
     }
