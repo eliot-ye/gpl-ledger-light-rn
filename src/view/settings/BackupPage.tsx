@@ -10,7 +10,7 @@ import {
 } from '@/components/base';
 import {I18n} from '@/assets/I18n';
 import React, {useEffect, useState} from 'react';
-import {PermissionsAndroid, Platform, Share, View} from 'react-native';
+import {Platform, Share, View} from 'react-native';
 import FS from 'react-native-fs';
 import {
   dbGetAssetTypes,
@@ -130,6 +130,7 @@ async function recoveryFromJSON(backupData: BackupData, password?: string) {
     CPNAlert.alert('', I18n.t('BackupFileError1'));
     return Promise.reject();
   }
+
   const username = SessionStorage.get('username');
   if (backupData.username !== username) {
     CPNAlert.alert('', I18n.t('BackupFileError2'));
@@ -179,17 +180,10 @@ async function recoveryFromJSON(backupData: BackupData, password?: string) {
   await dbSetCurrencyList(ledgerData.currency);
 }
 
-let backupDirBase = Platform.select({
-  android: FS.DownloadDirectoryPath,
+const backupDirBase = Platform.select({
+  android: FS.DocumentDirectoryPath,
   ios: FS.DocumentDirectoryPath,
 });
-if (
-  Platform.OS === 'android' &&
-  Platform.Version > 29 &&
-  Platform.Version < 33
-) {
-  backupDirBase = FS.DocumentDirectoryPath;
-}
 
 export function BackupPage({navigation}: PageProps<'BackupPage'>) {
   I18n.useLangCode();
@@ -254,15 +248,6 @@ export function BackupPage({navigation}: PageProps<'BackupPage'>) {
                 const backupDataStr = getBackupDataStr(await getLedgerData());
 
                 if (Platform.OS === 'android') {
-                  if (Platform.Version < 30) {
-                    const status = await PermissionsAndroid.request(
-                      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    );
-                    if (status !== PermissionsAndroid.RESULTS.GRANTED) {
-                      CPNToast.open(I18n.t('InsufficientPermissions'));
-                      return;
-                    }
-                  }
                   const backupFilePath = await backupHandler(
                     backupDirBase || FS.DocumentDirectoryPath,
                     backupDataStr,

@@ -5,8 +5,9 @@
   "scripts": {
     "android": "react-native run-android --mode=devDebug",
     "ios": "react-native run-ios",
-    "build:apk": "cd ./android && ./gradlew assembleProdRelease",
-    "build:aab": "cd ./android && ./gradlew bundleProdRelease",
+    "apk-dev": "cd ./android && ./gradlew assembleDevRelease",
+    "apk-prod": "cd ./android && ./gradlew assembleProdRelease",
+    "aab": "cd ./android && ./gradlew bundleProdRelease",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",

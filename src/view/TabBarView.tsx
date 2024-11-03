@@ -13,6 +13,7 @@ import {View, TouchableOpacity, BackHandler} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {PageProps, TabbarStackParamList, TabStack} from './Router';
 import {WindowSize} from '@/utils/dimensions';
+import ExitApp from 'react-native-exit-app';
 
 import {HomePage} from './ledger/routes';
 import {SettingPage} from './settings/routes';
@@ -47,8 +48,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
     let canExitApp = false;
     function onBackPress() {
       if (canExitApp) {
-        // TODO: exitApp
-        BackHandler.exitApp();
+        ExitApp.exitApp();
       } else {
         const id = CPNToast.open(I18n.t('PressAgainToExit'));
         canExitApp = true;
