@@ -12,7 +12,6 @@ import {
 } from '@/components/base';
 import {I18n, LangCode} from '../I18n';
 import {LS} from '@/store/localStorage';
-import {Colors} from '../colors';
 
 const validateControlJSON = validator(SControlJSON);
 
@@ -22,6 +21,7 @@ export enum ControlJSONError {
   NO_CONTROL_JSON = 'NO_CONTROL_JSON',
   IS_NOT_CONTROL_JSON = 'IS_NOT_CONTROL_JSON',
   IS_NOT_JSON = 'IS_NOT_JSON',
+  IS_BLOCK = 'IS_BLOCK',
 }
 export interface ControlJSONErrorItem {
   code: ControlJSONError;
@@ -29,9 +29,12 @@ export interface ControlJSONErrorItem {
 }
 
 export interface ControlItem extends CEnvVariable {
-  versionName: string;
+  versionName: string[];
   platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
+  isForceUpdate?: boolean;
+  /** 如果为true，则 APP 会阻塞在开屏页 */
+  isBlock?: boolean;
 }
 
 interface ControlJSONAlertText {
@@ -104,7 +107,7 @@ export async function getControlJSON() {
     const controlJSON = jsonList.find(
       _item =>
         _item.platform.includes(Platform.OS) &&
-        _item.versionName === envConstant.versionName,
+        _item.versionName.includes(envConstant.versionName),
     );
     if (!controlJSON) {
       return Promise.reject({
@@ -134,6 +137,26 @@ export async function injectControlJSON() {
   }
 
   setAppEnv(controlJSON);
+
+  if (controlJSON.isForceUpdate) {
+    const defaultUpdateLink = Platform.select({
+      android: `market://details?id=${envConstant.bundleId}`,
+      ios: `itms-apps://itunes.apple.com/us/app/id${envConstant.iosAppStoreId}?mt=8`,
+    });
+    CPNAlert.open({
+      message: I18n.t('UpdateMessage'),
+      backButtonClose: false,
+      buttons: [
+        {
+          text: I18n.t('UpdateNow'),
+          onPress: async () => {
+            await Linking.openURL(defaultUpdateLink!);
+            return Promise.reject();
+          },
+        },
+      ],
+    });
+  }
 
   if (controlJSON.alert) {
     const alert = controlJSON.alert;
@@ -173,7 +196,6 @@ export async function injectControlJSON() {
     const buttons: AlertButton<any>[] = [
       {
         text: confirmText ?? I18n.t('Confirm'),
-        textColor: Colors.theme,
         async onPress() {
           try {
             if (alert.confirmOpenURL) {
@@ -216,5 +238,9 @@ export async function injectControlJSON() {
       backButtonClose: alert.showCancel,
       buttons,
     });
+  }
+
+  if (controlJSON.isBlock) {
+    return Promise.reject(ControlJSONError.IS_BLOCK);
   }
 }
