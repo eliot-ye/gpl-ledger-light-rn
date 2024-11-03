@@ -11,7 +11,7 @@ export type StackParamListAuthorization = {
   SignUpPage: undefined;
   SignInPage: undefined;
   AccountManagementPage: undefined;
-  AccountInfoPage: LSUserInfo;
+  AccountInfoPage: LSUserInfo & {password?: string};
 };
 
 export const RTVAuthorization = (

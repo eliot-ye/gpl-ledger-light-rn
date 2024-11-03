@@ -165,6 +165,7 @@ export default {
   BiometricsSuccess: '生物认证成功',
 
   AccountManagement: '账户管理',
+  AccountDetail: '账户详情',
   EditAccount: '编辑账户：{0}',
   AddAccount: '新增账户',
   AccountName: '账户名称',

@@ -15,11 +15,36 @@ import {biometrics} from '@/utils/biometrics';
 import {CusLog} from '@/utils/tools';
 import {ColorsInstance} from '@/assets/colors';
 import {SessionStorage} from '@/store/sessionStorage';
+import {useLSUserInfoList} from '@/store/localStorage';
 
 export function SettingPage() {
   const navigation = useNavigation<PageProps<'Tabbar'>['navigation']>();
   I18n.useLangCode();
   ColorsInstance.useCode();
+
+  const useInfoList = useLSUserInfoList();
+  function renderAccount() {
+    return (
+      <CPNCellGroup style={{marginBottom: 20}}>
+        <CPNCell
+          title={I18n.t('AccountDetail')}
+          onPress={() => {
+            const useInfo = useInfoList.find(
+              item => item.id === SessionStorage.get('userId'),
+            );
+            if (!useInfo) {
+              return;
+            }
+            navigation.navigate('AccountInfoPage', {
+              ...useInfo,
+              password: SessionStorage.get('password'),
+            });
+          }}
+          isLast
+        />
+      </CPNCellGroup>
+    );
+  }
 
   const [availableBiometrics, availableBiometricsSet] = useState(false);
   const [enableBiometrics, enableBiometricsSet] = useState(false);
@@ -85,6 +110,7 @@ export function SettingPage() {
   return (
     <CPNPageView title={I18n.t('Settings')} leftIcon={<View />}>
       <View style={{padding: 20}}>
+        {renderAccount()}
         <CPNCellGroup style={{marginBottom: 20}}>
           <CPNCell
             title={I18n.t('ColorManagement')}
