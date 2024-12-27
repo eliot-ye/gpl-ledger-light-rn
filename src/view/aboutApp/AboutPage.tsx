@@ -13,7 +13,7 @@ import {Colors, ColorsInstance} from '@/assets/colors';
 import React, {useRef} from 'react';
 import {Dimensions, Linking, Platform, ScrollView, View} from 'react-native';
 import {envConstant} from '@/assets/environment';
-import {useApiPublic} from '@/api/public.http';
+import {apiPublic} from '@/api/public.http';
 import {useNavigation} from '@react-navigation/native';
 import {PageProps} from '../Router';
 import {CusLog} from '@/utils/tools';
@@ -23,7 +23,6 @@ export function AboutPage() {
   const navigation = useNavigation<PageProps<'AboutPage'>['navigation']>();
   I18n.useLangCode();
   ColorsInstance.useCode();
-  const apiPublic = useApiPublic();
 
   const clickVersionCount = useRef(0);
   function renderVersion(isLast?: boolean) {

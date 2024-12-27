@@ -1,43 +1,33 @@
-import {useMemo} from 'react';
-import {useHttp} from './http';
+import {createHttp} from './http';
 import {Platform} from 'react-native';
 import {validator} from '@exodus/schemasafe';
 import SVersionList from '../../public/SVersionList.json';
 
 const validateVersion = validator(SVersionList);
 
-export function useApiPublic() {
-  const apiGet = useHttp(
-    'public',
-    useMemo(
-      () => ({
-        method: 'GET',
-      }),
-      [],
-    ),
-  );
+const apiGet = createHttp('public', {method: 'GET'});
 
-  return useMemo(
-    () => ({
-      /** 获取最新版本 */
-      async nowVersion(): Promise<VersionItem[]> {
-        const res = await apiGet('/now_version.json');
-        if (!validateVersion(res)) {
-          return Promise.reject(new Error('数据校验失败'));
-        }
-        return res;
-      },
-      /** 获取版本更新记录 */
-      async versionLog(): Promise<VersionItem[]> {
-        const res = await apiGet('/change_log.json');
-        if (!validateVersion(res)) {
-          return Promise.reject(new Error('数据校验失败'));
-        }
-        return res;
-      },
-    }),
-    [apiGet],
-  );
+export const apiPublic = createApiPublic();
+
+function createApiPublic() {
+  return {
+    /** 获取最新版本 */
+    async nowVersion(): Promise<VersionItem[]> {
+      const res = await apiGet('/now_version.json');
+      if (!validateVersion(res)) {
+        return Promise.reject(new Error('数据校验失败'));
+      }
+      return res;
+    },
+    /** 获取版本更新记录 */
+    async versionLog(): Promise<VersionItem[]> {
+      const res = await apiGet('/change_log.json');
+      if (!validateVersion(res)) {
+        return Promise.reject(new Error('数据校验失败'));
+      }
+      return res;
+    },
+  };
 }
 
 export interface UpdateLinkItem {

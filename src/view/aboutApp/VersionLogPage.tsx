@@ -1,41 +1,25 @@
 import {I18n} from '@/assets/I18n';
-import {
-  CPNPageView,
-  CPNLoading,
-  CPNRichTextView,
-  CPNText,
-} from '@/components/base';
+import {CPNPageView, CPNRichTextView, CPNText} from '@/components/base';
 import {Colors} from '@/assets/colors';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useMemo} from 'react';
 import {Platform, View} from 'react-native';
-import {VersionItem, useApiPublic} from '@/api/public.http';
+import {apiPublic} from '@/api/public.http';
 import {StyleGet} from '@/assets/styles';
-import {CusLog} from '@/utils/tools';
+import {useApiState} from '@/api/httpHooks';
 
 export function VersionLogPage() {
   I18n.useLangCode();
 
-  const apiPublic = useApiPublic();
+  const {data, loading} = useApiState(apiPublic.versionLog, [], {autoFetch: true});
 
-  const [logList, logListSet] = useState<VersionItem[]>([]);
-  const apiGetLogData = useCallback(async () => {
-    CPNLoading.open();
-    try {
-      const res = await apiPublic.versionLog();
-      logListSet(res.filter(item => item.platform.includes(Platform.OS)));
-    } catch (error) {
-      CusLog.error('VersionLogPage', 'apiGetLogData', error);
-    }
-    CPNLoading.close();
-  }, [apiPublic]);
-  useEffect(() => {
-    apiGetLogData();
-  }, [apiGetLogData]);
+  const dataShown = useMemo(() => {
+    return data?.filter(item => item.platform.includes(Platform.OS));
+  }, [data]);
 
   return (
-    <CPNPageView title={I18n.t('VersionLog')}>
+    <CPNPageView loading={loading} title={I18n.t('VersionLog')}>
       <View style={{padding: 20}}>
-        {logList.map(item => {
+        {dataShown?.map(item => {
           return (
             <View
               key={`${item.versionName}.${item.versionCode}`}
