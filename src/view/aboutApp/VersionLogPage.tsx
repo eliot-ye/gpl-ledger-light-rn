@@ -10,7 +10,7 @@ import {useApiState} from '@/api/httpHooks';
 export function VersionLogPage() {
   I18n.useLangCode();
 
-  const {data, loading} = useApiState(apiPublic.versionLog, [], {autoFetch: true});
+  const {data, loading} = useApiState(apiPublic.versionLog, []);
 
   const dataShown = useMemo(() => {
     return data?.filter(item => item.platform.includes(Platform.OS));
