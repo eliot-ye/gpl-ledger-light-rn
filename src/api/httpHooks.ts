@@ -7,7 +7,7 @@ type ApiFuncReturn<T> = T extends (...args: any[]) => Promise<infer R>
 interface ApiState<T> {
   loading: boolean;
   data?: ApiFuncReturn<T>;
-  fetchData: (...args: ApiFuncParams<T>) => void;
+  fetchHandle: (...args: ApiFuncParams<T>) => Promise<void>;
 }
 
 interface Option {
@@ -19,11 +19,11 @@ export function useApiState<T extends Function>(
   apiFuncParams: ApiFuncParams<T>,
   option?: Option,
 ): ApiState<T> {
-  type Return = ApiFuncReturn<T>;
+  type ReturnData = ApiFuncReturn<T>;
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Return>();
+  const [data, setData] = useState<ReturnData>();
 
-  const fetchData = useCallback(async (..._args: ApiFuncParams<T>) => {
+  const fetchHandle = useCallback(async (..._args: ApiFuncParams<T>) => {
     setLoading(true);
     try {
       const res = await apiFunc(..._args);
@@ -37,14 +37,14 @@ export function useApiState<T extends Function>(
 
   useEffect(() => {
     if (option?.autoFetch !== false) {
-      fetchData(...apiFuncParams);
+      fetchHandle(...apiFuncParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchData]);
+  }, [fetchHandle]);
 
   return {
     loading,
     data,
-    fetchData: fetchData,
+    fetchHandle,
   };
 }
