@@ -1,7 +1,8 @@
 package com.screencapture;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
 
 public class ScreenCaptureModule extends NativeScreenCaptureSpec {
     private final ScreenCaptureModuleImpl implementation;

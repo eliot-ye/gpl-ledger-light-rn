@@ -20,7 +20,7 @@ public class CustomPackage implements ReactPackage {
             ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
 
-        modules.add(new FlagSecureModule(reactContext));
+        // modules.add(new FlagSecureModule(reactContext));
 
         return modules;
     }

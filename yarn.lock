@@ -6566,6 +6566,9 @@ rtn-i18n@^0.0.8:
   resolved "https://registry.yarnpkg.com/rtn-i18n/-/rtn-i18n-0.0.8.tgz#37d9dc3dfb2507eefcaa76d626ee35dc65537e33"
   integrity sha512-YlhD8qsg/PTkYLACkDen2z5yMyO4HriTCasJWukOUqpChpfN1Xcl3kuDmR/rwBUw5uZsbOq96CoNo+/4xK42Xg==
 
+rtn-screen-capture@./rtn-screen-capture:
+  version "0.0.1"
+
 run-parallel@^1.1.9:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.2.0.tgz#66d1368da7bdf921eb9d95bd1a9229e7f21a43ee"
