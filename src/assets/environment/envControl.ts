@@ -104,11 +104,16 @@ export async function getControlJSON() {
       } as ControlJSONErrorItem);
     }
 
-    const controlJSON = jsonList.find(
+    const targetJsonList = jsonList.filter(
       _item =>
         _item.platform.includes(Platform.OS) &&
         _item.versionName.includes(envConstant.versionName),
     );
+
+    const controlJSON = targetJsonList.reduce((prev, curr) => ({
+      ...prev,
+      ...curr,
+    }));
     if (!controlJSON) {
       return Promise.reject({
         code: ControlJSONError.NO_CONTROL_JSON,
