@@ -29,7 +29,14 @@ export interface ControlJSONErrorItem {
 }
 
 export interface ControlItem extends CEnvVariable {
-  versionName: string[];
+  /**
+   * 版本名，不能包含小版本
+   *
+   * 如果有重复版本，则按照 index 排序，从大到小依次覆盖
+   *
+   * - All - 表示所有版本
+   * */
+  versionName: ('All' | string)[];
   platform: (typeof Platform.OS)[];
   alert?: ControlJSONAlert;
   isForceUpdate?: boolean;
@@ -107,13 +114,17 @@ export async function getControlJSON() {
     const targetJsonList = jsonList.filter(
       _item =>
         _item.platform.includes(Platform.OS) &&
-        _item.versionName.includes(envConstant.versionName),
+        (_item.versionName.includes(envConstant.versionName) ||
+          _item.versionName.includes('All')),
     );
 
-    const controlJSON = targetJsonList.reduce((prev, curr) => ({
-      ...prev,
-      ...curr,
-    }));
+    const controlJSON = targetJsonList.reduceRight(
+      (prev, curr) => ({
+        ...prev,
+        ...curr,
+      }),
+      {} as ControlItem,
+    );
     if (!controlJSON) {
       return Promise.reject({
         code: ControlJSONError.NO_CONTROL_JSON,
