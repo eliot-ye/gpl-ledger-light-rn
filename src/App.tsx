@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 import {
   CPNActionSheet,
   CPNAlert,
@@ -13,6 +14,9 @@ import {StatusBar, useColorScheme} from 'react-native';
 import {Colors, ColorsInstance, ThemeCode} from './assets/colors';
 import {generateUUID} from './utils/tools';
 import {SessionStorage} from './store/sessionStorage';
+
+SystemNavigationBar.setFitsSystemWindows(false);
+SystemNavigationBar.setNavigationColor(Colors.transparent);
 
 LS.get('app_uuid').then(app_uuid => {
   if (app_uuid) {
