@@ -21,46 +21,94 @@ export function useDimensions(type: 'window' | 'screen') {
 }
 
 const breakpointWidth = {
+  /** `>= 0` */
   default: 0,
-  xs: 480,
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-  xxl: 1600,
+  /** `>= 320` */
+  xs: 320,
+  /**` >= 375` */
+  sm: 375,
+  /** `>= 600` */
+  md: 600,
+  /** `>= 840` */
+  lg: 840,
+  /** `>= 1440` */
+  xl: 1440,
 } as const;
+
+export type BreakpointType = keyof typeof breakpointWidth;
 
 export type BreakpointWidthSelectOptions<T> = {
   [key in keyof typeof breakpointWidth]?: T;
 };
-export type BreakpointWidthSelectOptionsWidthDefault<T> =
+export type BreakpointWidthSelectOptionsWidthRequired<T> =
   BreakpointWidthSelectOptions<T> & {default: T};
+
+export enum WindowShape {
+  Horizontal = 1,
+  Vertical = 2,
+  Square = 3,
+}
 
 export const WindowSize = {
   useDimensions,
   breakpointWidth,
+  getWindowWidthBreakpoint(width?: number): BreakpointType {
+    const clientWidth = width ?? Dimensions.get('window').width;
+    if (clientWidth >= breakpointWidth.xl) {
+      return 'xl';
+    }
+    if (clientWidth >= breakpointWidth.lg) {
+      return 'lg';
+    }
+    if (clientWidth >= breakpointWidth.md) {
+      return 'md';
+    }
+    if (clientWidth >= breakpointWidth.sm) {
+      return 'sm';
+    }
+    if (clientWidth >= breakpointWidth.xs) {
+      return 'xs';
+    }
+    return 'default';
+  },
+  getWindowShape({width, height}: {width?: number; height?: number} = {}) {
+    const scaledSize = Dimensions.get('window');
+    const clientWidth = width ?? scaledSize.width;
+    const clientHeight = height ?? scaledSize.height;
+    const proportion = clientWidth / clientHeight;
+    if (proportion < 0.8) {
+      return WindowShape.Vertical;
+    }
+    if (proportion > 1.2) {
+      return WindowShape.Horizontal;
+    }
+    return WindowShape.Square;
+  },
   /**
-   * 根据宽度选择不同的数据，默认使用 `default` 值
+   * 根据宽度选择不同的数据，默认使用 `xxs` 值
    * @param option
    * @returns
    */
   select<T>(
-    option: BreakpointWidthSelectOptionsWidthDefault<T>,
+    option: BreakpointWidthSelectOptionsWidthRequired<T>,
     width?: number,
   ) {
-    const clientWidth = width ?? Dimensions.get('window').width;
+    const breakpointType: BreakpointType =
+      WindowSize.getWindowWidthBreakpoint(width);
 
-    if (clientWidth > breakpointWidth.xxl && option.xxl !== undefined) {
-      return option.xxl;
-    } else if (clientWidth > breakpointWidth.xl && option.xl !== undefined) {
+    if (breakpointType === 'xl' && option.xl !== undefined) {
       return option.xl;
-    } else if (clientWidth > breakpointWidth.lg && option.lg !== undefined) {
+    }
+    if (breakpointType === 'lg' && option.lg !== undefined) {
       return option.lg;
-    } else if (clientWidth > breakpointWidth.md && option.md !== undefined) {
+    }
+    if (breakpointType === 'md' && option.md !== undefined) {
       return option.md;
-    } else if (clientWidth > breakpointWidth.sm && option.sm !== undefined) {
+    }
+    if (breakpointType === 'sm' && option.sm !== undefined) {
       return option.sm;
-    } else if (clientWidth > breakpointWidth.xs && option.xs !== undefined) {
+    }
+    if (breakpointType === 'xs' && option.xs !== undefined) {
       return option.xs;
     }
 
@@ -72,7 +120,7 @@ export const WindowSize = {
    * @param option
    * @returns
    */
-  useSelect<T>(option: BreakpointWidthSelectOptionsWidthDefault<T>) {
+  useSelect<T>(option: BreakpointWidthSelectOptionsWidthRequired<T>) {
     const [data, setData] = useState(option.default);
 
     useEffect(() => {
@@ -85,6 +133,7 @@ export const WindowSize = {
       return () => {
         ev.remove();
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return data;
