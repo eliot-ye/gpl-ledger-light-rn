@@ -71,10 +71,10 @@ export const WindowSize = {
     }
     return 'default';
   },
-  getWindowShape({width, height}: {width?: number; height?: number} = {}) {
+  getWindowShape(size?: {width: number; height: number}) {
     const scaledSize = Dimensions.get('window');
-    const clientWidth = width ?? scaledSize.width;
-    const clientHeight = height ?? scaledSize.height;
+    const clientWidth = size?.width ?? scaledSize.width;
+    const clientHeight = size?.height ?? scaledSize.height;
     const proportion = clientWidth / clientHeight;
     if (proportion < 0.8) {
       return WindowShape.Vertical;
