@@ -151,6 +151,7 @@ export function CPNActionSheetView<ItemB extends ActionSheetButton>(
             }}>
             <View
               style={{
+                maxWidth: StyleGet.maxWidth,
                 backgroundColor: Colors.backgroundTheme,
                 borderRadius: Config.borderRadius,
               }}>

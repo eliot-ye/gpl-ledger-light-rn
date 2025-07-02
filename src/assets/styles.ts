@@ -1,5 +1,6 @@
 import {FlexStyle} from 'react-native';
 import {Colors} from './colors';
+import {WindowSize} from '@/utils/dimensions';
 
 const titleMap = {
   h2: 20,
@@ -18,7 +19,7 @@ function title<T extends TitleType>(type: T, isReverse?: boolean) {
 export const StyleGet = {
   title,
 
-  maxWidth: 448,
+  maxWidth: WindowSize.breakpointWidth.sm,
 
   /**
    * @param height - useDimensions('screen').height

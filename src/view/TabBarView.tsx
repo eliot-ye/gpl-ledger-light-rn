@@ -23,7 +23,7 @@ export function TabBarView({navigation}: PageProps<'Tabbar'>) {
   ColorsInstance.useCode();
 
   const windowSize = WindowSize.useDimensions('window');
-  const maxWidth = WindowSize.breakpointWidth.sm;
+  const maxWidth = WindowSize.breakpointWidth.md;
 
   const edgeInsets = useSafeAreaInsets();
   const defHeight = 50 + edgeInsets.bottom;

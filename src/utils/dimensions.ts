@@ -93,22 +93,21 @@ export const WindowSize = {
     option: BreakpointWidthSelectOptionsWidthRequired<T>,
     width?: number,
   ) {
-    const breakpointType: BreakpointType =
-      WindowSize.getWindowWidthBreakpoint(width);
+    const clientWidth = width ?? Dimensions.get('window').width;
 
-    if (breakpointType === 'xl' && option.xl !== undefined) {
+    if (clientWidth >= breakpointWidth.xl && option.xl !== undefined) {
       return option.xl;
     }
-    if (breakpointType === 'lg' && option.lg !== undefined) {
+    if (clientWidth >= breakpointWidth.lg && option.lg !== undefined) {
       return option.lg;
     }
-    if (breakpointType === 'md' && option.md !== undefined) {
+    if (clientWidth >= breakpointWidth.md && option.md !== undefined) {
       return option.md;
     }
-    if (breakpointType === 'sm' && option.sm !== undefined) {
+    if (clientWidth >= breakpointWidth.sm && option.sm !== undefined) {
       return option.sm;
     }
-    if (breakpointType === 'xs' && option.xs !== undefined) {
+    if (clientWidth >= breakpointWidth.xs && option.xs !== undefined) {
       return option.xs;
     }
 
