@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {I18n} from '@assets/I18n';
+import {I18n} from '@/assets/I18n';
 import {Colors} from '@/assets/colors';
 import {StyleGet} from '@/assets/styles';
 import {getOnlyStr, getRandomStr} from '@/utils/tools';
@@ -16,7 +16,7 @@ import {useDimensions} from '@/utils/dimensions';
 
 const Config = {
   width: '80%',
-  borderRadius: 20,
+  borderRadius: 14,
   fontSize: 14,
   titleFontSize: 18,
   titleFontWeight: '600',
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     height: Config.buttonHeight,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 10,
   },
 });
 
@@ -67,6 +68,7 @@ interface AlertOption<T> {
     | React.ReactNode
     | ((option: [T, React.Dispatch<T>]) => React.JSX.Element);
   initState?: T;
+  isColumnButtons?: boolean;
   /**
    * 指示返回按钮是否关闭弹窗，仅`Android`
    * @default true
@@ -100,7 +102,7 @@ function CPNAlertBox(props: Readonly<CPNAlertBoxProps>) {
     [props.buttons],
   );
 
-  const isColumnButtons = buttonsList.length >= 3;
+  const isColumnButtons = props.isColumnButtons ?? buttonsList.length >= 3;
 
   const StateObj = useState(props.initState); // NOSONAR
 
@@ -259,10 +261,7 @@ export function CPNAlertView<T>(props: Readonly<CPNAlertViewProps<T>>) {
             index={1}
             animatedScale={animatedValue}
             buttons={useMemo(
-              () =>
-                props.buttons || [
-                  {text: I18n.t('Confirm'), textColor: Colors.theme},
-                ],
+              () => props.buttons || [{text: I18n.t('Confirm')}],
               [props.buttons],
             )}
           />
@@ -277,6 +276,7 @@ export function createCPNAlert() {
   const eventInstance = createSubscribeEvents<{
     close: string;
     show: CPNAlertOption;
+    update: AlertOption<any> & {id: string};
   }>();
 
   function CPNAlert() {
@@ -286,6 +286,13 @@ export function createCPNAlert() {
     useEffect(() => {
       return eventInstance.subscribe('show', opt => {
         setAlertOptionList(_opts => [..._opts, opt]);
+      });
+    }, []);
+    useEffect(() => {
+      return eventInstance.subscribe('update', opt => {
+        setAlertOptionList(_opts =>
+          _opts.map(o => (o.id === opt.id ? {...o, ...opt} : o)),
+        );
       });
     }, []);
     useEffect(() => {
@@ -384,46 +391,73 @@ export function createCPNAlert() {
 
       return id;
     },
+    update<T>(id: string, option: AlertOption<T>) {
+      if (!ids.includes(id)) {
+        console.warn('[CPNAlert] update: id not found');
+        return;
+      }
+      eventInstance.publish('update', {
+        id,
+        ...option,
+      });
+    },
     close(id: string) {
       eventInstance.publish('close', id);
     },
-    alert(title: React.ReactNode, message?: React.ReactNode) {
+    alert(
+      title: React.ReactNode,
+      message?: React.ReactNode,
+      option?: {confirmText?: string; backButtonClose?: boolean},
+    ) {
       return new Promise<void>(resolve => {
         const id = getOnlyStr(ids);
         eventInstance.publish('show', {
           id,
-          backButtonClose: true,
+          backButtonClose: option?.backButtonClose ?? true,
           animatedValue: new Animated.Value(0),
           title,
           message,
           onClose: () => resolve(),
           buttons: [
             {
-              text: I18n.t('Confirm'),
-              textColor: Colors.theme,
+              text: option?.confirmText ?? I18n.t('Confirm'),
               onPress: () => resolve(),
             },
           ],
         });
       });
     },
-    confirm(title: React.ReactNode, message?: React.ReactNode) {
+    confirm(
+      title: React.ReactNode,
+      message?: React.ReactNode,
+      option?: {
+        confirmText?: string;
+        cancelText?: string;
+        confirmTextColor?: string;
+        backButtonClose?: boolean;
+        isColumnButtons?: boolean;
+      },
+    ) {
       return new Promise<void>((resolve, reject) => {
         const id = getOnlyStr(ids);
         eventInstance.publish('show', {
           id,
-          backButtonClose: true,
+          backButtonClose: option?.backButtonClose ?? true,
+          isColumnButtons: option?.isColumnButtons,
           animatedValue: new Animated.Value(0),
           title,
           message,
           onClose: () => reject(),
           buttons: [
             {
-              text: I18n.t('Confirm'),
-              textColor: Colors.theme,
+              text: option?.confirmText ?? I18n.t('Confirm'),
+              textColor: option?.confirmTextColor,
               onPress: () => resolve(),
             },
-            {text: I18n.t('Cancel'), onPress: () => reject()},
+            {
+              text: option?.cancelText ?? I18n.t('Cancel'),
+              onPress: () => reject(),
+            },
           ],
         });
       });
