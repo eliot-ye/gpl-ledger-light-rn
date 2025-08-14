@@ -285,6 +285,7 @@ export function createCPNAlert() {
     );
     useEffect(() => {
       return eventInstance.subscribe('show', opt => {
+        ids.push(opt.id);
         setAlertOptionList(_opts => [..._opts, opt]);
       });
     }, []);
@@ -297,6 +298,7 @@ export function createCPNAlert() {
     }, []);
     useEffect(() => {
       return eventInstance.subscribe('close', id => {
+        ids.splice(ids.indexOf(id), 1);
         setAlertOptionList(_opts => {
           const index = _opts.map(_item => _item.id).indexOf(id);
           if (index > -1) {
